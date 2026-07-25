@@ -41,11 +41,32 @@ const lessonSpecs = [
   { id: 903, course_id: 9, title: 'Bài 26. Thực hành: Mạch tự động điều chỉnh cường độ sáng LED', description: 'Thiết kế, lắp ráp, lập trình và kiểm tra mạch điều chỉnh LED theo môi trường.', key_points: ['Dự án cần xác định yêu cầu, cảm biến ánh sáng, thuật toán điều khiển và tiêu chí kiểm tra.', 'Kiểm thử từng phần giúp phát hiện lỗi nối dây, lỗi chương trình hoặc lỗi nguồn cấp.', 'Sản phẩm cần được đánh giá theo chức năng, độ ổn định, an toàn và khả năng cải tiến.'] },
 ]
 
+const hiddenVisualFlowLessons = new Set([101, 102, 401, 402, 502])
+
+const enrichLessonFromSlide = (lesson) => {
+  const topic = lesson.title.replace(/^Bài \d+\.\s*/i, '').toLowerCase()
+
+  return {
+    ...lesson,
+    summary: [lesson.description, ...lesson.key_points].join(' '),
+    objectives: [
+      `Trình bày được nội dung trọng tâm của ${topic}.`,
+      'Giải thích được khái niệm, thành phần hoặc quy trình bằng sơ đồ và ví dụ.',
+      'Vận dụng kiến thức vào nhiệm vụ học tập đúng kĩ thuật và an toàn.',
+    ],
+    application: [
+      `Vẽ sơ đồ hoặc lập bảng tóm tắt các ý chính về ${topic}.`,
+      `Phân tích một tình huống thực tế liên quan đến ${topic}.`,
+    ],
+    hide_visual_flow: hiddenVisualFlowLessons.has(lesson.id),
+  }
+}
+
 const data = createKnttLmsData({
   theme: 'electrical',
   gradeTitle: 'Công nghệ 12 - Công nghệ Điện - Điện tử',
   courseSpecs,
-  lessonSpecs,
+  lessonSpecs: lessonSpecs.map(enrichLessonFromSlide),
   assessmentPrefix: 'kntt12',
   defaultTitle: 'Công nghệ Điện - Điện tử 12',
 })

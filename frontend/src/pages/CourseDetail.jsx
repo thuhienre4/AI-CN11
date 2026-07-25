@@ -7,7 +7,18 @@ import {
   getSampleCourse,
   getSampleLessonsByCourse,
 } from '../data/courseCatalog'
-import { getSimulationExperimentsByLessons } from '../data/simulationExperiments'
+import {
+  DRIVE_FOLDER_URL as GRADE_11_DRIVE_FOLDER_URL,
+  getGrade11SlideMaterialsByCourse,
+} from '../data/grade11SlideMaterials'
+import {
+  GRADE_10_DRIVE_FOLDER_URL,
+  getGrade10SlideMaterialsByCourse,
+} from '../data/grade10DriveMaterials'
+import {
+  GRADE_12_DRIVE_FOLDER_URL,
+  getGrade12DriveMaterialsByCourse,
+} from '../data/grade12DriveMaterials'
 import { useAuthStore } from '../store'
 import {
   createReferenceMaterial,
@@ -16,6 +27,127 @@ import {
   formatFileSize,
   readReferenceMaterials,
 } from '../utils/referenceMaterials'
+
+const toArray = (value, keys = []) => {
+  if (Array.isArray(value)) return value
+  if (!value || typeof value !== 'object') return []
+
+  for (const key of keys) {
+    if (Array.isArray(value[key])) return value[key]
+  }
+
+  if (Array.isArray(value.data)) return value.data
+  if (Array.isArray(value.items)) return value.items
+  if (Array.isArray(value.results)) return value.results
+
+  return []
+}
+
+function ChapterMiniTest({ test }) {
+  const [answers, setAnswers] = useState({})
+  const [submitted, setSubmitted] = useState(false)
+
+  if (!test?.questions?.length) return null
+
+  const answeredCount = Object.keys(answers).length
+  const score = test.questions.reduce(
+    (total, question, index) => total + (answers[index] === question.correct_index ? 1 : 0),
+    0
+  )
+
+  const chooseAnswer = (questionIndex, optionIndex) => {
+    if (submitted) return
+    setAnswers((current) => ({ ...current, [questionIndex]: optionIndex }))
+  }
+
+  const retry = () => {
+    setAnswers({})
+    setSubmitted(false)
+  }
+
+  return (
+    <section className="panel mt-8 overflow-hidden">
+      <div className="border-b border-violet-100 bg-gradient-to-r from-violet-50 to-blue-50 p-6">
+        <p className="muted-label mb-1 text-violet-700">Ôn nhanh cuối chương</p>
+        <h2 className="text-xl font-bold text-slate-950">{test.title}</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-600">
+          Chọn một đáp án cho mỗi câu. Kết quả và giải thích sẽ hiện sau khi nộp bài.
+        </p>
+      </div>
+
+      <div className="space-y-6 p-6">
+        {test.questions.map((question, questionIndex) => {
+          const selectedAnswer = answers[questionIndex]
+          const isCorrect = selectedAnswer === question.correct_index
+
+          return (
+            <article key={question.question} className="rounded-lg border border-slate-200 p-4">
+              <h3 className="font-bold leading-7 text-slate-950">
+                Câu {questionIndex + 1}. {question.question}
+              </h3>
+              <div className="mt-3 grid gap-2">
+                {question.options.map((option, optionIndex) => {
+                  const isSelected = selectedAnswer === optionIndex
+                  const showCorrect = submitted && optionIndex === question.correct_index
+                  const showIncorrect = submitted && isSelected && !showCorrect
+
+                  return (
+                    <button
+                      key={option}
+                      type="button"
+                      onClick={() => chooseAnswer(questionIndex, optionIndex)}
+                      className={`rounded-md border p-3 text-left text-sm leading-6 transition ${
+                        showCorrect
+                          ? 'border-emerald-400 bg-emerald-50 text-emerald-950'
+                          : showIncorrect
+                            ? 'border-red-300 bg-red-50 text-red-900'
+                            : isSelected
+                              ? 'border-violet-400 bg-violet-50 text-violet-950'
+                              : 'border-slate-200 bg-white text-slate-700 hover:border-violet-300'
+                      }`}
+                    >
+                      <span className="mr-2 font-black">{String.fromCharCode(65 + optionIndex)}.</span>
+                      {option}
+                    </button>
+                  )
+                })}
+              </div>
+              {submitted && (
+                <div className={`mt-3 rounded-md p-3 text-sm leading-6 ${isCorrect ? 'bg-emerald-50 text-emerald-900' : 'bg-amber-50 text-amber-950'}`}>
+                  <span className="font-black">{isCorrect ? 'Đúng.' : 'Chưa đúng.'}</span>{' '}
+                  {question.explanation}
+                </div>
+              )}
+            </article>
+          )
+        })}
+
+        {submitted ? (
+          <div className="flex flex-col gap-4 rounded-lg bg-slate-950 p-5 text-white sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-300">Kết quả mini test</p>
+              <p className="mt-1 text-2xl font-black">{score}/{test.questions.length} câu đúng</p>
+            </div>
+            <button type="button" onClick={retry} className="rounded-lg bg-white px-4 py-2 text-sm font-black text-slate-950">
+              Làm lại
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setSubmitted(true)}
+            disabled={answeredCount !== test.questions.length}
+            className="primary-button w-full justify-center disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {answeredCount === test.questions.length
+              ? 'Nộp mini test'
+              : `Đã trả lời ${answeredCount}/${test.questions.length} câu`}
+          </button>
+        )}
+      </div>
+    </section>
+  )
+}
 
 export default function CourseDetail() {
   const { courseId } = useParams()
@@ -29,7 +161,13 @@ export default function CourseDetail() {
   const [selectedMaterialFile, setSelectedMaterialFile] = useState(null)
   const [isUploadingMaterial, setIsUploadingMaterial] = useState(false)
   const chapterAssessments = getChapterAssessmentsByCourse(courseId)
-  const lessonExperiments = getSimulationExperimentsByLessons(lessons)
+  const driveFolderUrl = Number(course?.grade_level) === 10
+    ? GRADE_10_DRIVE_FOLDER_URL
+    : Number(course?.grade_level) === 11
+      ? GRADE_11_DRIVE_FOLDER_URL
+      : Number(course?.grade_level) === 12
+        ? GRADE_12_DRIVE_FOLDER_URL
+        : null
 
   useEffect(() => {
     fetchData()
@@ -37,14 +175,24 @@ export default function CourseDetail() {
   }, [courseId])
 
   const fetchData = async () => {
+    setIsLoading(true)
+    const sampleCourse = getSampleCourse(courseId)
+    const sampleLessons = getSampleLessonsByCourse(courseId)
+
     try {
       const courseRes = await coursesAPI.get(courseId)
-      setCourse(courseRes.data)
+      setCourse(
+        courseRes.data && !Array.isArray(courseRes.data)
+          ? { ...sampleCourse, ...courseRes.data }
+          : sampleCourse
+      )
+
       const lessonsRes = await lessonsAPI.list(courseId)
-      setLessons(lessonsRes.data)
+      const apiLessons = toArray(lessonsRes.data, ['lessons'])
+      setLessons(apiLessons.length ? apiLessons : sampleLessons)
     } catch (error) {
-      setCourse(getSampleCourse(courseId))
-      setLessons(getSampleLessonsByCourse(courseId))
+      setCourse(sampleCourse)
+      setLessons(sampleLessons)
     } finally {
       setIsLoading(false)
     }
@@ -59,7 +207,12 @@ export default function CourseDetail() {
   }
 
   const chapterMaterials = useMemo(
-    () => materials.filter((material) => material.course_id === Number(courseId)),
+    () => [
+      ...getGrade10SlideMaterialsByCourse(courseId),
+      ...getGrade11SlideMaterialsByCourse(courseId),
+      ...getGrade12DriveMaterialsByCourse(courseId),
+      ...(Array.isArray(materials) ? materials : []).filter((material) => material.course_id === Number(courseId)),
+    ],
     [materials, courseId],
   )
 
@@ -114,6 +267,14 @@ export default function CourseDetail() {
     return <div className="page-container text-center text-slate-600">Đang tải...</div>
   }
 
+  const chapterLearningOutcomes = course?.learning_outcomes?.length
+    ? course.learning_outcomes
+    : [
+        'Nắm được khái niệm, vai trò và yêu cầu kĩ thuật trọng tâm của chương.',
+        'Giải thích được quy trình, cấu tạo hoặc hệ thống bằng lời của mình.',
+        'Vận dụng kiến thức vào tình huống thực tế qua hoạt động, game và quiz.',
+      ]
+
   return (
     <div className="page-container">
       <Link to="/" className="mb-5 inline-flex items-center text-sm font-semibold text-blue-700 hover:text-blue-800">
@@ -137,13 +298,42 @@ export default function CourseDetail() {
           <div className="border-t border-slate-200 bg-slate-50 p-6 lg:border-l lg:border-t-0">
             <h2 className="font-bold text-slate-950">Mục tiêu học phần</h2>
             <ul className="mt-4 space-y-3 text-sm text-slate-600">
-              <li>Nắm được khái niệm, vai trò và yêu cầu kĩ thuật trọng tâm của chương.</li>
-              <li>Giải thích được quy trình, cấu tạo hoặc hệ thống bằng lời của mình.</li>
-              <li>Vận dụng kiến thức vào tình huống thực tế qua mô phỏng, game và quiz.</li>
+              {chapterLearningOutcomes.map((outcome) => (
+                <li key={outcome} className="flex gap-2">
+                  <span className="mt-0.5 font-black text-blue-600">✓</span>
+                  <span>{outcome}</span>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
       </section>
+
+      {(course?.chapter_summary || course?.core_concepts?.length) && (
+        <section className="panel mb-8 p-6 sm:p-8">
+          <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr]">
+            <div>
+              <p className="muted-label mb-2">Tổng quan chương</p>
+              <h2 className="text-xl font-bold text-slate-950">Tóm tắt kiến thức</h2>
+              <p className="mt-3 leading-7 text-slate-600">{course.chapter_summary}</p>
+            </div>
+            <div>
+              <p className="muted-label mb-2">Ghi nhớ nhanh</p>
+              <h2 className="text-xl font-bold text-slate-950">Khái niệm cốt lõi</h2>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2">
+                {course.core_concepts?.map((concept, index) => (
+                  <article key={concept} className="rounded-lg border border-blue-100 bg-blue-50 p-4">
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-md bg-blue-600 text-xs font-black text-white">
+                      {index + 1}
+                    </span>
+                    <p className="mt-3 text-sm leading-6 text-blue-950">{concept}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_320px]">
         <section>
@@ -174,6 +364,8 @@ export default function CourseDetail() {
               </Link>
             ))}
           </div>
+
+          <ChapterMiniTest key={course?.id} test={course?.mini_test} />
         </section>
 
         <aside className="space-y-4">
@@ -186,37 +378,31 @@ export default function CourseDetail() {
               </div>
               <div className="flex justify-between">
                 <span>Hoạt động</span>
-                <span className="font-semibold text-slate-900">Mô phỏng 3D, AI, Game, Quiz</span>
+                <span className="font-semibold text-slate-900">AI, Game, Quiz</span>
               </div>
               <div className="flex justify-between">
                 <span>Gợi ý thời lượng</span>
-                <span className="font-semibold text-slate-900">2 giờ</span>
+                <span className="font-semibold text-slate-900">
+                  {course?.suggested_periods ? `${course.suggested_periods} tiết` : '2 giờ'}
+                </span>
               </div>
-            </div>
-          </div>
-
-          <div className="rounded-lg border border-cyan-200 bg-cyan-50 p-5">
-            <h3 className="font-bold text-cyan-950">Thí nghiệm mô phỏng theo bài</h3>
-            <p className="mt-2 text-sm leading-6 text-cyan-900">
-              Mỗi bài học có một thí nghiệm mô phỏng gắn với đúng đơn vị kiến thức để học sinh quan sát trước khi luyện tập.
-            </p>
-            <div className="mt-4 space-y-3">
-              {lessonExperiments.slice(0, 5).map(({ lesson, experiment }) => (
-                <Link
-                  key={lesson.id}
-                  to={`/lessons/${lesson.id}`}
-                  className="block rounded-lg border border-cyan-100 bg-white p-3 text-sm shadow-sm transition hover:border-cyan-300 hover:shadow-md"
-                >
-                  <p className="font-black text-slate-950">{lesson.title}</p>
-                  <p className="mt-1 font-semibold text-cyan-700">{experiment.unit}</p>
-                  <p className="mt-1 text-slate-600">{experiment.title}</p>
-                </Link>
-              ))}
             </div>
           </div>
 
           <div className="motion-card rounded-lg border border-emerald-200 bg-emerald-50 p-5">
-            <h3 className="font-bold text-emerald-950">Tài liệu theo chương</h3>
+            <div className="flex items-center justify-between gap-3">
+              <h3 className="font-bold text-emerald-950">Tài liệu theo chương</h3>
+              {driveFolderUrl && (
+                <a
+                  href={driveFolderUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-xs font-black text-emerald-700 hover:text-emerald-900"
+                >
+                  Mở thư mục Drive ↗
+                </a>
+              )}
+            </div>
             <p className="mt-2 text-sm leading-6 text-emerald-900">
               Tài liệu được gắn với chương này, có thể chọn thêm từng bài học cụ thể khi tải lên.
             </p>
@@ -273,18 +459,42 @@ export default function CourseDetail() {
                 chapterMaterials.map((material) => (
                   <article key={material.id} className="rounded-lg border border-emerald-100 bg-white p-3">
                     <p className="font-bold text-slate-950">{material.title}</p>
-                    <p className="mt-1 text-xs font-semibold text-emerald-700">{getLessonTitle(material.lesson_id)}</p>
+                    <p className="mt-1 text-xs font-semibold text-emerald-700">
+                      {material.lesson_title || getLessonTitle(material.lesson_id)}
+                    </p>
                     {material.description && (
                       <p className="mt-2 text-sm leading-6 text-slate-600">{material.description}</p>
                     )}
                     <p className="mt-2 text-xs text-slate-500">
-                      {material.file_name} · {formatFileSize(material.file_size)}
+                      {material.file_name}
+                      {material.file_size ? ` · ${formatFileSize(material.file_size)}` : ''}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
-                      <button type="button" onClick={() => downloadChapterMaterial(material)} className="primary-button">
-                        Tải xuống
-                      </button>
-                      {isTeacher && (
+                      {material.external_url ? (
+                        <>
+                          <a
+                            href={material.external_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="primary-button"
+                          >
+                            {material.file_type === 'application/pdf' ? 'Xem PDF' : 'Xem slide'}
+                          </a>
+                          <a
+                            href={material.download_url}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="secondary-button"
+                          >
+                            {material.file_type === 'application/pdf' ? 'Tải PDF' : 'Tải PPTX'}
+                          </a>
+                        </>
+                      ) : (
+                        <button type="button" onClick={() => downloadChapterMaterial(material)} className="primary-button">
+                          Tải xuống
+                        </button>
+                      )}
+                      {isTeacher && !material.external_url && (
                         <button
                           type="button"
                           onClick={() => removeChapterMaterial(material.id)}
@@ -315,8 +525,8 @@ export default function CourseDetail() {
           <div className="rounded-lg border border-amber-200 bg-amber-50 p-5">
             <h3 className="font-bold text-amber-950">Cách học hiệu quả</h3>
             <p className="mt-2 text-sm leading-6 text-amber-900">
-              Đọc bài trước, mở mô phỏng để quan sát chuyển động, sau đó dùng bài kiểm tra nhanh
-              để đánh giá khả năng giải thích bằng lời của mình.
+              Đọc phần tóm tắt và khái niệm trọng tâm, hoàn thành hoạt động luyện tập, sau đó dùng
+              bài kiểm tra nhanh để đánh giá khả năng giải thích bằng lời của mình.
             </p>
           </div>
         </aside>

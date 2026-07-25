@@ -67,29 +67,53 @@ const buildFlow = (preset = 'design') =>
     color: colors[index % colors.length],
   }))
 
-const makeSections = (lesson, gradeTitle) => [
-  {
-    title: 'Mục tiêu cần đạt',
-    items: [
-      `Nêu được nội dung cốt lõi của "${lesson.title}".`,
-      'Đọc hoặc mô tả được sơ đồ, quy trình, bản vẽ, hệ thống hoặc thiết bị liên quan.',
-      'Vận dụng được kiến thức vào tình huống học tập, sản phẩm hoặc bối cảnh công nghiệp an toàn.',
-    ],
-  },
-  {
+const makeSections = (lesson, gradeTitle) => {
+  const objectiveItems = lesson.objectives?.length
+    ? lesson.objectives
+    : [
+        `Nêu được nội dung cốt lõi của "${lesson.title}".`,
+        'Đọc hoặc mô tả được sơ đồ, quy trình, bản vẽ, hệ thống hoặc thiết bị liên quan.',
+        'Vận dụng được kiến thức vào tình huống học tập, sản phẩm hoặc bối cảnh công nghệ an toàn.',
+      ]
+
+  const sections = [
+    {
+      title: 'Mục tiêu cần đạt',
+      items: objectiveItems,
+    },
+  ]
+
+  if (lesson.summary) {
+    sections.push({
+      title: 'Tóm tắt nội dung SGK',
+      items: [lesson.summary],
+    })
+  }
+
+  sections.push({
     title: 'Kiến thức trọng tâm',
     items: lesson.key_points,
-  },
-  {
+  })
+
+  if (lesson.application?.length) {
+    sections.push({
+      title: 'Vận dụng sau bài học',
+      items: lesson.application,
+    })
+  }
+
+  sections.push({
     title: 'Hoạt động LMS',
     items: [
-      'Khởi động bằng tình huống thực tế hoặc hình ảnh sản phẩm công nghiệp.',
+      'Khởi động bằng tình huống thực tế hoặc hình ảnh sản phẩm công nghệ.',
       'Khám phá qua sơ đồ khối, mô phỏng, bản vẽ hoặc quy trình thao tác.',
       'Luyện tập bằng câu hỏi nhiều dạng và nhiệm vụ giải thích bằng lời của học sinh.',
       `Vận dụng để tạo sản phẩm học tập nhỏ phù hợp ${gradeTitle}.`,
     ],
-  },
-]
+  })
+
+  return sections
+}
 
 const makeActivity = (lesson, gradeTitle) => ({
   flashcards: [
@@ -169,10 +193,11 @@ export const createKnttLmsData = ({ theme, gradeTitle, courseSpecs, lessonSpecs,
   const lessons = lessonSpecs.map((lesson) => ({
     ...lesson,
     content:
-      `${lesson.title} thuộc mạch ${gradeTitle} theo định hướng Kết nối tri thức với cuộc sống. Nội dung LMS được biên soạn theo hướng: nắm khái niệm, đọc sơ đồ hoặc quy trình, quan sát minh họa, luyện tập đa dạng và vận dụng vào tình huống công nghiệp an toàn.`,
+      lesson.content || lesson.summary ||
+      `${lesson.title} thuộc mạch ${gradeTitle} theo định hướng Kết nối tri thức với cuộc sống. Nội dung LMS được biên soạn theo hướng: nắm khái niệm, đọc sơ đồ hoặc quy trình, quan sát minh họa, luyện tập đa dạng và vận dụng vào tình huống công nghệ an toàn.`,
     order: lesson.order ?? Number(String(lesson.id).slice(-2)),
     content_sections: makeSections(lesson, gradeTitle),
-    visual_steps: buildFlow(lesson.flow || theme),
+    visual_steps: lesson.hide_visual_flow ? null : (lesson.visual_steps || buildFlow(lesson.flow || theme)),
   }))
 
   const questions = lessons.flatMap(makeLessonQuestions)

@@ -14,7 +14,27 @@ const lessonSpecs = [
   { id: 101, course_id: 1, title: 'Bài 1. Khái quát về cơ khí chế tạo', description: 'Nhận biết khái niệm, vai trò, đặc điểm và các bước cơ bản trong chế tạo cơ khí.', key_points: ['Cơ khí chế tạo tạo ra chi tiết, máy, thiết bị phục vụ sản xuất và đời sống.', 'Quy trình chế tạo thường đi từ yêu cầu, thiết kế, chọn vật liệu, gia công, lắp ráp đến kiểm tra.', 'Cơ khí chế tạo cần độ chính xác, an toàn, năng suất và khả năng bảo trì.'] },
   { id: 102, course_id: 1, title: 'Bài 2. Ngành nghề trong lĩnh vực cơ khí chế tạo', description: 'Tìm hiểu công việc, yêu cầu năng lực và triển vọng nghề cơ khí chế tạo.', key_points: ['Ngành nghề cơ khí chế tạo gồm thiết kế, gia công, vận hành máy, kiểm tra, bảo trì và quản lí sản xuất.', 'Người học cần đọc bản vẽ, hiểu vật liệu, quy trình, đo kiểm và an toàn lao động.', 'Định hướng nghề cần gắn sở thích cá nhân với nhu cầu sản xuất hiện đại.'] },
   { id: 201, course_id: 2, title: 'Bài 3. Tổng quan về vật liệu cơ khí', description: 'Phân loại vật liệu cơ khí và tiêu chí lựa chọn vật liệu.', key_points: ['Vật liệu cơ khí được chọn theo cơ tính, lí tính, hóa tính, khả năng gia công và điều kiện làm việc.', 'Lựa chọn vật liệu ảnh hưởng trực tiếp tới độ bền, chi phí, an toàn và tuổi thọ sản phẩm.', 'Cần đọc yêu cầu kĩ thuật trước khi quyết định vật liệu.'] },
-  { id: 202, course_id: 2, title: 'Bài 4. Vật liệu kim loại và hợp kim', description: 'Nhận biết kim loại, hợp kim và ứng dụng trong cơ khí.', key_points: ['Kim loại và hợp kim có độ bền, độ dẻo, độ cứng và khả năng dẫn nhiệt/dẫn điện khác nhau.', 'Thép, gang, nhôm, đồng và hợp kim được dùng tùy yêu cầu chi tiết.', 'Xử lí nhiệt, chống ăn mòn và lựa chọn mác vật liệu giúp nâng cao chất lượng sản phẩm.'] },
+  {
+    id: 202,
+    course_id: 2,
+    title: 'Bài 4. Vật liệu kim loại và hợp kim',
+    description: 'Nhận biết kim loại, hợp kim, gang, thép và liên hệ quy trình sản xuất gang - thép trong lò cao.',
+    summary: 'Bài học giới thiệu kim loại và hợp kim dùng trong cơ khí, trong đó gang và thép là hai vật liệu quan trọng. Mô hình lò cao giúp quan sát quặng sắt, than cốc và đá vôi được nạp từ đỉnh lò; gió nóng thổi vào đáy lò tạo nhiệt và khí khử; gang lỏng, xỉ và khí thải được tách ra ở các cửa khác nhau. Từ đó học sinh hiểu vật liệu kim loại không chỉ được lựa chọn theo tính chất mà còn gắn với quy trình luyện kim và yêu cầu bảo vệ môi trường.',
+    objectives: [
+      'Phân biệt được kim loại, hợp kim, gang và thép ở mức khái quát.',
+      'Mô tả được các dòng vật chất chính trong mô hình sản xuất gang - thép bằng lò cao.',
+      'Liên hệ được tính chất của gang, thép với ứng dụng trong cơ khí và yêu cầu xử lí khí thải, xỉ.',
+    ],
+    key_points: [
+      'Kim loại và hợp kim có độ bền, độ dẻo, độ cứng, khả năng dẫn nhiệt, dẫn điện và khả năng gia công khác nhau.',
+      'Trong lò cao, quặng sắt, than cốc và đá vôi đi từ trên xuống; gió nóng đi từ dưới lên để tạo nhiệt và phản ứng khử oxit sắt.',
+      'Gang lỏng được tháo ở đáy lò, xỉ được tách riêng; gang có thể tiếp tục luyện để tạo thép phù hợp yêu cầu cơ khí.',
+    ],
+    application: [
+      'Quan sát mô hình 3D lò cao và ghi lại đường đi của quặng, gió nóng, gang lỏng, xỉ và khí thải.',
+      'Giải thích vì sao sản xuất gang - thép cần chú ý thu hồi khí thải, xử lí xỉ và tiết kiệm năng lượng.',
+    ],
+  },
   { id: 203, course_id: 2, title: 'Bài 5. Vật liệu phi kim loại', description: 'Tìm hiểu nhựa, cao su, gốm, composite và ứng dụng trong cơ khí.', key_points: ['Vật liệu phi kim loại có ưu điểm về khối lượng, cách điện, chống ăn mòn hoặc giảm ma sát.', 'Nhựa, cao su, gốm và composite được dùng trong chi tiết cách điện, giảm chấn, vỏ máy hoặc kết cấu nhẹ.', 'Cần xét nhiệt độ, tải trọng, môi trường và khả năng tái chế khi sử dụng.'] },
   { id: 204, course_id: 2, title: 'Bài 6. Vật liệu mới', description: 'Nhận biết vật liệu mới và xu hướng ứng dụng trong sản xuất hiện đại.', key_points: ['Vật liệu mới hướng tới nhẹ, bền, thông minh, thân thiện môi trường và phù hợp công nghệ cao.', 'Vật liệu nano, composite tiên tiến, vật liệu in 3D và vật liệu nhớ hình mở rộng khả năng thiết kế.', 'Ứng dụng vật liệu mới cần đánh giá chi phí, quy trình chế tạo và an toàn sử dụng.'] },
   { id: 301, course_id: 3, title: 'Bài 7. Khái quát về gia công cơ khí', description: 'Hiểu mục đích, phân loại và yêu cầu của gia công cơ khí.', key_points: ['Gia công cơ khí làm thay đổi hình dạng, kích thước, bề mặt hoặc tính chất của phôi.', 'Có thể phân loại theo gia công cắt gọt, không cắt gọt, nhiệt luyện, xử lí bề mặt và công nghệ số.', 'Gia công cần bảo đảm kích thước, độ chính xác, năng suất và an toàn máy.'] },
@@ -38,11 +58,32 @@ const lessonSpecs = [
   { id: 705, course_id: 7, title: 'Bài 25. Hệ thống phanh và an toàn khi tham gia giao thông', description: 'Nhận biết hệ thống phanh, các công nghệ an toàn và nguyên tắc tham gia giao thông.', flow: 'engine', key_points: ['Hệ thống phanh làm giảm tốc độ, dừng xe và giữ xe đứng yên an toàn.', 'ABS, phân phối lực phanh, cân bằng điện tử và hỗ trợ phanh tăng khả năng kiểm soát xe.', 'An toàn giao thông cần kết hợp kĩ thuật xe, bảo dưỡng và hành vi lái xe đúng quy định.'] },
 ]
 
+const hiddenVisualFlowLessons = new Set([102, 404, 502])
+
+const enrichLessonContent = (lesson) => {
+  const topic = lesson.title.replace(/^Bài \d+\.\s*/i, '').toLowerCase()
+
+  return {
+    ...lesson,
+    summary: lesson.summary || [lesson.description, ...lesson.key_points].join(' '),
+    objectives: lesson.objectives || [
+      `Trình bày được nội dung trọng tâm của ${topic}.`,
+      'Giải thích được cấu tạo, vật liệu, quy trình hoặc nguyên lí bằng sơ đồ và ví dụ.',
+      'Vận dụng kiến thức vào nhiệm vụ cơ khí đúng kĩ thuật và bảo đảm an toàn.',
+    ],
+    application: lesson.application || [
+      `Vẽ sơ đồ hoặc lập bảng tóm tắt các ý chính về ${topic}.`,
+      `Phân tích một sản phẩm, thiết bị hoặc tình huống thực tế liên quan đến ${topic}.`,
+    ],
+    hide_visual_flow: hiddenVisualFlowLessons.has(lesson.id),
+  }
+}
+
 const data = createKnttLmsData({
   theme: 'mechanical',
   gradeTitle: 'Công nghệ 11 - Công nghệ cơ khí',
   courseSpecs,
-  lessonSpecs,
+  lessonSpecs: lessonSpecs.map(enrichLessonContent),
   assessmentPrefix: 'kntt11',
   defaultTitle: 'Công nghệ cơ khí 11',
 })
