@@ -1,4 +1,5 @@
 import { createKnttLmsData } from './knttLmsFactory'
+import { grade11AssessmentBank } from './knttChapterAssessmentBanks'
 
 const courseSpecs = [
   { id: 1, short_title: 'Chương I. Giới thiệu chung về cơ khí chế tạo', title: 'Chương I. Giới thiệu chung về cơ khí chế tạo', description: 'Khái quát vai trò, đặc điểm và ngành nghề trong lĩnh vực cơ khí chế tạo.' },
@@ -86,6 +87,7 @@ const data = createKnttLmsData({
   lessonSpecs: lessonSpecs.map(enrichLessonContent),
   assessmentPrefix: 'kntt11',
   defaultTitle: 'Công nghệ cơ khí 11',
+  assessmentBank: grade11AssessmentBank,
 })
 
 export const canhDieuCourses = data.courses

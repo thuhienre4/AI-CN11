@@ -1,6 +1,8 @@
 import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? ''
+const APP_BASE_URL = import.meta.env.BASE_URL ?? '/'
+const appPath = (path) => `${APP_BASE_URL.replace(/\/$/, '')}${path}`
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -28,7 +30,7 @@ api.interceptors.response.use(
 
     if (error.response?.status === 401 && !isLocalSession && !isAuthPage) {
       localStorage.removeItem('token')
-      window.location.href = '/login'
+      window.location.href = appPath('/login')
     }
     return Promise.reject(error)
   }
@@ -70,7 +72,9 @@ export const questionsAPI = {
 
 // Quiz
 export const quizAPI = {
+  startAttempt: (userId, lessonId) => api.post(`/api/quiz/attempts?user_id=${userId}`, { lesson_id: Number(lessonId) }),
   submit: (userId, data) => api.post(`/api/quiz/submit?user_id=${userId}`, data),
+  finalizeAttempt: (attemptId, data = {}) => api.post(`/api/quiz/attempts/${attemptId}/finalize`, data),
   getAttempts: (userId, params = {}) =>
     api.get(`/api/quiz/attempts/user/${userId}`, { params }),
   getResults: (userId, skip = 0, limit = 50) =>
@@ -81,6 +85,7 @@ export const quizAPI = {
 // Chat
 export const chatAPI = {
   message: (userId, data) => api.post(`/api/chat/message?user_id=${userId}`, data),
+  status: () => api.get('/api/chat/status'),
   history: (userId, lessonId = null, skip = 0, limit = 50) =>
     api.get(`/api/chat/history/${userId}`, {
       params: { lesson_id: lessonId, skip, limit }
@@ -90,6 +95,7 @@ export const chatAPI = {
 // Personalized learning
 export const learningAPI = {
   trackEvent: (userId, data) => api.post(`/api/learning/users/${userId}/events`, data),
+  trackEventsBatch: (userId, events) => api.post(`/api/learning/users/${userId}/events/batch`, events),
   getEvents: (userId, lessonId = null, limit = 50) =>
     api.get(`/api/learning/users/${userId}/events`, {
       params: { lesson_id: lessonId, limit },

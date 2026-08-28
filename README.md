@@ -101,6 +101,26 @@ ENGINE_LAB_NOVA3D_AUTH_TOKEN=...
 ENGINE_LAB_NOVA3D_PROVIDER_API_KEY=...
 ```
 
+Set `ENGINE_LAB_ENVIRONMENT=production` in production. Startup will stop if the
+default JWT secret is still in use. The AI Tutor shows whether each answer came
+from Gemini, the safe backend fallback, or offline browser fallback.
+
+## Catalog and Offline Event Synchronization
+
+Fresh backend databases are automatically seeded from
+`backend/data/course_catalog.json` (19 courses, 73 lessons, and 146 questions).
+After editing the frontend curriculum, regenerate this artifact with:
+
+```powershell
+cd frontend
+npm.cmd run export:backend-catalog
+```
+
+Learning events are written locally first, assigned a stable client event ID,
+and synchronized to the backend in batches. Replayed batches are idempotent.
+Authenticated WebSocket updates refresh student progress and notify teacher
+sessions after learning evidence changes.
+
 ## Roles and Permissions
 
 - `student`: learns lessons, submits quizzes, asks AI Tutor, submits assignments, views own analytics.
@@ -118,6 +138,9 @@ Students can only access their own learning, quiz, and chat data. Teachers/admin
 - `GET /api/courses/{course_id}/lessons`
 - `POST /api/chat/message?user_id={id}`
 - `POST /api/quiz/submit?user_id={id}`
+- `POST /api/quiz/attempts?user_id={id}`
+- `POST /api/quiz/attempts/{attempt_id}/finalize`
+- `POST /api/learning/users/{user_id}/events/batch`
 - `GET /api/learning/users/{user_id}/dashboard`
 - `GET /api/learning/teacher/analytics`
 - `GET /api/classroom/posts`
@@ -139,7 +162,37 @@ npm.cmd test -- --run
 npm.cmd run build
 ```
 
-The current repository may not contain many test files yet, so `pytest` or `vitest` can report no collected tests. Use the build and backend import checks as smoke tests during development.
+Backend tests cover JWT/RBAC, answer-key privacy, quiz attempt accounting,
+idempotent learning evidence, and risk scoring. A repeatable local load check is
+also available:
+
+```powershell
+cd backend
+python scripts/benchmark_api.py --requests 100 --concurrency 10
+```
+
+## GitHub Pages Deployment
+
+This repository includes a GitHub Actions workflow at `.github/workflows/pages.yml` that builds the Vite frontend and publishes `frontend/dist` to GitHub Pages after every push to `main`.
+
+To enable the site on GitHub:
+
+1. Open the repository Settings.
+2. Go to Pages.
+3. Set Source to `GitHub Actions`.
+4. Push to `main` and wait for the `Deploy Frontend to GitHub Pages` action to finish.
+
+The frontend build is configured for the repository path `/AI-CN11/`. The deployed URL will usually be:
+
+```text
+https://thuhien9344.github.io/AI-CN11/
+```
+
+The static GitHub Pages version uses the bundled demo curriculum data in
+`frontend/src/data`. JWT, centralized analytics, Gemini, PostgreSQL, uploads,
+and realtime updates require the FastAPI server to be deployed separately and
+connected with `VITE_API_URL`. GitHub Pages alone is therefore a demo frontend,
+not the complete Client-Server deployment.
 
 ## Local Demo Notes
 

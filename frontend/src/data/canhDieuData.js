@@ -1,3 +1,5 @@
+import { buildChapterMiniTestQuestions, getMiniTestDuration } from './chapterMiniTests'
+
 export const canhDieuCourses = [
   {
     id: 1,
@@ -1144,16 +1146,13 @@ export const chapterAssessments = canhDieuCourses.map((course) => ({
   id: `cd-c${course.id}`,
   course_id: course.id,
   chapter: `Chương ${course.id}`,
-  title: course.title.replace(/^Chương \d+\.\s*/, ''),
-  description: `Kiểm tra kiến thức trọng tâm của ${course.title.toLowerCase()}.`,
-  duration_minutes: course.id === 4 || course.id === 5 ? 20 : 15,
-  questions: canhDieuQuestions
-    .filter((question) => canhDieuLessons.some((lesson) => lesson.course_id === course.id && lesson.id === question.lesson_id))
-    .map((question) => ({
-      id: `chapter-${question.id}`,
-      text: question.text,
-      options: question.options.map((option) => option.text),
-      correctIndex: question.options.findIndex((option) => option.is_correct),
-      explanation: 'Đáp án đúng bám theo kiến thức trọng tâm của bài học trong chương.',
-    })),
+  title: `Mini test cuối ${course.title.toLowerCase()}`,
+  description: `Câu hỏi được soạn từ nội dung trọng tâm của các slide/PDF trong ${course.title.toLowerCase()}.`,
+  duration_minutes: getMiniTestDuration(
+    canhDieuLessons.filter((lesson) => lesson.course_id === course.id).length * 2,
+  ),
+  questions: buildChapterMiniTestQuestions(
+    canhDieuLessons.filter((lesson) => lesson.course_id === course.id),
+    `cd-c${course.id}`,
+  ),
 }))

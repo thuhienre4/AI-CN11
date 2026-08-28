@@ -221,6 +221,7 @@ class ChatHistory(Base):
     session_id = Column(String(64), nullable=True, index=True)
     user_message = Column(Text, nullable=False)
     ai_response = Column(Text)
+    response_mode = Column(String(30), default="fallback")
     created_at = Column(DateTime, default=datetime.utcnow)
 
     # Relationships
@@ -269,10 +270,12 @@ class LearningEvent(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"), nullable=True, index=True)
+    client_event_id = Column(String(80), nullable=True, unique=True, index=True)
     event_type = Column(String(50), nullable=False, index=True)
     duration_seconds = Column(Integer, default=0)
     score = Column(Float, nullable=True)
     payload = Column(JSON, nullable=True)
+    occurred_at = Column(DateTime, default=datetime.utcnow, index=True)
     created_at = Column(DateTime, default=datetime.utcnow, index=True)
 
     user = relationship("User", back_populates="learning_events")

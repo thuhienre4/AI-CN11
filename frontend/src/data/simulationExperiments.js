@@ -211,6 +211,58 @@ export const getSimulationExperimentForLesson = (lesson) => {
     return completeExperiment(grade10ByCourse[course] || fallbackExperiment, lesson)
   }
 
+  if (grade === 11 && sourceId === 202) {
+    return completeExperiment({
+      title: 'Mô phỏng sản xuất gang - thép trong lò cao',
+      unit: 'Bài 4. Vật liệu kim loại và hợp kim',
+      duration: '12 phút',
+      modelFocus: 'Lò cao, nạp liệu quặng sắt - than cốc - đá vôi, gió nóng, vùng phản ứng, gang lỏng, xỉ và khí thải.',
+      objective: 'Giúp học sinh biến hình 3.2 thành mô hình có thể quan sát theo dòng vật chất và giải thích vai trò của từng thành phần trong sản xuất gang - thép.',
+      setup: [
+        'Mở mô phỏng 3D của Bài 4 và bật lần lượt các lớp: Nạp liệu, Gió nóng, Gang - xỉ, Khí thải.',
+        'Quan sát chiều chuyển động ngược nhau: vật liệu rắn đi từ trên xuống, khí nóng đi từ dưới lên.',
+        'Dừng ở từng nhãn để đọc vai trò của quặng sắt, than cốc, đá vôi và cửa tháo gang/xỉ.',
+      ],
+      tasks: [
+        'Vẽ lại sơ đồ dòng vật chất trong lò cao bằng mũi tên.',
+        'Giải thích vai trò của than cốc, đá vôi và gió nóng trong quá trình luyện gang.',
+        'Chỉ ra vị trí gang lỏng, xỉ và khí thải trong mô hình; nêu yêu cầu xử lí môi trường.',
+      ],
+      observe: [
+        'Vì sao nguyên liệu được nạp từ đỉnh lò còn gió nóng lại thổi từ đáy lò?',
+        'Gang lỏng và xỉ khác nhau như thế nào nên có thể tách riêng?',
+        'Khí thải ở đỉnh lò cần được xử lí hoặc tận dụng ra sao?',
+      ],
+      safety: 'Chỉ quan sát trên mô phỏng. Với sản xuất thật, lò cao có nhiệt độ rất cao, khí độc, bụi và xỉ nóng nên cần hệ thống bảo hộ, che chắn, thông gió và xử lí môi trường nghiêm ngặt.',
+    }, lesson)
+  }
+
+  if (grade === 11 && sourceId === 602) {
+    return completeExperiment({
+      title: 'Mô hình 3D nguyên lí động cơ 4 kì',
+      unit: 'Bài 18. Nguyên lí làm việc của động cơ đốt trong',
+      duration: '12 phút',
+      modelFocus: 'Xi lanh, piston, thanh truyền, trục khuỷu, xupap nạp, xupap thải, vòi phun/bugi và dòng khí qua bốn kì.',
+      objective: 'Giúp học sinh quan sát trực tiếp chu trình nạp, nén, cháy - giãn nở và thải; từ đó giải thích cách động cơ biến nhiệt năng thành cơ năng.',
+      setup: [
+        'Mở mô phỏng 3D của Bài 18 và để chế độ Động cơ 4 kì.',
+        'Quan sát piston đi giữa ĐCT và ĐCD, đồng thời theo dõi trạng thái hai xupap.',
+        'Dừng ở từng lớp kiến thức: nạp, nén, cháy - giãn nở, thải để đọc ghi chú và đối chiếu với sơ đồ SGK.',
+      ],
+      tasks: [
+        'Lập bảng bốn kì với ba cột: chiều chuyển động piston, trạng thái xupap, nhiệm vụ của kì.',
+        'Chỉ ra đường truyền lực từ khí cháy đến piston, thanh truyền và trục khuỷu.',
+        'Giải thích vì sao kì cháy - giãn nở là kì sinh công, còn ba kì còn lại là kì chuẩn bị hoặc làm sạch xi lanh.',
+      ],
+      observe: [
+        'Kì nào xupap nạp mở, kì nào xupap thải mở?',
+        'Ở kì nén và kì cháy - giãn nở, vì sao hai xupap đều phải đóng?',
+        'Một chu trình 4 kì ứng với mấy hành trình piston và mấy vòng quay trục khuỷu?',
+      ],
+      safety: 'Chỉ thao tác trên mô phỏng. Nếu quan sát động cơ thật cần tắt máy, tránh bộ phận quay/nóng và có giáo viên hướng dẫn.',
+    }, lesson)
+  }
+
   if (grade === 11) {
     return completeExperiment(grade11ByCourse[course] || fallbackExperiment, lesson)
   }

@@ -2,10 +2,17 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from auth import can_manage_content, get_authenticated_user
+from auth import can_manage_content, get_authenticated_user, require_teacher_user
 from database import get_db
 from models import LearningEvent, LessonProgress, QuizAttempt, QuizResult, Question, User
-from schemas import QuizAttemptResponse, QuizResultResponse, QuizResultCreate
+from schemas import (
+    QuizAttemptCreate,
+    QuizAttemptFinalize,
+    QuizAttemptResponse,
+    QuizResultResponse,
+    QuizResultCreate,
+)
+from realtime import learning_connections
 
 router = APIRouter(prefix="/api", tags=["Quiz"])
 
@@ -17,6 +24,98 @@ def ensure_user_scope(target_user_id: int, current_user: User) -> None:
         status_code=status.HTTP_403_FORBIDDEN,
         detail="You can only access your own quiz data.",
     )
+
+
+def finalize_attempt_progress(
+    db: Session,
+    attempt: QuizAttempt,
+    client_event_id: str | None = None,
+) -> QuizAttempt:
+    if attempt.status == "submitted":
+        return attempt
+
+    attempt.status = "submitted"
+    learning_event = LearningEvent(
+        user_id=attempt.user_id,
+        lesson_id=attempt.lesson_id,
+        client_event_id=client_event_id,
+        event_type="quiz_submitted",
+        duration_seconds=attempt.time_spent_seconds,
+        score=attempt.score_percent,
+        payload={
+            "attempt_id": attempt.id,
+            "correct_answers": attempt.correct_answers,
+            "total_questions": attempt.total_questions,
+        },
+    )
+    db.add(learning_event)
+
+    progress = (
+        db.query(LessonProgress)
+        .filter(
+            LessonProgress.user_id == attempt.user_id,
+            LessonProgress.lesson_id == attempt.lesson_id,
+        )
+        .first()
+    )
+    if not progress:
+        progress = LessonProgress(user_id=attempt.user_id, lesson_id=attempt.lesson_id)
+        db.add(progress)
+        db.flush()
+
+    progress.quiz_attempt_count += 1
+    progress.time_spent_seconds += attempt.time_spent_seconds
+    progress.last_activity_type = "quiz_submitted"
+    progress.best_quiz_score = max(progress.best_quiz_score, attempt.score_percent)
+    previous_total = progress.average_quiz_score * (progress.quiz_attempt_count - 1)
+    progress.average_quiz_score = round(
+        (previous_total + attempt.score_percent) / progress.quiz_attempt_count,
+        2,
+    )
+    progress.progress_percent = max(progress.progress_percent, 100 if attempt.score_percent >= 70 else 75)
+    progress.status = "completed" if progress.progress_percent >= 100 else "needs_review"
+    return attempt
+
+
+@router.post("/quiz/attempts", response_model=QuizAttemptResponse, status_code=status.HTTP_201_CREATED)
+async def start_quiz_attempt(
+    user_id: int,
+    payload: QuizAttemptCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_authenticated_user),
+):
+    ensure_user_scope(user_id, current_user)
+    if not db.query(User).filter(User.id == user_id).first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    if not db.query(Question).filter(Question.lesson_id == payload.lesson_id).first():
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Lesson quiz not found")
+
+    attempt = QuizAttempt(user_id=user_id, lesson_id=payload.lesson_id, status="in_progress")
+    db.add(attempt)
+    db.commit()
+    db.refresh(attempt)
+    await learning_connections.publish_learning_update(
+        attempt.user_id,
+        {"event_type": "quiz_submitted", "lesson_id": attempt.lesson_id, "score": attempt.score_percent},
+    )
+    return attempt
+
+
+@router.post("/quiz/attempts/{attempt_id}/finalize", response_model=QuizAttemptResponse)
+async def finalize_quiz_attempt(
+    attempt_id: int,
+    payload: QuizAttemptFinalize,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_authenticated_user),
+):
+    attempt = db.query(QuizAttempt).filter(QuizAttempt.id == attempt_id).first()
+    if not attempt:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Quiz attempt not found")
+    ensure_user_scope(attempt.user_id, current_user)
+    finalize_attempt_progress(db, attempt, payload.client_event_id)
+    db.commit()
+    db.refresh(attempt)
+    return attempt
 
 
 @router.post("/quiz/submit", response_model=QuizResultResponse, status_code=status.HTTP_201_CREATED)
@@ -63,6 +162,7 @@ async def submit_quiz_answer(
             points_earned = question.points
 
     attempt = None
+    standalone_attempt = not result_data.attempt_id
     if result_data.attempt_id:
         attempt = (
             db.query(QuizAttempt)
@@ -119,42 +219,9 @@ async def submit_quiz_answer(
         else 0
     )
 
-    learning_event = LearningEvent(
-        user_id=user_id,
-        lesson_id=lesson_id,
-        event_type="quiz_submitted",
-        duration_seconds=result_data.time_spent_seconds,
-        score=score_percent,
-        payload={
-            "question_id": question.id,
-            "selected_answer": result_data.selected_answer,
-            "is_correct": is_correct,
-            "points_earned": points_earned,
-        },
-    )
-    db.add(learning_event)
-
-    progress = (
-        db.query(LessonProgress)
-        .filter(
-            LessonProgress.user_id == user_id,
-            LessonProgress.lesson_id == lesson_id,
-        )
-        .first()
-    )
-    if not progress:
-        progress = LessonProgress(user_id=user_id, lesson_id=lesson_id)
-        db.add(progress)
-        db.flush()
-
-    progress.quiz_attempt_count += 1
-    progress.time_spent_seconds += result_data.time_spent_seconds
-    progress.last_activity_type = "quiz_submitted"
-    progress.best_quiz_score = max(progress.best_quiz_score, attempt.score_percent)
-    previous_total = progress.average_quiz_score * (progress.quiz_attempt_count - 1)
-    progress.average_quiz_score = round((previous_total + attempt.score_percent) / progress.quiz_attempt_count, 2)
-    progress.progress_percent = max(progress.progress_percent, 100 if attempt.score_percent >= 70 else 75)
-    progress.status = "completed" if progress.progress_percent >= 100 else "needs_review"
+    if standalone_attempt:
+        attempt.status = "in_progress"
+        finalize_attempt_progress(db, attempt)
     db.commit()
     db.refresh(quiz_result)
 
@@ -221,7 +288,8 @@ async def get_user_results(
 @router.get("/quiz/results/question/{question_id}")
 async def get_question_stats(
     question_id: int,
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(require_teacher_user),
 ):
     """Get statistics for a question."""
     question = db.query(Question).filter(Question.id == question_id).first()
@@ -251,7 +319,11 @@ async def get_question_stats(
 
 
 @router.get("/quiz/results/{result_id}", response_model=QuizResultResponse)
-async def get_quiz_result(result_id: int, db: Session = Depends(get_db)):
+async def get_quiz_result(
+    result_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_authenticated_user),
+):
     """Get a specific quiz result."""
     result = db.query(QuizResult).filter(QuizResult.id == result_id).first()
     if not result:
@@ -259,4 +331,5 @@ async def get_quiz_result(result_id: int, db: Session = Depends(get_db)):
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Quiz result not found",
         )
+    ensure_user_scope(result.user_id, current_user)
     return result

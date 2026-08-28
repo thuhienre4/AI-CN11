@@ -577,8 +577,36 @@ const industrial12Simulations = {
   },
 }
 
+const blastFurnaceSimulation = {
+  modelId: 20,
+  label: 'KNTT - Bài 4',
+  title: 'Mô hình sản xuất gang - thép trong lò cao',
+  subtitle: 'Quặng sắt, than cốc, đá vôi, gió nóng, gang lỏng, xỉ và khí thải',
+  objective:
+    'Mô phỏng theo hình sản xuất gang - thép trong lò cao: vật liệu nạp từ miệng lò đi xuống, gió nóng thổi từ đáy lò đi lên, tạo phản ứng khử oxit sắt để thu gang lỏng và tách xỉ.',
+  layers: [
+    { id: 'furnace', name: 'Lò cao', note: 'Thân lò chịu nhiệt, nơi diễn ra quá trình cháy, khử oxit sắt, nóng chảy và tách gang - xỉ.' },
+    { id: 'charge', name: 'Nạp liệu', note: 'Quặng sắt, than cốc và đá vôi được đưa vào đỉnh lò theo từng lớp.' },
+    { id: 'hotBlast', name: 'Gió nóng', note: 'Không khí nóng thổi vào đáy lò giúp than cốc cháy, tạo nhiệt độ cao và khí khử.' },
+    { id: 'products', name: 'Gang - xỉ', note: 'Gang lỏng chảy ra cửa tháo gang; xỉ nhẹ hơn nổi lên và được tháo riêng.' },
+    { id: 'gas', name: 'Khí thải', note: 'Khí sau phản ứng đi lên đỉnh lò, cần được thu hồi, xử lí hoặc tận dụng nhiệt.' },
+  ],
+  checkpoints: [
+    'Nguyên liệu chính gồm quặng sắt, than cốc và đá vôi; mỗi thành phần có nhiệm vụ riêng trong lò cao.',
+    'Gió nóng đi từ dưới lên, còn vật liệu rắn đi từ trên xuống, tạo quá trình trao đổi nhiệt và phản ứng liên tục.',
+    'Gang lỏng và xỉ được tách ở đáy lò; khí thải ra ở đỉnh lò cần được xử lí để giảm tác động môi trường.',
+  ],
+  teacherPrompts: [
+    'Vì sao than cốc vừa là nhiên liệu vừa tham gia tạo khí khử trong lò cao?',
+    'Đá vôi có vai trò gì trong việc tạo xỉ và loại bỏ tạp chất?',
+    'Nếu gió nóng cấp vào không đủ thì năng suất và chất lượng gang bị ảnh hưởng như thế nào?',
+  ],
+}
 const getSimulationKey = (lesson) => {
   if (!lesson) return 1
+  if (Number(lesson.grade_level) === 11 && Number(lesson.source_id || lesson.id) === 202) {
+    return 'blastFurnace'
+  }
   return lesson.source_course_id || lesson.course_id || 1
 }
 
@@ -590,10 +618,11 @@ const getIndustrial12Simulation = (simulationKey) => {
 
 const dieselFourStrokeSimulation = {
   ...knttSimulations[6],
-  title: 'Mô phỏng động cơ Diesel 4 kì',
-  subtitle: 'Nạp, nén, cháy - giãn nở và thải theo sơ đồ SGK',
+  label: 'Bài 18',
+  title: 'Mô hình 3D nguyên lí động cơ 4 kì',
+  subtitle: 'Nạp, nén, cháy - giãn nở và thải theo Bài 18 Công nghệ 11',
   objective:
-    'Mô phỏng nguyên lí làm việc của động cơ Diesel 4 kì trên lược đồ động cơ đốt trong: piston chuyển động giữa ĐCT và ĐCD, hành trình S, đường kính xi lanh D, bán kính quay trục khuỷu R, cùng vòi phun và hai xupap.',
+    'Mô phỏng nguyên lí làm việc của động cơ 4 kì trên lược đồ động cơ đốt trong: piston chuyển động giữa ĐCT và ĐCD, hành trình S, đường kính xi lanh D, bán kính quay trục khuỷu R, cùng cơ cấu phối khí và quá trình sinh công.',
   layers: [
     { id: 'intake', name: 'a. Kì nạp', note: 'Piston đi xuống, xupap nạp mở, không khí được hút qua ống nạp vào xi lanh; xupap thải đóng.' },
     { id: 'compression', name: 'b. Kì nén', note: 'Piston đi lên, hai xupap đều đóng, không khí trong xi lanh bị nén tới áp suất và nhiệt độ cao.' },
@@ -602,13 +631,13 @@ const dieselFourStrokeSimulation = {
   ],
   checkpoints: [
     'Piston chuyển động tịnh tiến trong xi lanh từ ĐCT đến ĐCD hoặc ngược lại; quãng đường đó là hành trình S.',
-    'Động cơ Diesel 4 kì hoàn thành một chu trình công tác trong bốn hành trình piston, tương ứng hai vòng quay trục khuỷu.',
-    'Động cơ Diesel không dùng bugi đánh lửa; nhiên liệu được vòi phun đưa vào cuối kì nén và tự bốc cháy trong không khí nóng.',
+    'Động cơ 4 kì hoàn thành một chu trình công tác trong bốn hành trình piston, tương ứng hai vòng quay trục khuỷu.',
+    'Ở cuối kì nén, động cơ xăng dùng bugi đánh lửa còn động cơ Diesel phun nhiên liệu vào không khí nóng để tự bốc cháy.',
     'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay của trục khuỷu; bán kính quay R liên hệ với hành trình piston.',
   ],
   teacherPrompts: [
-    'Vì sao động cơ Diesel cần tỉ số nén lớn hơn động cơ xăng?',
-    'Ở kì nào vòi phun bắt đầu phun nhiên liệu và vì sao không phun ngay từ kì nạp?',
+    'Vì sao kì cháy - giãn nở được gọi là kì sinh công?',
+    'Ở những kì nào hai xupap đều đóng, và điều đó giúp quá trình trong xi lanh diễn ra như thế nào?',
   ],
 }
 
@@ -621,28 +650,31 @@ const nova3D = {
 
 const fourStrokeEngineNovaPrompt = `
 Create a structured, editable GLB model for a Vietnamese Grade 11 Technology textbook lesson:
-"Sơ đồ cấu tạo và nguyên lí làm việc của động cơ xăng 2 kì".
+"Mô hình cắt bổ và nguyên lí làm việc của động cơ đốt trong 4 kì".
 
-Model an educational cutaway two-stroke gasoline engine based on the textbook diagram, with separate named parts:
+Model an educational single-cylinder four-stroke engine with separate named parts:
 - cylinder block and transparent cylinder wall
 - piston
+- piston pin
 - connecting rod
-- crankshaft and crank web
+- crankshaft, crank web, and crank pin
 - crankcase
-- intake port
-- transfer passage and scavenge port
-- exhaust port
-- spark plug
+- intake valve and exhaust valve
+- valve springs and camshaft
+- intake manifold and exhaust manifold
+- central spark plug or diesel injector
 - combustion chamber
-- blue arrows for intake into the crankcase
-- green arrows for fresh charge through the transfer passage into the cylinder
+- blue arrows for fresh charge entering through the intake valve
 - orange arrows for exhaust gas out of the exhaust port
+- yellow/orange combustion volume above the piston
 
 Show the textbook working principle:
-1. Piston moves upward: the intake port opens, fresh charge enters the crankcase; charge above the piston is compressed.
-2. Spark plug ignites compressed charge near top dead center.
-3. Combustion gas expands and pushes piston downward, driving the connecting rod and crankshaft.
-4. Piston opens exhaust and scavenge ports: exhaust gas leaves, fresh charge from crankcase passes through the transfer passage into the cylinder.
+1. Intake stroke: piston moves from TDC to BDC, intake valve open, exhaust valve closed.
+2. Compression stroke: piston moves from BDC to TDC, both valves closed.
+3. Power stroke: ignition occurs near TDC; expanding gas drives the piston to BDC, both valves closed.
+4. Exhaust stroke: piston moves from BDC to TDC, exhaust valve open, intake valve closed.
+
+The crankshaft must rotate exactly two revolutions per complete four-stroke cycle and the camshaft one revolution. Keep the piston, connecting rod, crank pin, and crankshaft mechanically aligned throughout the animation.
 
 Preserve semantic part names in the scene graph. Keep parts separated and editable, not a single merged mesh.
 Use simple textbook-style colors, clean geometry, and no decorative background. Prioritize correct working principle over visual complexity.
@@ -693,10 +725,128 @@ function addAnnotation(annotations, parent, layerId, label, note, x, y, z) {
   annotations.push({ anchor, layerId, label, note })
 }
 
+function setLayerName(object, layerId) {
+  object.name = layerId
+  object.traverse((part) => {
+    if (part.isMesh) part.name = layerId
+  })
+  return object
+}
+
+function buildBlastFurnaceModel() {
+  const root = new THREE.Group()
+  const animated = []
+  const annotations = []
+
+  const floor = box(7.2, 0.12, 3.2, 0xe2e8f0)
+  floor.position.set(0, -0.7, 0)
+  root.add(floor)
+
+  const furnace = setLayerName(new THREE.Group(), 'furnace')
+  const shaft = cylinder(0.72, 3.45, 0x334155, 0.24)
+  shaft.position.y = 0.95
+  furnace.add(shaft)
+  const belly = cylinder(0.92, 0.72, 0x475569, 0.32)
+  belly.position.y = -0.15
+  furnace.add(belly)
+  const hearth = cylinder(0.82, 0.5, 0x1f2937, 0.82)
+  hearth.position.y = -0.52
+  furnace.add(hearth)
+  const topBell = cone(0.58, 0.42, 0x64748b, 0.78)
+  topBell.position.y = 2.9
+  furnace.add(topBell)
+  const flame = cone(0.42, 0.82, 0xf97316, 0.62)
+  flame.position.y = -0.18
+  furnace.add(flame)
+  animated.push({ mesh: flame, type: 'blastFlame' })
+
+  const oreLayer = cylinder(0.46, 0.32, 0xef4444, 0.84)
+  oreLayer.position.y = 1.9
+  furnace.add(oreLayer)
+  const cokeLayer = cylinder(0.48, 0.32, 0x111827, 0.84)
+  cokeLayer.position.y = 1.48
+  furnace.add(cokeLayer)
+  const limestoneLayer = cylinder(0.5, 0.32, 0xf8fafc, 0.84)
+  limestoneLayer.position.y = 1.06
+  furnace.add(limestoneLayer)
+  root.add(furnace)
+
+  const charge = setLayerName(new THREE.Group(), 'charge')
+  const rail = box(0.08, 4.1, 0.08, 0x475569)
+  rail.rotation.z = -0.72
+  rail.position.set(-1.35, 1.25, 0)
+  charge.add(rail)
+  const bucket = box(0.42, 0.3, 0.38, 0xf59e0b)
+  bucket.position.set(-2.18, 0.28, 0)
+  bucket.rotation.z = -0.15
+  charge.add(bucket)
+  animated.push({ mesh: bucket, type: 'chargeBucket' })
+  const chargeArrow = setLayerName(createFlowArrow(1.15, 0xfacc15), 'charge')
+  chargeArrow.rotation.z = -0.85
+  chargeArrow.position.set(-0.82, 2.35, 0.02)
+  charge.add(chargeArrow)
+  animated.push({ mesh: chargeArrow, type: 'flowPulse' })
+  root.add(charge)
+
+  const hotBlast = setLayerName(new THREE.Group(), 'hotBlast')
+  const leftStove = cylinder(0.28, 2.35, 0x60a5fa, 0.35)
+  leftStove.position.set(-2.95, 0.55, 0)
+  hotBlast.add(leftStove)
+  const rightStove = cylinder(0.28, 2.35, 0xf9a8d4, 0.35)
+  rightStove.position.set(2.95, 0.55, 0)
+  hotBlast.add(rightStove)
+  const leftPipe = box(2.35, 0.12, 0.12, 0x0284c7)
+  leftPipe.position.set(-1.78, -0.42, 0)
+  hotBlast.add(leftPipe)
+  const rightPipe = box(2.35, 0.12, 0.12, 0xec4899)
+  rightPipe.position.set(1.78, -0.42, 0)
+  hotBlast.add(rightPipe)
+  const blastArrow = setLayerName(createFlowArrow(1.35, 0xf97316), 'hotBlast')
+  blastArrow.position.set(-1.62, -0.2, 0.18)
+  hotBlast.add(blastArrow)
+  animated.push({ mesh: blastArrow, type: 'flowPulse' })
+  root.add(hotBlast)
+
+  const products = setLayerName(new THREE.Group(), 'products')
+  const ironRunner = box(2.4, 0.1, 0.22, 0xf97316, 0.88)
+  ironRunner.position.set(1.42, -0.76, 0.34)
+  products.add(ironRunner)
+  const slagRunner = box(2.1, 0.08, 0.18, 0xfacc15, 0.8)
+  slagRunner.position.set(-1.28, -0.62, -0.38)
+  products.add(slagRunner)
+  const moltenDrop = new THREE.Mesh(new THREE.SphereGeometry(0.16, 24, 24), material(0xff6b00, 0.84))
+  moltenDrop.position.set(0.45, -0.73, 0.34)
+  products.add(moltenDrop)
+  animated.push({ mesh: moltenDrop, type: 'moltenPulse' })
+  root.add(products)
+
+  const gas = setLayerName(new THREE.Group(), 'gas')
+  const gasArrow = setLayerName(createFlowArrow(1.1, 0x94a3b8), 'gas')
+  gasArrow.rotation.z = Math.PI / 2
+  gasArrow.position.set(0.18, 2.65, 0)
+  gas.add(gasArrow)
+  animated.push({ mesh: gasArrow, type: 'flowPulse' })
+  const gasPipe = box(1.65, 0.1, 0.1, 0x64748b, 0.7)
+  gasPipe.position.set(1.12, 2.8, 0)
+  gas.add(gasPipe)
+  root.add(gas)
+
+  addAnnotation(annotations, root, 'furnace', 'Lò cao', 'Thân lò nơi quặng sắt, than cốc, đá vôi đi xuống và phản ứng với khí nóng đi lên.', 0, 2.45, 0)
+  addAnnotation(annotations, root, 'charge', 'Nạp liệu', 'Quặng sắt, than cốc và đá vôi được đưa vào miệng lò theo từng lớp.', -2.35, 2.2, 0)
+  addAnnotation(annotations, root, 'hotBlast', 'Gió nóng', 'Không khí nóng thổi vào đáy lò giúp than cốc cháy, tạo nhiệt và khí khử.', -2.72, -0.1, 0)
+  addAnnotation(annotations, root, 'products', 'Gang lỏng và xỉ', 'Gang lỏng chảy ra cửa tháo gang; xỉ nhẹ hơn được tách ra ở cửa xỉ.', 1.72, -0.42, 0.45)
+  addAnnotation(annotations, root, 'gas', 'Khí thải', 'Khí sau phản ứng đi lên đỉnh lò và được dẫn ra ngoài để xử lí hoặc tận dụng nhiệt.', 1.38, 2.98, 0)
+
+  return { root, animated, annotations }
+}
 function buildChapterModel(courseId, engineMode = 'twoStroke') {
   const root = new THREE.Group()
   const animated = []
   const annotations = []
+
+  if (courseId === 20) {
+    return buildBlastFurnaceModel()
+  }
 
   if (courseId === 1) {
     const stations = [
@@ -807,7 +957,8 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     const tdcY = 1.45
     const bdcY = 0.15
     const crankCenterY = -1.12
-    const crankRadius = 0.48
+    const crankRadius = (tdcY - bdcY) / 2
+    const connectingRodLength = (tdcY + bdcY) / 2 - crankCenterY
 
     const cylinderWall = cylinder(0.78, 2.7, 0x64748b, 0.2)
     cylinderWall.name = 'compression'
@@ -847,11 +998,12 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     pistonGroup.position.y = tdcY
     root.add(pistonGroup)
 
-    const rod = box(0.11, 2.12, 0.11, 0xf97316)
+    const rod = box(0.11, connectingRodLength, 0.11, 0xf97316)
     rod.name = 'power'
-    rod.userData.tdcY = (tdcY + crankCenterY) / 2
-    rod.userData.bdcY = (bdcY + crankCenterY) / 2
-    rod.position.y = rod.userData.tdcY
+    rod.userData.length = connectingRodLength
+    rod.userData.crankRadius = crankRadius
+    rod.userData.crankCenterY = crankCenterY
+    rod.position.y = (tdcY + crankCenterY + crankRadius) / 2
     root.add(rod)
 
     const crank = new THREE.Group()
@@ -1308,6 +1460,10 @@ export default function ThreeDSimulation() {
   const [speed, setSpeed] = useState(1)
   const [selectedLayer, setSelectedLayer] = useState('all')
   const [activeStep, setActiveStep] = useState(0)
+  const [visitedLayers, setVisitedLayers] = useState(() => new Set(['all']))
+  const [completedCheckpoints, setCompletedCheckpoints] = useState(() => new Set())
+  const [assessmentScore, setAssessmentScore] = useState(null)
+  const simulationStartedAt = useRef(Date.now())
   const [engineMode, setEngineMode] = useState('twoStroke')
   const [novaWorkflowId, setNovaWorkflowId] = useState(null)
   const [novaModelUrl, setNovaModelUrl] = useState(null)
@@ -1320,11 +1476,12 @@ export default function ThreeDSimulation() {
 
   useEffect(() => {
     const fetchLesson = async () => {
+      const catalogLesson = getSampleLesson(lessonId)
       try {
         const response = await lessonsAPI.get(lessonId)
-        setLesson(response.data)
+        setLesson(catalogLesson || response.data)
       } catch {
-        setLesson(getSampleLesson(lessonId))
+        setLesson(catalogLesson)
       } finally {
         setIsLoading(false)
       }
@@ -1334,20 +1491,28 @@ export default function ThreeDSimulation() {
 
   useEffect(() => {
     if (!user?.id || !lessonId) return
+    simulationStartedAt.current = Date.now()
+    setVisitedLayers(new Set(['all']))
+    setCompletedCheckpoints(new Set())
+    setAssessmentScore(null)
     recordLocalLearningEvent(user.id, {
       lesson_id: Number(lessonId),
       event_type: 'simulation_opened',
-      duration_seconds: 120,
+      duration_seconds: 0,
     })
   }, [user?.id, lessonId])
 
   const simulationKey = getSimulationKey(lesson)
+  const isFourStrokeLesson = Number(lesson?.grade_level) === 11 && Number(lesson?.source_id || lesson?.id) === 602
   const simulation = lesson?.grade_level === 12
     ? getIndustrial12Simulation(simulationKey)
     : lesson?.grade_level === 11
-      ? mechanical11SpecializedSimulations[simulationKey] || mechanical11SpecializedSimulations[1]
+      ? simulationKey === 'blastFurnace'
+        ? blastFurnaceSimulation
+        : mechanical11SpecializedSimulations[simulationKey] || knttSimulations[simulationKey] || mechanical11SpecializedSimulations[1]
       : technology10Simulations[simulationKey] || technology10Simulations[1]
-  const displayedSimulation = simulation.modelId === 6 && engineMode === 'diesel4'
+  const isFourStrokeMode = simulation.modelId === 6 && (engineMode === 'diesel4' || isFourStrokeLesson)
+  const displayedSimulation = isFourStrokeMode
     ? dieselFourStrokeSimulation
     : simulation
   const simulationExperiment = getSimulationExperimentForLesson(lesson)
@@ -1360,6 +1525,41 @@ export default function ThreeDSimulation() {
     () => [{ id: 'all', name: 'Tổng quan', note: displayedSimulation.objective }, ...displayedSimulation.layers],
     [displayedSimulation]
   )
+
+  const selectKnowledgeLayer = (layerId) => {
+    setSelectedLayer(layerId)
+    setVisitedLayers((current) => new Set([...current, layerId]))
+  }
+
+  const toggleCheckpoint = (checkpoint) => {
+    setCompletedCheckpoints((current) => {
+      const next = new Set(current)
+      if (next.has(checkpoint)) next.delete(checkpoint)
+      else next.add(checkpoint)
+      return next
+    })
+    setAssessmentScore(null)
+  }
+
+  const submitSimulationAssessment = () => {
+    const layerCoverage = visitedLayers.size / Math.max(layerButtons.length, 1)
+    const checkpointCoverage = completedCheckpoints.size / Math.max(displayedSimulation.checkpoints.length, 1)
+    const score = Math.round((layerCoverage * 0.4 + checkpointCoverage * 0.6) * 100)
+    const durationSeconds = Math.max(1, Math.round((Date.now() - simulationStartedAt.current) / 1000))
+    setAssessmentScore(score)
+    recordLocalLearningEvent(user?.id, {
+      lesson_id: Number(lessonId),
+      event_type: 'simulation_completed',
+      duration_seconds: durationSeconds,
+      score,
+      payload: {
+        visited_layers: [...visitedLayers],
+        confirmed_checkpoints: [...completedCheckpoints],
+        total_layers: layerButtons.length,
+        total_checkpoints: displayedSimulation.checkpoints.length,
+      },
+    })
+  }
 
   useEffect(() => {
     if (isLoading || !shouldUseNovaApi) {
@@ -1491,7 +1691,10 @@ export default function ThreeDSimulation() {
     base.position.y = -0.65
     scene.add(base)
 
-    const { root, animated, annotations } = buildChapterModel(simulation.modelId, engineMode)
+    const { root, animated, annotations } = buildChapterModel(
+      simulation.modelId,
+      isFourStrokeLesson ? 'diesel4' : engineMode
+    )
     if (simulation.modelId === 8) {
       root.scale.setScalar(0.78)
       root.position.set(0, -0.18, 0.12)
@@ -1557,7 +1760,10 @@ export default function ThreeDSimulation() {
       if (isPlaying) angle += 0.025 * speed
       root.rotation.y = simulation.modelId === 8 ? 0 : Math.sin(angle * 0.25) * 0.18
 
-      const step = Math.floor((((angle % (Math.PI * 2)) + Math.PI * 2) / (Math.PI * 2)) * displayedSimulation.layers.length)
+      const cycleDuration = isFourStrokeMode ? Math.PI * 4 : Math.PI * 2
+      const cyclePhase = ((angle % cycleDuration) + cycleDuration) % cycleDuration
+      const cycleProgress = cyclePhase / cycleDuration
+      const step = Math.floor(cycleProgress * displayedSimulation.layers.length)
       if (step !== lastStep) {
         lastStep = step
         setActiveStep(step % displayedSimulation.layers.length)
@@ -1584,26 +1790,26 @@ export default function ThreeDSimulation() {
           mesh.rotation.z = Math.sin(angle + mesh.userData.phase) * 0.22
         }
         if (type === 'dieselSinglePiston') {
-          const phase = ((angle % (Math.PI * 4)) + Math.PI * 4) % (Math.PI * 4)
-          const cycleProgress = phase / (Math.PI * 4)
-          const movingDown = cycleProgress < 0.25 || (cycleProgress >= 0.5 && cycleProgress < 0.75)
-          const localProgress = (cycleProgress % 0.25) / 0.25
-          const t = movingDown ? localProgress : 1 - localProgress
-          mesh.position.y = mesh.userData.tdcY + (mesh.userData.bdcY - mesh.userData.tdcY) * t
+          const crankRadius = (mesh.userData.tdcY - mesh.userData.bdcY) / 2
+          const crankCenterY = -1.12
+          const rodLength = (mesh.userData.tdcY + mesh.userData.bdcY) / 2 - crankCenterY
+          const crankAngle = Math.PI / 2 - cyclePhase
+          const crankPinX = crankRadius * Math.cos(crankAngle)
+          const crankPinY = crankCenterY + crankRadius * Math.sin(crankAngle)
+          mesh.position.y = crankPinY + Math.sqrt(Math.max(rodLength ** 2 - crankPinX ** 2, 0))
         }
         if (type === 'dieselSingleRod') {
-          const phase = ((angle % (Math.PI * 4)) + Math.PI * 4) % (Math.PI * 4)
-          const cycleProgress = phase / (Math.PI * 4)
-          const movingDown = cycleProgress < 0.25 || (cycleProgress >= 0.5 && cycleProgress < 0.75)
-          const localProgress = (cycleProgress % 0.25) / 0.25
-          const t = movingDown ? localProgress : 1 - localProgress
-          mesh.position.y = mesh.userData.tdcY + (mesh.userData.bdcY - mesh.userData.tdcY) * t
-          mesh.rotation.z = Math.sin(phase * 2) * 0.24
+          const crankAngle = Math.PI / 2 - cyclePhase
+          const crankPinX = mesh.userData.crankRadius * Math.cos(crankAngle)
+          const crankPinY = mesh.userData.crankCenterY + mesh.userData.crankRadius * Math.sin(crankAngle)
+          const pistonPinY = crankPinY + Math.sqrt(
+            Math.max(mesh.userData.length ** 2 - crankPinX ** 2, 0)
+          )
+          mesh.position.set(crankPinX / 2, (pistonPinY + crankPinY) / 2, 0)
+          mesh.rotation.z = Math.atan2(crankPinX, pistonPinY - crankPinY)
         }
-        if (type === 'dieselSingleCrank') mesh.rotation.z -= 0.03 * speed
+        if (type === 'dieselSingleCrank') mesh.rotation.z = Math.PI / 2 - cyclePhase
         if (type === 'dieselIntakeValve' || type === 'dieselExhaustValve') {
-          const phase = ((angle % (Math.PI * 4)) + Math.PI * 4) % (Math.PI * 4)
-          const cycleProgress = phase / (Math.PI * 4)
           const open = type === 'dieselIntakeValve'
             ? cycleProgress < 0.25
             : cycleProgress >= 0.75
@@ -1611,8 +1817,6 @@ export default function ThreeDSimulation() {
           mesh.material.color.setHex(open ? (type === 'dieselIntakeValve' ? 0x0ea5e9 : 0xf97316) : 0x475569)
         }
         if (type === 'dieselIntakeFlow' || type === 'dieselExhaustFlow') {
-          const phase = ((angle % (Math.PI * 4)) + Math.PI * 4) % (Math.PI * 4)
-          const cycleProgress = phase / (Math.PI * 4)
           const active = type === 'dieselIntakeFlow'
             ? cycleProgress < 0.25
             : cycleProgress >= 0.75
@@ -1624,8 +1828,6 @@ export default function ThreeDSimulation() {
           })
         }
         if (type === 'dieselCombustion') {
-          const phase = ((angle % (Math.PI * 4)) + Math.PI * 4) % (Math.PI * 4)
-          const cycleProgress = phase / (Math.PI * 4)
           const active = cycleProgress >= 0.5 && cycleProgress < 0.62
           mesh.scale.setScalar(active ? 1.15 + Math.sin(angle * 8) * 0.18 : 0.35)
           mesh.material.opacity = active ? 0.85 : 0.08
@@ -1648,6 +1850,20 @@ export default function ThreeDSimulation() {
           mesh.material.transparent = true
         }
         if (type === 'transfer') mesh.position.x = -3 + ((angle * 0.7) % 6)
+        if (type === 'chargeBucket') {
+          const t = (Math.sin(angle * 0.85) + 1) / 2
+          mesh.position.x = -2.35 + t * 1.35
+          mesh.position.y = 0.16 + t * 2.12
+        }
+        if (type === 'blastFlame') {
+          mesh.scale.setScalar(0.92 + Math.sin(angle * 4) * 0.08)
+          mesh.material.opacity = 0.48 + Math.abs(Math.sin(angle * 3)) * 0.26
+          mesh.material.transparent = true
+        }
+        if (type === 'moltenPulse') {
+          mesh.position.x = 0.35 + ((angle * 0.65) % 1.8)
+          mesh.scale.setScalar(0.75 + Math.abs(Math.sin(angle * 2.5)) * 0.35)
+        }
       })
 
       const selected = selectedLayerRef.current
@@ -1688,7 +1904,7 @@ export default function ThreeDSimulation() {
       labelLayer.remove()
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
     }
-  }, [simulation.modelId, displayedSimulation.layers.length, engineMode, isLoading, isPlaying, speed, novaModelUrl])
+  }, [simulation.modelId, displayedSimulation.layers.length, engineMode, isFourStrokeLesson, isFourStrokeMode, isLoading, isPlaying, speed, novaModelUrl])
 
   if (isLoading) {
     return <div className="page-container text-center text-slate-600">Đang tải mô phỏng 3D...</div>
@@ -1751,7 +1967,7 @@ export default function ThreeDSimulation() {
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: 'twoStroke', label: 'Xăng 2 kì' },
-                  { id: 'diesel4', label: 'Diesel 4 kì' },
+                  { id: 'diesel4', label: isFourStrokeLesson ? 'Động cơ 4 kì' : 'Diesel 4 kì' },
                 ].map((mode) => (
                   <button
                     key={mode.id}
@@ -1763,10 +1979,11 @@ export default function ThreeDSimulation() {
                       setNovaModelUrl(null)
                     }}
                     className={`rounded-md px-3 py-2 text-sm font-bold transition ${
-                      engineMode === mode.id
+                      (isFourStrokeLesson ? mode.id === 'diesel4' : engineMode === mode.id)
                         ? 'bg-slate-950 text-white'
                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
+                    disabled={isFourStrokeLesson && mode.id === 'twoStroke'}
                   >
                     {mode.label}
                   </button>
@@ -1820,7 +2037,7 @@ export default function ThreeDSimulation() {
                 <button
                   key={layer.id}
                   type="button"
-                  onClick={() => setSelectedLayer(layer.id)}
+                  onClick={() => selectKnowledgeLayer(layer.id)}
                   className={`rounded-lg border px-3 py-3 text-left text-sm font-semibold transition ${
                     selectedLayer === layer.id
                       ? 'border-blue-500 bg-blue-50 text-blue-950'
@@ -1842,10 +2059,34 @@ export default function ThreeDSimulation() {
             <h3 className="font-bold text-slate-950">Kiến thức chuẩn cần chốt</h3>
             <div className="mt-3 space-y-3">
               {displayedSimulation.checkpoints.map((item) => (
-                <div key={item} className="rounded-lg border border-slate-200 bg-slate-50 p-3 text-sm leading-6 text-slate-700">
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => toggleCheckpoint(item)}
+                  className={`w-full rounded-lg border p-3 text-left text-sm leading-6 transition ${
+                    completedCheckpoints.has(item)
+                      ? 'border-emerald-300 bg-emerald-50 text-emerald-900'
+                      : 'border-slate-200 bg-slate-50 text-slate-700 hover:border-blue-300'
+                  }`}
+                >
+                  <span className="mr-2 font-black">{completedCheckpoints.has(item) ? '✓' : '○'}</span>
                   {item}
-                </div>
+                </button>
               ))}
+            </div>
+            <div className="mt-4 rounded-lg border border-indigo-200 bg-indigo-50 p-4">
+              <div className="flex items-center justify-between gap-3 text-sm font-bold text-indigo-950">
+                <span>Đã quan sát {visitedLayers.size}/{layerButtons.length} lớp</span>
+                <span>Đã xác nhận {completedCheckpoints.size}/{displayedSimulation.checkpoints.length} ý</span>
+              </div>
+              <button type="button" onClick={submitSimulationAssessment} className="primary-button mt-3 w-full">
+                Hoàn thành và lưu kết quả mô phỏng
+              </button>
+              {assessmentScore !== null && (
+                <p className="mt-3 rounded-md bg-white p-3 text-center text-sm font-black text-indigo-900">
+                  Điểm hoàn thành mô phỏng: {assessmentScore}%
+                </p>
+              )}
             </div>
           </section>
 

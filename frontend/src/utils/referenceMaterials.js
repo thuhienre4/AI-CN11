@@ -10,9 +10,17 @@ export const allowedMaterialTypes = [
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
 ]
 
+const normalizeMaterials = (payload) => {
+  if (Array.isArray(payload)) return payload
+  if (Array.isArray(payload?.data)) return payload.data
+  if (Array.isArray(payload?.items)) return payload.items
+  if (Array.isArray(payload?.results)) return payload.results
+  return []
+}
+
 export const readReferenceMaterials = async () => {
   const response = await materialsAPI.list()
-  return response.data
+  return normalizeMaterials(response.data)
 }
 
 export const createReferenceMaterial = async ({

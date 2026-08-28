@@ -1,4 +1,5 @@
 import { createKnttLmsData } from './knttLmsFactory'
+import { grade12AssessmentBank } from './knttChapterAssessmentBanks'
 
 const courseSpecs = [
   { id: 1, short_title: 'Chương I. Giới thiệu chung về kĩ thuật điện', title: 'Chương I. Giới thiệu chung về kĩ thuật điện', description: 'Khái quát vai trò, triển vọng và ngành nghề trong lĩnh vực kĩ thuật điện.' },
@@ -69,6 +70,7 @@ const data = createKnttLmsData({
   lessonSpecs: lessonSpecs.map(enrichLessonFromSlide),
   assessmentPrefix: 'kntt12',
   defaultTitle: 'Công nghệ Điện - Điện tử 12',
+  assessmentBank: grade12AssessmentBank,
 })
 
 export const canhDieuCourses = data.courses

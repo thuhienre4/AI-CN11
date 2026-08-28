@@ -47,6 +47,7 @@ def list_posts(
     course_id: int | None = None,
     status_filter: str | None = "published",
     db: Session = Depends(get_db),
+    _current_user: User = Depends(get_authenticated_user),
 ):
     query = db.query(ClassroomPost)
     if course_id is not None:
@@ -76,6 +77,7 @@ def list_assignments(
     course_id: int | None = None,
     status_filter: str | None = "published",
     db: Session = Depends(get_db),
+    _current_user: User = Depends(get_authenticated_user),
 ):
     query = db.query(Assignment)
     if course_id is not None:

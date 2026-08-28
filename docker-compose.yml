@@ -40,10 +40,13 @@ services:
       dockerfile: Dockerfile
     container_name: ai_education_backend
     environment:
-      DATABASE_URL: postgresql+psycopg://ai_user:ai_password@postgres:5432/ai_education
-      REDIS_URL: redis://redis:6379/0
-      SECRET_KEY: your-secret-key-change-in-production
-      DEBUG: "true"
+      ENGINE_LAB_ENVIRONMENT: production
+      ENGINE_LAB_DATABASE_URL: postgresql+psycopg://ai_user:ai_password@postgres:5432/ai_education
+      ENGINE_LAB_REDIS_URL: redis://redis:6379/0
+      ENGINE_LAB_SECRET_KEY: ${ENGINE_LAB_SECRET_KEY:?Set ENGINE_LAB_SECRET_KEY before starting Docker}
+      ENGINE_LAB_DEBUG: "false"
+      ENGINE_LAB_CORS_ORIGINS: '["http://localhost:5173","http://127.0.0.1:5173"]'
+      ENGINE_LAB_AI_API_KEY: ${GEMINI_API_KEY:-}
     ports:
       - "8000:8000"
     depends_on:

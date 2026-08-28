@@ -223,6 +223,7 @@ export default function ChatBot() {
   const [messages, setMessages] = useState([])
   const [inputValue, setInputValue] = useState('')
   const [isLoading, setIsLoading] = useState(false)
+  const [aiStatus, setAiStatus] = useState({ configured: false, provider: 'Gemini', model: '', available: false })
   const lesson = getSampleLesson(lessonId)
   const messagesEndRef = useRef(null)
 
@@ -238,6 +239,18 @@ export default function ChatBot() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  useEffect(() => {
+    let active = true
+    chatAPI.status()
+      .then((response) => {
+        if (active) setAiStatus({ ...response.data, available: true })
+      })
+      .catch(() => {
+        if (active) setAiStatus({ configured: false, provider: 'Gemini', model: '', available: false })
+      })
+    return () => { active = false }
+  }, [])
+
   const sendMessage = async (question) => {
     const cleanQuestion = question.trim()
     if (!cleanQuestion || isLoading) return
@@ -252,11 +265,12 @@ export default function ChatBot() {
     ])
     setInputValue('')
     setIsLoading(true)
-    recordLocalLearningEvent(user?.id, {
+    const localEvent = recordLocalLearningEvent(user?.id, {
       lesson_id: Number(lessonId),
       event_type: 'assistant_question',
       duration_seconds: 45,
       payload: { question: cleanQuestion },
+      auto_sync: false,
     })
 
     try {
@@ -264,6 +278,7 @@ export default function ChatBot() {
         lesson_id: Number(lessonId),
         session_id: `lesson-${lessonId}`,
         user_message: cleanQuestion,
+        client_event_id: localEvent?.client_event_id,
       })
       setMessages((prev) => [
         ...prev,
@@ -271,6 +286,7 @@ export default function ChatBot() {
           id: `assistant-${Date.now()}`,
           text: response.data?.ai_response || buildTutorReply(cleanQuestion, lesson),
           sender: 'assistant',
+          mode: response.data?.response_mode || 'fallback',
         },
       ])
     } catch {
@@ -280,6 +296,7 @@ export default function ChatBot() {
           id: `assistant-${Date.now()}`,
           text: buildTutorReply(cleanQuestion, lesson),
           sender: 'assistant',
+          mode: 'offline',
         },
       ])
     } finally {
@@ -293,12 +310,21 @@ export default function ChatBot() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="nova-ai-page min-h-screen bg-slate-50">
       <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 py-6">
-        <div className="mb-4 rounded-lg border border-violet-200 bg-violet-50 p-5">
+        <div className="nova-ai-hero mb-4 rounded-lg border border-violet-200 bg-violet-50 p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="muted-label">EngineLab AI Assistant</p>
+            <span className={`mt-2 inline-flex rounded-full px-3 py-1 text-xs font-bold ${
+              aiStatus.configured && aiStatus.available
+                ? 'bg-emerald-100 text-emerald-800'
+                : 'bg-amber-100 text-amber-800'
+            }`}>
+              {aiStatus.configured && aiStatus.available
+                ? `AI thật: ${aiStatus.provider} ${aiStatus.model}`
+                : 'Chế độ dự phòng an toàn'}
+            </span>
             <h1 className="text-3xl font-bold text-violet-950">AI gia sư Công nghệ 10</h1>
             <p className="mt-2 max-w-2xl text-base leading-7 text-violet-900">{welcomeMessage}</p>
           </div>
@@ -323,7 +349,7 @@ export default function ChatBot() {
         </div>
 
         <div className="grid flex-1 gap-4 lg:grid-cols-[1fr_320px]">
-          <section className="panel flex min-h-[620px] flex-col overflow-hidden p-0">
+          <section className="nova-chat-panel panel flex min-h-[620px] flex-col overflow-hidden p-0">
             <div className="border-b border-slate-200 bg-white px-5 py-4">
               <h2 className="text-lg font-semibold text-slate-950">Phiên hỏi đáp</h2>
               <p className="text-base leading-7 text-slate-600">
@@ -355,6 +381,11 @@ export default function ChatBot() {
                       }`}
                     >
                       {msg.text}
+                      {msg.sender === 'assistant' && msg.mode && (
+                        <span className="mt-2 block text-[11px] font-bold uppercase tracking-wide opacity-60">
+                          {msg.mode === 'gemini' ? 'Gemini AI' : msg.mode === 'offline' ? 'Ngoại tuyến' : 'Phản hồi dự phòng'}
+                        </span>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -371,7 +402,7 @@ export default function ChatBot() {
               <div ref={messagesEndRef} />
             </div>
 
-            <form onSubmit={handleSendMessage} className="border-t border-slate-200 bg-white p-4">
+            <form onSubmit={handleSendMessage} className="nova-chat-composer border-t border-slate-200 bg-white p-4">
               <div className="flex gap-2">
                 <input
                   type="text"
@@ -388,7 +419,7 @@ export default function ChatBot() {
             </form>
           </section>
 
-          <aside className="space-y-4">
+          <aside className="nova-ai-sidebar space-y-4">
             <div className="rounded-lg border border-violet-200 bg-violet-50 p-4 shadow-sm">
               <h2 className="font-semibold text-violet-950">Câu hỏi gợi ý</h2>
               <div className="mt-3 space-y-2">

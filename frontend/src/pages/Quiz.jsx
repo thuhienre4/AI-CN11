@@ -3,7 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { questionsAPI, quizAPI } from '../services/api'
 import { useAuthStore } from '../store'
 import { getSampleLesson, getSampleQuestionsByLesson } from '../data/courseCatalog'
-import { recordLocalLearningEvent } from '../utils/learningProgress'
+import { recordLocalLearningEvent, syncPendingLearningEvents } from '../utils/learningProgress'
 
 export default function Quiz() {
   const { lessonId } = useParams()
@@ -13,6 +13,7 @@ export default function Quiz() {
   const [score, setScore] = useState(0)
   const [isLoading, setIsLoading] = useState(true)
   const [quizSubmitted, setQuizSubmitted] = useState(false)
+  const [attemptId, setAttemptId] = useState(null)
   const lesson = getSampleLesson(lessonId)
 
   useEffect(() => {
@@ -28,18 +29,28 @@ export default function Quiz() {
     } finally {
       setIsLoading(false)
     }
+    if (user?.id) {
+      try {
+        const attempt = await quizAPI.startAttempt(user.id, lessonId)
+        setAttemptId(attempt.data.id)
+      } catch {
+        setAttemptId(null)
+      }
+    }
   }
 
   const handleAnswer = async (optionId) => {
     const question = questions[currentIndex]
-    const isCorrect = question.options.some((opt) => opt.id === optionId && opt.is_correct)
+    let isCorrect = question.options.some((opt) => opt.id === optionId && opt.is_correct)
 
     try {
-      await quizAPI.submit(user?.id || 1, {
+      const response = await quizAPI.submit(user?.id || 1, {
         question_id: question.id,
+        attempt_id: attemptId,
         selected_answer: optionId.toString(),
         time_spent_seconds: 30,
       })
+      isCorrect = Boolean(response.data?.is_correct)
     } catch {
       // Offline mode: kiểm tra vẫn chạy khi backend chưa bật.
     }
@@ -53,13 +64,23 @@ export default function Quiz() {
     } else {
       const finalScore = score + (isCorrect ? 1 : 0)
       const scorePercent = Math.round((finalScore / questions.length) * 100)
-      recordLocalLearningEvent(user?.id, {
+      const localEvent = recordLocalLearningEvent(user?.id, {
         lesson_id: Number(lessonId),
         event_type: 'quiz_submitted',
         duration_seconds: 30,
         score: scorePercent,
         payload: { correct_answers: finalScore, total_questions: questions.length },
+        auto_sync: false,
       })
+      if (attemptId) {
+        try {
+          await quizAPI.finalizeAttempt(attemptId, { client_event_id: localEvent?.client_event_id })
+        } catch {
+          void syncPendingLearningEvents(user?.id)
+        }
+      } else {
+        void syncPendingLearningEvents(user?.id)
+      }
       setQuizSubmitted(true)
     }
   }
@@ -75,8 +96,8 @@ export default function Quiz() {
   if (quizSubmitted) {
     const percentage = Math.round((score / questions.length) * 100)
     return (
-      <div className="page-container">
-        <div className="panel mx-auto max-w-2xl p-8 text-center">
+      <div className="nova-quiz-page page-container">
+        <div className="nova-quiz-result panel mx-auto max-w-2xl p-8 text-center">
           <p className="muted-label mb-2">Kết quả đánh giá</p>
           <h1 className="text-3xl font-bold text-slate-950">Hoàn thành kiểm tra nhanh</h1>
           <div className="my-8">
@@ -91,6 +112,12 @@ export default function Quiz() {
                 setCurrentIndex(0)
                 setScore(0)
                 setQuizSubmitted(false)
+                setAttemptId(null)
+                if (user?.id) {
+                  quizAPI.startAttempt(user.id, lessonId)
+                    .then((response) => setAttemptId(response.data.id))
+                    .catch(() => setAttemptId(null))
+                }
               }}
               className="primary-button"
             >
@@ -109,8 +136,8 @@ export default function Quiz() {
   const progress = ((currentIndex + 1) / questions.length) * 100
 
   return (
-    <div className="page-container">
-      <div className="panel mx-auto max-w-3xl p-6 sm:p-8">
+    <div className="nova-quiz-page page-container">
+      <div className="nova-quiz-card panel mx-auto max-w-3xl p-6 sm:p-8">
         <div className="mb-6">
           <p className="muted-label mb-2">Kiểm tra nhanh</p>
           <h1 className="text-2xl font-bold text-slate-950">{lesson?.title || 'Động cơ đốt trong'}</h1>

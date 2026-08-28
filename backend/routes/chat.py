@@ -1,13 +1,15 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, status, WebSocket
+from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect
 from sqlalchemy.orm import Session
 from typing import List
 
-from auth import can_manage_content, get_authenticated_user
+from auth import can_manage_content, decode_token, get_authenticated_user
 from database import get_db
-from models import ChatHistory, LearningEvent, Lesson, LessonProgress, User
+from models import ChatHistory, LearningEvent, Lesson, LessonProgress, QuizResult, User
 from schemas import ChatMessageResponse, ChatMessageCreate
+from ai_tutor import AITutorError, generate_ai_tutor_reply
+from config import settings
 
 router = APIRouter(prefix="/api", tags=["Chat"])
 
@@ -23,36 +25,45 @@ def ensure_user_scope(target_user_id: int, current_user: User) -> None:
 
 def build_tutor_reply(message: str, lesson: Lesson | None = None) -> str:
     text = (message or "").strip().lower()
-    lesson_hint = f" for lesson '{lesson.title}'" if lesson else ""
+    lesson_hint = f' trong bài "{lesson.title}"' if lesson else ""
 
     if not text:
-        return "Please enter a question about the lesson, simulation, quiz, or design process."
-    if any(keyword in text for keyword in ["4 stroke", "four stroke", "piston", "crankshaft", "valve", "engine"]):
+        return "Em hãy nhập câu hỏi về bài học, mô phỏng, bài kiểm tra hoặc quy trình thiết kế."
+    if any(keyword in text for keyword in ["4 kỳ", "bốn kỳ", "4 stroke", "piston", "trục khuỷu", "xupap", "động cơ"]):
         return (
-            "A four-stroke engine works through intake, compression, power, and exhaust. "
-            "Focus on piston direction, valve state, and when useful work is produced. "
-            "The power stroke happens after ignition when expanding gas pushes the piston down."
+            "Động cơ bốn kỳ làm việc theo thứ tự: nạp, nén, cháy–giãn nở và thải. "
+            "Em hãy quan sát hướng chuyển động của piston, trạng thái các xupap và kỳ sinh công. "
+            "Ở kỳ cháy–giãn nở, khí cháy đẩy piston đi xuống và làm quay trục khuỷu."
         )
-    if any(keyword in text for keyword in ["quiz", "test", "review", "wrong", "score"]):
+    if any(keyword in text for keyword in ["quiz", "kiểm tra", "ôn tập", "sai", "điểm"]):
         return (
-            "Review the concept first, then explain why each wrong option fails. "
-            "After that, redo the quiz and compare the new score with your best score."
+            "Trước tiên em hãy ôn lại khái niệm liên quan và xác định vì sao từng phương án sai chưa phù hợp. "
+            "Sau đó làm lại bài kiểm tra và so sánh kết quả mới với điểm tốt nhất trước đó."
         )
-    if any(keyword in text for keyword in ["design", "cad", "drawing", "projection", "system"]):
+    if any(keyword in text for keyword in ["thiết kế", "cad", "bản vẽ", "hình chiếu", "hệ thống"]):
         return (
-            "Use the engineering design loop: define the problem, list constraints, sketch options, "
-            "choose a solution, prototype or simulate it, test against criteria, then improve."
+            "Em có thể dùng quy trình thiết kế kỹ thuật: xác định vấn đề và ràng buộc; đề xuất phương án; "
+            "chọn giải pháp; tạo mẫu hoặc mô phỏng; thử nghiệm theo tiêu chí; sau đó cải tiến."
         )
     return (
-        f"I can help{lesson_hint}. Break the topic into: definition, main parts, operating principle, "
-        "real-life example, and one common mistake. Ask about one of those parts for a shorter explanation."
+        f"Trợ lý có thể hỗ trợ em{lesson_hint}. Hãy chia nội dung thành: khái niệm, bộ phận chính, "
+        "nguyên lí hoạt động, ví dụ thực tế và lỗi thường gặp. Em muốn tìm hiểu phần nào trước?"
     )
 
 
-def update_assistant_progress(db: Session, user_id: int, lesson_id: int | None, question: str) -> None:
+def update_assistant_progress(
+    db: Session,
+    user_id: int,
+    lesson_id: int | None,
+    question: str,
+    client_event_id: str | None = None,
+) -> None:
+    if client_event_id and db.query(LearningEvent).filter(LearningEvent.client_event_id == client_event_id).first():
+        return
     event = LearningEvent(
         user_id=user_id,
         lesson_id=lesson_id,
+        client_event_id=client_event_id,
         event_type="assistant_question",
         duration_seconds=45,
         payload={"question": question[:500]},
@@ -106,20 +117,62 @@ async def create_chat_message(
                 detail="Lesson not found",
             )
 
-    ai_response = build_tutor_reply(message_data.user_message, lesson)
+    progress = None
+    if lesson is not None:
+        progress = (
+            db.query(LessonProgress)
+            .filter(LessonProgress.user_id == user_id, LessonProgress.lesson_id == lesson.id)
+            .first()
+        )
+    history_query = db.query(ChatHistory).filter(ChatHistory.user_id == user_id)
+    if message_data.session_id:
+        history_query = history_query.filter(ChatHistory.session_id == message_data.session_id)
+    recent_history = list(reversed(history_query.order_by(ChatHistory.created_at.desc()).limit(6).all()))
+
+    response_mode = "gemini"
+    try:
+        ai_response = await generate_ai_tutor_reply(
+            message_data.user_message,
+            lesson=lesson,
+            user=user,
+            progress=progress,
+            history=recent_history,
+        )
+    except AITutorError:
+        response_mode = "fallback"
+        ai_response = build_tutor_reply(message_data.user_message, lesson)
     chat_message = ChatHistory(
         user_id=user_id,
         lesson_id=message_data.lesson_id,
         session_id=message_data.session_id,
         user_message=message_data.user_message,
         ai_response=ai_response,
+        response_mode=response_mode,
     )
     db.add(chat_message)
-    update_assistant_progress(db, user_id, message_data.lesson_id, message_data.user_message)
+    update_assistant_progress(
+        db,
+        user_id,
+        message_data.lesson_id,
+        message_data.user_message,
+        message_data.client_event_id,
+    )
     db.commit()
     db.refresh(chat_message)
 
     return chat_message
+
+
+@router.get("/chat/status")
+async def get_chat_status(current_user: User = Depends(get_authenticated_user)):
+    """Report whether the real AI provider is configured without exposing secrets."""
+    return {
+        "enabled": settings.enable_chatbot,
+        "provider": settings.ai_provider,
+        "model": settings.ai_model,
+        "configured": bool(settings.ai_api_key),
+        "fallback_available": True,
+    }
 
 
 @router.get("/chat/history/{user_id}", response_model=List[ChatMessageResponse])
@@ -213,13 +266,30 @@ async def delete_chat_message(
 
 # WebSocket endpoint for real-time chat (will be enhanced later)
 @router.websocket("/ws/chat/{user_id}")
-async def websocket_endpoint(websocket: WebSocket, user_id: int):
-    """WebSocket endpoint for real-time chat."""
+async def websocket_endpoint(
+    websocket: WebSocket,
+    user_id: int,
+    token: str | None = None,
+    db: Session = Depends(get_db),
+):
+    """Authenticated WebSocket channel reserved for realtime tutor updates."""
+    token_data = decode_token(token or "")
+    current_user = (
+        db.query(User).filter(User.username == token_data.username, User.is_active.is_(True)).first()
+        if token_data
+        else None
+    )
+    if not current_user:
+        await websocket.close(code=4401, reason="Authentication is required.")
+        return
+    if current_user.id != user_id and not can_manage_content(current_user):
+        await websocket.close(code=4403, reason="You cannot access this chat channel.")
+        return
+
     await websocket.accept()
     try:
         while True:
             data = await websocket.receive_text()
-            # Echo back for now - AI integration will come later
-            await websocket.send_text(f"Echo: {data}")
-    except Exception as e:
-        print(f"WebSocket error: {e}")
+            await websocket.send_json({"type": "ack", "message": data})
+    except WebSocketDisconnect:
+        return

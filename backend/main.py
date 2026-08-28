@@ -8,15 +8,20 @@ from sqlalchemy.exc import SQLAlchemyError
 from starlette import status
 
 from config import settings
+from catalog_seed import seed_catalog_if_empty
 from database import Base, engine
 from migrations import run_startup_migrations
 import models  # noqa: F401
 
 logger = logging.getLogger("enginelab")
 
+if settings.environment.lower() == "production" and settings.secret_key == "your-secret-key-change-in-production":
+    raise RuntimeError("ENGINE_LAB_SECRET_KEY must be changed before production startup.")
+
 # Create tables
 Base.metadata.create_all(bind=engine)
 run_startup_migrations(engine)
+seed_catalog_if_empty()
 
 # Initialize FastAPI app
 app = FastAPI(
@@ -92,7 +97,7 @@ async def root():
 
 
 # ============= Import Routes =============
-from routes import auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d
+from routes import auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime
 
 app.include_router(auth.router)
 app.include_router(lessons.router)
@@ -103,6 +108,7 @@ app.include_router(progress.router)
 app.include_router(materials.router)
 app.include_router(classroom.router)
 app.include_router(nova3d.router)
+app.include_router(realtime.router)
 
 
 if __name__ == "__main__":

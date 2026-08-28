@@ -1,3 +1,4 @@
+from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import Optional
 from pathlib import Path
@@ -20,6 +21,7 @@ class Settings(BaseSettings):
     app_name: str = "AI Education System"
     debug: bool = False
     version: str = "0.1.0"
+    environment: str = "development"
 
     # Database
     database_url: str = DEFAULT_DATABASE_URL
@@ -35,10 +37,16 @@ class Settings(BaseSettings):
     # CORS
     cors_origins: list = ["http://localhost:3000", "http://localhost:5173"]
 
-    # AI Service
-    ai_model: str = "mistral"  # or "llama", "gpt"
-    ai_api_key: Optional[str] = None
+    # AI Service0
+    ai_provider: str = "gemini"
+    ai_model: str = "gemini-2.5-flash"
+    ai_api_key: Optional[str] = Field(
+        default=None,
+        validation_alias=AliasChoices("ENGINE_LAB_AI_API_KEY", "GEMINI_API_KEY"),
+    )
     ai_base_url: Optional[str] = None
+    ai_timeout_seconds: float = 30.0
+    ai_max_output_tokens: int = 800
 
     # Nova3D GraphFlow Service
     nova3d_base_url: str = "https://nova3d.xyz/api"
@@ -51,5 +59,6 @@ class Settings(BaseSettings):
     enable_3d_simulation: bool = True
     enable_chatbot: bool = True
     enable_gamification: bool = True
+    allow_teacher_self_registration: bool = False
 
 settings = Settings()

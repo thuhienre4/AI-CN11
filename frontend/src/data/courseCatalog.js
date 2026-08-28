@@ -82,70 +82,12 @@ const mapQuestion = (question, config) => ({
   })),
 })
 
-const getCorrectOptionText = (question) =>
-  question.options?.[question.correctIndex] || question.options?.[0] || 'nội dung trọng tâm của bài'
-
 const diversifyAssessmentQuestions = (questions) => {
-  const normalizedQuestions = questions.map((question) => ({
+  return questions.map((question) => ({
     ...question,
     question_type: question.question_type || 'multiple_choice',
     points: question.points || 1,
   }))
-
-  if (!normalizedQuestions.length) return normalizedQuestions
-
-  const anchor = normalizedQuestions[0]
-  const second = normalizedQuestions[1] || normalizedQuestions[0]
-  const third = normalizedQuestions[2] || normalizedQuestions[0]
-  const correctAnchor = getCorrectOptionText(anchor)
-  const correctSecond = getCorrectOptionText(second)
-  const correctThird = getCorrectOptionText(third)
-
-  return [
-    ...normalizedQuestions,
-    {
-      id: `${anchor.id}-tf`,
-      question_type: 'true_false',
-      points: 1,
-      text: `Đúng hay sai: ${correctAnchor}`,
-      correctBoolean: true,
-      explanation: 'Nhận định này đúng vì bám vào kiến thức trọng tâm của chương.',
-    },
-    {
-      id: `${second.id}-multi`,
-      question_type: 'multi_select',
-      points: 2,
-      text: 'Chọn tất cả nhận định phù hợp khi ôn tập nội dung của chương.',
-      options: [
-        correctSecond,
-        'Bỏ qua tiêu chí an toàn nếu câu trả lời vẫn có vẻ hợp lí.',
-        'Liên hệ kiến thức với sơ đồ, quy trình hoặc tình huống thực tế.',
-        'Chỉ học thuộc tên bài, không cần giải thích bằng lời của mình.',
-      ],
-      correctIndexes: [0, 2],
-      explanation: 'Cần chọn cả ý kiến thức đúng và cách học vận dụng; các lựa chọn học vẹt hoặc bỏ qua an toàn đều không phù hợp.',
-    },
-    {
-      id: `${third.id}-fill`,
-      question_type: 'fill_blank',
-      points: 1,
-      text: 'Điền từ còn thiếu: Khi vận dụng kiến thức Công nghệ, học sinh luôn cần chú ý yếu tố ______ trong sử dụng, thiết kế hoặc vận hành.',
-      acceptedAnswers: ['an toàn', 'antoan'],
-      explanation: 'An toàn là tiêu chí bắt buộc trong các nội dung công nghệ, kĩ thuật và hệ thống.',
-    },
-    {
-      id: `${anchor.id}-match`,
-      question_type: 'matching',
-      points: 2,
-      text: 'Ghép khái niệm với ý nghĩa phù hợp.',
-      pairs: [
-        { term: 'Kiến thức trọng tâm', answer: correctThird },
-        { term: 'Vận dụng', answer: 'Liên hệ với sơ đồ, quy trình hoặc tình huống thực tế' },
-        { term: 'Tự đánh giá', answer: 'Đọc giải thích sau khi nộp để biết phần cần ôn lại' },
-      ],
-      explanation: 'Ghép cặp giúp kiểm tra khả năng hiểu thuật ngữ, không chỉ chọn một đáp án có sẵn.',
-    },
-  ]
 }
 
 const mapActivities = (activities, lessons, config) =>

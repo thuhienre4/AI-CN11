@@ -1,11 +1,19 @@
 import { sampleLessons } from '../data/courseCatalog'
+import { learningAPI } from '../services/api'
 
 const STORAGE_KEY = 'engine_lab_learning_events'
 const DEDUPE_WINDOW_MS = 60 * 1000
+let activeSync = null
+
+const createClientEventId = () => {
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID()
+  return `event-${Date.now()}-${Math.random().toString(36).slice(2, 12)}`
+}
 
 const readEvents = () => {
   try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+    const value = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
+    return Array.isArray(value) ? value.filter((item) => item && typeof item === 'object') : []
   } catch {
     return []
   }
@@ -34,11 +42,13 @@ export const recordLocalLearningEvent = (userId, event) => {
     event.event_type !== 'quiz_submitted' &&
     event.event_type !== 'game_played'
   ) {
+    void syncPendingLearningEvents(userId)
     return
   }
 
-  events.push({
+  const storedEvent = {
     id: `${now}-${events.length}`,
+    client_event_id: createClientEventId(),
     user_id: userId,
     lesson_id: event.lesson_id ? Number(event.lesson_id) : null,
     event_type: event.event_type,
@@ -46,8 +56,64 @@ export const recordLocalLearningEvent = (userId, event) => {
     score: event.score ?? null,
     payload: event.payload || null,
     created_at: new Date(now).toISOString(),
-  })
+    synced_at: null,
+  }
+  events.push(storedEvent)
   writeEvents(events.slice(-500))
+  if (event.auto_sync !== false) void syncPendingLearningEvents(userId)
+  return storedEvent
+}
+
+export const syncPendingLearningEvents = async (userId) => {
+  const token = localStorage.getItem('token')
+  if (!userId || !token || token.startsWith('local-token-')) return { synced: 0 }
+  if (activeSync) return activeSync
+
+  activeSync = (async () => {
+    let events = readEvents()
+    let assignedIds = false
+    events = events.map((event) => {
+      if (String(event.user_id) !== String(userId) || event.client_event_id) return event
+      assignedIds = true
+      return { ...event, client_event_id: createClientEventId() }
+    })
+    if (assignedIds) writeEvents(events)
+
+    const pending = events.filter(
+      (event) => String(event.user_id) === String(userId) && !event.synced_at,
+    )
+    let synced = 0
+
+    for (let index = 0; index < pending.length; index += 50) {
+      const batch = pending.slice(index, index + 50)
+      const payload = batch.map((event) => ({
+        lesson_id: event.lesson_id,
+        client_event_id: event.client_event_id,
+        event_type: event.event_type,
+        duration_seconds: Math.max(0, Number(event.duration_seconds || 0)),
+        score: event.score == null ? null : Number(event.score),
+        payload: event.payload,
+        occurred_at: event.created_at,
+      }))
+      await learningAPI.trackEventsBatch(userId, payload)
+      const completedIds = new Set(batch.map((event) => event.client_event_id))
+      const syncedAt = new Date().toISOString()
+      events = events.map((event) =>
+        completedIds.has(event.client_event_id) ? { ...event, synced_at: syncedAt } : event,
+      )
+      writeEvents(events)
+      synced += batch.length
+    }
+    return { synced }
+  })()
+
+  try {
+    return await activeSync
+  } catch {
+    return { synced: 0 }
+  } finally {
+    activeSync = null
+  }
 }
 
 const createEmptyProgress = (userId, lesson) => ({
@@ -86,6 +152,11 @@ const updateProgressFromEvent = (progress, event) => {
   if (event.event_type === 'simulation_opened') {
     progress.simulation_count += 1
     progress.progress_percent = Math.max(progress.progress_percent, 45)
+  }
+
+  if (event.event_type === 'simulation_completed') {
+    progress.simulation_count = Math.max(progress.simulation_count, 1)
+    progress.progress_percent = Math.max(progress.progress_percent, 70)
   }
 
   if (event.event_type === 'assistant_question') {
@@ -138,8 +209,8 @@ const getRiskLevel = (riskScore) => {
 
 const getKnowledgeUnit = (lesson) => {
   if (!lesson) return 'Kiến thức Công nghệ'
-  if (lesson.course_id <= 3) return 'Công nghệ 10 - Thiết kế và công nghệ'
-  if (lesson.course_id <= 6) return 'Công nghệ 11 - Cơ khí và chế tạo'
+  if (Number(lesson.grade_level) === 10 || lesson.course_id <= 3 || (lesson.course_id >= 1000 && lesson.course_id < 1100)) return 'Công nghệ 10 - Thiết kế và công nghệ'
+  if (Number(lesson.grade_level) === 11 || lesson.course_id <= 6 || (lesson.course_id >= 1100 && lesson.course_id < 1200)) return 'Công nghệ 11 - Cơ khí và chế tạo'
   return 'Công nghệ 12 - Điện, điện tử và điều khiển'
 }
 
@@ -359,7 +430,8 @@ export const buildLocalLearningDashboard = (userId) => {
 export const buildTeacherLearningAnalytics = () => {
   let users = []
   try {
-    users = JSON.parse(localStorage.getItem('local_auth_users') || '[]')
+    const value = JSON.parse(localStorage.getItem('local_auth_users') || '[]')
+    users = Array.isArray(value) ? value.filter((item) => item && typeof item === 'object') : []
   } catch {
     users = []
   }

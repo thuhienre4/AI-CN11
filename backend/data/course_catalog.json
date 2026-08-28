@@ -1,0 +1,4887 @@
+{
+  "generated_at": "2026-08-01T06:55:00.255Z",
+  "courses": [
+    {
+      "id": 1001,
+      "title": "Chương I. Đại cương về công nghệ",
+      "description": "Giúp học sinh hiểu công nghệ là gì, hệ thống kĩ thuật vận hành ra sao, một số công nghệ phổ biến và công nghệ mới, cách đánh giá công nghệ, tác động của cách mạng công nghiệp và định hướng nghề nghiệp trong lĩnh vực kĩ thuật - công nghệ.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1002,
+      "title": "Chương II. Vẽ kĩ thuật",
+      "description": "Hình thành năng lực đọc, lập và sử dụng bản vẽ kĩ thuật: tiêu chuẩn trình bày, hình chiếu vuông góc, hình cắt, mặt cắt, hình chiếu trục đo, phối cảnh, ren, bản vẽ cơ khí, bản vẽ xây dựng và CAD.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1003,
+      "title": "Chương III. Thiết kế kĩ thuật",
+      "description": "Tổ chức tư duy thiết kế theo quy trình: xác định vấn đề, tìm hiểu yêu cầu, đề xuất và lựa chọn phương án, tạo mẫu, thử nghiệm, đánh giá, hoàn thiện sản phẩm hoặc giải pháp kĩ thuật.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1518709268805-4e9042af2176?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1101,
+      "title": "Chương I. Giới thiệu chung về cơ khí chế tạo",
+      "description": "Khái quát vai trò, đặc điểm và ngành nghề trong lĩnh vực cơ khí chế tạo.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1102,
+      "title": "Chương II. Vật liệu cơ khí",
+      "description": "Tìm hiểu vật liệu kim loại, hợp kim, phi kim loại và vật liệu mới dùng trong cơ khí.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1103,
+      "title": "Chương III. Các phương pháp gia công cơ khí",
+      "description": "Nhận biết gia công cơ khí, một số phương pháp gia công và quy trình công nghệ gia công chi tiết.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1617791160536-598cf32026fb?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1104,
+      "title": "Chương IV. Sản xuất cơ khí",
+      "description": "Phân tích quá trình sản xuất, dây chuyền tự động, robot, tự động hóa và an toàn môi trường.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1504917595217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1105,
+      "title": "Chương V. Giới thiệu chung về cơ khí động lực",
+      "description": "Khái quát cơ khí động lực và định hướng ngành nghề liên quan.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1581092334651-ddf26d9a09d0?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1106,
+      "title": "Chương VI. Động cơ đốt trong",
+      "description": "Tìm hiểu đại cương, nguyên lí làm việc, cơ cấu và hệ thống trong động cơ đốt trong.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1107,
+      "title": "Chương VII. Ô tô",
+      "description": "Khái quát ô tô, hệ thống truyền lực, bánh xe - treo, lái, phanh và an toàn giao thông.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1617791160536-598cf32026fb?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1201,
+      "title": "Chương I. Giới thiệu chung về kĩ thuật điện",
+      "description": "Khái quát vai trò, triển vọng và ngành nghề trong lĩnh vực kĩ thuật điện.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1202,
+      "title": "Chương II. Hệ thống điện quốc gia",
+      "description": "Tìm hiểu mạch điện xoay chiều ba pha, sản xuất, truyền tải, phân phối và mạng điện.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1203,
+      "title": "Chương III. Hệ thống điện trong gia đình",
+      "description": "Thiết kế, lựa chọn thiết bị và lắp đặt mạch điều khiển trong hệ thống điện gia đình.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1204,
+      "title": "Chương IV. An toàn và tiết kiệm điện năng",
+      "description": "Thực hiện an toàn điện, sơ cứu điện và sử dụng điện tiết kiệm, hiệu quả.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1205,
+      "title": "Chương V. Giới thiệu chung về kĩ thuật điện tử",
+      "description": "Khái quát kĩ thuật điện tử, ngành nghề và dịch vụ trong lĩnh vực điện tử.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1206,
+      "title": "Chương VI. Linh kiện điện tử",
+      "description": "Nhận biết điện trở, tụ điện, cuộn cảm, diode, transistor, IC và mạch thực hành phát hiện dòng điện.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1558449028-b53a39d100fc?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1207,
+      "title": "Chương VII. Điện tử tương tự",
+      "description": "Tìm hiểu tín hiệu tương tự, khuếch đại thuật toán và mạch khuếch đại đảo.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1208,
+      "title": "Chương VIII. Điện tử số",
+      "description": "Nhận biết tín hiệu số, cổng logic, mạch xử lí tín hiệu và lắp ráp mạch báo cháy.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1555664424-778a1e5e1b48?auto=format&fit=crop&w=1200&q=80"
+    },
+    {
+      "id": 1209,
+      "title": "Chương IX. Vi điều khiển",
+      "description": "Khái quát vi điều khiển, bo mạch lập trình và dự án điều chỉnh cường độ sáng LED.",
+      "content": "",
+      "thumbnail_url": "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=1200&q=80"
+    }
+  ],
+  "lessons": [
+    {
+      "id": 100101,
+      "course_id": 1001,
+      "title": "Bài 1. Công nghệ và đời sống",
+      "description": "Nhận biết bản chất của công nghệ và vai trò của công nghệ trong sản xuất, đời sống, học tập và bảo vệ môi trường.",
+      "content": "Công nghệ là tập hợp tri thức, phương pháp, quy trình, kĩ năng và phương tiện do con người tạo ra để biến đổi nguồn lực thành sản phẩm, dịch vụ phục vụ nhu cầu. Bài học nhấn mạnh công nghệ luôn gắn với đời sống: từ sản xuất nông nghiệp, công nghiệp, y tế, giao thông đến học tập và sinh hoạt gia đình. Khi sử dụng hoặc lựa chọn công nghệ cần nhìn cả lợi ích, chi phí, an toàn, đạo đức và tác động môi trường.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 100102,
+      "course_id": 1001,
+      "title": "Bài 2. Hệ thống kĩ thuật",
+      "description": "Phân tích hệ thống kĩ thuật theo đầu vào, bộ phận xử lí, đầu ra, điều khiển và phản hồi.",
+      "content": "Hệ thống kĩ thuật là tập hợp các phần tử có liên hệ với nhau để thực hiện một nhiệm vụ xác định. Một hệ thống thường có đầu vào, quá trình xử lí hoặc biến đổi, đầu ra, bộ phận điều khiển và có thể có tín hiệu phản hồi. Cách nhìn hệ thống giúp học sinh hiểu dòng vật chất, năng lượng, thông tin trong máy móc, thiết bị và quy trình sản xuất.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 100103,
+      "course_id": 1001,
+      "title": "Bài 3. Công nghệ phổ biến",
+      "description": "Khái quát một số lĩnh vực công nghệ nền tảng trong sản xuất và đời sống hiện đại.",
+      "content": "Bài học giới thiệu các công nghệ phổ biến như cơ khí, điện, điện tử, tự động hoá, công nghệ vật liệu, công nghệ xây dựng và công nghệ thông tin. Mỗi công nghệ có đối tượng tác động, công cụ, quy trình và yêu cầu an toàn riêng. Hiểu các công nghệ phổ biến giúp học sinh nhận ra mối liên hệ giữa sản phẩm hằng ngày với các lĩnh vực kĩ thuật phía sau nó.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 100104,
+      "course_id": 1001,
+      "title": "Bài 4. Một số công nghệ mới",
+      "description": "Tìm hiểu trí tuệ nhân tạo, Internet vạn vật, robot, in 3D, vật liệu mới, năng lượng tái tạo và công nghệ sinh học.",
+      "content": "Các công nghệ mới làm thay đổi cách con người sản xuất, học tập và sinh hoạt. AI hỗ trợ phân tích dữ liệu và ra quyết định; IoT kết nối thiết bị để giám sát, điều khiển; robot thay con người làm việc nguy hiểm hoặc lặp lại; in 3D tạo mẫu nhanh; vật liệu mới và năng lượng tái tạo hướng tới hiệu quả và bền vững. Bài học cũng lưu ý rủi ro về dữ liệu, an toàn và đạo đức công nghệ.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 100105,
+      "course_id": 1001,
+      "title": "Bài 5. Đánh giá công nghệ",
+      "description": "Biết đánh giá một công nghệ theo tiêu chí kĩ thuật, kinh tế, xã hội, môi trường và khả năng triển khai.",
+      "content": "Đánh giá công nghệ là quá trình xem xét một giải pháp công nghệ trước khi lựa chọn, sử dụng hoặc cải tiến. Các tiêu chí thường gặp gồm hiệu quả kĩ thuật, độ tin cậy, chi phí, an toàn, ảnh hưởng môi trường, tác động xã hội và khả năng phù hợp với điều kiện sử dụng. Bài học giúp học sinh tránh lựa chọn cảm tính hoặc chỉ chạy theo công nghệ mới.",
+      "model_3d_url": null,
+      "order": 5
+    },
+    {
+      "id": 100106,
+      "course_id": 1001,
+      "title": "Bài 6. Cách mạng công nghiệp",
+      "description": "Nhận biết các cuộc cách mạng công nghiệp và tác động của chuyển đổi số đến sản xuất, nghề nghiệp, đời sống.",
+      "content": "Cách mạng công nghiệp là những bước nhảy lớn làm thay đổi công cụ lao động, nguồn năng lượng, phương thức sản xuất và tổ chức xã hội. Từ cơ giới hoá bằng hơi nước, sản xuất hàng loạt bằng điện, tự động hoá bằng điện tử - tin học đến công nghiệp 4.0 với dữ liệu, kết nối, AI và robot, mỗi giai đoạn đều tạo ra cơ hội và thách thức mới. Người học cần năng lực số, tư duy hệ thống và khả năng học suốt đời.",
+      "model_3d_url": null,
+      "order": 6
+    },
+    {
+      "id": 100107,
+      "course_id": 1001,
+      "title": "Bài 7. Nghề nghiệp kĩ thuật, công nghệ",
+      "description": "Tìm hiểu đặc điểm, yêu cầu năng lực và cơ hội nghề nghiệp trong lĩnh vực kĩ thuật - công nghệ.",
+      "content": "Lĩnh vực kĩ thuật, công nghệ rất rộng, gồm thiết kế, chế tạo, vận hành, bảo trì, kiểm định, tự động hoá, dữ liệu, xây dựng, năng lượng và nhiều ngành khác. Bài học định hướng học sinh nhận diện sở thích, năng lực, điều kiện học tập và nhu cầu xã hội để lựa chọn hướng phát triển phù hợp. Các nghề kĩ thuật yêu cầu kiến thức nền, kĩ năng thực hành, an toàn lao động, hợp tác và tinh thần cập nhật công nghệ.",
+      "model_3d_url": null,
+      "order": 7
+    },
+    {
+      "id": 100201,
+      "course_id": 1002,
+      "title": "Bài 8. Bản vẽ kĩ thuật và tiêu chuẩn trình bày bản vẽ kĩ thuật",
+      "description": "Hiểu vai trò của bản vẽ kĩ thuật và các tiêu chuẩn trình bày cơ bản.",
+      "content": "Bản vẽ kĩ thuật là ngôn ngữ dùng để truyền đạt thông tin về hình dạng, kích thước, vật liệu, yêu cầu kĩ thuật và cách chế tạo hoặc thi công sản phẩm. Để mọi người đọc hiểu thống nhất, bản vẽ phải tuân theo tiêu chuẩn về khổ giấy, tỉ lệ, nét vẽ, chữ viết, ghi kích thước, khung tên. Đây là nền tảng để học các dạng biểu diễn kĩ thuật tiếp theo.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 100202,
+      "course_id": 1002,
+      "title": "Bài 9. Hình chiếu vuông góc",
+      "description": "Biểu diễn vật thể bằng hình chiếu đứng, bằng, cạnh và liên hệ giữa các hình chiếu.",
+      "content": "Hình chiếu vuông góc biểu diễn vật thể lên các mặt phẳng chiếu bằng các tia chiếu vuông góc. Các hình chiếu cơ bản gồm hình chiếu đứng, hình chiếu bằng và hình chiếu cạnh. Khi đọc hoặc vẽ, học sinh cần xác định hướng chiếu, vị trí các hình chiếu và mối liên hệ kích thước giữa chúng để hình dung đúng vật thể trong không gian.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 100203,
+      "course_id": 1002,
+      "title": "Bài 10. Hình cắt và mặt cắt",
+      "description": "Dùng hình cắt, mặt cắt để biểu diễn cấu tạo bên trong vật thể.",
+      "content": "Khi vật thể có cấu tạo bên trong phức tạp, chỉ dùng hình chiếu ngoài sẽ khó thể hiện đầy đủ. Hình cắt được tạo bằng cách tưởng tượng dùng mặt phẳng cắt vật thể rồi bỏ phần trước mặt phẳng cắt để thấy phần bên trong. Mặt cắt chỉ thể hiện hình dạng phần vật thể nằm trên mặt phẳng cắt. Cần dùng đúng kí hiệu mặt phẳng cắt, đường gạch vật liệu và quy ước biểu diễn.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 100204,
+      "course_id": 1002,
+      "title": "Bài 11. Hình chiếu trục đo",
+      "description": "Biểu diễn vật thể trong không gian bằng hình chiếu trục đo.",
+      "content": "Hình chiếu trục đo là dạng biểu diễn giúp người đọc thấy đồng thời ba chiều của vật thể trên một hình vẽ. Khác với hình chiếu vuông góc, hình chiếu trục đo cho cảm giác không gian rõ hơn nên thuận lợi khi trình bày ý tưởng hoặc hỗ trợ đọc bản vẽ. Khi vẽ cần chú ý hệ trục, hệ số biến dạng và cách dựng các kích thước theo trục.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 100205,
+      "course_id": 1002,
+      "title": "Bài 12. Hình chiếu phối cảnh",
+      "description": "Tìm hiểu biểu diễn không gian gần với thị giác trong kiến trúc và thiết kế sản phẩm.",
+      "content": "Hình chiếu phối cảnh tạo hình ảnh giống cách mắt người quan sát: vật ở xa trông nhỏ hơn, các đường song song có thể hội tụ về điểm tụ. Dạng biểu diễn này thường dùng trong kiến trúc, nội thất, mĩ thuật công nghiệp và trình bày ý tưởng sản phẩm. Học sinh cần nhận biết đường chân trời, điểm tụ, phối cảnh một điểm tụ và hai điểm tụ.",
+      "model_3d_url": null,
+      "order": 5
+    },
+    {
+      "id": 100206,
+      "course_id": 1002,
+      "title": "Bài 13. Biểu diễn ren",
+      "description": "Đọc và biểu diễn ren theo quy ước trong các chi tiết lắp ghép.",
+      "content": "Ren là dạng kết cấu dùng nhiều trong bulông, đai ốc, vít, trục ren để lắp ghép, truyền lực hoặc truyền chuyển động. Vì hình dạng xoắn của ren phức tạp, bản vẽ kĩ thuật dùng quy ước nét vẽ để biểu diễn nhanh và rõ. Bài học giúp phân biệt ren ngoài, ren trong, đường đỉnh ren, đường chân ren, giới hạn ren và cách ghi kí hiệu ren.",
+      "model_3d_url": null,
+      "order": 6
+    },
+    {
+      "id": 100207,
+      "course_id": 1002,
+      "title": "Bài 14. Bản vẽ cơ khí",
+      "description": "Đọc bản vẽ chi tiết và bản vẽ lắp trong cơ khí.",
+      "content": "Bản vẽ cơ khí dùng trong thiết kế, chế tạo, kiểm tra và lắp ráp máy móc. Bản vẽ chi tiết thể hiện đầy đủ hình dạng, kích thước, vật liệu, yêu cầu kĩ thuật của một chi tiết để chế tạo. Bản vẽ lắp thể hiện vị trí, quan hệ lắp ghép và nguyên lí làm việc của cụm chi tiết. Đọc bản vẽ cơ khí cần đi theo trình tự: khung tên, hình biểu diễn, kích thước, yêu cầu kĩ thuật, bảng kê.",
+      "model_3d_url": null,
+      "order": 7
+    },
+    {
+      "id": 100208,
+      "course_id": 1002,
+      "title": "Bài 15. Bản vẽ xây dựng",
+      "description": "Nhận biết mặt bằng, mặt đứng, mặt cắt và kí hiệu trong bản vẽ xây dựng.",
+      "content": "Bản vẽ xây dựng dùng để thiết kế, thi công và quản lí công trình. Một bộ bản vẽ thường có mặt bằng, mặt đứng, mặt cắt và các kí hiệu quy ước như tường, cửa, cầu thang, vật liệu. Mặt bằng cho biết cách bố trí không gian; mặt đứng cho biết hình dáng bên ngoài; mặt cắt thể hiện cấu tạo theo chiều cao. Đọc bản vẽ cần chú ý tỉ lệ và kích thước.",
+      "model_3d_url": null,
+      "order": 8
+    },
+    {
+      "id": 100209,
+      "course_id": 1002,
+      "title": "Bài 16. Vẽ kĩ thuật với sự trợ giúp của máy tính",
+      "description": "Khai thác phần mềm CAD để tạo, sửa, lưu trữ và chia sẻ bản vẽ.",
+      "content": "Máy tính và phần mềm CAD hỗ trợ người học, kĩ sư, kiến trúc sư tạo bản vẽ nhanh, chính xác và dễ chỉnh sửa. CAD cho phép vẽ đường, hình, ghi kích thước, quản lí lớp, sao chép, hiệu chỉnh, lưu trữ và xuất bản vẽ. Tuy vậy, người dùng vẫn phải hiểu tiêu chuẩn bản vẽ và nguyên lí biểu diễn kĩ thuật để bản vẽ đúng, rõ, có thể dùng trong sản xuất hoặc thi công.",
+      "model_3d_url": null,
+      "order": 9
+    },
+    {
+      "id": 100301,
+      "course_id": 1003,
+      "title": "Bài 17. Khái quát về thiết kế kĩ thuật",
+      "description": "Hiểu thiết kế kĩ thuật là hoạt động giải quyết vấn đề bằng giải pháp, sản phẩm hoặc hệ thống kĩ thuật.",
+      "content": "Thiết kế kĩ thuật là quá trình tạo ra hoặc cải tiến sản phẩm, quy trình, hệ thống nhằm đáp ứng nhu cầu con người trong điều kiện cụ thể. Hoạt động thiết kế bắt đầu từ vấn đề thực tiễn, yêu cầu người thiết kế phân tích nhu cầu, đề xuất phương án, thử nghiệm và hoàn thiện. Một thiết kế tốt cần cân bằng công năng, an toàn, thẩm mĩ, chi phí, khả năng chế tạo và tác động môi trường.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 100302,
+      "course_id": 1003,
+      "title": "Bài 18. Quy trình thiết kế kĩ thuật",
+      "description": "Thực hành quy trình xác định vấn đề, nghiên cứu, đề xuất, chọn phương án, tạo mẫu, thử nghiệm và cải tiến.",
+      "content": "Quy trình thiết kế kĩ thuật là chuỗi hoạt động có thể lặp lại: xác định vấn đề, tìm hiểu thông tin, xác lập yêu cầu, đề xuất phương án, lựa chọn phương án, tạo mẫu, thử nghiệm, đánh giá và hoàn thiện. Quy trình không phải đường thẳng cố định; khi thử nghiệm phát hiện lỗi, nhóm thiết kế cần quay lại điều chỉnh yêu cầu hoặc phương án.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 100303,
+      "course_id": 1003,
+      "title": "Bài 19. Những yếu tố ảnh hưởng đến thiết kế kĩ thuật",
+      "description": "Phân tích yêu cầu người dùng, điều kiện sử dụng, vật liệu, công nghệ, kinh tế, thẩm mĩ, an toàn và môi trường.",
+      "content": "Thiết kế kĩ thuật chịu ảnh hưởng bởi nhiều yếu tố: nhu cầu người dùng, điều kiện sử dụng, vật liệu, công nghệ chế tạo, chi phí, thẩm mĩ, tiêu chuẩn an toàn, môi trường và văn hoá xã hội. Nếu bỏ qua một yếu tố quan trọng, sản phẩm có thể hoạt động được nhưng khó sử dụng, khó chế tạo, quá đắt hoặc không an toàn. Bài học rèn cách nhìn thiết kế như một bài toán có nhiều ràng buộc.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 100304,
+      "course_id": 1003,
+      "title": "Bài 20. Nguyên tắc thiết kế kĩ thuật",
+      "description": "Vận dụng các nguyên tắc: đáp ứng nhu cầu, đơn giản, an toàn, tin cậy, tiết kiệm và thân thiện môi trường.",
+      "content": "Nguyên tắc thiết kế là các định hướng giúp phương án trở nên hữu ích, an toàn và có khả năng triển khai. Một sản phẩm cần đáp ứng đúng nhu cầu, có cấu tạo hợp lí, dễ sử dụng, tin cậy, an toàn, tiết kiệm vật liệu - năng lượng, thuận lợi bảo trì và hạn chế tác động xấu tới môi trường. Các nguyên tắc này cần được vận dụng linh hoạt tùy nhiệm vụ thiết kế.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 100305,
+      "course_id": 1003,
+      "title": "Bài 21. Phương pháp, phương tiện hỗ trợ thiết kế kĩ thuật",
+      "description": "Sử dụng phác thảo, sơ đồ, mô hình, CAD, mô phỏng, in 3D và làm việc nhóm để hỗ trợ thiết kế.",
+      "content": "Để thiết kế hiệu quả, người học cần biết dùng nhiều phương pháp và phương tiện hỗ trợ. Phác thảo, sơ đồ tư duy, sơ đồ khối giúp hình thành và trao đổi ý tưởng nhanh. Mô hình, mẫu thử, CAD, mô phỏng và in 3D giúp kiểm tra hình dạng, kích thước, khả năng lắp ráp và hoạt động trước khi làm sản phẩm thật. Làm việc nhóm và ghi chép thiết kế giúp quá trình cải tiến có căn cứ.",
+      "model_3d_url": null,
+      "order": 5
+    },
+    {
+      "id": 100306,
+      "course_id": 1003,
+      "title": "Bài 22. Dự án: Thiết kế sản phẩm đơn giản",
+      "description": "Vận dụng quy trình thiết kế kĩ thuật để đề xuất, tạo mẫu, thử nghiệm, đánh giá và hoàn thiện một sản phẩm đơn giản.",
+      "content": "Dự án là nhiệm vụ tổng hợp cuối chương. Học sinh lựa chọn một vấn đề gần gũi, xác định yêu cầu và tiêu chí, thu thập thông tin, đề xuất nhiều phương án rồi chọn giải pháp phù hợp. Nhóm tạo bản vẽ hoặc mô hình, làm mẫu, thử nghiệm theo tiêu chí, ghi nhận kết quả và cải tiến. Sản phẩm cuối gồm mẫu hoặc mô hình cùng hồ sơ thiết kế thể hiện rõ quá trình ra quyết định.",
+      "model_3d_url": null,
+      "order": 6
+    },
+    {
+      "id": 110101,
+      "course_id": 1101,
+      "title": "Bài 1. Khái quát về cơ khí chế tạo",
+      "description": "Nhận biết khái niệm, vai trò, đặc điểm và các bước cơ bản trong chế tạo cơ khí.",
+      "content": "Nhận biết khái niệm, vai trò, đặc điểm và các bước cơ bản trong chế tạo cơ khí. Cơ khí chế tạo tạo ra chi tiết, máy, thiết bị phục vụ sản xuất và đời sống. Quy trình chế tạo thường đi từ yêu cầu, thiết kế, chọn vật liệu, gia công, lắp ráp đến kiểm tra. Cơ khí chế tạo cần độ chính xác, an toàn, năng suất và khả năng bảo trì.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 110102,
+      "course_id": 1101,
+      "title": "Bài 2. Ngành nghề trong lĩnh vực cơ khí chế tạo",
+      "description": "Tìm hiểu công việc, yêu cầu năng lực và triển vọng nghề cơ khí chế tạo.",
+      "content": "Tìm hiểu công việc, yêu cầu năng lực và triển vọng nghề cơ khí chế tạo. Ngành nghề cơ khí chế tạo gồm thiết kế, gia công, vận hành máy, kiểm tra, bảo trì và quản lí sản xuất. Người học cần đọc bản vẽ, hiểu vật liệu, quy trình, đo kiểm và an toàn lao động. Định hướng nghề cần gắn sở thích cá nhân với nhu cầu sản xuất hiện đại.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 110201,
+      "course_id": 1102,
+      "title": "Bài 3. Tổng quan về vật liệu cơ khí",
+      "description": "Phân loại vật liệu cơ khí và tiêu chí lựa chọn vật liệu.",
+      "content": "Phân loại vật liệu cơ khí và tiêu chí lựa chọn vật liệu. Vật liệu cơ khí được chọn theo cơ tính, lí tính, hóa tính, khả năng gia công và điều kiện làm việc. Lựa chọn vật liệu ảnh hưởng trực tiếp tới độ bền, chi phí, an toàn và tuổi thọ sản phẩm. Cần đọc yêu cầu kĩ thuật trước khi quyết định vật liệu.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 110202,
+      "course_id": 1102,
+      "title": "Bài 4. Vật liệu kim loại và hợp kim",
+      "description": "Nhận biết kim loại, hợp kim, gang, thép và liên hệ quy trình sản xuất gang - thép trong lò cao.",
+      "content": "Bài học giới thiệu kim loại và hợp kim dùng trong cơ khí, trong đó gang và thép là hai vật liệu quan trọng. Mô hình lò cao giúp quan sát quặng sắt, than cốc và đá vôi được nạp từ đỉnh lò; gió nóng thổi vào đáy lò tạo nhiệt và khí khử; gang lỏng, xỉ và khí thải được tách ra ở các cửa khác nhau. Từ đó học sinh hiểu vật liệu kim loại không chỉ được lựa chọn theo tính chất mà còn gắn với quy trình luyện kim và yêu cầu bảo vệ môi trường.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 110203,
+      "course_id": 1102,
+      "title": "Bài 5. Vật liệu phi kim loại",
+      "description": "Tìm hiểu nhựa, cao su, gốm, composite và ứng dụng trong cơ khí.",
+      "content": "Tìm hiểu nhựa, cao su, gốm, composite và ứng dụng trong cơ khí. Vật liệu phi kim loại có ưu điểm về khối lượng, cách điện, chống ăn mòn hoặc giảm ma sát. Nhựa, cao su, gốm và composite được dùng trong chi tiết cách điện, giảm chấn, vỏ máy hoặc kết cấu nhẹ. Cần xét nhiệt độ, tải trọng, môi trường và khả năng tái chế khi sử dụng.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 110204,
+      "course_id": 1102,
+      "title": "Bài 6. Vật liệu mới",
+      "description": "Nhận biết vật liệu mới và xu hướng ứng dụng trong sản xuất hiện đại.",
+      "content": "Nhận biết vật liệu mới và xu hướng ứng dụng trong sản xuất hiện đại. Vật liệu mới hướng tới nhẹ, bền, thông minh, thân thiện môi trường và phù hợp công nghệ cao. Vật liệu nano, composite tiên tiến, vật liệu in 3D và vật liệu nhớ hình mở rộng khả năng thiết kế. Ứng dụng vật liệu mới cần đánh giá chi phí, quy trình chế tạo và an toàn sử dụng.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 110301,
+      "course_id": 1103,
+      "title": "Bài 7. Khái quát về gia công cơ khí",
+      "description": "Hiểu mục đích, phân loại và yêu cầu của gia công cơ khí.",
+      "content": "Hiểu mục đích, phân loại và yêu cầu của gia công cơ khí. Gia công cơ khí làm thay đổi hình dạng, kích thước, bề mặt hoặc tính chất của phôi. Có thể phân loại theo gia công cắt gọt, không cắt gọt, nhiệt luyện, xử lí bề mặt và công nghệ số. Gia công cần bảo đảm kích thước, độ chính xác, năng suất và an toàn máy.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 110302,
+      "course_id": 1103,
+      "title": "Bài 8. Một số phương pháp gia công cơ khí",
+      "description": "Nhận biết tiện, phay, khoan, mài, đúc, rèn, hàn và gia công hiện đại.",
+      "content": "Nhận biết tiện, phay, khoan, mài, đúc, rèn, hàn và gia công hiện đại. Mỗi phương pháp gia công có nguyên lí, dụng cụ, thiết bị và phạm vi ứng dụng riêng. Chọn phương pháp cần dựa vào vật liệu, hình dạng, độ chính xác, sản lượng và chi phí. Gia công hiện đại như CNC, laser, EDM, in 3D giúp tạo chi tiết phức tạp và tự động hóa cao.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 110303,
+      "course_id": 1103,
+      "title": "Bài 9. Quy trình công nghệ gia công chi tiết",
+      "description": "Lập trình tự gia công chi tiết từ bản vẽ đến kiểm tra.",
+      "content": "Lập trình tự gia công chi tiết từ bản vẽ đến kiểm tra. Quy trình công nghệ xác định phôi, nguyên công, máy, dao, đồ gá, chế độ cắt và kiểm tra. Trình tự hợp lí giúp đạt yêu cầu kĩ thuật, giảm sai lỗi và tiết kiệm chi phí. Đo kiểm sau gia công là căn cứ để đánh giá và điều chỉnh quy trình.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 110304,
+      "course_id": 1103,
+      "title": "Bài 10. Dự án: Chế tạo sản phẩm bằng phương pháp gia công cắt gọt",
+      "description": "Tổ chức dự án nhỏ để lập kế hoạch, gia công, đo kiểm và báo cáo một sản phẩm cơ khí đơn giản.",
+      "content": "Tổ chức dự án nhỏ để lập kế hoạch, gia công, đo kiểm và báo cáo một sản phẩm cơ khí đơn giản. Dự án gia công cần bắt đầu từ yêu cầu sản phẩm, bản vẽ phác thảo, vật liệu và phương án công nghệ. Quá trình thực hiện phải tuân thủ an toàn máy, dụng cụ, phôi, phoi và bảo hộ cá nhân. Sản phẩm được đánh giá bằng kích thước, bề mặt, công năng, báo cáo quy trình và khả năng cải tiến.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 110401,
+      "course_id": 1104,
+      "title": "Bài 11. Quá trình sản xuất cơ khí",
+      "description": "Mô tả các giai đoạn của quá trình sản xuất cơ khí.",
+      "content": "Mô tả các giai đoạn của quá trình sản xuất cơ khí. Sản xuất cơ khí gồm chuẩn bị kĩ thuật, chuẩn bị vật tư, gia công, lắp ráp, kiểm tra và hoàn thiện. Tổ chức sản xuất tốt giúp tăng năng suất, chất lượng và tính ổn định. Dữ liệu kĩ thuật, bản vẽ, quy trình và tiêu chuẩn là cơ sở quản lí sản xuất.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 110402,
+      "course_id": 1104,
+      "title": "Bài 12. Dây chuyền sản xuất tự động với sự tham gia của robot",
+      "description": "Tìm hiểu cấu trúc dây chuyền tự động và vai trò của robot công nghiệp.",
+      "content": "Tìm hiểu cấu trúc dây chuyền tự động và vai trò của robot công nghiệp. Dây chuyền tự động kết hợp máy, robot, cảm biến, cơ cấu chấp hành và bộ điều khiển. Robot giúp thao tác lặp lại, nâng cao năng suất, giảm nguy hiểm và ổn định chất lượng. Thiết kế dây chuyền cần xét an toàn vùng làm việc, đồng bộ thiết bị và bảo trì.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 110403,
+      "course_id": 1104,
+      "title": "Bài 13. Tự động hóa sản xuất dưới tác động của Cách mạng công nghiệp 4.0",
+      "description": "Nhận biết vai trò dữ liệu, kết nối, AI, IoT và sản xuất thông minh.",
+      "content": "Nhận biết vai trò dữ liệu, kết nối, AI, IoT và sản xuất thông minh. Tự động hóa 4.0 gắn với cảm biến, kết nối dữ liệu, giám sát thời gian thực và tối ưu bằng phần mềm. Nhà máy thông minh giúp linh hoạt sản xuất, giảm lỗi và dự báo bảo trì. Người lao động cần năng lực số, phân tích dữ liệu và phối hợp với hệ thống tự động.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 110404,
+      "course_id": 1104,
+      "title": "Bài 14. An toàn lao động và bảo vệ môi trường trong sản xuất cơ khí",
+      "description": "Nhận diện nguy cơ và biện pháp phòng tránh trong xưởng cơ khí.",
+      "content": "Nhận diện nguy cơ và biện pháp phòng tránh trong xưởng cơ khí. Nguy cơ cơ khí gồm va chạm, kẹp cuốn, mảnh văng, tiếng ồn, bụi, nhiệt và hóa chất. An toàn cần bảo hộ, quy trình thao tác, che chắn, biển báo, khóa nguồn và đào tạo. Bảo vệ môi trường cần quản lí phế liệu, dầu mỡ, bụi, nước thải và tiết kiệm năng lượng.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 110501,
+      "course_id": 1105,
+      "title": "Bài 15. Khái quát về cơ khí động lực",
+      "description": "Hiểu vai trò của cơ khí động lực trong tạo, truyền và sử dụng năng lượng cơ học.",
+      "content": "Hiểu vai trò của cơ khí động lực trong tạo, truyền và sử dụng năng lượng cơ học. Cơ khí động lực nghiên cứu, khai thác và bảo dưỡng các máy tạo hoặc truyền công suất. Động cơ, hệ truyền lực, phương tiện giao thông và máy công tác là các đối tượng tiêu biểu. Hiệu quả, an toàn, tiết kiệm nhiên liệu và giảm phát thải là yêu cầu quan trọng.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 110502,
+      "course_id": 1105,
+      "title": "Bài 16. Ngành nghề trong lĩnh vực cơ khí động lực",
+      "description": "Tìm hiểu nghề liên quan đến động cơ, ô tô, máy công trình và bảo dưỡng.",
+      "content": "Tìm hiểu nghề liên quan đến động cơ, ô tô, máy công trình và bảo dưỡng. Nghề cơ khí động lực gồm thiết kế, lắp ráp, vận hành, chẩn đoán, sửa chữa và kiểm định. Năng lực cốt lõi là đọc tài liệu kĩ thuật, hiểu nguyên lí, dùng dụng cụ đo và tuân thủ an toàn. Xu hướng nghề gắn với xe điện, tự động hóa, chẩn đoán điện tử và bảo vệ môi trường.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 110601,
+      "course_id": 1106,
+      "title": "Bài 17. Đại cương về động cơ đốt trong",
+      "description": "Nhận biết khái niệm, phân loại và thông số cơ bản của động cơ đốt trong.",
+      "content": "Nhận biết khái niệm, phân loại và thông số cơ bản của động cơ đốt trong. Động cơ đốt trong biến đổi nhiệt năng của nhiên liệu cháy trong xi lanh thành cơ năng. Có thể phân loại theo nhiên liệu, số kì, cách làm mát, cách tạo hòa khí và số xi lanh. Thông số như công suất, mô men, dung tích, tỉ số nén giúp đánh giá động cơ.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 110602,
+      "course_id": 1106,
+      "title": "Bài 18. Nguyên lí làm việc của động cơ đốt trong",
+      "description": "Mô tả chu trình làm việc của động cơ bốn kì và hai kì.",
+      "content": "Mô tả chu trình làm việc của động cơ bốn kì và hai kì. Động cơ bốn kì gồm nạp, nén, cháy - giãn nở và thải. Mỗi kì có chuyển động piston, trạng thái xupap và nhiệm vụ riêng. Hiểu nguyên lí giúp giải thích công suất, tiêu hao nhiên liệu và hiện tượng hư hỏng.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 110603,
+      "course_id": 1106,
+      "title": "Bài 19. Các cơ cấu trong động cơ đốt trong",
+      "description": "Nhận biết cơ cấu trục khuỷu - thanh truyền và cơ cấu phối khí.",
+      "content": "Nhận biết cơ cấu trục khuỷu - thanh truyền và cơ cấu phối khí. Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay. Cơ cấu phối khí điều khiển thời điểm nạp và thải môi chất. Các cơ cấu cần bôi trơn, làm mát và lắp ghép chính xác để làm việc bền.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 110604,
+      "course_id": 1106,
+      "title": "Bài 20. Các hệ thống trong động cơ đốt trong",
+      "description": "Tìm hiểu hệ thống nhiên liệu, bôi trơn, làm mát, khởi động và đánh lửa hoặc phun nhiên liệu.",
+      "content": "Tìm hiểu hệ thống nhiên liệu, bôi trơn, làm mát, khởi động và đánh lửa hoặc phun nhiên liệu. Các hệ thống phụ trợ bảo đảm động cơ có nhiên liệu, nhiệt độ, ma sát và điều kiện khởi động phù hợp. Hệ thống bôi trơn giảm ma sát và mài mòn; làm mát giữ nhiệt độ ổn định. Chẩn đoán động cơ cần đọc dấu hiệu từ nhiều hệ thống cùng lúc.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 110701,
+      "course_id": 1107,
+      "title": "Bài 21. Khái quát chung về ô tô",
+      "description": "Nhận biết cấu tạo chung, phân loại và vai trò của các hệ thống trên ô tô.",
+      "content": "Nhận biết cấu tạo chung, phân loại và vai trò của các hệ thống trên ô tô. Ô tô gồm nguồn động lực, hệ truyền lực, hệ thống treo, lái, phanh, thân vỏ và hệ thống điện - điện tử. Mỗi hệ thống có chức năng riêng nhưng liên kết để bảo đảm xe vận hành an toàn. Xu hướng ô tô hiện đại gắn với điện hóa, kết nối, hỗ trợ lái và tiết kiệm năng lượng.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 110702,
+      "course_id": 1107,
+      "title": "Bài 22. Hệ thống truyền lực",
+      "description": "Mô tả nhiệm vụ và các bộ phận chính của hệ thống truyền lực.",
+      "content": "Mô tả nhiệm vụ và các bộ phận chính của hệ thống truyền lực. Hệ thống truyền lực truyền mô men từ động cơ tới bánh xe chủ động. Các bộ phận như li hợp, hộp số, trục truyền, vi sai phối hợp để thay đổi mô men và tốc độ. Truyền lực cần êm, hiệu quả, bền và phù hợp điều kiện chuyển động.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 110703,
+      "course_id": 1107,
+      "title": "Bài 23. Bánh xe và hệ thống treo ô tô",
+      "description": "Hiểu vai trò của bánh xe, lốp, giảm xóc và hệ thống treo.",
+      "content": "Hiểu vai trò của bánh xe, lốp, giảm xóc và hệ thống treo. Bánh xe tiếp xúc mặt đường, truyền lực kéo, lực phanh và lực lái. Hệ thống treo giảm dao động, tăng độ êm dịu và giữ bánh xe bám đường. Tình trạng lốp, áp suất và giảm xóc ảnh hưởng trực tiếp tới an toàn.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 110704,
+      "course_id": 1107,
+      "title": "Bài 24. Hệ thống lái",
+      "description": "Mô tả nhiệm vụ, cấu tạo chung và yêu cầu của hệ thống lái.",
+      "content": "Mô tả nhiệm vụ, cấu tạo chung và yêu cầu của hệ thống lái. Hệ thống lái thay đổi hướng chuyển động của ô tô theo điều khiển của người lái hoặc bộ điều khiển. Cơ cấu lái, dẫn động lái và trợ lực lái giúp xe chuyển hướng chính xác, nhẹ và ổn định. Độ rơ, sai lệch góc đặt bánh xe hoặc hư hỏng trợ lực đều ảnh hưởng tới an toàn.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 110705,
+      "course_id": 1107,
+      "title": "Bài 25. Hệ thống phanh và an toàn khi tham gia giao thông",
+      "description": "Nhận biết hệ thống phanh, các công nghệ an toàn và nguyên tắc tham gia giao thông.",
+      "content": "Nhận biết hệ thống phanh, các công nghệ an toàn và nguyên tắc tham gia giao thông. Hệ thống phanh làm giảm tốc độ, dừng xe và giữ xe đứng yên an toàn. ABS, phân phối lực phanh, cân bằng điện tử và hỗ trợ phanh tăng khả năng kiểm soát xe. An toàn giao thông cần kết hợp kĩ thuật xe, bảo dưỡng và hành vi lái xe đúng quy định.",
+      "model_3d_url": null,
+      "order": 5
+    },
+    {
+      "id": 120101,
+      "course_id": 1201,
+      "title": "Bài 1. Giới thiệu tổng quan về kĩ thuật điện",
+      "description": "Hiểu vai trò, triển vọng và đặc điểm của kĩ thuật điện trong sản xuất và đời sống.",
+      "content": "Hiểu vai trò, triển vọng và đặc điểm của kĩ thuật điện trong sản xuất và đời sống. Kĩ thuật điện nghiên cứu, thiết kế, sản xuất, truyền tải, phân phối và sử dụng điện năng. Hệ thống điện cần bảo đảm an toàn, tin cậy, tiết kiệm và thân thiện môi trường. Xu hướng phát triển gồm năng lượng tái tạo, lưới điện thông minh, tự động hóa và chuyển đổi số.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120102,
+      "course_id": 1201,
+      "title": "Bài 2. Ngành nghề trong lĩnh vực kĩ thuật điện",
+      "description": "Nhận biết nhiệm vụ, yêu cầu và năng lực nghề điện.",
+      "content": "Nhận biết nhiệm vụ, yêu cầu và năng lực nghề điện. Ngành nghề kĩ thuật điện gồm thiết kế, lắp đặt, vận hành, bảo trì hệ thống điện và thiết bị điện. Người làm việc trong lĩnh vực điện cần đọc sơ đồ, đo kiểm, tuân thủ an toàn và thao tác chính xác. Định hướng nghề cần gắn năng lực cá nhân với nhu cầu xã hội và xu hướng công nghệ.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120201,
+      "course_id": 1202,
+      "title": "Bài 3. Mạch điện xoay chiều ba pha",
+      "description": "Nhận biết đặc điểm nguồn ba pha, tải ba pha và cách nối cơ bản.",
+      "content": "Nhận biết đặc điểm nguồn ba pha, tải ba pha và cách nối cơ bản. Mạch điện ba pha dùng phổ biến trong sản xuất và truyền tải điện năng. Cần phân biệt đại lượng pha, dây, cách nối sao, tam giác và quan hệ điện áp - dòng điện. Vận hành mạch ba pha cần chú ý cân bằng tải, bảo vệ và an toàn điện.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120202,
+      "course_id": 1202,
+      "title": "Bài 4. Hệ thống điện quốc gia",
+      "description": "Mô tả cấu trúc nguồn điện, lưới điện, phụ tải và điều độ.",
+      "content": "Mô tả cấu trúc nguồn điện, lưới điện, phụ tải và điều độ. Hệ thống điện quốc gia gồm nguồn điện, lưới truyền tải, lưới phân phối, phụ tải và điều khiển bảo vệ. Truyền tải điện áp cao giúp giảm tổn thất khi đưa điện đi xa. Điều độ và bảo vệ giúp hệ thống vận hành ổn định, an toàn, liên tục.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120203,
+      "course_id": 1202,
+      "title": "Bài 5. Sản xuất điện năng",
+      "description": "Tìm hiểu các phương thức sản xuất điện và xu hướng năng lượng.",
+      "content": "Tìm hiểu các phương thức sản xuất điện và xu hướng năng lượng. Nguồn điện biến đổi năng lượng sơ cấp thành điện năng. Nhiệt điện, thủy điện, điện gió, điện mặt trời và các nguồn khác có ưu nhược điểm riêng. Sản xuất điện cần cân bằng hiệu quả, chi phí, phát thải và độ ổn định nguồn.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 120204,
+      "course_id": 1202,
+      "title": "Bài 6. Mạng điện sản xuất quy mô nhỏ",
+      "description": "Nhận biết cấu trúc mạng điện phục vụ cơ sở sản xuất nhỏ.",
+      "content": "Nhận biết cấu trúc mạng điện phục vụ cơ sở sản xuất nhỏ. Mạng điện sản xuất quy mô nhỏ cần cấp điện đủ công suất, tin cậy và thuận tiện vận hành. Cần bố trí tủ điện, thiết bị bảo vệ, đường dây và phụ tải theo sơ đồ rõ ràng. An toàn, chống quá tải, nối đất và kiểm tra định kì là yêu cầu bắt buộc.",
+      "model_3d_url": null,
+      "order": 4
+    },
+    {
+      "id": 120205,
+      "course_id": 1202,
+      "title": "Bài 7. Mạng điện hạ áp dùng trong sinh hoạt",
+      "description": "Tìm hiểu mạng điện hạ áp và nguyên tắc cấp điện sinh hoạt.",
+      "content": "Tìm hiểu mạng điện hạ áp và nguyên tắc cấp điện sinh hoạt. Mạng điện hạ áp cấp điện trực tiếp cho hộ gia đình và phụ tải sinh hoạt. Thiết bị bảo vệ, dây dẫn, công tơ, bảng điện và nối đất cần được lựa chọn phù hợp. Sử dụng điện sinh hoạt phải an toàn, tiết kiệm và dễ kiểm tra bảo dưỡng.",
+      "model_3d_url": null,
+      "order": 5
+    },
+    {
+      "id": 120301,
+      "course_id": 1203,
+      "title": "Bài 8. Hệ thống điện trong gia đình",
+      "description": "Nhận biết cấu trúc và yêu cầu của hệ thống điện gia đình.",
+      "content": "Nhận biết cấu trúc và yêu cầu của hệ thống điện gia đình. Hệ thống điện gia đình gồm nguồn cấp, thiết bị bảo vệ, dây dẫn, thiết bị điều khiển và đồ dùng điện. Hệ thống cần thuận tiện, an toàn, tin cậy, thẩm mĩ và phù hợp công suất tải. Sơ đồ nguyên lí và sơ đồ lắp đặt giúp đọc, thiết kế và sửa chữa dễ hơn.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120302,
+      "course_id": 1203,
+      "title": "Bài 9. Thiết bị điện trong hệ thống điện gia đình",
+      "description": "Lựa chọn thiết bị đóng cắt, bảo vệ, điều khiển và đồ dùng điện.",
+      "content": "Lựa chọn thiết bị đóng cắt, bảo vệ, điều khiển và đồ dùng điện. Thiết bị điện cần phù hợp điện áp, dòng điện, công suất, môi trường và mục đích sử dụng. Aptomat, cầu chì, công tắc, ổ cắm, rơle và thiết bị chống rò giúp bảo vệ người và thiết bị. Không thay thiết bị sai định mức hoặc đấu nối không đúng kĩ thuật.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120303,
+      "course_id": 1203,
+      "title": "Bài 10. Thiết kế và lắp đặt mạch điện điều khiển trong gia đình",
+      "description": "Vận dụng kí hiệu và sơ đồ để thiết kế, lắp đặt mạch điều khiển đơn giản.",
+      "content": "Vận dụng kí hiệu và sơ đồ để thiết kế, lắp đặt mạch điều khiển đơn giản. Thiết kế mạch cần xác định yêu cầu, chọn thiết bị, vẽ sơ đồ nguyên lí và sơ đồ lắp đặt. Lắp đặt phải ngắt nguồn, kiểm tra cách điện, đấu nối đúng cực và thử nghiệm an toàn. Sản phẩm đạt yêu cầu khi hoạt động đúng, gọn, an toàn và dễ bảo trì.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 120401,
+      "course_id": 1204,
+      "title": "Bài 11. An toàn điện",
+      "description": "Nhận diện nguy cơ điện giật, chập cháy và thực hiện biện pháp phòng tránh.",
+      "content": "Nhận diện nguy cơ điện giật, chập cháy và thực hiện biện pháp phòng tránh. Điện giật, quá tải, ngắn mạch, hồ quang và rò điện là các nguy cơ phổ biến. Cần ngắt nguồn trước khi sửa chữa, dùng bảo hộ, nối đất và thiết bị bảo vệ phù hợp. Sơ cứu điện phải bảo đảm an toàn cho người cứu và gọi hỗ trợ y tế khi cần.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120402,
+      "course_id": 1204,
+      "title": "Bài 12. Tiết kiệm điện năng",
+      "description": "Tìm hiểu biện pháp sử dụng điện tiết kiệm và hiệu quả.",
+      "content": "Tìm hiểu biện pháp sử dụng điện tiết kiệm và hiệu quả. Tiết kiệm điện giúp giảm chi phí, giảm tải hệ thống và bảo vệ môi trường. Chọn thiết bị hiệu suất cao, dùng đúng nhu cầu, bảo trì định kì và tắt thiết bị không cần thiết. Có thể theo dõi điện năng tiêu thụ để điều chỉnh thói quen sử dụng.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120501,
+      "course_id": 1205,
+      "title": "Bài 13. Khái quát về kĩ thuật điện tử",
+      "description": "Hiểu đối tượng, vai trò và ứng dụng của kĩ thuật điện tử.",
+      "content": "Hiểu đối tượng, vai trò và ứng dụng của kĩ thuật điện tử. Kĩ thuật điện tử làm việc chủ yếu với tín hiệu và mạch điều khiển. Hệ thống điện tử thường gồm khối vào, xử lí, khối ra, nguồn cấp và phản hồi. Điện tử có mặt trong truyền thông, tự động hóa, thiết bị gia dụng, y tế, giao thông và giáo dục.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120502,
+      "course_id": 1205,
+      "title": "Bài 14. Ngành nghề và dịch vụ trong lĩnh vực kĩ thuật điện tử",
+      "description": "Nhận biết nghề thiết kế, lắp ráp, kiểm tra, sửa chữa và dịch vụ điện tử.",
+      "content": "Nhận biết nghề thiết kế, lắp ráp, kiểm tra, sửa chữa và dịch vụ điện tử. Lĩnh vực điện tử cần nhân lực thiết kế mạch, lập trình nhúng, lắp ráp, đo kiểm, bảo trì và hỗ trợ kĩ thuật. Năng lực quan trọng gồm đọc sơ đồ, hiểu linh kiện, đo tín hiệu và xử lí lỗi có hệ thống. Dịch vụ điện tử hiện đại gắn với IoT, thiết bị thông minh và bảo mật dữ liệu.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120601,
+      "course_id": 1206,
+      "title": "Bài 15. Điện trở, tụ điện và cuộn cảm",
+      "description": "Nhận biết linh kiện thụ động và chức năng trong mạch.",
+      "content": "Nhận biết linh kiện thụ động và chức năng trong mạch. Điện trở hạn chế dòng điện, phân áp hoặc tạo tải trong mạch. Tụ điện tích - phóng điện, lọc nguồn, ghép tín hiệu hoặc tạo trễ. Cuộn cảm liên quan đến từ trường, lọc, tích trữ năng lượng và mạch dao động.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120602,
+      "course_id": 1206,
+      "title": "Bài 16. Diode, transistor và mạch tích hợp IC",
+      "description": "Nhận biết linh kiện bán dẫn và ứng dụng cơ bản.",
+      "content": "Nhận biết linh kiện bán dẫn và ứng dụng cơ bản. Diode cho dòng điện đi chủ yếu theo một chiều và dùng trong chỉnh lưu, bảo vệ, phát sáng. Transistor có thể khuếch đại tín hiệu hoặc đóng cắt như công tắc điện tử. IC tích hợp nhiều linh kiện để thực hiện chức năng xử lí, điều khiển hoặc nhớ.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120603,
+      "course_id": 1206,
+      "title": "Bài 17. Thực hành: Mạch phát hiện dòng điện xoay chiều trong dây dẫn",
+      "description": "Lắp ráp, kiểm tra và giải thích mạch phát hiện dòng điện xoay chiều.",
+      "content": "Lắp ráp, kiểm tra và giải thích mạch phát hiện dòng điện xoay chiều. Thực hành cần đọc sơ đồ, nhận dạng linh kiện, lắp đúng cực tính và kiểm tra nguồn. Mạch phát hiện dòng điện giúp nhận biết sự có mặt của dòng xoay chiều qua tín hiệu chỉ thị. Kết quả thực hành phải được kiểm tra bằng tiêu chí hoạt động, an toàn và thao tác đúng.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 120701,
+      "course_id": 1207,
+      "title": "Bài 18. Giới thiệu về điện tử tương tự",
+      "description": "Nhận biết tín hiệu tương tự và chức năng xử lí trong mạch tương tự.",
+      "content": "Nhận biết tín hiệu tương tự và chức năng xử lí trong mạch tương tự. Tín hiệu tương tự biến thiên liên tục theo thời gian. Mạch tương tự có thể khuếch đại, lọc, so sánh, chỉnh lưu hoặc ổn áp. Đọc mạch tương tự cần chú ý nguồn, tín hiệu vào, tầng xử lí và tín hiệu ra.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120702,
+      "course_id": 1207,
+      "title": "Bài 19. Khuếch đại thuật toán",
+      "description": "Tìm hiểu chức năng và ứng dụng cơ bản của op-amp.",
+      "content": "Tìm hiểu chức năng và ứng dụng cơ bản của op-amp. Khuếch đại thuật toán là linh kiện tích hợp dùng để khuếch đại và xử lí tín hiệu tương tự. Mạch op-amp có thể tạo cấu hình khuếch đại đảo, không đảo, so sánh hoặc lọc. Cần xét nguồn cấp, hồi tiếp, điện trở và giới hạn tín hiệu khi phân tích mạch.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120703,
+      "course_id": 1207,
+      "title": "Bài 20. Thực hành: Mạch khuếch đại đảo",
+      "description": "Lắp ráp, đo kiểm và giải thích mạch khuếch đại đảo dùng op-amp.",
+      "content": "Lắp ráp, đo kiểm và giải thích mạch khuếch đại đảo dùng op-amp. Mạch khuếch đại đảo cho tín hiệu ra ngược pha với tín hiệu vào. Hệ số khuếch đại phụ thuộc vào tỉ số điện trở hồi tiếp và điện trở vào. Thực hành cần đo tín hiệu, so sánh với lí thuyết và bảo đảm an toàn thiết bị.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 120801,
+      "course_id": 1208,
+      "title": "Bài 21. Tín hiệu số và các cổng logic cơ bản",
+      "description": "Nhận biết mức logic và cổng AND, OR, NOT cùng bảng chân lí.",
+      "content": "Nhận biết mức logic và cổng AND, OR, NOT cùng bảng chân lí. Tín hiệu số thường biểu diễn bằng hai mức logic 0 và 1. Cổng logic thực hiện phép toán logic cơ bản để tạo quyết định trong mạch số. Bảng chân lí mô tả quan hệ giữa đầu vào và đầu ra của cổng logic.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120802,
+      "course_id": 1208,
+      "title": "Bài 22. Một số mạch xử lí tín hiệu trong điện tử số",
+      "description": "Tìm hiểu mạch tổ hợp, mạch tuần tự và ứng dụng xử lí tín hiệu số.",
+      "content": "Tìm hiểu mạch tổ hợp, mạch tuần tự và ứng dụng xử lí tín hiệu số. Mạch tổ hợp có đầu ra phụ thuộc vào trạng thái đầu vào hiện tại. Mạch tuần tự có đầu ra phụ thuộc vào đầu vào và trạng thái trước đó. Bộ đếm, thanh ghi, chốt và flip-flop là thành phần quan trọng trong mạch số.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120803,
+      "course_id": 1208,
+      "title": "Bài 23. Thực hành: Lắp ráp, kiểm tra mạch báo cháy dùng cổng logic",
+      "description": "Lắp ráp và kiểm tra mạch báo cháy sử dụng cổng logic cơ bản.",
+      "content": "Lắp ráp và kiểm tra mạch báo cháy sử dụng cổng logic cơ bản. Mạch báo cháy cần xác định tín hiệu cảm biến, điều kiện logic và tín hiệu cảnh báo. Lắp ráp cần đúng sơ đồ, đúng nguồn, đúng cực linh kiện và kiểm tra từng khối. Sản phẩm đạt yêu cầu khi cảnh báo đúng điều kiện và hoạt động ổn định.",
+      "model_3d_url": null,
+      "order": 3
+    },
+    {
+      "id": 120901,
+      "course_id": 1209,
+      "title": "Bài 24. Khái quát về vi điều khiển",
+      "description": "Mô tả cấu trúc hệ thống vi điều khiển và vai trò trong điều khiển thiết bị.",
+      "content": "Mô tả cấu trúc hệ thống vi điều khiển và vai trò trong điều khiển thiết bị. Vi điều khiển là bộ điều khiển nhỏ gọn có thể lập trình để xử lí tín hiệu và điều khiển thiết bị. Hệ thống vi điều khiển gồm bộ xử lí, bộ nhớ, chân vào/ra, nguồn, cảm biến và cơ cấu chấp hành. Chương trình quyết định cách hệ thống đọc dữ liệu, xử lí điều kiện và tạo tín hiệu ra.",
+      "model_3d_url": null,
+      "order": 1
+    },
+    {
+      "id": 120902,
+      "course_id": 1209,
+      "title": "Bài 25. Bo mạch lập trình vi điều khiển",
+      "description": "Nhận biết bo mạch, chân vào/ra, nguồn, giao tiếp và môi trường lập trình.",
+      "content": "Nhận biết bo mạch, chân vào/ra, nguồn, giao tiếp và môi trường lập trình. Bo mạch lập trình tích hợp vi điều khiển, nguồn, cổng giao tiếp và chân kết nối. Kết nối cảm biến và cơ cấu chấp hành cần đúng điện áp, dòng điện, cực tính và chân tín hiệu. Dùng driver hoặc rơle khi tải cần dòng lớn hơn khả năng chân vi điều khiển.",
+      "model_3d_url": null,
+      "order": 2
+    },
+    {
+      "id": 120903,
+      "course_id": 1209,
+      "title": "Bài 26. Thực hành: Mạch tự động điều chỉnh cường độ sáng LED",
+      "description": "Thiết kế, lắp ráp, lập trình và kiểm tra mạch điều chỉnh LED theo môi trường.",
+      "content": "Thiết kế, lắp ráp, lập trình và kiểm tra mạch điều chỉnh LED theo môi trường. Dự án cần xác định yêu cầu, cảm biến ánh sáng, thuật toán điều khiển và tiêu chí kiểm tra. Kiểm thử từng phần giúp phát hiện lỗi nối dây, lỗi chương trình hoặc lỗi nguồn cấp. Sản phẩm cần được đánh giá theo chức năng, độ ổn định, an toàn và khả năng cải tiến.",
+      "model_3d_url": null,
+      "order": 3
+    }
+  ],
+  "questions": [
+    {
+      "id": 1001011,
+      "lesson_id": 100101,
+      "text": "Nhận định nào đúng nhất về \"Bài 1. Công nghệ và đời sống\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001011,
+          "text": "Công nghệ không chỉ là máy móc mà còn gồm tri thức, quy trình, kĩ năng và cách tổ chức để tạo ra sản phẩm hoặc dịch vụ.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001012,
+      "lesson_id": 100101,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001021,
+      "lesson_id": 100102,
+      "text": "Nhận định nào đúng nhất về \"Bài 2. Hệ thống kĩ thuật\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001021,
+          "text": "Hệ thống kĩ thuật gồm các phần tử liên kết với nhau để tạo ra chức năng chung, không nên xem từng bộ phận một cách rời rạc.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001022,
+      "lesson_id": 100102,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001031,
+      "lesson_id": 100103,
+      "text": "Nhận định nào đúng nhất về \"Bài 3. Công nghệ phổ biến\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001031,
+          "text": "Công nghệ cơ khí tạo ra, gia công, lắp ráp và bảo trì các chi tiết, máy móc, phương tiện.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001032,
+      "lesson_id": 100103,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001041,
+      "lesson_id": 100104,
+      "text": "Nhận định nào đúng nhất về \"Bài 4. Một số công nghệ mới\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001041,
+          "text": "AI, IoT, robot và dữ liệu lớn giúp thiết bị, quy trình sản xuất và dịch vụ trở nên thông minh hơn.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001042,
+      "lesson_id": 100104,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001051,
+      "lesson_id": 100105,
+      "text": "Nhận định nào đúng nhất về \"Bài 5. Đánh giá công nghệ\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001051,
+          "text": "Đánh giá công nghệ giúp lựa chọn giải pháp phù hợp, hiệu quả và an toàn, không nhất thiết là giải pháp đắt hoặc mới nhất.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001052,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001053,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001052,
+      "lesson_id": 100105,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001054,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001055,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001056,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001061,
+      "lesson_id": 100106,
+      "text": "Nhận định nào đúng nhất về \"Bài 6. Cách mạng công nghiệp\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001061,
+          "text": "Mỗi cuộc cách mạng công nghiệp gắn với một nền tảng công nghệ chủ đạo và làm thay đổi cách tổ chức sản xuất.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001062,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001063,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001062,
+      "lesson_id": 100106,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001064,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001065,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001066,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001071,
+      "lesson_id": 100107,
+      "text": "Nhận định nào đúng nhất về \"Bài 7. Nghề nghiệp kĩ thuật, công nghệ\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001071,
+          "text": "Nghề kĩ thuật, công nghệ gắn với giải quyết vấn đề thực tiễn bằng tri thức, quy trình, công cụ và tiêu chuẩn an toàn.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001072,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001073,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1001072,
+      "lesson_id": 100107,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10001074,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10001075,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10001076,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002011,
+      "lesson_id": 100201,
+      "text": "Nhận định nào đúng nhất về \"Bài 8. Bản vẽ kĩ thuật và tiêu chuẩn trình bày bản vẽ kĩ thuật\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002011,
+          "text": "Bản vẽ kĩ thuật là phương tiện giao tiếp quan trọng giữa người thiết kế, người chế tạo, người thi công và người kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002012,
+      "lesson_id": 100201,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002021,
+      "lesson_id": 100202,
+      "text": "Nhận định nào đúng nhất về \"Bài 9. Hình chiếu vuông góc\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002021,
+          "text": "Hình chiếu vuông góc mô tả chính xác hình dạng vật thể trên các mặt phẳng chiếu.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002022,
+      "lesson_id": 100202,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002031,
+      "lesson_id": 100203,
+      "text": "Nhận định nào đúng nhất về \"Bài 10. Hình cắt và mặt cắt\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002031,
+          "text": "Hình cắt giúp biểu diễn rõ cấu tạo bên trong mà hình chiếu bình thường khó thể hiện.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002032,
+      "lesson_id": 100203,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002041,
+      "lesson_id": 100204,
+      "text": "Nhận định nào đúng nhất về \"Bài 11. Hình chiếu trục đo\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002041,
+          "text": "Hình chiếu trục đo giúp hình dung nhanh dạng 3D của vật thể trên mặt phẳng bản vẽ.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002042,
+      "lesson_id": 100204,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002051,
+      "lesson_id": 100205,
+      "text": "Nhận định nào đúng nhất về \"Bài 12. Hình chiếu phối cảnh\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002051,
+          "text": "Hình chiếu phối cảnh tạo cảm giác xa gần gần với quan sát thực tế.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002052,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002053,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002052,
+      "lesson_id": 100205,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002054,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002055,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002056,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002061,
+      "lesson_id": 100206,
+      "text": "Nhận định nào đúng nhất về \"Bài 13. Biểu diễn ren\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002061,
+          "text": "Ren được dùng để lắp ghép tháo được, điều chỉnh vị trí, kẹp chặt hoặc truyền chuyển động.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002062,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002063,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002062,
+      "lesson_id": 100206,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002064,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002065,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002066,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002071,
+      "lesson_id": 100207,
+      "text": "Nhận định nào đúng nhất về \"Bài 14. Bản vẽ cơ khí\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002071,
+          "text": "Bản vẽ chi tiết cung cấp thông tin để chế tạo và kiểm tra một chi tiết riêng lẻ.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002072,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002073,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002072,
+      "lesson_id": 100207,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002074,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002075,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002076,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002081,
+      "lesson_id": 100208,
+      "text": "Nhận định nào đúng nhất về \"Bài 15. Bản vẽ xây dựng\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002081,
+          "text": "Bản vẽ xây dựng truyền đạt thông tin về bố trí không gian, hình dáng, kích thước và cấu tạo công trình.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002082,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002083,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002082,
+      "lesson_id": 100208,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002084,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002085,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002086,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002091,
+      "lesson_id": 100209,
+      "text": "Nhận định nào đúng nhất về \"Bài 16. Vẽ kĩ thuật với sự trợ giúp của máy tính\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002091,
+          "text": "CAD giúp tăng tốc độ vẽ, sửa, sao chép, quản lí lớp, ghi kích thước và chia sẻ bản vẽ.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002092,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002093,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1002092,
+      "lesson_id": 100209,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10002094,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10002095,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10002096,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003011,
+      "lesson_id": 100301,
+      "text": "Nhận định nào đúng nhất về \"Bài 17. Khái quát về thiết kế kĩ thuật\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003011,
+          "text": "Thiết kế kĩ thuật xuất phát từ nhu cầu hoặc vấn đề thực tế và hướng tới giải pháp có thể kiểm chứng.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003012,
+      "lesson_id": 100301,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003021,
+      "lesson_id": 100302,
+      "text": "Nhận định nào đúng nhất về \"Bài 18. Quy trình thiết kế kĩ thuật\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003021,
+          "text": "Quy trình thiết kế bắt đầu từ xác định đúng vấn đề và yêu cầu, không bắt đầu ngay bằng việc làm sản phẩm.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003022,
+      "lesson_id": 100302,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003031,
+      "lesson_id": 100303,
+      "text": "Nhận định nào đúng nhất về \"Bài 19. Những yếu tố ảnh hưởng đến thiết kế kĩ thuật\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003031,
+          "text": "Nhu cầu người dùng và điều kiện sử dụng quyết định sản phẩm cần giải quyết vấn đề gì và hoạt động trong bối cảnh nào.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003032,
+      "lesson_id": 100303,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003041,
+      "lesson_id": 100304,
+      "text": "Nhận định nào đúng nhất về \"Bài 20. Nguyên tắc thiết kế kĩ thuật\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003041,
+          "text": "Thiết kế phải xuất phát từ nhu cầu thực, tránh thêm chức năng không cần thiết làm sản phẩm phức tạp và tốn kém.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003042,
+      "lesson_id": 100304,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003051,
+      "lesson_id": 100305,
+      "text": "Nhận định nào đúng nhất về \"Bài 21. Phương pháp, phương tiện hỗ trợ thiết kế kĩ thuật\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003051,
+          "text": "Phác thảo và sơ đồ giúp biểu đạt nhanh ý tưởng ở giai đoạn đầu, khi phương án còn cần thay đổi.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003052,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003053,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003052,
+      "lesson_id": 100305,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003054,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003055,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003056,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003061,
+      "lesson_id": 100306,
+      "text": "Nhận định nào đúng nhất về \"Bài 22. Dự án: Thiết kế sản phẩm đơn giản\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003061,
+          "text": "Vấn đề, người dùng, yêu cầu và tiêu chí đánh giá phải được xác định rõ trước khi tạo sản phẩm.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003062,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003063,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1003062,
+      "lesson_id": 100306,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 10003064,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 10003065,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 10003066,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1101011,
+      "lesson_id": 110101,
+      "text": "Nhận định nào đúng nhất về \"Bài 1. Khái quát về cơ khí chế tạo\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11001011,
+          "text": "Cơ khí chế tạo tạo ra chi tiết, máy, thiết bị phục vụ sản xuất và đời sống.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11001012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11001013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1101012,
+      "lesson_id": 110101,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11001014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11001015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11001016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1101021,
+      "lesson_id": 110102,
+      "text": "Nhận định nào đúng nhất về \"Bài 2. Ngành nghề trong lĩnh vực cơ khí chế tạo\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11001021,
+          "text": "Ngành nghề cơ khí chế tạo gồm thiết kế, gia công, vận hành máy, kiểm tra, bảo trì và quản lí sản xuất.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11001022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11001023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1101022,
+      "lesson_id": 110102,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11001024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11001025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11001026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1102011,
+      "lesson_id": 110201,
+      "text": "Nhận định nào đúng nhất về \"Bài 3. Tổng quan về vật liệu cơ khí\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11002011,
+          "text": "Vật liệu cơ khí được chọn theo cơ tính, lí tính, hóa tính, khả năng gia công và điều kiện làm việc.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11002012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11002013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1102012,
+      "lesson_id": 110201,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11002014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11002015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11002016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1102021,
+      "lesson_id": 110202,
+      "text": "Nhận định nào đúng nhất về \"Bài 4. Vật liệu kim loại và hợp kim\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11002021,
+          "text": "Kim loại và hợp kim có độ bền, độ dẻo, độ cứng, khả năng dẫn nhiệt, dẫn điện và khả năng gia công khác nhau.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11002022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11002023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1102022,
+      "lesson_id": 110202,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11002024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11002025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11002026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1102031,
+      "lesson_id": 110203,
+      "text": "Nhận định nào đúng nhất về \"Bài 5. Vật liệu phi kim loại\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11002031,
+          "text": "Vật liệu phi kim loại có ưu điểm về khối lượng, cách điện, chống ăn mòn hoặc giảm ma sát.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11002032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11002033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1102032,
+      "lesson_id": 110203,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11002034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11002035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11002036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1102041,
+      "lesson_id": 110204,
+      "text": "Nhận định nào đúng nhất về \"Bài 6. Vật liệu mới\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11002041,
+          "text": "Vật liệu mới hướng tới nhẹ, bền, thông minh, thân thiện môi trường và phù hợp công nghệ cao.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11002042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11002043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1102042,
+      "lesson_id": 110204,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11002044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11002045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11002046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1103011,
+      "lesson_id": 110301,
+      "text": "Nhận định nào đúng nhất về \"Bài 7. Khái quát về gia công cơ khí\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11003011,
+          "text": "Gia công cơ khí làm thay đổi hình dạng, kích thước, bề mặt hoặc tính chất của phôi.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11003012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11003013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1103012,
+      "lesson_id": 110301,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11003014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11003015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11003016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1103021,
+      "lesson_id": 110302,
+      "text": "Nhận định nào đúng nhất về \"Bài 8. Một số phương pháp gia công cơ khí\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11003021,
+          "text": "Mỗi phương pháp gia công có nguyên lí, dụng cụ, thiết bị và phạm vi ứng dụng riêng.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11003022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11003023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1103022,
+      "lesson_id": 110302,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11003024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11003025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11003026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1103031,
+      "lesson_id": 110303,
+      "text": "Nhận định nào đúng nhất về \"Bài 9. Quy trình công nghệ gia công chi tiết\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11003031,
+          "text": "Quy trình công nghệ xác định phôi, nguyên công, máy, dao, đồ gá, chế độ cắt và kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11003032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11003033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1103032,
+      "lesson_id": 110303,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11003034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11003035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11003036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1103041,
+      "lesson_id": 110304,
+      "text": "Nhận định nào đúng nhất về \"Bài 10. Dự án: Chế tạo sản phẩm bằng phương pháp gia công cắt gọt\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11003041,
+          "text": "Dự án gia công cần bắt đầu từ yêu cầu sản phẩm, bản vẽ phác thảo, vật liệu và phương án công nghệ.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11003042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11003043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1103042,
+      "lesson_id": 110304,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11003044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11003045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11003046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1104011,
+      "lesson_id": 110401,
+      "text": "Nhận định nào đúng nhất về \"Bài 11. Quá trình sản xuất cơ khí\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11004011,
+          "text": "Sản xuất cơ khí gồm chuẩn bị kĩ thuật, chuẩn bị vật tư, gia công, lắp ráp, kiểm tra và hoàn thiện.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11004012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11004013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1104012,
+      "lesson_id": 110401,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11004014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11004015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11004016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1104021,
+      "lesson_id": 110402,
+      "text": "Nhận định nào đúng nhất về \"Bài 12. Dây chuyền sản xuất tự động với sự tham gia của robot\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11004021,
+          "text": "Dây chuyền tự động kết hợp máy, robot, cảm biến, cơ cấu chấp hành và bộ điều khiển.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11004022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11004023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1104022,
+      "lesson_id": 110402,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11004024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11004025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11004026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1104031,
+      "lesson_id": 110403,
+      "text": "Nhận định nào đúng nhất về \"Bài 13. Tự động hóa sản xuất dưới tác động của Cách mạng công nghiệp 4.0\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11004031,
+          "text": "Tự động hóa 4.0 gắn với cảm biến, kết nối dữ liệu, giám sát thời gian thực và tối ưu bằng phần mềm.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11004032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11004033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1104032,
+      "lesson_id": 110403,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11004034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11004035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11004036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1104041,
+      "lesson_id": 110404,
+      "text": "Nhận định nào đúng nhất về \"Bài 14. An toàn lao động và bảo vệ môi trường trong sản xuất cơ khí\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11004041,
+          "text": "Nguy cơ cơ khí gồm va chạm, kẹp cuốn, mảnh văng, tiếng ồn, bụi, nhiệt và hóa chất.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11004042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11004043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1104042,
+      "lesson_id": 110404,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11004044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11004045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11004046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1105011,
+      "lesson_id": 110501,
+      "text": "Nhận định nào đúng nhất về \"Bài 15. Khái quát về cơ khí động lực\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11005011,
+          "text": "Cơ khí động lực nghiên cứu, khai thác và bảo dưỡng các máy tạo hoặc truyền công suất.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11005012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11005013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1105012,
+      "lesson_id": 110501,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11005014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11005015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11005016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1105021,
+      "lesson_id": 110502,
+      "text": "Nhận định nào đúng nhất về \"Bài 16. Ngành nghề trong lĩnh vực cơ khí động lực\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11005021,
+          "text": "Nghề cơ khí động lực gồm thiết kế, lắp ráp, vận hành, chẩn đoán, sửa chữa và kiểm định.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11005022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11005023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1105022,
+      "lesson_id": 110502,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11005024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11005025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11005026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1106011,
+      "lesson_id": 110601,
+      "text": "Nhận định nào đúng nhất về \"Bài 17. Đại cương về động cơ đốt trong\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11006011,
+          "text": "Động cơ đốt trong biến đổi nhiệt năng của nhiên liệu cháy trong xi lanh thành cơ năng.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11006012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11006013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1106012,
+      "lesson_id": 110601,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11006014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11006015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11006016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1106021,
+      "lesson_id": 110602,
+      "text": "Nhận định nào đúng nhất về \"Bài 18. Nguyên lí làm việc của động cơ đốt trong\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11006021,
+          "text": "Động cơ bốn kì gồm nạp, nén, cháy - giãn nở và thải.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11006022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11006023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1106022,
+      "lesson_id": 110602,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11006024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11006025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11006026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1106031,
+      "lesson_id": 110603,
+      "text": "Nhận định nào đúng nhất về \"Bài 19. Các cơ cấu trong động cơ đốt trong\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11006031,
+          "text": "Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11006032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11006033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1106032,
+      "lesson_id": 110603,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11006034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11006035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11006036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1106041,
+      "lesson_id": 110604,
+      "text": "Nhận định nào đúng nhất về \"Bài 20. Các hệ thống trong động cơ đốt trong\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11006041,
+          "text": "Các hệ thống phụ trợ bảo đảm động cơ có nhiên liệu, nhiệt độ, ma sát và điều kiện khởi động phù hợp.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11006042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11006043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1106042,
+      "lesson_id": 110604,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11006044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11006045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11006046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107011,
+      "lesson_id": 110701,
+      "text": "Nhận định nào đúng nhất về \"Bài 21. Khái quát chung về ô tô\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007011,
+          "text": "Ô tô gồm nguồn động lực, hệ truyền lực, hệ thống treo, lái, phanh, thân vỏ và hệ thống điện - điện tử.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107012,
+      "lesson_id": 110701,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107021,
+      "lesson_id": 110702,
+      "text": "Nhận định nào đúng nhất về \"Bài 22. Hệ thống truyền lực\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007021,
+          "text": "Hệ thống truyền lực truyền mô men từ động cơ tới bánh xe chủ động.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107022,
+      "lesson_id": 110702,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107031,
+      "lesson_id": 110703,
+      "text": "Nhận định nào đúng nhất về \"Bài 23. Bánh xe và hệ thống treo ô tô\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007031,
+          "text": "Bánh xe tiếp xúc mặt đường, truyền lực kéo, lực phanh và lực lái.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107032,
+      "lesson_id": 110703,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107041,
+      "lesson_id": 110704,
+      "text": "Nhận định nào đúng nhất về \"Bài 24. Hệ thống lái\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007041,
+          "text": "Hệ thống lái thay đổi hướng chuyển động của ô tô theo điều khiển của người lái hoặc bộ điều khiển.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107042,
+      "lesson_id": 110704,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107051,
+      "lesson_id": 110705,
+      "text": "Nhận định nào đúng nhất về \"Bài 25. Hệ thống phanh và an toàn khi tham gia giao thông\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007051,
+          "text": "Hệ thống phanh làm giảm tốc độ, dừng xe và giữ xe đứng yên an toàn.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007052,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007053,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1107052,
+      "lesson_id": 110705,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 11007054,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 11007055,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 11007056,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1201011,
+      "lesson_id": 120101,
+      "text": "Nhận định nào đúng nhất về \"Bài 1. Giới thiệu tổng quan về kĩ thuật điện\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12001011,
+          "text": "Kĩ thuật điện nghiên cứu, thiết kế, sản xuất, truyền tải, phân phối và sử dụng điện năng.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12001012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12001013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1201012,
+      "lesson_id": 120101,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12001014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12001015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12001016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1201021,
+      "lesson_id": 120102,
+      "text": "Nhận định nào đúng nhất về \"Bài 2. Ngành nghề trong lĩnh vực kĩ thuật điện\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12001021,
+          "text": "Ngành nghề kĩ thuật điện gồm thiết kế, lắp đặt, vận hành, bảo trì hệ thống điện và thiết bị điện.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12001022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12001023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1201022,
+      "lesson_id": 120102,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12001024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12001025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12001026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202011,
+      "lesson_id": 120201,
+      "text": "Nhận định nào đúng nhất về \"Bài 3. Mạch điện xoay chiều ba pha\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002011,
+          "text": "Mạch điện ba pha dùng phổ biến trong sản xuất và truyền tải điện năng.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202012,
+      "lesson_id": 120201,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202021,
+      "lesson_id": 120202,
+      "text": "Nhận định nào đúng nhất về \"Bài 4. Hệ thống điện quốc gia\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002021,
+          "text": "Hệ thống điện quốc gia gồm nguồn điện, lưới truyền tải, lưới phân phối, phụ tải và điều khiển bảo vệ.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202022,
+      "lesson_id": 120202,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202031,
+      "lesson_id": 120203,
+      "text": "Nhận định nào đúng nhất về \"Bài 5. Sản xuất điện năng\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002031,
+          "text": "Nguồn điện biến đổi năng lượng sơ cấp thành điện năng.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202032,
+      "lesson_id": 120203,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202041,
+      "lesson_id": 120204,
+      "text": "Nhận định nào đúng nhất về \"Bài 6. Mạng điện sản xuất quy mô nhỏ\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002041,
+          "text": "Mạng điện sản xuất quy mô nhỏ cần cấp điện đủ công suất, tin cậy và thuận tiện vận hành.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002042,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002043,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202042,
+      "lesson_id": 120204,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002044,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002045,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002046,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202051,
+      "lesson_id": 120205,
+      "text": "Nhận định nào đúng nhất về \"Bài 7. Mạng điện hạ áp dùng trong sinh hoạt\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002051,
+          "text": "Mạng điện hạ áp cấp điện trực tiếp cho hộ gia đình và phụ tải sinh hoạt.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002052,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002053,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1202052,
+      "lesson_id": 120205,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12002054,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12002055,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12002056,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1203011,
+      "lesson_id": 120301,
+      "text": "Nhận định nào đúng nhất về \"Bài 8. Hệ thống điện trong gia đình\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12003011,
+          "text": "Hệ thống điện gia đình gồm nguồn cấp, thiết bị bảo vệ, dây dẫn, thiết bị điều khiển và đồ dùng điện.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12003012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12003013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1203012,
+      "lesson_id": 120301,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12003014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12003015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12003016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1203021,
+      "lesson_id": 120302,
+      "text": "Nhận định nào đúng nhất về \"Bài 9. Thiết bị điện trong hệ thống điện gia đình\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12003021,
+          "text": "Thiết bị điện cần phù hợp điện áp, dòng điện, công suất, môi trường và mục đích sử dụng.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12003022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12003023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1203022,
+      "lesson_id": 120302,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12003024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12003025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12003026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1203031,
+      "lesson_id": 120303,
+      "text": "Nhận định nào đúng nhất về \"Bài 10. Thiết kế và lắp đặt mạch điện điều khiển trong gia đình\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12003031,
+          "text": "Thiết kế mạch cần xác định yêu cầu, chọn thiết bị, vẽ sơ đồ nguyên lí và sơ đồ lắp đặt.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12003032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12003033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1203032,
+      "lesson_id": 120303,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12003034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12003035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12003036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1204011,
+      "lesson_id": 120401,
+      "text": "Nhận định nào đúng nhất về \"Bài 11. An toàn điện\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12004011,
+          "text": "Điện giật, quá tải, ngắn mạch, hồ quang và rò điện là các nguy cơ phổ biến.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12004012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12004013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1204012,
+      "lesson_id": 120401,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12004014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12004015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12004016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1204021,
+      "lesson_id": 120402,
+      "text": "Nhận định nào đúng nhất về \"Bài 12. Tiết kiệm điện năng\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12004021,
+          "text": "Tiết kiệm điện giúp giảm chi phí, giảm tải hệ thống và bảo vệ môi trường.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12004022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12004023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1204022,
+      "lesson_id": 120402,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12004024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12004025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12004026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1205011,
+      "lesson_id": 120501,
+      "text": "Nhận định nào đúng nhất về \"Bài 13. Khái quát về kĩ thuật điện tử\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12005011,
+          "text": "Kĩ thuật điện tử làm việc chủ yếu với tín hiệu và mạch điều khiển.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12005012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12005013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1205012,
+      "lesson_id": 120501,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12005014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12005015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12005016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1205021,
+      "lesson_id": 120502,
+      "text": "Nhận định nào đúng nhất về \"Bài 14. Ngành nghề và dịch vụ trong lĩnh vực kĩ thuật điện tử\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12005021,
+          "text": "Lĩnh vực điện tử cần nhân lực thiết kế mạch, lập trình nhúng, lắp ráp, đo kiểm, bảo trì và hỗ trợ kĩ thuật.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12005022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12005023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1205022,
+      "lesson_id": 120502,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12005024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12005025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12005026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1206011,
+      "lesson_id": 120601,
+      "text": "Nhận định nào đúng nhất về \"Bài 15. Điện trở, tụ điện và cuộn cảm\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12006011,
+          "text": "Điện trở hạn chế dòng điện, phân áp hoặc tạo tải trong mạch.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12006012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12006013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1206012,
+      "lesson_id": 120601,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12006014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12006015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12006016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1206021,
+      "lesson_id": 120602,
+      "text": "Nhận định nào đúng nhất về \"Bài 16. Diode, transistor và mạch tích hợp IC\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12006021,
+          "text": "Diode cho dòng điện đi chủ yếu theo một chiều và dùng trong chỉnh lưu, bảo vệ, phát sáng.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12006022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12006023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1206022,
+      "lesson_id": 120602,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12006024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12006025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12006026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1206031,
+      "lesson_id": 120603,
+      "text": "Nhận định nào đúng nhất về \"Bài 17. Thực hành: Mạch phát hiện dòng điện xoay chiều trong dây dẫn\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12006031,
+          "text": "Thực hành cần đọc sơ đồ, nhận dạng linh kiện, lắp đúng cực tính và kiểm tra nguồn.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12006032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12006033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1206032,
+      "lesson_id": 120603,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12006034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12006035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12006036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1207011,
+      "lesson_id": 120701,
+      "text": "Nhận định nào đúng nhất về \"Bài 18. Giới thiệu về điện tử tương tự\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12007011,
+          "text": "Tín hiệu tương tự biến thiên liên tục theo thời gian.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12007012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12007013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1207012,
+      "lesson_id": 120701,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12007014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12007015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12007016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1207021,
+      "lesson_id": 120702,
+      "text": "Nhận định nào đúng nhất về \"Bài 19. Khuếch đại thuật toán\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12007021,
+          "text": "Khuếch đại thuật toán là linh kiện tích hợp dùng để khuếch đại và xử lí tín hiệu tương tự.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12007022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12007023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1207022,
+      "lesson_id": 120702,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12007024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12007025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12007026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1207031,
+      "lesson_id": 120703,
+      "text": "Nhận định nào đúng nhất về \"Bài 20. Thực hành: Mạch khuếch đại đảo\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12007031,
+          "text": "Mạch khuếch đại đảo cho tín hiệu ra ngược pha với tín hiệu vào.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12007032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12007033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1207032,
+      "lesson_id": 120703,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12007034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12007035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12007036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1208011,
+      "lesson_id": 120801,
+      "text": "Nhận định nào đúng nhất về \"Bài 21. Tín hiệu số và các cổng logic cơ bản\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12008011,
+          "text": "Tín hiệu số thường biểu diễn bằng hai mức logic 0 và 1.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12008012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12008013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1208012,
+      "lesson_id": 120801,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12008014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12008015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12008016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1208021,
+      "lesson_id": 120802,
+      "text": "Nhận định nào đúng nhất về \"Bài 22. Một số mạch xử lí tín hiệu trong điện tử số\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12008021,
+          "text": "Mạch tổ hợp có đầu ra phụ thuộc vào trạng thái đầu vào hiện tại.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12008022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12008023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1208022,
+      "lesson_id": 120802,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12008024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12008025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12008026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1208031,
+      "lesson_id": 120803,
+      "text": "Nhận định nào đúng nhất về \"Bài 23. Thực hành: Lắp ráp, kiểm tra mạch báo cháy dùng cổng logic\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12008031,
+          "text": "Mạch báo cháy cần xác định tín hiệu cảm biến, điều kiện logic và tín hiệu cảnh báo.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12008032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12008033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1208032,
+      "lesson_id": 120803,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12008034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12008035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12008036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1209011,
+      "lesson_id": 120901,
+      "text": "Nhận định nào đúng nhất về \"Bài 24. Khái quát về vi điều khiển\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12009011,
+          "text": "Vi điều khiển là bộ điều khiển nhỏ gọn có thể lập trình để xử lí tín hiệu và điều khiển thiết bị.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12009012,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12009013,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1209012,
+      "lesson_id": 120901,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12009014,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12009015,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12009016,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1209021,
+      "lesson_id": 120902,
+      "text": "Nhận định nào đúng nhất về \"Bài 25. Bo mạch lập trình vi điều khiển\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12009021,
+          "text": "Bo mạch lập trình tích hợp vi điều khiển, nguồn, cổng giao tiếp và chân kết nối.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12009022,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12009023,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1209022,
+      "lesson_id": 120902,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12009024,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12009025,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12009026,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1209031,
+      "lesson_id": 120903,
+      "text": "Nhận định nào đúng nhất về \"Bài 26. Thực hành: Mạch tự động điều chỉnh cường độ sáng LED\"?",
+      "question_type": "multiple_choice",
+      "difficulty": "easy",
+      "points": 1,
+      "options": [
+        {
+          "id": 12009031,
+          "text": "Dự án cần xác định yêu cầu, cảm biến ánh sáng, thuật toán điều khiển và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12009032,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12009033,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    },
+    {
+      "id": 1209032,
+      "lesson_id": 120903,
+      "text": "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ?",
+      "question_type": "multiple_choice",
+      "difficulty": "medium",
+      "points": 1,
+      "options": [
+        {
+          "id": 12009034,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
+          "order": 1
+        },
+        {
+          "id": 12009035,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
+          "order": 2
+        },
+        {
+          "id": 12009036,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
+          "order": 3
+        }
+      ]
+    }
+  ]
+}

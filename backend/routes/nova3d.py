@@ -2,10 +2,12 @@ import asyncio
 from typing import Any, Optional
 
 import httpx
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 
 from config import settings
+from auth import get_authenticated_user, require_teacher_user
+from models import User
 
 
 router = APIRouter(prefix="/api/nova3d", tags=["Nova3D"])
@@ -120,7 +122,7 @@ async def _nova_request(method: str, path: str, **kwargs):
 
 
 @router.get("/config")
-async def get_nova3d_config():
+async def get_nova3d_config(_current_user: User = Depends(get_authenticated_user)):
     return {
         "configured": _is_configured(),
         "base_url": settings.nova3d_base_url,
@@ -130,7 +132,10 @@ async def get_nova3d_config():
 
 
 @router.post("/four-stroke-engine", response_model=Nova3DWorkflowResponse)
-async def generate_four_stroke_engine(request: Nova3DGenerateRequest):
+async def generate_four_stroke_engine(
+    request: Nova3DGenerateRequest,
+    _current_user: User = Depends(require_teacher_user),
+):
     prompt = (request.prompt or FOUR_STROKE_ENGINE_PROMPT).strip()
     if not _is_configured():
         return Nova3DWorkflowResponse(
@@ -214,14 +219,14 @@ async def generate_four_stroke_engine(request: Nova3DGenerateRequest):
 
 
 @router.get("/workflows/{workflow_id}/status")
-async def get_workflow_status(workflow_id: str):
+async def get_workflow_status(workflow_id: str, _current_user: User = Depends(require_teacher_user)):
     if not _is_configured():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Nova3D is not configured.")
     return await _nova_request("GET", f"/status/{workflow_id}")
 
 
 @router.get("/workflows/{workflow_id}/result")
-async def get_workflow_result(workflow_id: str):
+async def get_workflow_result(workflow_id: str, _current_user: User = Depends(require_teacher_user)):
     if not _is_configured():
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Nova3D is not configured.")
     result = await _nova_request("GET", f"/result/{workflow_id}")

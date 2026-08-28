@@ -22,9 +22,17 @@ const formatDate = (value) => {
 const getErrorMessage = (error, fallback) =>
   error?.response?.data?.detail || error?.message || fallback
 
+const asList = (payload) => {
+  if (Array.isArray(payload)) return payload
+  if (Array.isArray(payload?.data)) return payload.data
+  if (Array.isArray(payload?.items)) return payload.items
+  if (Array.isArray(payload?.results)) return payload.results
+  return []
+}
+
 const getLocalStudents = () => {
   try {
-    return JSON.parse(localStorage.getItem('local_auth_users') || '[]')
+    return asList(JSON.parse(localStorage.getItem('local_auth_users') || '[]'))
       .filter((item) => item.role === 'student')
       .map((item) => ({
         id: item.id || item.username,
@@ -53,7 +61,7 @@ const getLocalSubmissions = () => {
 }
 
 const readLocalSubmissions = (assignmentId) =>
-  getLocalSubmissions()[String(assignmentId)] || []
+  asList(getLocalSubmissions()[String(assignmentId)])
 
 const saveLocalSubmission = (assignmentId, submission) => {
   const submissions = getLocalSubmissions()
@@ -73,7 +81,7 @@ const LOCAL_MATERIALS_KEY = 'local_reference_materials'
 
 const readLocalMaterials = () => {
   try {
-    return JSON.parse(localStorage.getItem(LOCAL_MATERIALS_KEY) || '[]')
+    return asList(JSON.parse(localStorage.getItem(LOCAL_MATERIALS_KEY) || '[]'))
   } catch {
     return []
   }
@@ -96,7 +104,7 @@ const normalizeClassName = (value = '') => String(value || '').trim()
 
 const readLocalAssignments = () => {
   try {
-    return JSON.parse(localStorage.getItem(LOCAL_ASSIGNMENTS_KEY) || '[]')
+    return asList(JSON.parse(localStorage.getItem(LOCAL_ASSIGNMENTS_KEY) || '[]'))
   } catch {
     return []
   }
@@ -127,7 +135,7 @@ const assignmentTargetClass = (assignment = {}) =>
 
 const applyAssignmentClassMeta = (assignments = []) => {
   const classMap = readAssignmentClassMap()
-  return assignments.map((assignment) => ({
+  return asList(assignments).map((assignment) => ({
     ...assignment,
     target_class: assignmentTargetClass(assignment) || classMap[String(assignment.id)] || '',
   }))
@@ -195,7 +203,7 @@ export default function Classroom() {
 
   const visibleMaterials = useMemo(() => {
     const normalizedSearch = materialSearchTerm.trim().toLowerCase()
-    return materials.filter((material) => {
+    return asList(materials).filter((material) => {
       const matchesCourse = !materialCourseFilter || material.course_id === Number(materialCourseFilter)
       const matchesSearch =
         !normalizedSearch ||
@@ -209,21 +217,23 @@ export default function Classroom() {
   const localStudents = useMemo(() => getLocalStudents(), [])
 
   const classOptions = useMemo(() => {
-    const names = new Set(localStudents.map((student) => student.className).filter(Boolean))
-    assignments.forEach((assignment) => {
+    const safeAssignments = asList(assignments)
+    const names = new Set(asList(localStudents).map((student) => student.className).filter(Boolean))
+    safeAssignments.forEach((assignment) => {
       const targetClass = assignmentTargetClass(assignment)
       if (targetClass) names.add(targetClass)
     })
-    Object.values(submissionsByAssignment).flat().forEach((submission) => {
+    Object.values(submissionsByAssignment).flatMap(asList).forEach((submission) => {
       names.add(getClassFromSubmission(submission.student_name))
     })
     return [...names].filter(Boolean).sort((a, b) => a.localeCompare(b, 'vi'))
   }, [assignments, localStudents, submissionsByAssignment])
 
   const assignmentRows = useMemo(() => {
-    if (!isTeacher || !classFilter) return assignments
+    const safeAssignments = asList(assignments)
+    if (!isTeacher || !classFilter) return safeAssignments
     const selected = normalizeClassName(classFilter).toLowerCase()
-    return assignments.filter((assignment) => {
+    return safeAssignments.filter((assignment) => {
       const targetClass = assignmentTargetClass(assignment).toLowerCase()
       return !targetClass || targetClass === selected
     })
@@ -234,7 +244,7 @@ export default function Classroom() {
     (isTeacher ? classFilter || assignmentTargetClass(activeAssignment) : user?.student_class) ||
     classOptions[0] ||
     ''
-  const activeSubmissions = submissionsByAssignment[activeAssignment?.id || activeAssignmentId] || []
+  const activeSubmissions = asList(submissionsByAssignment[activeAssignment?.id || activeAssignmentId])
 
   useEffect(() => {
     if (!assignmentRows.length) {
@@ -287,14 +297,15 @@ export default function Classroom() {
         classroomAPI.listPosts(),
         classroomAPI.listAssignments(),
       ])
+      const serverAssignments = asList(assignmentResponse.data)
       const combinedAssignments = applyAssignmentClassMeta([
         ...readLocalAssignments(),
-        ...assignmentResponse.data,
+        ...serverAssignments,
       ])
       const visibleAssignments = combinedAssignments.filter((assignment) =>
         isAssignmentVisibleToUser(assignment, user, isTeacher),
       )
-      setPosts(postResponse.data)
+      setPosts(asList(postResponse.data))
       setAssignments(visibleAssignments)
       setActiveAssignmentId((prev) =>
         visibleAssignments.some((assignment) => assignment.id === prev) ? prev : visibleAssignments[0]?.id || null,
@@ -309,7 +320,7 @@ export default function Classroom() {
   const loadMaterials = async () => {
     try {
       const serverMaterials = await readReferenceMaterials()
-      setMaterials([...readLocalMaterials(), ...serverMaterials])
+      setMaterials([...readLocalMaterials(), ...asList(serverMaterials)])
     } catch {
       setMaterials(readLocalMaterials())
       toast.error('Không đọc được kho tài liệu trên server')
@@ -323,7 +334,7 @@ export default function Classroom() {
       const response = await classroomAPI.listSubmissions(assignmentId)
       setSubmissionsByAssignment((prev) => ({
         ...prev,
-        [assignmentId]: [...localSubmissions, ...response.data],
+        [assignmentId]: [...localSubmissions, ...asList(response.data)],
       }))
     } catch (error) {
       if (isLocalAuthError(error)) {
@@ -367,7 +378,7 @@ export default function Classroom() {
       course_id: assignmentForm.courseId ? Number(assignmentForm.courseId) : null,
       lesson_id: assignmentForm.lessonId ? Number(assignmentForm.lessonId) : null,
       due_at: assignmentForm.dueAt ? new Date(assignmentForm.dueAt).toISOString() : null,
-      created_by: user?.full_name || user?.username || 'Giao vien',
+      created_by: user?.full_name || user?.username || 'Giáo viên',
       created_by_user_id: user?.id || null,
     }
 
@@ -379,7 +390,7 @@ export default function Classroom() {
       if (response?.data?.id) saveAssignmentTargetClass(response.data.id, targetClass)
       setAssignmentForm({ title: '', description: '', courseId: '', lessonId: '', dueAt: '', targetClass: '' })
       await loadClassroom()
-      toast.success('Da tao nhiem vu nop bai')
+      toast.success('Đã tạo nhiệm vụ nộp bài')
     } catch (error) {
       if (isLocalSession() || isLocalAuthError(error)) {
         const localAssignment = {
@@ -396,10 +407,10 @@ export default function Classroom() {
         setAssignments((prev) => [localAssignment, ...prev])
         setActiveAssignmentId(localAssignment.id)
         setAssignmentForm({ title: '', description: '', courseId: '', lessonId: '', dueAt: '', targetClass: '' })
-        toast.success('Da tao nhiem vu cho lop tren phien demo')
+        toast.success('Đã tạo nhiệm vụ cho lớp trong chế độ thử nghiệm')
         return
       }
-      toast.error(getErrorMessage(error, 'Khong tao duoc nhiem vu'))
+      toast.error(getErrorMessage(error, 'Không tạo được nhiệm vụ'))
     }
   }
 
@@ -422,26 +433,26 @@ export default function Classroom() {
         description: materialForm.description,
         courseId: materialForm.courseId,
         lessonId: materialForm.lessonId,
-        uploader: user?.full_name || user?.username || 'Giao vien',
+        uploader: user?.full_name || user?.username || 'Giáo viên',
         uploaderUserId: user?.id,
       })
       setMaterialForm({ title: '', description: '', courseId: '', lessonId: '' })
       setSelectedMaterialFile(null)
       event.target.reset()
       await loadMaterials()
-      toast.success('Da tai tai lieu tham khao len')
+      toast.success('Đã tải tài liệu tham khảo lên')
     } catch (error) {
       if (isLocalSession()) {
         const localMaterial = {
           id: 'local-material-' + Date.now(),
-          title: materialForm.title.trim() || selectedMaterialFile?.name || 'Tai lieu tham khao',
+          title: materialForm.title.trim() || selectedMaterialFile?.name || 'Tài liệu tham khảo',
           description: materialForm.description.trim(),
           course_id: materialForm.courseId ? Number(materialForm.courseId) : null,
           lesson_id: materialForm.lessonId ? Number(materialForm.lessonId) : null,
           file_name: selectedMaterialFile?.name || 'tai-lieu',
           file_size: selectedMaterialFile?.size || 0,
           file_type: selectedMaterialFile?.type || '',
-          uploader: user?.full_name || user?.username || 'Giao vien',
+          uploader: user?.full_name || user?.username || 'Giáo viên',
           uploader_user_id: user?.id || null,
           created_at: new Date().toISOString(),
           is_local: true,
@@ -451,10 +462,10 @@ export default function Classroom() {
         setMaterialForm({ title: '', description: '', courseId: '', lessonId: '' })
         setSelectedMaterialFile(null)
         event.target.reset()
-        toast.success('Da ghi nhan tai lieu tren phien demo')
+        toast.success('Đã ghi nhận tài liệu trong chế độ thử nghiệm')
         return
       }
-      toast.error(error.message || 'Khong tai duoc tai lieu tham khao')
+      toast.error(error.message || 'Không tải được tài liệu tham khảo')
     } finally {
       setIsUploadingMaterial(false)
     }
@@ -467,8 +478,8 @@ export default function Classroom() {
 
     const studentName =
       user?.role === 'student' && user?.student_class
-        ? `${user?.full_name || user?.username} - Lop ${user.student_class}`
-        : user?.full_name || user?.username || 'Hoc sinh'
+        ? `${user?.full_name || user?.username} - Lớp ${user.student_class}`
+        : user?.full_name || user?.username || 'Học sinh'
 
     try {
       const formData = new FormData()
@@ -480,7 +491,7 @@ export default function Classroom() {
       setSubmissionForm({ content: '', file: null })
       await loadSubmissions(submissionAssignmentId)
       await loadClassroom()
-      toast.success('Da nop bai')
+      toast.success('Đã nộp bài')
     } catch (error) {
       if (isLocalAuthError(error)) {
         const localSubmission = {
@@ -501,17 +512,17 @@ export default function Classroom() {
           ...prev,
           [submissionAssignmentId]: [localSubmission, ...(prev[submissionAssignmentId] || [])],
         }))
-        toast.success('Da ghi nhan bai nop tren phien demo')
+        toast.success('Đã ghi nhận bài nộp trong chế độ thử nghiệm')
         return
       }
-      toast.error(getErrorMessage(error, 'Khong nop duoc bai'))
+      toast.error(getErrorMessage(error, 'Không nộp được bài'))
     } finally {
       setIsSubmittingAssignment(false)
     }
   }
   const downloadSubmission = async (submission) => {
     if (submission.is_local) {
-      toast.error('Bai nop demo chi luu thong tin file tren trinh duyet nay.')
+      toast.error('Bài nộp thử nghiệm chỉ lưu thông tin tệp trên trình duyệt này.')
       return
     }
     try {
@@ -539,7 +550,7 @@ export default function Classroom() {
     if (String(materialId).startsWith('local-material-')) {
       deleteLocalMaterial(materialId)
       setMaterials((prev) => prev.filter((material) => material.id !== materialId))
-      toast.success('Da xoa tai lieu demo')
+      toast.success('Đã xóa tài liệu thử nghiệm')
       return
     }
     try {
@@ -553,7 +564,7 @@ export default function Classroom() {
 
   const handleMaterialDownload = async (material) => {
     if (material.is_local) {
-      toast.error('Tai lieu demo chi luu thong tin file tren trinh duyet nay.')
+      toast.error('Tài liệu thử nghiệm chỉ lưu thông tin tệp trên trình duyệt này.')
       return
     }
     try {
@@ -699,7 +710,7 @@ export default function Classroom() {
                 type="text"
                 value={assignmentForm.targetClass}
                 onChange={(event) => setAssignmentForm((prev) => ({ ...prev, targetClass: event.target.value }))}
-                placeholder="Lop nhan nhiem vu, VD: 11A1. Bo trong = tat ca lop"
+                placeholder="Lớp nhận nhiệm vụ, VD: 11A1. Bỏ trống = tất cả lớp"
                 className="w-full rounded-md border-slate-300 px-4 py-2 text-sm focus:border-blue-500 focus:ring-blue-500"
               />
                 <button type="submit" className="primary-button w-full">Giao nhiệm vụ</button>
@@ -875,7 +886,7 @@ export default function Classroom() {
           <section className="rounded-lg border border-sky-200 bg-white p-6 shadow-sm">
             <h2 className="text-2xl font-bold text-sky-950">Nhiệm vụ nộp bài</h2>
             {assignmentRows.length === 0 ? (
-              <p className="mt-4 rounded-lg bg-slate-50 p-4 text-sm text-slate-600">{isTeacher ? 'Chua co nhiem vu nao cho lop dang chon.' : 'Chua co nhiem vu nao cho lop cua em.'}</p>
+              <p className="mt-4 rounded-lg bg-slate-50 p-4 text-sm text-slate-600">{isTeacher ? 'Chưa có nhiệm vụ nào cho lớp đang chọn.' : 'Chưa có nhiệm vụ nào cho lớp của em.'}</p>
             ) : (
               <div className="mt-4 grid gap-5 lg:grid-cols-[300px_1fr]">
                 <div className="space-y-3">
@@ -892,7 +903,7 @@ export default function Classroom() {
                     >
                       <p className="text-base font-bold">{assignment.title}</p>
                       <p className="mt-2 text-xs text-slate-500">Hạn nộp: {formatDate(assignment.due_at)}</p>
-                      <p className="mt-1 text-xs font-bold text-sky-700">Lop: {assignmentTargetClass(assignment) || 'Tat ca lop'}</p>
+                      <p className="mt-1 text-xs font-bold text-sky-700">Lớp: {assignmentTargetClass(assignment) || 'Tất cả lớp'}</p>
                       <p className="mt-1 text-xs text-slate-500">{assignment.submission_count || 0} bài nộp</p>
                     </button>
                   ))}
@@ -903,7 +914,7 @@ export default function Classroom() {
                     <h3 className="text-lg font-bold text-slate-950">{activeAssignment.title}</h3>
                     <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-700">{activeAssignment.description}</p>
                     <p className="mt-3 text-xs text-slate-500">Hạn nộp: {formatDate(activeAssignment.due_at)}</p>
-                    <p className="mt-1 text-xs font-bold text-sky-700">Lop nhan nhiem vu: {assignmentTargetClass(activeAssignment) || 'Tat ca lop'}</p>
+                    <p className="mt-1 text-xs font-bold text-sky-700">Lớp nhận nhiệm vụ: {assignmentTargetClass(activeAssignment) || 'Tất cả lớp'}</p>
 
                     {isTeacher ? (
                       <section className="mt-5 rounded-lg border border-violet-200 bg-violet-50 p-4">
@@ -985,7 +996,7 @@ export default function Classroom() {
                           </p>
                         )}
                         <button type="submit" disabled={isSubmittingAssignment} className="primary-button disabled:opacity-60">
-                          {isSubmittingAssignment ? 'Dang nop...' : 'Nop bai'}
+                          {isSubmittingAssignment ? 'Đang nộp...' : 'Nộp bài'}
                         </button>
                       </form>
                     )}
@@ -1019,7 +1030,7 @@ export default function Classroom() {
                               {submission.file_name && (
                                 <p className="mt-2 text-xs text-slate-500">
                                   {submission.file_name} · {formatFileSize(submission.file_size)}
-                                  {submission.is_local ? ' · Demo local' : ''}
+                                  {submission.is_local ? ' · Thử nghiệm cục bộ' : ''}
                                 </p>
                               )}
                             </div>

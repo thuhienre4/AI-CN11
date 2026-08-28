@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 
 from auth import create_access_token, get_authenticated_user, hash_password, verify_password
+from config import settings
 from database import get_db
 from models import User
 from schemas import Token, UserCreate, UserLogin, UserResponse
@@ -29,6 +30,11 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin and moderator accounts must be created by an administrator.",
         )
+    if user_data.role.value == "teacher" and not settings.allow_teacher_self_registration:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Teacher accounts must be approved and created by an administrator.",
+        )
 
     new_user = User(
         username=user_data.username,
@@ -49,12 +55,15 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
 @router.post("/login", response_model=Token)
 async def login(credentials: UserLogin, db: Session = Depends(get_db)):
     """Authenticate user and return JWT token."""
-    user = db.query(User).filter(User.username == credentials.username).first()
+    username_or_email = credentials.username.strip()
+    user = db.query(User).filter(
+        (User.username == username_or_email) | (User.email == username_or_email)
+    ).first()
 
     if not user or not verify_password(credentials.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid username or password",
+            detail="Sai tai khoan/email hoac mat khau. Neu chua co tai khoan, hay dang ky truoc.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 

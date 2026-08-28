@@ -126,6 +126,25 @@ class QuestionResponse(QuestionBase):
         from_attributes = True
 
 
+class QuizQuestionOptionResponse(BaseModel):
+    id: int
+    text: str
+    order: int = 0
+
+    class Config:
+        from_attributes = True
+
+
+class QuizQuestionResponse(QuestionBase):
+    id: int
+    lesson_id: int
+    options: List[QuizQuestionOptionResponse] = Field(default_factory=list)
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+
 # ============= Quiz Result Schemas =============
 class QuizResultBase(BaseModel):
     question_id: int
@@ -168,6 +187,14 @@ class QuizAttemptResponse(BaseModel):
         from_attributes = True
 
 
+class QuizAttemptCreate(BaseModel):
+    lesson_id: int
+
+
+class QuizAttemptFinalize(BaseModel):
+    client_event_id: Optional[str] = Field(default=None, min_length=8, max_length=80)
+
+
 # ============= Chat History Schemas =============
 class ChatMessageBase(BaseModel):
     user_message: str
@@ -176,13 +203,14 @@ class ChatMessageBase(BaseModel):
 
 
 class ChatMessageCreate(ChatMessageBase):
-    pass
+    client_event_id: Optional[str] = Field(default=None, min_length=8, max_length=80)
 
 
 class ChatMessageResponse(ChatMessageBase):
     id: int
     user_id: int
     ai_response: Optional[str] = None
+    response_mode: str = "fallback"
     created_at: datetime
 
     class Config:
@@ -192,10 +220,12 @@ class ChatMessageResponse(ChatMessageBase):
 # ============= Personalized Learning Schemas =============
 class LearningEventCreate(BaseModel):
     lesson_id: Optional[int] = None
+    client_event_id: Optional[str] = Field(default=None, min_length=8, max_length=80)
     event_type: str = Field(..., min_length=1, max_length=50)
     duration_seconds: int = Field(default=0, ge=0)
-    score: Optional[float] = Field(default=None, ge=0)
+    score: Optional[float] = Field(default=None, ge=0, le=100)
     payload: Optional[Dict[str, Any]] = None
+    occurred_at: Optional[datetime] = None
 
 
 class LearningEventResponse(LearningEventCreate):
@@ -247,6 +277,9 @@ class LearningRecommendation(BaseModel):
     mastery_score: Optional[float] = 0
     risk_score: Optional[float] = 0
     knowledge_unit: Optional[str] = None
+    type: Optional[str] = None
+    label: Optional[str] = None
+    to: Optional[str] = None
 
 
 class LearningDashboardResponse(BaseModel):

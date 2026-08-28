@@ -7,6 +7,7 @@ import { lessonsAPI } from '../services/api'
 import { useAuthStore } from '../store'
 import { getInteractiveActivity, getSampleLesson } from '../data/courseCatalog'
 import { recordLocalLearningEvent } from '../utils/learningProgress'
+import { useLearningSession } from '../hooks/useLearningSession'
 
 function InteractiveLearning({ activity }) {
   const [openCard, setOpenCard] = useState(null)
@@ -267,6 +268,7 @@ export default function LessonDetail() {
   const [lesson, setLesson] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isCompleted, setIsCompleted] = useState(false)
+  useLearningSession({ userId: user?.id, lessonId, eventType: 'lesson_session' })
 
   useEffect(() => {
     fetchLesson()
@@ -277,7 +279,7 @@ export default function LessonDetail() {
     recordLocalLearningEvent(user.id, {
       lesson_id: Number(lessonId),
       event_type: 'lesson_viewed',
-      duration_seconds: 90,
+      duration_seconds: 0,
     })
   }, [user?.id, lessonId])
 
@@ -428,6 +430,10 @@ export default function LessonDetail() {
           <section className="panel p-5">
             <h3 className="font-bold text-slate-950">Bộ công cụ học tập</h3>
             <div className="mt-4 space-y-3">
+              <Link to={`/lessons/${lessonId}/3d`} className="primary-button w-full">
+                <span className="mr-2 rounded bg-white/20 px-1.5 py-0.5 text-xs">3D</span>
+                Mô phỏng nguyên lí
+              </Link>
               <Link to={`/lessons/${lessonId}/chat`} className="secondary-button w-full">
                 <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs">AI</span>
                 Trợ lý học tập

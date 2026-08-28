@@ -4,8 +4,8 @@ from typing import List
 
 from database import get_db
 from models import Question, Lesson, QuestionOption
-from schemas import QuestionResponse, QuestionCreate
-from auth import require_teacher_user
+from schemas import QuestionResponse, QuestionCreate, QuizQuestionResponse
+from auth import get_authenticated_user, require_teacher_user
 
 router = APIRouter(prefix="/api", tags=["Questions"])
 
@@ -51,8 +51,12 @@ async def create_question(
     return new_question
 
 
-@router.get("/lessons/{lesson_id}/questions", response_model=List[QuestionResponse])
-async def list_questions(lesson_id: int, db: Session = Depends(get_db)):
+@router.get("/lessons/{lesson_id}/questions", response_model=List[QuizQuestionResponse])
+async def list_questions(
+    lesson_id: int,
+    db: Session = Depends(get_db),
+    _current_user=Depends(get_authenticated_user),
+):
     """List all questions for a lesson."""
     lesson = db.query(Lesson).filter(Lesson.id == lesson_id).first()
     if not lesson:
@@ -66,7 +70,11 @@ async def list_questions(lesson_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/questions/{question_id}", response_model=QuestionResponse)
-async def get_question(question_id: int, db: Session = Depends(get_db)):
+async def get_question(
+    question_id: int,
+    db: Session = Depends(get_db),
+    _current_user=Depends(require_teacher_user),
+):
     """Get a question by ID."""
     question = db.query(Question).filter(Question.id == question_id).first()
     if not question:

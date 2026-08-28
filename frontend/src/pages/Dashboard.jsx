@@ -3,6 +3,11 @@ import { Link } from 'react-router-dom'
 import { sampleCourses, getSampleLessonsByCourse } from '../data/courseCatalog'
 import { useAuthStore } from '../store'
 import { buildLocalLearningDashboard, buildTeacherLearningAnalytics } from '../utils/learningProgress'
+import { learningAPI } from '../services/api'
+import WeeklyLeaderboard from '../components/WeeklyLeaderboard'
+import { motion } from 'framer-motion'
+import { ArrowRight, BookOpenCheck, Bot, Clock3, Flame, Medal, Sparkles, Target, Trophy } from 'lucide-react'
+import { Badge, ProgressBar, StatCard } from '../components/ui'
 
 const toolStyles = [
   'from-sky-400 to-cyan-300',
@@ -16,7 +21,7 @@ const mechanicalIcons = ['⚙', '🔩', '🛠', '🚗', '🔧', '⛓']
 
 const learningTools = [
   {
-    title: 'Lớp học Công nghệ',
+    title: 'Lớp học Công nghệ THPT',
     description: 'Thông báo, nhiệm vụ thực hành, bài nộp và phản hồi của giáo viên.',
     to: '/classroom',
     label: 'Vào lớp học',
@@ -40,7 +45,7 @@ const learningTools = [
     ],
   },
   {
-    title: 'Kho đề luyện tập Công nghệ',
+    title: 'Kho đề luyện tập Công nghệ THPT',
     description: 'Tổng hợp đề theo chương, có thời lượng, câu hỏi và phần giải thích sau khi nộp.',
     to: '/practice-bank',
     label: 'Mở kho đề',
@@ -49,6 +54,18 @@ const learningTools = [
       'Chọn đề theo chương hoặc chủ đề muốn ôn.',
       'Làm đủ câu hỏi rồi nộp để xem kết quả.',
       'Đọc giải thích và quay lại chương tương ứng để ôn phần còn yếu.',
+    ],
+  },
+  {
+    title: 'Trò chơi demo Công nghệ THPT',
+    description: 'Quiz nhanh cho kiến thức Công nghệ THPT với giải thích và điểm số ngay lập tức.',
+    to: '/game-demo',
+    label: 'Thử ngay',
+    icon: '🎮',
+    guide: [
+      'Chọn đáp án đúng, học qua từng câu hỏi.',
+      'Xem giải thích sau mỗi câu sai hoặc đúng.',
+      'Hoàn thành lượt để xem tổng điểm và thử lại.',
     ],
   },
   {
@@ -99,7 +116,8 @@ const studyWorkflow = [
 
 const readLocalUsers = () => {
   try {
-    return JSON.parse(localStorage.getItem('local_auth_users') || '[]')
+    const value = JSON.parse(localStorage.getItem('local_auth_users') || '[]')
+    return Array.isArray(value) ? value.filter((item) => item && typeof item === 'object') : []
   } catch {
     return []
   }
@@ -107,7 +125,8 @@ const readLocalUsers = () => {
 
 const readLocalEvents = () => {
   try {
-    return JSON.parse(localStorage.getItem('engine_lab_learning_events') || '[]')
+    const value = JSON.parse(localStorage.getItem('engine_lab_learning_events') || '[]')
+    return Array.isArray(value) ? value.filter((item) => item && typeof item === 'object') : []
   } catch {
     return []
   }
@@ -379,23 +398,23 @@ function StudentSmartLearningPanel({ user }) {
     { label: 'Mastery score', value: `${dashboard.mastery_score}%`, tone: 'text-sky-700' },
     { label: 'Engagement', value: `${dashboard.engagement_score}%`, tone: 'text-emerald-700' },
     { label: 'Risk score', value: `${dashboard.risk_score}%`, tone: dashboard.risk_level === 'high' ? 'text-rose-700' : 'text-amber-700' },
-    { label: 'Mo phong', value: dashboard.analytics_summary.simulation_views, tone: 'text-violet-700' },
+    { label: 'Mô phỏng', value: dashboard.analytics_summary.simulation_views, tone: 'text-violet-700' },
     { label: 'Quiz', value: dashboard.analytics_summary.quiz_attempts, tone: 'text-orange-700' },
-    { label: 'Can on', value: dashboard.analytics_summary.weak_lessons, tone: 'text-rose-700' },
+    { label: 'Cần ôn', value: dashboard.analytics_summary.weak_lessons, tone: 'text-rose-700' },
   ]
 
   return (
     <section className="mb-8 rounded-2xl border border-sky-200 bg-gradient-to-r from-white via-sky-50 to-emerald-50 p-6 shadow-lg">
       <div className="mb-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
-          <p className="text-xs font-black uppercase tracking-wide text-sky-700">Smart Learning Analytics</p>
-          <h2 className="mt-1 text-2xl font-black text-slate-950">Ca nhan hoa hoc tap cho hoc sinh</h2>
+          <p className="text-xs font-black uppercase tracking-wide text-sky-700">Phân tích học tập thông minh</p>
+          <h2 className="mt-1 text-2xl font-black text-slate-950">Cá nhân hóa học tập cho học sinh</h2>
           <p className="mt-2 text-sm leading-6 text-slate-600">
             He thong cham muc do thanh thao, muc do tham gia, nguy co hoc yeu va tu dong goi y lo trinh tiep theo.
           </p>
         </div>
         <div className={`rounded-xl border px-4 py-3 text-sm font-black ${riskTone}`}>
-          Canh bao: {dashboard.risk_level === 'high' ? 'Can ho tro gap' : dashboard.risk_level === 'medium' ? 'Can theo doi' : 'On dinh'}
+          Cảnh báo: {dashboard.risk_level === 'high' ? 'Cần hỗ trợ gấp' : dashboard.risk_level === 'medium' ? 'Cần theo dõi' : 'Ổn định'}
         </div>
       </div>
 
@@ -410,7 +429,7 @@ function StudentSmartLearningPanel({ user }) {
 
       <div className="mt-5 grid gap-4 lg:grid-cols-3">
         <div className="rounded-2xl border border-slate-100 bg-white p-5">
-          <h3 className="font-black text-slate-950">Lo trinh AI de xuat</h3>
+          <h3 className="font-black text-slate-950">Lộ trình AI đề xuất</h3>
           <div className="mt-4 space-y-2">
             {dashboard.learning_path.length ? (
               dashboard.learning_path.map((item) => (
@@ -420,29 +439,29 @@ function StudentSmartLearningPanel({ user }) {
                 </Link>
               ))
             ) : (
-              <p className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">Hay hoc mot bai, mo mo phong hoac lam quiz de he thong tao lo trinh rieng.</p>
+              <p className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">Hãy học một bài, mở mô phỏng hoặc làm quiz để hệ thống tạo lộ trình riêng.</p>
             )}
           </div>
         </div>
 
         <div className="rounded-2xl border border-slate-100 bg-white p-5">
-          <h3 className="font-black text-slate-950">Canh bao hoc sinh yeu</h3>
+          <h3 className="font-black text-slate-950">Cảnh báo học sinh cần hỗ trợ</h3>
           <div className="mt-4 space-y-2">
             {dashboard.weak_alerts.length ? (
               dashboard.weak_alerts.map((item) => (
                 <Link key={item.lesson_id} to={`/lessons/${item.lesson_id}/chat`} className="block rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-950">
-                  <span className="font-black">{item.lesson?.title || `Bai ${item.lesson_id}`}</span>
+                  <span className="font-black">{item.lesson?.title || `Bài ${item.lesson_id}`}</span>
                   <span className="mt-1 block">{item.analytics.risk_reasons[0]}</span>
                 </Link>
               ))
             ) : (
-              <p className="rounded-xl bg-emerald-50 p-4 text-sm font-bold text-emerald-900">Chua co bai nao o muc nguy co cao.</p>
+              <p className="rounded-xl bg-emerald-50 p-4 text-sm font-bold text-emerald-900">Chưa có bài nào ở mức nguy cơ cao.</p>
             )}
           </div>
         </div>
 
         <div className="rounded-2xl border border-slate-100 bg-white p-5">
-          <h3 className="font-black text-slate-950">Ke hoach can thiep</h3>
+          <h3 className="font-black text-slate-950">Kế hoạch can thiệp</h3>
           <div className="mt-4 space-y-2">
             {dashboard.intervention_plan.map((item, index) => (
               <div key={item} className="rounded-xl bg-amber-50 px-4 py-3 text-sm font-bold text-amber-950">
@@ -457,26 +476,59 @@ function StudentSmartLearningPanel({ user }) {
 }
 
 function TeacherSmartLearningPanel() {
-  const analytics = buildTeacherLearningAnalytics()
+  const [analytics, setAnalytics] = useState(() => buildTeacherLearningAnalytics())
+
+  useEffect(() => {
+    let active = true
+    const loadAnalytics = () => {
+      learningAPI.getTeacherAnalytics()
+        .then((response) => {
+          if (!active) return
+          const data = response.data
+          const studentCount = data.classes.reduce((sum, row) => sum + row.student_count, 0)
+          const averageMastery = studentCount
+            ? Math.round(data.classes.reduce((sum, row) => sum + row.average_mastery * row.student_count, 0) / studentCount)
+            : 0
+          setAnalytics({
+            summary: { ...data.summary, average_mastery: averageMastery },
+            at_risk_students: data.at_risk_students.map((row) => ({
+              student: { id: row.student_id, full_name: row.name, student_class: row.class_name },
+              dashboard: { risk_score: row.risk_score, mastery_score: row.mastery_score },
+            })),
+            class_rows: data.classes,
+            weak_units: data.weak_units.map((row) => ({ ...row, lessons: row.lesson_titles || [] })),
+          })
+        })
+        .catch(() => {
+          if (active) setAnalytics(buildTeacherLearningAnalytics())
+        })
+    }
+    loadAnalytics()
+    window.addEventListener('enginelab:learning-update', loadAnalytics)
+    return () => {
+      active = false
+      window.removeEventListener('enginelab:learning-update', loadAnalytics)
+    }
+  }, [])
   const cards = [
-    { label: 'Hoc sinh', value: analytics.summary.total_students, tone: 'text-indigo-700' },
-    { label: 'Da hoat dong', value: analytics.summary.active_students, tone: 'text-emerald-700' },
-    { label: 'Nguy co cao', value: analytics.summary.high_risk_students, tone: 'text-rose-700' },
-    { label: 'Can theo doi', value: analytics.summary.medium_risk_students, tone: 'text-amber-700' },
-    { label: 'Mastery lop', value: `${analytics.summary.average_mastery}%`, tone: 'text-sky-700' },
+    { label: 'Học sinh', value: analytics.summary.total_students, tone: 'text-indigo-700' },
+    { label: 'Đã hoạt động', value: analytics.summary.active_students, tone: 'text-emerald-700' },
+    { label: 'Nguy cơ cao', value: analytics.summary.high_risk_students, tone: 'text-rose-700' },
+    { label: 'Cần theo dõi', value: analytics.summary.medium_risk_students, tone: 'text-amber-700' },
+    { label: 'Mức độ làm chủ của lớp', value: `${analytics.summary.average_mastery}%`, tone: 'text-sky-700' },
   ]
 
   return (
     <section className="mb-8 rounded-2xl border border-amber-200 bg-gradient-to-r from-white via-amber-50 to-sky-50 p-6 shadow-lg">
       <div className="mb-5 flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
         <div>
-          <p className="text-xs font-black uppercase tracking-wide text-amber-700">Teacher Learning Analytics</p>
-          <h2 className="mt-1 text-2xl font-black text-slate-950">Bang dieu khien giao vien thong minh</h2>
+          <p className="text-xs font-black uppercase tracking-wide text-amber-700">Phân tích học tập dành cho giáo viên</p>
+          <h2 className="mt-1 text-2xl font-black text-slate-950">Bảng điều khiển giáo viên thông minh</h2>
           <p className="mt-2 text-sm leading-6 text-slate-600">
-            Tong hop hoc sinh nguy co, diem yeu theo don vi kien thuc va goi y can thiep phu hop lop THPT.
+            Tổng hợp học sinh có nguy cơ, điểm yếu theo đơn vị kiến thức và gợi ý can thiệp phù hợp với lớp THPT.
           </p>
         </div>
-        <Link to="/classroom" className="primary-button">Giao nhiem vu can thiep</Link>
+        <Link to="/classroom" className="primary-button">Giao nhiệm vụ hỗ trợ</Link>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
@@ -490,37 +542,37 @@ function TeacherSmartLearningPanel() {
 
       <div className="mt-5 grid gap-4 lg:grid-cols-3">
         <div className="rounded-2xl border border-slate-100 bg-white p-5">
-          <h3 className="font-black text-slate-950">Hoc sinh can uu tien</h3>
+          <h3 className="font-black text-slate-950">Học sinh cần ưu tiên</h3>
           <div className="mt-4 space-y-2">
             {analytics.at_risk_students.slice(0, 5).map(({ student, dashboard }) => (
               <div key={student.id} className="rounded-xl bg-rose-50 px-4 py-3 text-sm text-rose-950">
-                <p className="font-black">{student.full_name || student.username} - {student.student_class || 'Chua co lop'}</p>
+                <p className="font-black">{student.full_name || student.username} - {student.student_class || 'Chưa có lớp'}</p>
                 <p className="mt-1">Risk {dashboard.risk_score}% - Mastery {dashboard.mastery_score}%</p>
               </div>
             ))}
             {!analytics.at_risk_students.length && (
-              <p className="rounded-xl bg-emerald-50 p-4 text-sm font-bold text-emerald-900">Chua phat hien hoc sinh nguy co.</p>
+              <p className="rounded-xl bg-emerald-50 p-4 text-sm font-bold text-emerald-900">Chưa phát hiện học sinh có nguy cơ.</p>
             )}
           </div>
         </div>
 
         <div className="rounded-2xl border border-slate-100 bg-white p-5">
-          <h3 className="font-black text-slate-950">Thong ke theo lop</h3>
+          <h3 className="font-black text-slate-950">Thống kê theo lớp</h3>
           <div className="mt-4 space-y-2">
             {analytics.class_rows.map((row) => (
               <div key={row.class_name} className="rounded-xl bg-sky-50 px-4 py-3 text-sm text-sky-950">
-                <p className="font-black">Lop {row.class_name}</p>
-                <p className="mt-1">{row.active_students}/{row.student_count} da hoc - Mastery {row.average_mastery}% - Nguy co cao {row.high_risk_count}</p>
+                <p className="font-black">Lớp {row.class_name}</p>
+                <p className="mt-1">{row.active_students}/{row.student_count} đã học - Mức độ làm chủ {row.average_mastery}% - Nguy cơ cao {row.high_risk_count}</p>
               </div>
             ))}
             {!analytics.class_rows.length && (
-              <p className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">Chua co tai khoan hoc sinh de thong ke theo lop.</p>
+              <p className="rounded-xl bg-slate-50 p-4 text-sm text-slate-600">Chưa có tài khoản học sinh để thống kê theo lớp.</p>
             )}
           </div>
         </div>
 
         <div className="rounded-2xl border border-slate-100 bg-white p-5">
-          <h3 className="font-black text-slate-950">Don vi kien thuc yeu</h3>
+          <h3 className="font-black text-slate-950">Đơn vị kiến thức còn yếu</h3>
           <div className="mt-4 space-y-2">
             {analytics.weak_units.map((unit) => (
               <div key={unit.unit} className="rounded-xl bg-amber-50 px-4 py-3 text-sm text-amber-950">
@@ -529,11 +581,54 @@ function TeacherSmartLearningPanel() {
               </div>
             ))}
             {!analytics.weak_units.length && (
-              <p className="rounded-xl bg-emerald-50 p-4 text-sm font-bold text-emerald-900">Chua co don vi kien thuc nao bi canh bao nhieu.</p>
+              <p className="rounded-xl bg-emerald-50 p-4 text-sm font-bold text-emerald-900">Chưa có đơn vị kiến thức nào bị cảnh báo nhiều.</p>
             )}
           </div>
         </div>
       </div>
+    </section>
+  )
+}
+
+function PremiumDashboardHero({ user, isTeacher, primaryAction, secondaryAction }) {
+  const dashboard = !isTeacher ? buildLocalLearningDashboard(user?.id) : null
+  const completed = dashboard?.completed_lessons || 0
+  const total = dashboard?.total_lessons || 24
+  const progress = dashboard?.average_progress || 0
+  const studyMinutes = Math.max(18, Math.round((dashboard?.total_time_spent_seconds || 1080) / 60))
+  const xp = completed * 120 + (dashboard?.assistant_questions || 0) * 15 + 420
+  const learnerName = user?.full_name || user?.username || (isTeacher ? 'Thầy cô' : 'Minh Anh')
+  const stats = isTeacher
+    ? [
+        { label: 'Lớp đang quản lý', value: '3', detail: '96 học sinh', trend: '+8%', icon: BookOpenCheck, tone: 'blue' },
+        { label: 'Bài đã giao', value: '12', detail: '4 bài tuần này', trend: '+12%', icon: Target, tone: 'green' },
+        { label: 'Tương tác AI', value: '248', detail: 'Trong 7 ngày', trend: '+24%', icon: Bot, tone: 'violet' },
+        { label: 'Tỉ lệ hoàn thành', value: '84%', detail: 'Toàn bộ lớp', trend: '+6%', icon: Trophy, tone: 'orange' },
+      ]
+    : [
+        { label: 'Bài hoàn thành', value: `${completed}/${total}`, detail: 'Tiến độ khóa học', trend: '+12%', icon: BookOpenCheck, tone: 'blue' },
+        { label: 'Độ chính xác Quiz', value: `${dashboard?.average_quiz_score || 86}%`, detail: 'Cao hơn tuần trước', trend: '+5%', icon: Target, tone: 'green' },
+        { label: 'Thời gian học', value: `${studyMinutes}p`, detail: 'Tuần này', trend: '+18%', icon: Clock3, tone: 'violet' },
+        { label: 'Tổng XP', value: xp.toLocaleString('vi-VN'), detail: 'Hạng Bạc', trend: '+120', icon: Trophy, tone: 'orange' },
+      ]
+
+  return (
+    <section className="nova-dashboard-hero">
+      <div className="nova-hero-grid" aria-hidden="true" /><div className="nova-hero-orb" aria-hidden="true" />
+      <div className="nova-hero-content">
+        <motion.div className="nova-hero-copy" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .35 }}>
+          <Badge tone="blue" icon={Sparkles}>{isTeacher ? 'Teacher intelligence workspace' : 'Lộ trình được AI cá nhân hóa'}</Badge>
+          <h1>Chào mừng trở lại,<br /><span>{learnerName}</span> 👋</h1>
+          <p>{isTeacher ? 'Nắm bắt nhanh hoạt động lớp học và hỗ trợ đúng học sinh vào đúng thời điểm.' : 'Mỗi bước tiến hôm nay đưa bạn gần hơn tới việc làm chủ Công nghệ 11.'}</p>
+          <div className="nova-hero-actions"><Link to={primaryAction.to} className="nova-hero-primary">{primaryAction.label}<ArrowRight /></Link><Link to={secondaryAction.to} className="nova-hero-secondary">{secondaryAction.label}</Link></div>
+          <div className="nova-hero-microstats"><span><Flame />7 ngày<strong>Streak</strong></span><span><Medal />12<strong>Thành tích</strong></span><span><Clock3 />~25 phút<strong>Học hôm nay</strong></span></div>
+        </motion.div>
+        <motion.aside className="nova-current-lesson" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: .4, delay: .1 }}>
+          <div className="nova-lesson-visual"><span><Bot /></span><i className="nova-gear gear-one">✦</i><i className="nova-gear gear-two">⚙</i><Badge tone="green">Đang học</Badge></div>
+          <div className="nova-lesson-body"><small>BÀI HỌC TIẾP THEO</small><h2>{isTeacher ? 'Tổng quan hoạt động lớp 11A1' : 'Nguyên lí động cơ đốt trong'}</h2><p>{isTeacher ? '8 hoạt động mới cần xem xét' : 'Chương 4 · Công nghệ cơ khí'}</p><ProgressBar value={isTeacher ? 84 : Math.max(progress, 68)} showValue label="Tiến độ" /><Link to={primaryAction.to}>Tiếp tục học <ArrowRight /></Link></div>
+        </motion.aside>
+      </div>
+      <div className="nova-stat-grid">{stats.map((stat) => <StatCard key={stat.label} {...stat} />)}</div>
     </section>
   )
 }
@@ -570,20 +665,20 @@ export default function Dashboard() {
       {
         grade: 10,
         label: 'CN10',
-        title: 'Cong nghe 10',
-        description: 'Thiet ke va cong nghe: dai cuong cong nghe, ve ki thuat, thiet ke ki thuat.',
+        title: 'Công nghệ 10',
+        description: 'Thiết kế và công nghệ: đại cương công nghệ, vẽ kỹ thuật, thiết kế kỹ thuật.',
       },
       {
         grade: 11,
         label: 'CN11',
-        title: 'Cong nghe 11',
-        description: 'Cong nghe co khi: du an co khi, CAD/CAM-CNC, vat lieu va che tao.',
+        title: 'Công nghệ 11',
+        description: 'Công nghệ cơ khí: dự án cơ khí, CAD/CAM-CNC, vật liệu và chế tạo.',
       },
       {
         grade: 12,
         label: 'CN12',
-        title: 'Cong nghe 12',
-        description: 'Cong nghe dien - dien tu: he thong dien, an toan dien, dien tu va vi dieu khien.',
+        title: 'Công nghệ 12',
+        description: 'Công nghệ điện - điện tử: hệ thống điện, an toàn điện, điện tử và vi điều khiển.',
       },
     ]
 
@@ -598,23 +693,23 @@ export default function Dashboard() {
   const activeTool = learningTools[activeToolIndex]
   const isTeacher = user?.role === 'teacher'
   const primaryAction = isTeacher
-    ? { to: '/classroom', label: 'Quan ly lop hoc' }
-    : { to: '/courses/1', label: 'Vao hoc ngay' }
+    ? { to: '/classroom', label: 'Quản lý lớp học' }
+    : { to: '/courses/1', label: 'Vào học ngay' }
   const secondaryAction = isTeacher
-    ? { to: '/practice-bank', label: 'Mo kho de' }
-    : { to: '/progress', label: 'Xem tien do' }
+    ? { to: '/practice-bank', label: 'Mở kho đề' }
+    : { to: '/progress', label: 'Xem tiến độ' }
   const taskBoard = isTeacher
     ? [
-        { to: '/classroom', step: '1. Giao nhiem vu', title: 'Tao bai nop theo lop', body: 'Chon lop nhan nhiem vu, han nop va yeu cau bai lam.', tone: 'blue' },
-        { to: '/classroom', step: '2. Hoc lieu', title: 'Tai tai lieu tham khao', body: 'Them PDF, PPT, DOC cho hoc sinh dung khi lam bai.', tone: 'emerald' },
-        { to: '/classroom', step: '3. Theo doi lop', title: 'Kiem tra ai chua nop', body: 'Loc theo lop de quan sat trang thai nop bai.', tone: 'amber' },
-        { to: '/practice-bank', step: '4. Kiem tra', title: 'Mo de theo chuong', body: 'Dung kho de de on tap va danh gia nhanh.', tone: 'violet' },
+        { to: '/classroom', step: '1. Giao nhiệm vụ', title: 'Tạo bài nộp theo lớp', body: 'Chọn lớp nhận nhiệm vụ, hạn nộp và yêu cầu bài làm.', tone: 'blue' },
+        { to: '/classroom', step: '2. Học liệu', title: 'Tải tài liệu tham khảo', body: 'Thêm PDF, PPT, DOC cho học sinh dùng khi làm bài.', tone: 'emerald' },
+        { to: '/classroom', step: '3. Theo dõi lớp', title: 'Kiểm tra ai chưa nộp', body: 'Lọc theo lớp để quan sát trạng thái nộp bài.', tone: 'amber' },
+        { to: '/practice-bank', step: '4. Kiểm tra', title: 'Mở đề theo chương', body: 'Dùng kho đề để ôn tập và đánh giá nhanh.', tone: 'violet' },
       ]
     : [
-        { to: '/classroom', step: '1. Viec can nop', title: 'Xem nhiem vu cua lop', body: 'Mo lop hoc de doc yeu cau, tai hoc lieu va nop bai.', tone: 'emerald' },
-        { to: '/courses/1', step: '2. Hoc tiep', title: 'Chon chuong va bai hoc', body: 'Bat dau tu lo trinh CN10, CN11 hoac CN12.', tone: 'blue' },
-        { to: '/practice-bank', step: '3. Kiem tra', title: 'Lam de theo chuong', body: 'On tap bang cau hoi va xem giai thich sau khi nop.', tone: 'amber' },
-        { to: '/progress', step: '4. Tien do', title: 'Xem diem va goi y', body: 'Biet bai nao can on lai va bai nao nen hoc tiep.', tone: 'rose' },
+        { to: '/classroom', step: '1. Việc cần nộp', title: 'Xem nhiệm vụ của lớp', body: 'Mở lớp học để đọc yêu cầu, tải học liệu và nộp bài.', tone: 'emerald' },
+        { to: '/courses/1', step: '2. Học tiếp', title: 'Chọn chương và bài học', body: 'Bắt đầu từ lộ trình CN10, CN11 hoặc CN12.', tone: 'blue' },
+        { to: '/practice-bank', step: '3. Kiểm tra', title: 'Làm đề theo chương', body: 'Ôn tập bằng câu hỏi và xem giải thích sau khi nộp.', tone: 'amber' },
+        { to: '/progress', step: '4. Tiến độ', title: 'Xem điểm và gợi ý', body: 'Biết bài nào cần ôn lại và bài nào nên học tiếp.', tone: 'rose' },
       ]
   const taskToneClass = {
     blue: 'border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100',
@@ -624,8 +719,8 @@ export default function Dashboard() {
     rose: 'border-rose-200 bg-rose-50 text-rose-700 hover:bg-rose-100',
   }
   const quickGuide = isTeacher
-    ? ['Mo lop hoc de dang thong bao hoac giao bai.', 'Chon lop nhan nhiem vu de phan quyen ro.', 'Loc theo lop de xem hoc sinh da nop/chua nop.']
-    : ['Mo lop hoc de xem viec can nop truoc.', 'Hoc bai va xem mo phong theo chuong.', 'Lam quiz, nop nhiem vu va xem tien do.']
+    ? ['Mở lớp học để đăng thông báo hoặc giao bài.', 'Chọn lớp nhận nhiệm vụ để phân quyền rõ ràng.', 'Lọc theo lớp để xem học sinh đã nộp/chưa nộp.']
+    : ['Mở lớp học để xem việc cần nộp trước.', 'Học bài và xem mô phỏng theo chương.', 'Làm quiz, nộp nhiệm vụ và xem tiến độ.']
 
   if (isLoading) {
     return (
@@ -636,10 +731,11 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="bg-transparent">
-      <section className="relative overflow-hidden bg-gradient-to-br from-blue-600 via-sky-600 to-teal-500 pb-10 pt-8 text-white">
+    <div className="talent-dashboard bg-transparent">
+      <PremiumDashboardHero user={user} isTeacher={isTeacher} primaryAction={primaryAction} secondaryAction={secondaryAction} />
+      <section className="talent-hero relative overflow-hidden bg-gradient-to-br from-blue-600 via-sky-600 to-teal-500 pb-10 pt-8 text-white">
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto flex max-w-5xl flex-col gap-4 rounded-2xl border border-white/20 bg-white/12 p-4 shadow-lg backdrop-blur lg:flex-row lg:items-center lg:justify-between">
+          <div className="talent-welcome mx-auto flex max-w-5xl flex-col gap-4 rounded-2xl border border-white/20 bg-white/12 p-4 shadow-lg backdrop-blur lg:flex-row lg:items-center lg:justify-between">
             <div className="flex min-w-0 items-center gap-4">
               <div className="motion-pulse-soft flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white/20 text-3xl">
                 👤
@@ -660,19 +756,21 @@ export default function Dashboard() {
             </div>
           </div>
 
-          <div className="mx-auto mt-4 grid max-w-5xl overflow-hidden rounded-2xl bg-white text-slate-900 shadow-2xl md:grid-cols-3">
+          <div className="talent-shortcuts mx-auto mt-4 grid max-w-5xl overflow-hidden rounded-2xl bg-white text-slate-900 shadow-2xl md:grid-cols-3">
             <Link to="/classroom" className="flex items-center justify-center gap-2 px-5 py-4 text-sm font-black transition hover:bg-sky-50">
               🏫 Lớp học chung
             </Link>
             <Link to="/progress" className="flex items-center justify-center gap-2 border-t border-slate-100 px-5 py-4 text-sm font-black transition hover:bg-emerald-50 md:border-l md:border-t-0">
               🪪 Trang cá nhân
             </Link>
-            
+            <Link to="/mechanical-workshop" className="flex items-center justify-center gap-2 border-t border-slate-100 px-5 py-4 text-sm font-black transition hover:bg-orange-50 md:border-l md:border-t-0">
+              ⚙ Xưởng cơ khí offline
+            </Link>
           </div>
         </div>
       </section>
 
-      <main className="page-container">
+      <main className="talent-dashboard-main page-container">
         {isTeacher ? (
           <>
             <TeacherPersonalDashboard totalLessons={totalLessons} />
@@ -682,6 +780,7 @@ export default function Dashboard() {
         ) : (
           <>
             <StudentPersonalDashboard user={user} />
+            <WeeklyLeaderboard currentUser={user} />
             <StudentSmartLearningPanel user={user} />
           </>
         )}
@@ -689,10 +788,10 @@ export default function Dashboard() {
         <section className="mb-8 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div className="mb-5 flex flex-col justify-between gap-3 lg:flex-row lg:items-end">
             <div>
-              <p className="muted-label text-blue-700">Bang hoc tap hom nay</p>
-              <h1 className="mt-1 text-3xl font-black text-slate-950">{isTeacher ? 'Hom nay giao vien can lam gi?' : 'Em can lam gi tiep theo?'}</h1>
+              <p className="muted-label text-blue-700">Bảng học tập hôm nay</p>
+              <h1 className="mt-1 text-3xl font-black text-slate-950">{isTeacher ? 'Hôm nay giáo viên cần làm gì?' : 'Em cần làm gì tiếp theo?'}</h1>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">
-                {isTeacher ? 'Cac tac vu quan ly lop duoc dua len dau de giao bai, tai hoc lieu va theo doi nhanh hon.' : 'Cac tac vu quan trong duoc dua len dau trang de hoc sinh vao hoc, nop bai, xem tai lieu va kiem tra nhanh hon.'}
+                {isTeacher ? 'Các tác vụ quản lý lớp được đưa lên đầu để giao bài, tải học liệu và theo dõi nhanh hơn.' : 'Các tác vụ quan trọng được đưa lên đầu trang để học sinh vào học, nộp bài, xem tài liệu và kiểm tra nhanh hơn.'}
               </p>
             </div>
             <Link to={secondaryAction.to} className="secondary-button shrink-0">{secondaryAction.label}</Link>
@@ -747,7 +846,7 @@ export default function Dashboard() {
 
                 <p className="text-lg font-black text-slate-950">{tool.title}</p>
                 <p className="mt-2 min-h-[72px] text-sm leading-6 text-slate-700">{tool.description}</p>
-                <div className="mt-4 text-sm font-black text-blue-700 group-hover:text-blue-800">Xem huong dan</div>
+                <div className="mt-4 text-sm font-black text-blue-700 group-hover:text-blue-800">Xem hướng dẫn</div>
               </div>
             </button>
           ))}
@@ -838,7 +937,7 @@ export default function Dashboard() {
                                   {course.lessonCount} bai hoc
                                 </span>
                                 <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-black text-indigo-700">
-                                  Co kiem tra chuong
+                                  Có kiểm tra chương
                                 </span>
                               </div>
                               <h4 className="mt-3 text-lg font-black text-slate-950">{course.title}</h4>
@@ -852,8 +951,8 @@ export default function Dashboard() {
                                 Bat dau: <span className="font-black text-slate-900">{firstLesson?.title}</span>
                               </div>
                               <div className="flex flex-wrap gap-2">
-                                <Link to={`/courses/${course.id}`} className="secondary-button">Vao chuong</Link>
-                                <Link to={`/courses/${course.id}/chapter-tests`} className="primary-button">Kiem tra</Link>
+                                <Link to={`/courses/${course.id}`} className="secondary-button">Vào chương</Link>
+                                <Link to={`/courses/${course.id}/chapter-tests`} className="primary-button">Kiểm tra</Link>
                               </div>
                             </div>
                           </div>

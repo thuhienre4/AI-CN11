@@ -126,6 +126,41 @@ const loginLocalUser = (usernameOrEmail, password, expectedRole = 'student') => 
   }
 }
 
+const loginOfflineDemoUser = (usernameOrEmail, password, role = 'student') => {
+  const users = getLocalUsers()
+  const username = usernameOrEmail.trim()
+  const existingIndex = users.findIndex(
+    (item) => item.username === username || item.email === username
+  )
+  const user = {
+    id: existingIndex >= 0 ? users[existingIndex].id : Date.now(),
+    username,
+    email: username.includes('@') ? username : `${username}@demo.local`,
+    password,
+    full_name: role === 'teacher' ? 'Giáo viên mẫu' : `Học sinh ${username}`,
+    role: normalizeRole(role),
+    student_class: role === 'student' ? 'mẫu' : '',
+    is_active: true,
+  }
+
+  if (existingIndex >= 0) {
+    users[existingIndex] = {
+      ...users[existingIndex],
+      ...user,
+    }
+  } else {
+    users.push(user)
+  }
+
+  saveLocalUsers(users)
+  saveProfileMeta(user.username, {
+    role: user.role,
+    student_class: user.student_class,
+    full_name: user.full_name,
+  })
+
+  return loginLocalUser(username, password, role)
+}
 // Auth Store
 export const useAuthStore = create((set, get) => ({
   user: getLocalCurrentUser(),
@@ -157,6 +192,7 @@ export const useAuthStore = create((set, get) => ({
         ...user,
         role: userRole,
         student_class: profileMeta.student_class || user.student_class || '',
+        avatar: profileMeta.avatar || user.avatar,
       }
       localStorage.setItem('token', access_token)
       localStorage.setItem(LOCAL_CURRENT_USER_KEY, JSON.stringify(safeUser))
@@ -173,7 +209,7 @@ export const useAuthStore = create((set, get) => ({
         error.response.status === 404 ||
         error.response.status >= 500
 
-      if (backendUnavailable || error.response?.status === 401 || error.response?.status === 422) {
+      if (backendUnavailable) {
         const result = loginLocalUser(username, password, role)
         if (result.success) {
           set({
@@ -185,8 +221,21 @@ export const useAuthStore = create((set, get) => ({
           return { success: true }
         }
 
-        set({ error: result.error, isLoading: false })
-        return result
+        const demoResult = loginOfflineDemoUser(username, password, role)
+        set({
+          user: demoResult.user,
+          token: demoResult.access_token,
+          isAuthenticated: true,
+          isLoading: false,
+        })
+        return { success: true }
+      }
+
+      if (error.response?.status === 401 || error.response?.status === 422) {
+        const message =
+          'Sai tài khoản/email hoặc mật khẩu. Nếu chưa có tài khoản trên hệ thống này, hãy bấm Tạo tài khoản mới trước.'
+        set({ error: message, isLoading: false })
+        return { success: false, error: message }
       }
 
       const message = error.response?.data?.detail || 'Login failed'
@@ -207,6 +256,7 @@ export const useAuthStore = create((set, get) => ({
         password,
         full_name,
         role,
+        student_class,
       })
       saveProfileMeta(username, { role, student_class, full_name })
       set({ isLoading: false })
@@ -251,11 +301,19 @@ export const useAuthStore = create((set, get) => ({
     })
   },
 
+  updateAvatar: (avatar) => {
+    const user = get().user
+    if (!user) return
+    const updatedUser = { ...user, avatar }
+    saveProfileMeta(user.username, { avatar })
+    localStorage.setItem(LOCAL_CURRENT_USER_KEY, JSON.stringify(updatedUser))
+    set({ user: updatedUser })
+  },
+
   clearError: () => set({ error: null }),
 }))
-
 // Courses Store
-export const useCoursesStore = create((set, get) => ({
+export const useCoursesStore = create((set) => ({
   courses: [],
   isLoading: false,
   error: null,

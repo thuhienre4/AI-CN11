@@ -1,3 +1,5 @@
+import { buildChapterMiniTestQuestions, getMiniTestDuration } from './chapterMiniTests'
+
 const coverImages = {
   design: [
     'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80',
@@ -173,17 +175,24 @@ const makeLessonQuestions = (lesson) => [
   },
 ]
 
-const makeChapterQuestions = (questions) =>
-  questions.map((question) => ({
-    id: `chapter-${question.id}`,
-    text: question.text,
-    question_type: 'multiple_choice',
-    options: question.options.map((option) => option.text),
-    correctIndex: question.options.findIndex((option) => option.is_correct),
-    explanation: 'Đáp án đúng bám vào mục tiêu cần đạt, kiến thức trọng tâm và cách vận dụng trong bài.',
-  }))
+const normalizeMiniTestQuestion = (question, prefix, index) => ({
+  ...question,
+  id: question.id || `${prefix}-q${index + 1}`,
+  text: question.text || question.question,
+  question_type: question.question_type || 'multiple_choice',
+  correctIndex: question.correctIndex ?? question.correct_index,
+  points: question.points || 1,
+})
 
-export const createKnttLmsData = ({ theme, gradeTitle, courseSpecs, lessonSpecs, assessmentPrefix, defaultTitle }) => {
+export const createKnttLmsData = ({
+  theme,
+  gradeTitle,
+  courseSpecs,
+  lessonSpecs,
+  assessmentPrefix,
+  defaultTitle,
+  assessmentBank = {},
+}) => {
   const images = coverImages[theme] || coverImages.design
   const courses = courseSpecs.map((course, index) => ({
     ...course,
@@ -211,17 +220,24 @@ export const createKnttLmsData = ({ theme, gradeTitle, courseSpecs, lessonSpecs,
   )
 
   const chapterAssessments = courses.map((course) => {
-    const courseQuestions = questions.filter((question) =>
-      lessons.some((lesson) => lesson.course_id === course.id && lesson.id === question.lesson_id)
-    )
+    const courseLessons = lessons.filter((lesson) => lesson.course_id === course.id)
+    const assessmentId = `${assessmentPrefix}-c${course.id}`
+    const authoredQuestions = assessmentBank[course.id] || course.mini_test?.questions
+    const courseQuestions = authoredQuestions?.length
+      ? authoredQuestions.map((question, index) =>
+          normalizeMiniTestQuestion(question, assessmentId, index)
+        )
+      : buildChapterMiniTestQuestions(courseLessons, assessmentId)
     return {
-      id: `${assessmentPrefix}-c${course.id}`,
+      id: assessmentId,
       course_id: course.id,
       chapter: course.short_title || course.title,
-      title: course.title,
-      description: `Đánh giá năng lực trọng tâm của ${course.title.toLowerCase()}: hiểu kiến thức, đọc sơ đồ/quy trình, vận dụng và giải thích an toàn.`,
-      duration_minutes: Math.max(20, Math.min(45, 10 + courseQuestions.length * 2)),
-      questions: makeChapterQuestions(courseQuestions),
+      title: course.mini_test?.title || `Mini test cuối ${course.title.toLowerCase()}`,
+      description:
+        course.mini_test?.description ||
+        `Câu hỏi được biên soạn theo yêu cầu cần đạt và nội dung trọng tâm của ${course.title.toLowerCase()}.`,
+      duration_minutes: getMiniTestDuration(courseQuestions.length),
+      questions: courseQuestions,
     }
   })
 

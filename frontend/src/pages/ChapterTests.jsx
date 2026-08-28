@@ -297,11 +297,11 @@ export default function ChapterTests() {
       </Link>
 
       <section className="mb-6 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
-        <p className="muted-label mb-2">Không gian đánh giá</p>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-950">Bài kiểm tra theo chương</h1>
+        <p className="muted-label mb-2">Ôn nhanh cuối chương</p>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-950">Mini test theo nội dung slide</h1>
         <p className="mt-3 max-w-3xl leading-7 text-slate-600">
-          {course.title}. Giáo viên có thể dùng khu vực này để giao bài ôn tập sau từng chương, học sinh làm
-          trực tiếp và xem giải thích ngay sau khi nộp.
+          {course.title}. Câu hỏi bao quát kiến thức trọng tâm của từng bài trong chương; học sinh làm trực
+          tiếp và xem giải thích theo nội dung slide ngay sau khi nộp.
         </p>
       </section>
 
@@ -320,7 +320,9 @@ export default function ChapterTests() {
             >
               <div className="text-sm font-bold">{assessment.chapter}</div>
               <div className="mt-1 font-semibold">{assessment.title}</div>
-              <div className="mt-2 text-xs text-slate-500">{assessment.duration_minutes} phút</div>
+              <div className="mt-2 text-xs text-slate-500">
+                {assessment.questions.length} câu · {assessment.duration_minutes} phút
+              </div>
             </button>
           ))}
         </aside>

@@ -255,17 +255,19 @@ export default function EngineGame() {
   const currentScenario = game.scenarios[scenarioIndex]
 
   const trackGameEvent = async (points) => {
-    recordLocalLearningEvent(user?.id, {
+    const localEvent = recordLocalLearningEvent(user?.id, {
       lesson_id: Number(lessonId),
       event_type: 'game_played',
       duration_seconds: 60,
       score: points,
       payload: { mode: activeMode, chapter: lesson?.course_id },
+      auto_sync: false,
     })
     if (!user?.id) return
     try {
       await learningAPI.trackEvent(user.id, {
         lesson_id: Number(lessonId),
+        client_event_id: localEvent?.client_event_id,
         event_type: 'game_played',
         duration_seconds: 60,
         score: points,

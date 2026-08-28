@@ -16,6 +16,7 @@ from schemas import (
     LessonProgressResponse,
     LessonProgressUpdate,
 )
+from realtime import learning_connections
 
 router = APIRouter(prefix="/api/learning", tags=["Personalized Learning"])
 
@@ -98,6 +99,9 @@ def apply_activity_to_progress(progress: LessonProgress, event: LearningEventCre
     elif event.event_type == "simulation_opened":
         progress.simulation_count += 1
         progress.progress_percent = max(progress.progress_percent, 45)
+    elif event.event_type == "simulation_completed":
+        progress.simulation_count = max(progress.simulation_count, 1)
+        progress.progress_percent = max(progress.progress_percent, 70)
     elif event.event_type == "assistant_question":
         progress.assistant_question_count += 1
         progress.progress_percent = max(progress.progress_percent, 60)
@@ -157,9 +161,10 @@ def days_since(date_value: datetime | None) -> int:
 def knowledge_unit_for_lesson(lesson: Lesson | None) -> str:
     if not lesson:
         return "Kiến thức Công nghệ"
-    if lesson.course_id <= 3:
+    course_id = lesson.course_id
+    if course_id <= 3 or 1000 <= course_id < 1100:
         return "Công nghệ 10 - Thiết kế và công nghệ"
-    if lesson.course_id <= 6:
+    if course_id <= 6 or 1100 <= course_id < 1200:
         return "Công nghệ 11 - Cơ khí và chế tạo"
     return "Công nghệ 12 - Điện, điện tử và điều khiển"
 
@@ -228,6 +233,10 @@ def smart_recommendations(progress_rows: List[LessonProgress]) -> List[LearningR
 
 def smart_learning_path(progress_rows: List[LessonProgress]) -> List[LearningRecommendation]:
     path = smart_recommendations(progress_rows)[:3]
+    for item in path:
+        item.type = "review"
+        item.label = "Ôn lại"
+        item.to = f"/lessons/{item.lesson_id}/chat"
     selected = {item.lesson_id for item in path}
     for progress in [item for item in progress_rows if item.status == "not_started" and item.lesson_id not in selected][:2]:
         path.append(
@@ -240,6 +249,9 @@ def smart_learning_path(progress_rows: List[LessonProgress]) -> List[LearningRec
                 mastery_score=0,
                 risk_score=0,
                 knowledge_unit=knowledge_unit_for_lesson(progress.lesson),
+                type="next",
+                label="Học tiếp",
+                to=f"/lessons/{progress.lesson_id}",
             )
         )
     return path[:5]
@@ -265,6 +277,37 @@ def intervention_plan(risk_level: str) -> List[str]:
     ]
 
 
+def persist_learning_event(db: Session, user_id: int, event_data: LearningEventCreate) -> LearningEvent:
+    if event_data.client_event_id:
+        existing = (
+            db.query(LearningEvent)
+            .filter(LearningEvent.client_event_id == event_data.client_event_id)
+            .first()
+        )
+        if existing:
+            return existing
+
+    if event_data.lesson_id is not None:
+        get_lesson_or_404(db, event_data.lesson_id)
+
+    event = LearningEvent(
+        user_id=user_id,
+        lesson_id=event_data.lesson_id,
+        client_event_id=event_data.client_event_id,
+        event_type=event_data.event_type,
+        duration_seconds=event_data.duration_seconds,
+        score=event_data.score,
+        payload=event_data.payload,
+        occurred_at=event_data.occurred_at or datetime.utcnow(),
+    )
+    db.add(event)
+
+    if event_data.lesson_id is not None:
+        progress = get_or_create_progress(db, user_id, event_data.lesson_id)
+        apply_activity_to_progress(progress, event_data)
+    return event
+
+
 @router.post("/users/{user_id}/events", response_model=LearningEventResponse, status_code=status.HTTP_201_CREATED)
 async def track_learning_event(
     user_id: int,
@@ -276,26 +319,42 @@ async def track_learning_event(
     ensure_learning_data_access(user_id, current_user)
     get_user_or_404(db, user_id)
 
-    if event_data.lesson_id is not None:
-        get_lesson_or_404(db, event_data.lesson_id)
-
-    event = LearningEvent(
-        user_id=user_id,
-        lesson_id=event_data.lesson_id,
-        event_type=event_data.event_type,
-        duration_seconds=event_data.duration_seconds,
-        score=event_data.score,
-        payload=event_data.payload,
-    )
-    db.add(event)
-
-    if event_data.lesson_id is not None:
-        progress = get_or_create_progress(db, user_id, event_data.lesson_id)
-        apply_activity_to_progress(progress, event_data)
+    event = persist_learning_event(db, user_id, event_data)
 
     db.commit()
     db.refresh(event)
+    await learning_connections.publish_learning_update(
+        user_id,
+        {"event_type": event.event_type, "lesson_id": event.lesson_id},
+    )
     return event
+
+
+@router.post("/users/{user_id}/events/batch", response_model=List[LearningEventResponse])
+async def track_learning_events_batch(
+    user_id: int,
+    events: List[LearningEventCreate],
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_authenticated_user),
+):
+    """Persist an offline event queue idempotently after connectivity returns."""
+    ensure_learning_data_access(user_id, current_user)
+    get_user_or_404(db, user_id)
+    if len(events) > 100:
+        raise HTTPException(
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+            detail="A batch can contain at most 100 learning events.",
+        )
+
+    rows = [persist_learning_event(db, user_id, event_data) for event_data in events]
+    db.commit()
+    for row in rows:
+        db.refresh(row)
+    await learning_connections.publish_learning_update(
+        user_id,
+        {"event_type": "batch_synced", "event_count": len(rows)},
+    )
+    return rows
 
 
 @router.put("/users/{user_id}/lessons/{lesson_id}/progress", response_model=LessonProgressResponse)
@@ -387,7 +446,8 @@ async def get_learning_dashboard(
     average_quiz_score = round(sum(quiz_scores) / len(quiz_scores), 2) if quiz_scores else 0
     total_time_spent_seconds = sum(item.time_spent_seconds for item in progress_rows)
     assistant_questions = sum(item.assistant_question_count for item in progress_rows)
-    analytics_rows = [lesson_analytics(item) for item in progress_rows]
+    active_progress_rows = [item for item in progress_rows if item.progress_percent > 0]
+    analytics_rows = [lesson_analytics(item) for item in active_progress_rows]
     mastery_score = (
         round(sum(item["mastery_score"] for item in analytics_rows) / len(analytics_rows), 2)
         if analytics_rows
@@ -398,11 +458,7 @@ async def get_learning_dashboard(
         if analytics_rows
         else 0
     )
-    risk_score = (
-        round(sum(item["risk_score"] for item in analytics_rows) / len(analytics_rows), 2)
-        if analytics_rows
-        else 0
-    )
+    risk_score = max((item["risk_score"] for item in analytics_rows), default=0)
     risk_level = "high" if risk_score >= 70 else "medium" if risk_score >= 40 else "low"
     recommendations = smart_recommendations(progress_rows)
 
@@ -436,10 +492,13 @@ async def get_learning_dashboard(
 @router.get("/teacher/analytics")
 async def get_teacher_learning_analytics(
     db: Session = Depends(get_db),
-    _current_user: User = Depends(require_teacher_user),
+    current_user: User = Depends(require_teacher_user),
 ):
     """Return class-level analytics for teacher dashboards and early intervention."""
-    students = db.query(User).filter(User.role == "student").all()
+    student_query = db.query(User).filter(User.role == "student")
+    if current_user.role == "teacher" and current_user.student_class:
+        student_query = student_query.filter(User.student_class == current_user.student_class)
+    students = student_query.all()
     lessons = db.query(Lesson).order_by(Lesson.course_id, Lesson.order).all()
     student_rows = []
     class_rows = {}
@@ -447,17 +506,14 @@ async def get_teacher_learning_analytics(
 
     for student in students:
         progress_rows = [get_or_create_progress(db, student.id, lesson.id) for lesson in lessons]
-        analytics_rows = [lesson_analytics(item) for item in progress_rows]
+        active_progress_rows = [item for item in progress_rows if item.progress_percent > 0]
+        analytics_rows = [lesson_analytics(item) for item in active_progress_rows]
         mastery_score = (
             round(sum(item["mastery_score"] for item in analytics_rows) / len(analytics_rows), 2)
             if analytics_rows
             else 0
         )
-        risk_score = (
-            round(sum(item["risk_score"] for item in analytics_rows) / len(analytics_rows), 2)
-            if analytics_rows
-            else 0
-        )
+        risk_score = max((item["risk_score"] for item in analytics_rows), default=0)
         risk_level = "high" if risk_score >= 70 else "medium" if risk_score >= 40 else "low"
         active_lessons = sum(1 for item in progress_rows if item.progress_percent > 0)
         student_row = {

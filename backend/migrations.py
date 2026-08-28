@@ -42,6 +42,34 @@ def run_startup_migrations(engine):
         _add_column_if_missing(
             connection,
             inspector,
+            "chat_history",
+            "response_mode",
+            "response_mode VARCHAR(30) DEFAULT 'fallback'",
+        )
+        _add_column_if_missing(
+            connection,
+            inspector,
+            "learning_events",
+            "client_event_id",
+            "client_event_id VARCHAR(80)",
+        )
+        _add_column_if_missing(
+            connection,
+            inspector,
+            "learning_events",
+            "occurred_at",
+            "occurred_at DATETIME",
+        )
+        if inspector.has_table("learning_events"):
+            connection.execute(
+                text(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS ix_learning_events_client_event_id "
+                    "ON learning_events (client_event_id)"
+                )
+            )
+        _add_column_if_missing(
+            connection,
+            inspector,
             "reference_materials",
             "file_checksum",
             "file_checksum VARCHAR(64)",

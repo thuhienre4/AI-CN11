@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
+  base: process.env.VITE_BASE_PATH || '/',
   server: {
     port: 5173,
     host: '0.0.0.0',
@@ -26,7 +27,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom'],
-          'three-vendor': ['three'],
         }
       }
     }

@@ -6,7 +6,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, s
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
-from auth import require_teacher_user
+from auth import get_authenticated_user, require_teacher_user
 from database import get_db
 from models import ReferenceMaterial, User
 from schemas import ReferenceMaterialResponse
@@ -48,6 +48,7 @@ def list_materials(
     lesson_id: int | None = None,
     search: str | None = None,
     db: Session = Depends(get_db),
+    _current_user: User = Depends(get_authenticated_user),
 ):
     query = db.query(ReferenceMaterial)
     if course_id is not None:
@@ -140,7 +141,11 @@ async def upload_material(
 
 
 @router.get("/{material_id}/download")
-def download_material(material_id: int, db: Session = Depends(get_db)):
+def download_material(
+    material_id: int,
+    db: Session = Depends(get_db),
+    _current_user: User = Depends(get_authenticated_user),
+):
     material = db.query(ReferenceMaterial).filter(ReferenceMaterial.id == material_id).first()
     if not material:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy tài liệu.")
