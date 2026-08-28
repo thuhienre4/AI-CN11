@@ -185,7 +185,7 @@ To enable the site on GitHub:
 The frontend build is configured for the repository path `/AI-CN11/`. The deployed URL will usually be:
 
 ```text
-https://thuhien9344.github.io/AI-CN11/
+https://thuhienre4.github.io/AI-CN11/
 ```
 
 The static GitHub Pages version uses the bundled demo curriculum data in
