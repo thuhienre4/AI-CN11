@@ -11,7 +11,7 @@ DEFAULT_DATABASE_URL = f"sqlite:///{(PROJECT_ROOT / 'ai_education.db').as_posix(
 class Settings(BaseSettings):
     """Application settings and configuration."""
     model_config = SettingsConfigDict(
-        env_file="backend/.env",
+        env_file=PROJECT_ROOT / "backend" / ".env",
         env_prefix="ENGINE_LAB_",
         case_sensitive=False,
         extra="ignore",

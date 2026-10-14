@@ -35,7 +35,7 @@ const highlights = [
 const Brand = () => (
   <Link to="/" className="register-brand" aria-label="EngineLab AI - Trang chủ">
     <span><Sparkles aria-hidden="true" /></span>
-    <div><strong>EngineLab</strong><em>AI</em><small>Công nghệ 11</small></div>
+    <div><strong>EngineLab</strong><em>AI</em><small>Công nghệ THPT</small></div>
   </Link>
 )
 
@@ -140,10 +140,6 @@ export default function Register() {
             ))}
           </div>
 
-          <div className="register-proof">
-            <div className="register-avatars" aria-hidden="true"><span>NA</span><span>MH</span><span>TL</span><span>+2k</span></div>
-            <p><strong>2.000+ người học</strong><br />đang khám phá Công nghệ cùng EngineLab.</p>
-          </div>
         </div>
       </aside>
 
@@ -276,10 +272,6 @@ export default function Register() {
               {!isLoading && <ArrowRight aria-hidden="true" />}
             </button>
 
-            <p className="register-terms">
-              <ShieldCheck aria-hidden="true" />
-              Bằng việc tiếp tục, bạn đồng ý với <button type="button">Điều khoản sử dụng</button> và <button type="button">Chính sách bảo mật</button>.
-            </p>
           </form>
 
           <p className="register-login-link">Đã có tài khoản? <Link to="/login">Đăng nhập ngay <ArrowRight aria-hidden="true" /></Link></p>

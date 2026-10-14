@@ -28,6 +28,7 @@ const Dashboard = lazyPage(() => import('./pages/Dashboard'))
 const CourseDetail = lazyPage(() => import('./pages/CourseDetail'))
 const LessonDetail = lazyPage(() => import('./pages/LessonDetail'))
 const ChatBot = lazyPage(() => import('./pages/ChatBot'))
+const AIWorkspace = lazyPage(() => import('./pages/AIWorkspace'))
 const Quiz = lazyPage(() => import('./pages/Quiz'))
 const PersonalProgress = lazyPage(() => import('./pages/PersonalProgress'))
 const ChapterTests = lazyPage(() => import('./pages/ChapterTests'))
@@ -204,6 +205,7 @@ function App() {
         <AppErrorBoundary>
           <Suspense fallback={<PageFallback />}>
           <Routes>
+            <Route path="/ai-workspace" element={<ProtectedRoute><AIWorkspace /></ProtectedRoute>} />
             {/* Public Routes */}
             <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
             <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />

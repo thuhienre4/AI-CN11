@@ -97,7 +97,9 @@ async def root():
 
 
 # ============= Import Routes =============
-from routes import auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime
+from routes import auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime, ai_workspace
+
+app.include_router(ai_workspace.router)
 
 app.include_router(auth.router)
 app.include_router(lessons.router)

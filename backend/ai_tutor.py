@@ -97,7 +97,11 @@ async def generate_ai_tutor_reply(
     user=None,
     progress=None,
     history: Iterable = (),
+    instruction: str | None = None,
+    max_output_tokens: int | None = None,
 ) -> str:
+    if not settings.enable_chatbot:
+        raise AITutorError("AI is disabled")
     if settings.ai_provider.lower() != "gemini":
         raise AITutorError(f"Unsupported AI provider: {settings.ai_provider}")
     if not settings.ai_api_key:
@@ -109,16 +113,16 @@ async def generate_ai_tutor_reply(
     contents.append(
         {
             "role": "user",
-            "parts": [{"text": f"{_lesson_context(lesson, user, progress)}\n\nCÂU HỎI CỦA HỌC SINH:\n{message[:6000]}"}],
+            "parts": [{"text": f"{_lesson_context(lesson, user, progress)}\n\nYÊU CẦU CỦA NGƯỜI DÙNG:\n{message[:6000]}"}],
         }
     )
     payload = {
-        "systemInstruction": {"parts": [{"text": SYSTEM_INSTRUCTION}]},
+        "systemInstruction": {"parts": [{"text": instruction or SYSTEM_INSTRUCTION}]},
         "contents": contents,
         "generationConfig": {
             "temperature": 0.4,
             "topP": 0.9,
-            "maxOutputTokens": settings.ai_max_output_tokens,
+            "maxOutputTokens": max_output_tokens or settings.ai_max_output_tokens,
         },
         "safetySettings": [
             {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_MEDIUM_AND_ABOVE"},
@@ -143,4 +147,7 @@ async def generate_ai_tutor_reply(
         logger.warning("Gemini request failed: %s", exc.__class__.__name__)
         raise AITutorError("Gemini is temporarily unavailable") from exc
 
-    return _extract_text(response.json())
+    try:
+        return _extract_text(response.json())
+    except (ValueError, TypeError) as exc:
+        raise AITutorError("AI returned an invalid response") from exc

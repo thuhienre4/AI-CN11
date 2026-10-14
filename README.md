@@ -4,12 +4,49 @@ EngineLab AI is an EdTech web application for high-school Technology learning. I
 
 ## Main Features
 
+The interface uses a restrained green-and-neutral theme with responsive
+navigation, Vietnamese sign-in/registration screens, and a focused dashboard.
+The dashboard provides grade 10–12 filters, accent-insensitive chapter search,
+direct AI/classroom links and practice tools. Progress uses server data with a
+clearly labelled device-local fallback; decorative notifications and fabricated
+dashboard statistics have been removed.
+
 - Student learning path, lesson detail pages, quiz practice, warm-up games, and 3D simulation activities.
 - AI Tutor for lesson-focused Q&A with chat history and learning-event tracking.
 - Personal Learning Analytics: progress, quiz score, time spent, mastery, engagement, risk score, weak lessons, and suggested learning path.
 - Teacher Analytics: class overview, at-risk students, weak knowledge units, and intervention suggestions.
 - Classroom: announcements, assignments, submissions, grading, and reference materials.
 - Role-based access control for `student`, `teacher`, `admin`, and `moderator`.
+
+## AI workspace (students and teachers)
+
+Open **Không gian AI** in the navigation (`/ai-workspace`) after signing in
+with a backend account. Students can request explanations, feedback on their
+submitted work, and practice questions. Teachers, admins and moderators can
+draft lesson plans, assessments with answer keys, and assessment rubrics.
+Teacher drafts are editable and downloadable as UTF-8 text; they are not
+automatically published or assigned to students.
+
+The workspace loads lessons from the backend and sends the selected lesson
+(up to 4,000 characters of content), the authenticated user's progress, and a
+task-specific instruction to the existing Gemini integration. The displayed
+lesson is input context, not a verified citation for every generated claim.
+Each request is independent; include earlier work when asking a follow-up.
+Results are held on the page only: download before leaving. No completion
+percentage or study duration is awarded by this new endpoint.
+
+Configure `GEMINI_API_KEY` or `ENGINE_LAB_AI_API_KEY` in `backend/.env`, enable
+`ENGINE_LAB_ENABLE_CHATBOT=true`, and restart the backend. The configuration
+file is resolved relative to the project, independent of the launch directory.
+The workspace uses a 4,096-token output budget for longer teaching drafts.
+It requires the running backend and a valid provider configuration; local
+demo accounts and static-only hosting cannot generate these results.
+Unavailable AI returns an explicit error, without a canned fallback answer.
+
+Endpoints: `GET /api/ai-workspace/lessons`, `POST /api/ai-workspace/generate`.
+Teacher tasks are authorized on the server. Generated material remains a
+draft for teacher review. Live provider quality and browser layout require
+separate verification; backend tests mock the provider.
 
 ## Tech Stack
 

@@ -84,6 +84,8 @@ export const quizAPI = {
 
 // Chat
 export const chatAPI = {
+  workspaceLessons: () => api.get('/api/ai-workspace/lessons'),
+  generate: (data) => api.post('/api/ai-workspace/generate', data, { timeout: 120000 }),
   message: (userId, data) => api.post(`/api/chat/message?user_id=${userId}`, data),
   status: () => api.get('/api/chat/status'),
   history: (userId, lessonId = null, skip = 0, limit = 50) =>
