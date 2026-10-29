@@ -167,7 +167,7 @@ def test_teacher_self_registration_and_nova_generation_are_restricted(api):
         json={
             "username": "unapproved_teacher",
             "email": "unapproved.teacher@example.com",
-            "password": "teacher-pass",
+            "password": "teacher-pass1",
             "full_name": "Unapproved",
             "role": "teacher",
             "student_class": "",
