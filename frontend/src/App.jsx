@@ -1,5 +1,5 @@
 import { Component, Suspense, lazy, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from './store'
 
@@ -54,13 +54,19 @@ const getDefaultRoute = (user) => (user?.role === 'teacher' ? '/classroom' : '/'
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-  return isAuthenticated ? children : <Navigate to="/login" replace />
+  const location = useLocation()
+  // Remember where the user was heading so login can send them back there.
+  return isAuthenticated ? children : <Navigate to="/login" replace state={{ from: location }} />
 }
 
 const PublicOnlyRoute = ({ children }) => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
   const user = useAuthStore((state) => state.user)
-  return isAuthenticated ? <Navigate to={getDefaultRoute(user)} replace /> : children
+  const location = useLocation()
+  if (!isAuthenticated) return children
+  const from = location.state?.from
+  // "/" is only the default entry point, so teachers still land on their classroom.
+  return <Navigate to={from?.pathname && from.pathname !== '/' ? from : getDefaultRoute(user)} replace />
 }
 
 const PageFallback = () => (
@@ -125,6 +131,9 @@ class AppErrorBoundary extends Component {
 
 function App() {
   const userId = useAuthStore((state) => state.user?.id)
+  const verifySession = useAuthStore((state) => state.verifySession)
+
+  useEffect(() => { verifySession() }, [verifySession])
 
   useEffect(() => {
     if (!userId) return undefined

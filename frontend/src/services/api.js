@@ -1,8 +1,14 @@
 import axios from 'axios'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL ?? ''
-const APP_BASE_URL = import.meta.env.BASE_URL ?? '/'
-const appPath = (path) => `${APP_BASE_URL.replace(/\/$/, '')}${path}`
+const AUTH_ENDPOINTS = ['/api/auth/login', '/api/auth/register']
+
+// The auth store registers itself here so a 401 can end the session through
+// React state (keeping the "return to page" location) instead of a hard reload.
+let unauthorizedHandler = null
+export const setUnauthorizedHandler = (handler) => {
+  unauthorizedHandler = handler
+}
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -26,11 +32,10 @@ api.interceptors.response.use(
   (error) => {
     const token = localStorage.getItem('token')
     const isLocalSession = token?.startsWith('local-token-')
-    const isAuthPage = ['/login', '/register'].includes(window.location.pathname)
+    const isAuthRequest = AUTH_ENDPOINTS.some((path) => error.config?.url?.endsWith(path))
 
-    if (error.response?.status === 401 && !isLocalSession && !isAuthPage) {
-      localStorage.removeItem('token')
-      window.location.href = appPath('/login')
+    if (error.response?.status === 401 && token && !isLocalSession && !isAuthRequest) {
+      unauthorizedHandler?.()
     }
     return Promise.reject(error)
   }
