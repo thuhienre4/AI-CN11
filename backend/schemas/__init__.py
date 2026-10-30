@@ -1,4 +1,6 @@
-from pydantic import BaseModel, EmailStr, Field
+import re
+
+from pydantic import BaseModel, EmailStr, Field, field_validator, model_validator
 from typing import Any, Dict, Optional, List
 from datetime import datetime
 from enum import Enum
@@ -20,13 +22,54 @@ class UserBase(BaseModel):
     student_class: str = Field(default="", max_length=50)
 
 
+USERNAME_PATTERN = re.compile(r"^[a-zA-Z0-9._]{3,50}$")
+
+
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=8, max_length=128)
+
+    @field_validator("username")
+    @classmethod
+    def validate_username(cls, value: str) -> str:
+        value = value.strip()
+        if not USERNAME_PATTERN.fullmatch(value):
+            raise ValueError(
+                "Tên đăng nhập gồm 3–50 ký tự, chỉ dùng chữ không dấu, số, dấu chấm hoặc gạch dưới."
+            )
+        return value
+
+    @field_validator("email")
+    @classmethod
+    def normalize_email(cls, value: str) -> str:
+        return value.strip().lower()
+
+    @field_validator("full_name", "student_class")
+    @classmethod
+    def strip_text(cls, value: Optional[str]) -> Optional[str]:
+        return value.strip() if isinstance(value, str) else value
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        if not re.search(r"[A-Za-z]", value) or not re.search(r"\d", value):
+            raise ValueError("Mật khẩu cần ít nhất 8 ký tự, gồm cả chữ và số.")
+        return value
+
+    @model_validator(mode="after")
+    def require_identity(self):
+        if self.role == UserRole.STUDENT:
+            if not self.full_name or len(self.full_name) < 2:
+                raise ValueError("Học sinh cần nhập họ và tên đầy đủ.")
+            if not self.student_class:
+                raise ValueError("Học sinh cần nhập lớp.")
+        if self.role != UserRole.STUDENT:
+            self.student_class = ""
+        return self
 
 
 class UserLogin(BaseModel):
-    username: str
-    password: str
+    username: str = Field(..., min_length=1, max_length=100)
+    password: str = Field(..., min_length=1, max_length=128)
 
 
 class UserResponse(UserBase):

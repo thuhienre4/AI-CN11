@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ArrowRight, BookOpen, Bot, CircuitBoard, Cuboid, GraduationCap, Search, Wrench } from 'lucide-react'
+import { ArrowRight, BookOpen, Bot, CircuitBoard, Compass, Cuboid, GraduationCap, Search, Wrench } from 'lucide-react'
 import { sampleCourses, getSampleLessonsByCourse } from '../data/courseCatalog'
 import { useAuthStore } from '../store'
 import { buildLocalLearningDashboard } from '../utils/learningProgress'
@@ -48,6 +48,7 @@ export default function Dashboard() {
       [circuitLesson ? `/lessons/${circuitLesson.id}/circuit-lab` : '/practice-bank', CircuitBoard, 'Thí nghiệm mạch điện', 'Thực hành kiến thức điện và điện tử.'],
       ['/projection-practice', Cuboid, 'Hình chiếu kỹ thuật', 'Rèn tư duy không gian và đọc bản vẽ.'],
       ['/game-demo', BookOpen, 'Ôn tập nhanh', 'Củng cố kiến thức qua câu hỏi tương tác.'],
+      ['/engineering-design', Compass, 'Xưởng thiết kế kĩ thuật', 'Làm dự án thiết kế theo quy trình 5 bước.'],
     ].map(([to, Icon, title, description]) => <Link to={to} className="studio-lab" key={to}><Icon size={23} /><h3>{title}</h3><p>{description}</p><ArrowRight size={16} /></Link>)}</div></section>
     <footer className="studio-footer"><span>EngineLab AI</span><span>Công nghệ THPT · Học tập và giảng dạy</span></footer>
   </main>
