@@ -1,4 +1,5 @@
-import { blankTemplate, designSteps, safetyChecklist } from '../data/engineeringDesign'
+import { blankTemplate, designSteps, projectTemplates, safetyChecklist } from '../data/engineeringDesign'
+import { createModel } from './technicalDrawing'
 
 const STORAGE_PREFIX = 'enginelab_engineering_design_v1'
 
@@ -21,7 +22,15 @@ export const createProject = (template = blankTemplate) => {
     solutions: template.solutions.map((name) => ({ id: createId('s'), name, description: '', scores: {} })),
     chosenSolutionId: null,
     choiceReason: '',
-    prototype: { sketch: [], dimensions: '', materials: [], steps: '', tools: '', safety: [] },
+    prototype: {
+      sketch: [],
+      model: createModel(template.model || blankTemplate.model),
+      drawing: { material: template.material || '', scale: 'auto', number: '01' },
+      materials: [],
+      steps: '',
+      tools: '',
+      safety: [],
+    },
     tests: criteria.map((item) => ({ id: createId('t'), criterionId: item.id, method: item.measure || '', result: '', passed: null })),
     iterations: [],
     dossier: { team: '', summary: '', reflection: '' },
@@ -70,7 +79,8 @@ export const getStepChecks = (project) => {
       },
     ],
     prototype: [
-      { label: 'Có bản phác thảo', done: project.prototype.sketch.length > 0 },
+      { label: 'Thiết kế hình dạng vật thể', done: project.prototype.model.cells.length > 0 },
+      { label: 'Ghi vật liệu trong khung tên bản vẽ', done: filled(project.prototype.drawing.material) },
       { label: 'Lập bảng vật liệu', done: project.prototype.materials.some((item) => filled(item.name)) },
       { label: 'Ghi các bước chế tạo', done: filled(project.prototype.steps, 10) },
       { label: 'Hoàn thành kiểm tra an toàn', done: safetyChecklist.every((item) => project.prototype.safety.includes(item.id)) },
@@ -104,10 +114,24 @@ export const summarizeTests = (project) => {
 // ============= Persistence (per user, in this browser) =============
 const storageKey = (userKey) => `${STORAGE_PREFIX}:${userKey || 'guest'}`
 
+// Projects saved before the technical drawing existed get the template's model (or a starter block).
+const withDrawingDefaults = (project) => {
+  if (project.prototype?.model && project.prototype?.drawing) return project
+  const template = projectTemplates.find((item) => item.id === project.templateId) || blankTemplate
+  return {
+    ...project,
+    prototype: {
+      ...project.prototype,
+      model: project.prototype?.model || createModel(template.model || blankTemplate.model),
+      drawing: project.prototype?.drawing || { material: template.material || '', scale: 'auto', number: '01' },
+    },
+  }
+}
+
 export const loadProjects = (userKey) => {
   try {
     const projects = JSON.parse(localStorage.getItem(storageKey(userKey)) || '[]')
-    return Array.isArray(projects) ? projects : []
+    return Array.isArray(projects) ? projects.map(withDrawingDefaults) : []
   } catch {
     return []
   }

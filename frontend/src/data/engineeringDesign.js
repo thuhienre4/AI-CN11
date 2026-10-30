@@ -34,9 +34,10 @@ export const designSteps = [
     number: 3,
     title: 'Xây dựng nguyên mẫu',
     short: 'Nguyên mẫu',
-    goal: 'Phác thảo hình dáng, lập bảng vật liệu, các bước chế tạo và kiểm tra an toàn trước khi làm mẫu.',
+    goal: 'Thiết kế hình dạng vật thể, lập bản vẽ kĩ thuật (hình chiếu, kích thước, khung tên), bảng vật liệu, các bước chế tạo và kiểm tra an toàn.',
     hints: [
-      'Bản phác thảo cần thể hiện hình dáng và kích thước chính (đơn vị mm).',
+      'Bản vẽ dùng phương pháp chiếu góc thứ nhất: hình chiếu bằng đặt dưới hình chiếu đứng, hình chiếu cạnh (nhìn từ trái) đặt bên phải hình chiếu đứng.',
+      'Nét liền đậm: cạnh thấy · nét đứt: cạnh khuất · nét liền mảnh: đường kích thước. Kích thước ghi bằng mm, không ghi đơn vị.',
       'Bảng vật liệu giúp chuẩn bị đủ đồ trước khi làm và ước tính chi phí.',
       'Liệt kê các bước chế tạo theo thứ tự; bước nào cần dụng cụ nguy hiểm thì ghi chú cần người lớn hỗ trợ.',
       'Nguyên mẫu có thể làm bằng vật liệu rẻ (bìa, que kem) để thử ý tưởng trước khi làm bản hoàn chỉnh.',
@@ -80,6 +81,13 @@ export const safetyChecklist = [
 
 const criterion = (name, weight, measure) => ({ name, weight, measure })
 
+// Block models for the technical drawing: grid step sizes in mm and filled "i,j,k" cells.
+const cellsWhere = (nx, ny, nz, keep) => {
+  const cells = []
+  for (let i = 0; i < nx; i += 1) for (let j = 0; j < ny; j += 1) for (let k = 0; k < nz; k += 1) if (keep(i, j, k)) cells.push(`${i},${j},${k}`)
+  return cells
+}
+
 export const projectTemplates = [
   {
     id: 'phone-stand',
@@ -100,6 +108,9 @@ export const projectTemplates = [
       criterion('Chi phí thấp', 3, 'Tổng chi phí vật liệu dưới 30.000 đồng'),
     ],
     solutions: ['Giá gấp bằng bìa carton', 'Giá lắp ghép bằng que kem và keo'],
+    material: 'Gỗ ép 5 mm',
+    // Base plate, a front lip that stops the phone sliding, and a back rest.
+    model: { x: [80], y: [15, 60, 15], z: [8, 12, 70], cells: ['0,0,0', '0,1,0', '0,2,0', '0,0,1', '0,2,1', '0,2,2'] },
   },
   {
     id: 'popsicle-bridge',
@@ -120,6 +131,9 @@ export const projectTemplates = [
       criterion('Thẩm mĩ, chắc chắn mối nối', 2, 'Mối dán phẳng, không bong khi lắc nhẹ'),
     ],
     solutions: ['Kết cấu giàn tam giác (Warren)', 'Cầu vòm', 'Cầu dầm đơn giản'],
+    material: 'Que kem gỗ',
+    // Two abutments carrying a deck across the 260 mm span.
+    model: { x: [20, 260, 20], y: [60], z: [40, 10], cells: ['0,0,0', '2,0,0', '0,0,1', '1,0,1', '2,0,1'] },
   },
   {
     id: 'auto-watering',
@@ -140,6 +154,9 @@ export const projectTemplates = [
       criterion('Chi phí hợp lí', 2, 'Tổng chi phí dưới 200.000 đồng'),
     ],
     solutions: ['Arduino + cảm biến độ ẩm + bơm mini', 'Tưới nhỏ giọt bằng chai nhựa (không dùng điện)'],
+    material: 'Mica 5 mm',
+    // Water reservoir: open-top box with 5 mm walls.
+    model: { x: [5, 110, 5], y: [5, 70, 5], z: [5, 95], cells: cellsWhere(3, 3, 2, (i, j, k) => !(k === 1 && i === 1 && j === 1)) },
   },
   {
     id: 'desk-organizer',
@@ -160,6 +177,14 @@ export const projectTemplates = [
       criterion('Thẩm mĩ', 2, 'Trang trí hài hòa, bề mặt nhẵn'),
     ],
     solutions: ['Ghép lõi giấy vệ sinh', 'Hộp sữa giấy cắt bậc thang'],
+    material: 'Bìa carton tái chế',
+    // Two compartments; the left (pen) compartment is taller.
+    model: {
+      x: [5, 70, 5, 50, 5],
+      y: [5, 80, 5],
+      z: [5, 60, 40],
+      cells: cellsWhere(5, 3, 3, (i, j, k) => (k === 0) || (k === 1 && !(j === 1 && (i === 1 || i === 3))) || (k === 2 && i <= 2 && !(j === 1 && i === 1))),
+    },
   },
 ]
 
@@ -172,4 +197,6 @@ export const blankTemplate = {
   problem: { need: '', users: '', constraints: '' },
   criteria: [],
   solutions: [],
+  material: '',
+  model: { x: [40, 40], y: [40], z: [20, 20], cells: ['0,0,0', '1,0,0', '0,0,1'] },
 }

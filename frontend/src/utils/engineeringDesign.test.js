@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest'
 import { blankTemplate, projectTemplates, safetyChecklist } from '../data/engineeringDesign'
-import { createProject, getChosenSolution, getProgress, rankSolutions, scoreSolution, strokeToPath } from './engineeringDesign'
+import { createProject, getChosenSolution, getProgress, loadProjects, rankSolutions, scoreSolution, strokeToPath } from './engineeringDesign'
+
+if (!globalThis.localStorage) {
+  const data = new Map()
+  globalThis.localStorage = { getItem: (k) => data.get(k) ?? null, setItem: (k, v) => data.set(k, String(v)), removeItem: (k) => data.delete(k), clear: () => data.clear() }
+}
 
 const phoneStand = projectTemplates.find((template) => template.id === 'phone-stand')
 
@@ -18,8 +23,9 @@ describe('createProject', () => {
     expect(phoneStand.problem.need).not.toBe('changed')
   })
 
-  it('starts a blank project with no progress', () => {
-    expect(getProgress(createProject(blankTemplate)).percent).toBe(0)
+  it('starts a blank project with only the starter object in place', () => {
+    const done = Object.values(getProgress(createProject(blankTemplate)).checks).flat().filter((item) => item.done)
+    expect(done.map((item) => item.label)).toEqual(['Thiết kế hình dạng vật thể'])
   })
 })
 
@@ -53,13 +59,25 @@ describe('progress', () => {
     expect(getProgress(project).steps.problem).toBe(true)
     expect(getProgress(project).steps.prototype).toBe(false)
 
-    project.prototype.sketch = [{ color: '#000', width: 3, points: [[0, 0], [10, 10]] }]
+    expect(project.prototype.model.cells.length).toBeGreaterThan(0) // templates ship a starter object
     project.prototype.materials = [{ id: 'm', name: 'Đế', material: 'Bìa', qty: 1, size: '', cost: 0 }]
     project.prototype.steps = 'Cắt đế, dán tấm tựa'
     project.prototype.safety = safetyChecklist.slice(1).map((item) => item.id)
     expect(getProgress(project).steps.prototype).toBe(false)
     project.prototype.safety = safetyChecklist.map((item) => item.id)
     expect(getProgress(project).steps.prototype).toBe(true)
+    project.prototype.drawing.material = ''
+    expect(getProgress(project).steps.prototype).toBe(false)
+  })
+
+  it('gives projects saved before the drawing feature a starter model', () => {
+    const legacy = createProject(phoneStand)
+    delete legacy.prototype.model
+    delete legacy.prototype.drawing
+    localStorage.setItem('enginelab_engineering_design_v1:u1', JSON.stringify([legacy]))
+    const [loaded] = loadProjects('u1')
+    expect(loaded.prototype.model.cells.length).toBeGreaterThan(0)
+    expect(loaded.prototype.drawing).toMatchObject({ material: phoneStand.material, scale: 'auto' })
   })
 
   it('requires a recorded result and verdict for every criterion', () => {

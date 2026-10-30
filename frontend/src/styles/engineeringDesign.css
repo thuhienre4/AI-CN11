@@ -186,6 +186,55 @@
 .ed-dossier ol { padding-left: 20px; margin-bottom: 8px; }
 .ed-dossier-sketch { width: 100%; max-width: 560px; border: 1px solid #d7dfda; border-radius: 6px; margin: 4px 0 10px; }
 
+
+/* Object designer & technical drawing */
+.ed-details > summary { list-style: none; cursor: pointer; }
+.ed-details > summary::-webkit-details-marker { display: none; }
+.ed-details > summary h3 { display: flex; align-items: center; gap: 8px; margin-bottom: 0; }
+.ed-details > summary h3::before { content: '▸'; color: var(--studio-muted); transition: transform .2s; }
+.ed-details[open] > summary h3::before { transform: rotate(90deg); }
+.ed-details[open] > summary { margin-bottom: 14px; }
+.ed-details h3 small, .ed-card-heading h3 small { font-size: 11px; font-weight: 400; color: var(--studio-muted); }
+.td-axes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 18px; }
+.td-axis { border: 1px solid #e6ece8; border-radius: 8px; padding: 10px 12px 12px; min-width: 0; }
+.td-axis legend { font-size: 12px; font-weight: 600; padding: 0 4px; }
+.td-axis legend small { display: block; font-weight: 400; color: var(--studio-muted); }
+.td-axis-steps { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.td-step { display: flex; align-items: center; border: 1px solid #d7dfda; border-radius: 6px; background: #fff; }
+.td-step input { width: 58px; border: 0; padding: 6px 6px; font-size: 12px; background: transparent; }
+.ed-page .td-step input:focus { outline: none; }
+.td-step:focus-within { outline: 2px solid #185b50; outline-offset: 1px; }
+.td-step button { display: grid; place-items: center; width: 22px; height: 28px; color: #9aa7a1; border-left: 1px solid #eef2ef; }
+.td-step button:hover { color: #b42318; background: #fdf0ef; }
+.td-add-step { display: grid; place-items: center; width: 30px; height: 30px; border: 1px dashed #b7c7be; border-radius: 6px; color: var(--studio-accent); }
+.td-add-step:hover { background: #f1f7f3; }
+.td-workarea { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+.td-layer-tabs { flex-wrap: wrap; margin-bottom: 8px; }
+.td-layer-tabs small { color: var(--studio-muted); font-weight: 400; }
+.td-grid-wrap { display: grid; gap: 4px; justify-items: center; margin: 10px 0 6px; }
+.td-grid-label { font-size: 10px; letter-spacing: .6px; text-transform: uppercase; color: var(--studio-muted); }
+.td-grid { display: grid; gap: 3px; width: 100%; max-width: 420px; max-height: 340px; padding: 3px; background: #e6ece8; border-radius: 8px; }
+.td-cell { position: relative; background: #fff; border-radius: 4px; min-height: 26px; transition: background .12s; }
+.td-cell:hover { background: #eef5f0; }
+.td-cell.is-filled { background: #3f7d57; }
+.td-cell.is-filled:hover { background: #356b4a; }
+.td-cell.has-below::after { content: ''; position: absolute; left: 50%; top: 50%; width: 6px; height: 6px; margin: -3px 0 0 -3px; border-radius: 50%; background: #9db8a8; }
+.td-cell.is-filled.has-below::after { background: #a9d1b7; }
+.td-cell:focus-visible { outline: 2px solid #c4810b; outline-offset: 1px; }
+.td-preview { border: 1px solid #e6ece8; border-radius: 8px; background: #fafcfb; padding: 12px; text-align: center; }
+.td-iso { width: 100%; height: 260px; }
+.td-preview p { font-size: 12px; margin-top: 6px; }
+.td-sheet-settings { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+.td-sheet-settings select { width: 100%; border: 1px solid #d7dfda; border-radius: 7px; padding: 9px 11px; font-size: 13px; background: #fff; }
+.td-sheet-frame { overflow-x: auto; border: 1px solid #d7dfda; border-radius: 6px; background: #eef1ef; padding: 10px; }
+.td-sheet { display: block; width: 100%; min-width: 560px; aspect-ratio: 297 / 210; background: #fff; box-shadow: 0 1px 4px #1f2a2414; }
+.td-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 11px; color: var(--studio-muted); margin-top: 10px; }
+.td-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.td-legend i { display: inline-block; width: 22px; border-top: 2px solid #111827; }
+.td-legend i.is-hidden { border-top-style: dashed; border-top-width: 1.5px; }
+.td-legend i.is-thin { border-top-width: 1px; }
+.ed-dossier-drawing { width: 100%; border: 1px solid #d7dfda; margin: 4px 0 12px; }
+
 @media (max-width: 1180px) {
   .ed-layout { grid-template-columns: 210px minmax(0, 1fr); }
   .ed-guide { grid-column: 1 / -1; position: static; grid-template-columns: repeat(3, 1fr); }
@@ -204,6 +253,8 @@
   .ed-card { padding: 16px; }
   .ed-dossier { padding: 18px; }
   .ed-sketch-actions { margin-left: 0; }
+  .td-axes, .td-workarea, .td-sheet-settings { grid-template-columns: 1fr; }
+  .td-iso { height: 200px; }
 }
 @media (max-width: 540px) {
   .ed-page textarea, .ed-page input, .ed-page select { font-size: 16px; }
@@ -216,4 +267,8 @@
   .ed-dossier, .ed-dossier * { visibility: visible; }
   .ed-dossier { position: absolute; inset: 0 0 auto 0; border: 0; padding: 0; }
   .ed-noprint { display: none !important; }
+  /* "In bản vẽ" prints only the A4 sheet, edge to edge on a landscape page. */
+  body.td-printing-sheet .td-sheet-frame, body.td-printing-sheet .td-sheet-frame * { visibility: visible; }
+  body.td-printing-sheet .td-sheet-frame { position: fixed; inset: 0; padding: 0; border: 0; background: #fff; overflow: visible; }
+  body.td-printing-sheet .td-sheet { width: 297mm; height: 210mm; min-width: 0; box-shadow: none; }
 }

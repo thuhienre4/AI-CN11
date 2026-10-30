@@ -2,6 +2,8 @@ import { useRef, useState } from 'react'
 import { Check, Minus, PenTool, Plus, Printer, RotateCcw, Trash2, Undo2, X } from 'lucide-react'
 import { safetyChecklist } from '../data/engineeringDesign'
 import { createId, getChosenSolution, rankSolutions, strokeToPath, summarizeTests } from '../utils/engineeringDesign'
+import { STANDARD_SCALES, layoutSheet, pickScale } from '../utils/technicalDrawing'
+import { ObjectDesigner, TechnicalSheet, printSheet, resolveScale } from './TechnicalDrawing'
 
 export const SKETCH_WIDTH = 800
 export const SKETCH_HEIGHT = 500
@@ -251,8 +253,19 @@ export function SolutionsStep({ project, patch }) {
 }
 
 // ============= Step 3 =============
-export function PrototypeStep({ project, patch }) {
+const drawingInfo = (project, owner, school) => ({
+  title: project.title,
+  material: project.prototype.drawing.material,
+  number: project.prototype.drawing.number,
+  drawer: project.dossier.team || owner,
+  school,
+  date: new Date().toLocaleDateString('vi-VN'),
+})
+
+export function PrototypeStep({ project, patch, owner, school }) {
   const chosen = getChosenSolution(project)
+  const { model, drawing } = project.prototype
+  const scale = resolveScale(model, drawing.scale)
   const totalCost = project.prototype.materials.reduce((sum, item) => sum + Number(item.qty || 0) * Number(item.cost || 0), 0)
   const updateMaterial = (id, key, value) => patch((draft) => { draft.prototype.materials.find((item) => item.id === id)[key] = value })
 
@@ -261,15 +274,40 @@ export function PrototypeStep({ project, patch }) {
       <div className={`ed-callout ${chosen ? '' : 'is-warning'}`}>
         {chosen ? <>Phương án được chọn: <strong>{chosen.name}</strong>{chosen.description && ` — ${chosen.description}`}</> : 'Chưa chọn phương án. Hãy hoàn thành ma trận lựa chọn ở bước 2.'}
       </div>
-      <section className="ed-card">
-        <h3>Bản phác thảo</h3>
+      <details className="ed-card ed-details" open={project.prototype.sketch.length > 0 || undefined}>
+        <summary><h3>Phác thảo nhanh ý tưởng <small>không bắt buộc</small></h3></summary>
         <SketchPad
           strokes={project.prototype.sketch}
           onChange={(sketch) => patch((draft) => { draft.prototype.sketch = sketch })}
           // Appending inside patch works on the latest state, so strokes finished back-to-back are never lost.
           onAddStroke={(stroke) => patch((draft) => { draft.prototype.sketch.push(stroke) })}
         />
-        <TextArea label="Kích thước chính" hint="mm" value={project.prototype.dimensions || ''} onChange={(event) => patch((draft) => { draft.prototype.dimensions = event.target.value })} placeholder="VD: Đế 120 × 90 mm; tấm tựa cao 110 mm, nghiêng 65°" rows={2} />
+      </details>
+      <section className="ed-card">
+        <div className="ed-card-heading"><h3>Thiết kế vật thể</h3><span>Dựng vật thể từ các khối hộp theo kích thước thật</span></div>
+        <ObjectDesigner model={model} onChange={(next) => patch((draft) => { draft.prototype.model = next })} />
+      </section>
+      <section className="ed-card">
+        <div className="ed-card-heading"><h3>Bản vẽ kĩ thuật</h3><span>TCVN · phương pháp chiếu góc thứ nhất</span></div>
+        <div className="td-sheet-settings">
+          <TextInput label="Vật liệu" value={drawing.material} onChange={(event) => patch((draft) => { draft.prototype.drawing.material = event.target.value })} placeholder="VD: Gỗ ép 5 mm" />
+          <label className="ed-field">
+            <span>Tỉ lệ</span>
+            <select value={drawing.scale} onChange={(event) => patch((draft) => { draft.prototype.drawing.scale = event.target.value })}>
+              <option value="auto">Tự động ({pickScale(model).label})</option>
+              {STANDARD_SCALES.filter((item) => layoutSheet(model, item.value)).map((item) => <option key={item.label} value={item.label}>{item.label}</option>)}
+            </select>
+          </label>
+          <TextInput label="Bản vẽ số" value={drawing.number} onChange={(event) => patch((draft) => { draft.prototype.drawing.number = event.target.value })} />
+        </div>
+        <div className="td-sheet-frame"><TechnicalSheet model={model} info={drawingInfo(project, owner, school)} scaleSetting={drawing.scale} /></div>
+        <div className="td-legend" aria-label="Chú giải nét vẽ">
+          <span><i className="is-thick" />Nét liền đậm: cạnh thấy</span>
+          <span><i className="is-hidden" />Nét đứt: cạnh khuất</span>
+          <span><i className="is-thin" />Nét liền mảnh: đường kích thước</span>
+          <span>Tỉ lệ <strong>{scale.label}</strong> · kích thước ghi bằng mm</span>
+        </div>
+        <button type="button" className="studio-button secondary ed-add" onClick={printSheet}><Printer size={16} /> In bản vẽ (A4 ngang)</button>
       </section>
       <section className="ed-card">
         <div className="ed-card-heading"><h3>Bảng vật liệu</h3><span>Ước tính: <strong>{formatMoney(totalCost)}</strong></span></div>
@@ -380,7 +418,7 @@ export function TestingStep({ project, patch, goToStep }) {
 }
 
 // ============= Step 5 =============
-export function DossierStep({ project, patch, owner }) {
+export function DossierStep({ project, patch, owner, school }) {
   return (
     <>
       <section className="ed-card ed-noprint">
@@ -390,12 +428,12 @@ export function DossierStep({ project, patch, owner }) {
         <TextArea label="Tự đánh giá & bài học rút ra" value={project.dossier.reflection} onChange={(event) => patch((draft) => { draft.dossier.reflection = event.target.value })} placeholder="Điều nhóm làm tốt, khó khăn gặp phải, nếu làm lại sẽ thay đổi gì?" rows={3} />
         <button type="button" className="studio-button" onClick={() => window.print()}><Printer size={16} /> In / lưu PDF</button>
       </section>
-      <DossierPreview project={project} owner={owner} />
+      <DossierPreview project={project} owner={owner} school={school} />
     </>
   )
 }
 
-function DossierPreview({ project, owner }) {
+function DossierPreview({ project, owner, school }) {
   const chosen = getChosenSolution(project)
   const ranking = rankSolutions(project.solutions, project.criteria)
   const summary = summarizeTests(project)
@@ -433,7 +471,9 @@ function DossierPreview({ project, owner }) {
       </section>
       <section>
         <h3>3. Nguyên mẫu</h3>
-        {project.prototype.sketch.length ? <SketchView strokes={project.prototype.sketch} className="ed-dossier-sketch" /> : <p>{empty}</p>}
+        <p><strong>Bản vẽ kĩ thuật:</strong></p>
+        <TechnicalSheet model={project.prototype.model} info={drawingInfo(project, owner, school)} scaleSetting={project.prototype.drawing.scale} className="ed-dossier-drawing" />
+        {project.prototype.sketch.length > 0 && <><p><strong>Phác thảo ý tưởng:</strong></p><SketchView strokes={project.prototype.sketch} className="ed-dossier-sketch" /></>}
         {project.prototype.dimensions && <p><strong>Kích thước chính:</strong> {project.prototype.dimensions}</p>}
         {project.prototype.materials.length > 0 && (
           <table><thead><tr><th>Chi tiết</th><th>Vật liệu</th><th>SL</th><th>Kích thước</th><th>Thành tiền</th></tr></thead>

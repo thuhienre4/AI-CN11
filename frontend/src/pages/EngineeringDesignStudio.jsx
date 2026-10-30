@@ -6,7 +6,8 @@ import { useAuthStore } from '../store'
 import { sampleLessons } from '../data/courseCatalog'
 import { blankTemplate, designSteps, projectTemplates } from '../data/engineeringDesign'
 import { createProject, getProgress, loadProjects, saveProjects } from '../utils/engineeringDesign'
-import { DossierStep, PrototypeStep, ProblemStep, SketchView, SolutionsStep, TestingStep } from '../components/EngineeringDesignSteps'
+import { DossierStep, PrototypeStep, ProblemStep, SolutionsStep, TestingStep } from '../components/EngineeringDesignSteps'
+import { IsometricView } from '../components/TechnicalDrawing'
 import '../styles/engineeringDesign.css'
 
 const theoryLesson = sampleLessons.find((lesson) => lesson.title.startsWith('Bài 18. Quy trình thiết kế'))
@@ -26,7 +27,7 @@ function ProjectLibrary({ projects, onOpen, onCreate, onDelete }) {
               return (
                 <article key={project.id} className="ed-project-card">
                   <button type="button" className="ed-project-open" onClick={() => onOpen(project.id)}>
-                    <div className="ed-project-thumb">{project.prototype.sketch.length ? <SketchView strokes={project.prototype.sketch} /> : <Compass size={28} aria-hidden="true" />}</div>
+                    <div className="ed-project-thumb">{project.prototype.model.cells.length ? <IsometricView model={project.prototype.model} /> : <Compass size={28} aria-hidden="true" />}</div>
                     <h3>{project.title}</h3>
                     <p>Bước {step.number}: {step.short} · Cập nhật {formatDate(project.updatedAt)}</p>
                     <div className="ed-meter" aria-label={`Hoàn thành ${percent}%`}><i style={{ width: `${percent}%` }} /></div>
@@ -60,7 +61,7 @@ function ProjectLibrary({ projects, onOpen, onCreate, onDelete }) {
   )
 }
 
-function ProjectWorkspace({ project, patch, onBack, saveState, owner }) {
+function ProjectWorkspace({ project, patch, onBack, saveState, owner, school }) {
   const stepIndex = Math.max(designSteps.findIndex((item) => item.id === project.currentStep), 0)
   const step = designSteps[stepIndex]
   const progress = getProgress(project)
@@ -102,7 +103,7 @@ function ProjectWorkspace({ project, patch, onBack, saveState, owner }) {
             <h2 ref={headingRef} tabIndex={-1}>{step.title}</h2>
             <p>{step.goal}</p>
           </header>
-          <StepComponent project={project} patch={patch} goToStep={goToStep} owner={owner} />
+          <StepComponent project={project} patch={patch} goToStep={goToStep} owner={owner} school={school} />
           <nav className="ed-step-nav ed-noprint" aria-label="Chuyển bước">
             {stepIndex > 0 ? <button type="button" className="studio-button secondary" onClick={() => goToStep(designSteps[stepIndex - 1].id)}><ArrowLeft size={16} /> {designSteps[stepIndex - 1].short}</button> : <span />}
             {stepIndex < designSteps.length - 1 && <button type="button" className="studio-button" onClick={() => goToStep(designSteps[stepIndex + 1].id)}>Tiếp: {designSteps[stepIndex + 1].short} <ArrowRight size={16} /></button>}
@@ -175,7 +176,7 @@ export default function EngineeringDesignStudio() {
   return (
     <main className="studio-page ed-page">
       {activeProject ? (
-        <ProjectWorkspace project={activeProject} patch={patch} onBack={() => openProject(null)} saveState={saveState} owner={user?.full_name || user?.username} />
+        <ProjectWorkspace project={activeProject} patch={patch} onBack={() => openProject(null)} saveState={saveState} owner={user?.full_name || user?.username} school={user?.student_class ? `Lớp ${user.student_class}` : ''} />
       ) : (
         <>
           <div className="studio-heading">
