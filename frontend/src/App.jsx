@@ -34,6 +34,7 @@ const PersonalProgress = lazyPage(() => import('./pages/PersonalProgress'))
 const ChapterTests = lazyPage(() => import('./pages/ChapterTests'))
 const Classroom = lazyPage(() => import('./pages/Classroom'))
 const SystemDesignLab = lazyPage(() => import('./pages/SystemDesignLab'))
+const EngineeringDesignStudio = lazyPage(() => import('./pages/EngineeringDesignStudio'))
 const PracticeBank = lazyPage(() => import('./pages/PracticeBank'))
 const ProjectionPractice = lazyPage(() => import('./pages/ProjectionPractice'))
 const CircuitExperimentLab = lazyPage(() => import('./pages/CircuitExperimentLab'))
@@ -300,6 +301,7 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="/engineering-design" element={<ProtectedRoute><EngineeringDesignStudio /></ProtectedRoute>} />
           <Route
             path="/design-lab"
             element={

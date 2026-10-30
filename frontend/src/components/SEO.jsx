@@ -35,6 +35,10 @@ const privatePageSeo = {
     title: 'Luyện tập hình chiếu - EngineLab Công nghệ',
     description: 'Công cụ luyện tập hình chiếu và đọc bản vẽ kỹ thuật trong môn Công nghệ.',
   },
+  '/engineering-design': {
+    title: 'Xưởng thiết kế kĩ thuật - EngineLab Công nghệ',
+    description: 'Thực hành quy trình thiết kế kĩ thuật 5 bước: xác định vấn đề, chọn giải pháp, làm nguyên mẫu, thử nghiệm và lập hồ sơ kĩ thuật.',
+  },
   '/design-lab': {
     title: 'Phòng thiết kế hệ thống - EngineLab Công nghệ',
     description: 'Thực hành thiết kế sơ đồ hệ thống, cấu trúc cơ khí và quy trình kỹ thuật.',
