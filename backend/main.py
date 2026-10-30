@@ -1,6 +1,7 @@
 import logging
 
 from fastapi import FastAPI, Request
+from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -48,7 +49,8 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={
             "detail": "Request validation failed.",
-            "errors": exc.errors(),
+            # jsonable_encoder: custom validators put the raw ValueError in ctx, which json can't serialize.
+            "errors": jsonable_encoder(exc.errors()),
             "path": str(request.url.path),
         },
     )
