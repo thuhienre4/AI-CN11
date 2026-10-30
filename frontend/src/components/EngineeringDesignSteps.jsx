@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react'
-import { Check, Minus, PenTool, Plus, Printer, RotateCcw, Trash2, Undo2, X } from 'lucide-react'
+import toast from 'react-hot-toast'
+import { Check, Download, Minus, PenTool, Plus, Printer, RotateCcw, Trash2, Undo2, X } from 'lucide-react'
 import { safetyChecklist } from '../data/engineeringDesign'
 import { createId, getChosenSolution, rankSolutions, strokeToPath, summarizeTests } from '../utils/engineeringDesign'
 import { STANDARD_SCALES, layoutSheet, pickScale } from '../utils/technicalDrawing'
-import { ObjectDesigner, TechnicalSheet, printSheet, resolveScale } from './TechnicalDrawing'
+import { ObjectDesigner, TechnicalSheet, resolveScale } from './TechnicalDrawing'
+import { downloadPng, downloadSvg, printDossier, printElement, toFileName } from '../utils/printDrawing'
 
 export const SKETCH_WIDTH = 800
 export const SKETCH_HEIGHT = 500
@@ -266,6 +268,18 @@ export function PrototypeStep({ project, patch, owner, school }) {
   const chosen = getChosenSolution(project)
   const { model, drawing } = project.prototype
   const scale = resolveScale(model, drawing.scale)
+  const sheetRef = useRef(null)
+  const [exporting, setExporting] = useState(false)
+  const exportPng = async () => {
+    setExporting(true)
+    try {
+      await downloadPng(sheetRef.current, toFileName(project.title, 'png'))
+    } catch (error) {
+      toast.error(error.message)
+    } finally {
+      setExporting(false)
+    }
+  }
   const totalCost = project.prototype.materials.reduce((sum, item) => sum + Number(item.qty || 0) * Number(item.cost || 0), 0)
   const updateMaterial = (id, key, value) => patch((draft) => { draft.prototype.materials.find((item) => item.id === id)[key] = value })
 
@@ -300,14 +314,19 @@ export function PrototypeStep({ project, patch, owner, school }) {
           </label>
           <TextInput label="Bản vẽ số" value={drawing.number} onChange={(event) => patch((draft) => { draft.prototype.drawing.number = event.target.value })} />
         </div>
-        <div className="td-sheet-frame"><TechnicalSheet model={model} info={drawingInfo(project, owner, school)} scaleSetting={drawing.scale} /></div>
+        <div className="td-sheet-frame"><TechnicalSheet svgRef={sheetRef} model={model} info={drawingInfo(project, owner, school)} scaleSetting={drawing.scale} /></div>
         <div className="td-legend" aria-label="Chú giải nét vẽ">
           <span><i className="is-thick" />Nét liền đậm: cạnh thấy</span>
           <span><i className="is-hidden" />Nét đứt: cạnh khuất</span>
           <span><i className="is-thin" />Nét liền mảnh: đường kích thước</span>
           <span>Tỉ lệ <strong>{scale.label}</strong> · kích thước ghi bằng mm</span>
         </div>
-        <button type="button" className="studio-button secondary ed-add" onClick={printSheet}><Printer size={16} /> In bản vẽ (A4 ngang)</button>
+        <div className="td-export-row">
+          <button type="button" className="studio-button" onClick={() => printElement(sheetRef.current)} disabled={!model.cells.length}><Printer size={16} /> In bản vẽ (A4 ngang)</button>
+          <button type="button" className="studio-button secondary" onClick={exportPng} disabled={!model.cells.length || exporting}><Download size={16} /> {exporting ? 'Đang tạo ảnh…' : 'Tải PNG'}</button>
+          <button type="button" className="studio-button secondary" onClick={() => downloadSvg(sheetRef.current, toFileName(project.title, 'svg'))} disabled={!model.cells.length}><Download size={16} /> Tải SVG</button>
+          <span className="ed-muted">PNG 200 dpi để nộp bài · SVG giữ nét sắc khi phóng to · In → chọn “Lưu dưới dạng PDF” để có file PDF</span>
+        </div>
       </section>
       <section className="ed-card">
         <div className="ed-card-heading"><h3>Bảng vật liệu</h3><span>Ước tính: <strong>{formatMoney(totalCost)}</strong></span></div>
@@ -426,7 +445,7 @@ export function DossierStep({ project, patch, owner, school }) {
         <TextInput label="Thành viên nhóm" value={project.dossier.team} onChange={(event) => patch((draft) => { draft.dossier.team = event.target.value })} placeholder={owner || 'Họ tên các thành viên'} />
         <TextArea label="Tóm tắt dự án" value={project.dossier.summary} onChange={(event) => patch((draft) => { draft.dossier.summary = event.target.value })} placeholder="Sản phẩm là gì, giải quyết vấn đề gì, kết quả thử nghiệm ra sao?" rows={3} />
         <TextArea label="Tự đánh giá & bài học rút ra" value={project.dossier.reflection} onChange={(event) => patch((draft) => { draft.dossier.reflection = event.target.value })} placeholder="Điều nhóm làm tốt, khó khăn gặp phải, nếu làm lại sẽ thay đổi gì?" rows={3} />
-        <button type="button" className="studio-button" onClick={() => window.print()}><Printer size={16} /> In / lưu PDF</button>
+        <button type="button" className="studio-button" onClick={printDossier}><Printer size={16} /> In / lưu PDF</button>
       </section>
       <DossierPreview project={project} owner={owner} school={school} />
     </>

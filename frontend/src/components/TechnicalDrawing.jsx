@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Minus, Plus } from 'lucide-react'
 import {
   SHEET, STANDARD_SCALES, formatMm, getDimensionStops, getIsometricBounds, getIsometricFaces, getOverallSize, getSymmetryAxes,
@@ -70,7 +70,8 @@ export function ObjectDesigner({ model, onChange }) {
   const [layer, setLayer] = useState(0)
   const currentLayer = Math.min(layer, model.z.length - 1)
   const size = getOverallSize(model)
-  const has = (i, j, k) => model.cells.includes(keyOf(i, j, k))
+  const cellSet = new Set(model.cells)
+  const has = (i, j, k) => cellSet.has(keyOf(i, j, k))
   const setLayerCells = (fill) => {
     const others = model.cells.filter((key) => Number(key.split(',')[2]) !== currentLayer)
     onChange({ ...model, cells: fill ? [...others, ...model.x.flatMap((_, i) => model.y.map((__, j) => keyOf(i, j, currentLayer)))] : others })
@@ -275,15 +276,21 @@ function TitleBlock({ info, scaleLabel }) {
   )
 }
 
-export function TechnicalSheet({ model, info, scaleSetting = 'auto', className = '' }) {
+export function TechnicalSheet({ model, info, scaleSetting = 'auto', className = '', svgRef }) {
   const scale = resolveScale(model, scaleSetting)
   const layout = layoutSheet(model, scale.value)
-  const views = layout && model.cells.length
-    ? { front: projectView(model, 'front'), top: projectView(model, 'top'), side: projectView(model, 'side') }
-    : null
+  // Projections only depend on the model's content. Project edits deep-clone the model on every
+  // keystroke, so key the memo on its serialised form rather than object identity.
+  const modelKey = JSON.stringify(model)
+  const views = useMemo(
+    () => (model.cells.length ? { front: projectView(model, 'front'), top: projectView(model, 'top'), side: projectView(model, 'side') } : null),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [modelKey],
+  )
+  const ready = Boolean(layout && views)
 
   let iso = null
-  if (layout && views && layout.iso.width > 35 && layout.iso.height > 30) {
+  if (ready && layout.iso.width > 35 && layout.iso.height > 30) {
     const bounds = getIsometricBounds(model)
     const fit = Math.min(layout.iso.width / bounds.width, layout.iso.height / bounds.height, scale.value)
     const dx = layout.iso.x + (layout.iso.width - bounds.width * fit) / 2 - bounds.minX * fit
@@ -292,10 +299,10 @@ export function TechnicalSheet({ model, info, scaleSetting = 'auto', className =
   }
 
   return (
-    <svg className={`td-sheet ${className}`} viewBox={`0 0 ${SHEET.width} ${SHEET.height}`} role="img" aria-label={`Bản vẽ kĩ thuật ${info.title || ''}, tỉ lệ ${scale.label}`} fontFamily="Arial, Helvetica, sans-serif">
+    <svg ref={svgRef} className={`td-sheet ${className}`} viewBox={`0 0 ${SHEET.width} ${SHEET.height}`} role="img" aria-label={`Bản vẽ kĩ thuật ${info.title || ''}, tỉ lệ ${scale.label}`} fontFamily="Arial, Helvetica, sans-serif">
       <rect width={SHEET.width} height={SHEET.height} fill="#fff" />
       <rect x={SHEET.frame.left} y={SHEET.frame.top} width={SHEET.frame.right - SHEET.frame.left} height={SHEET.frame.bottom - SHEET.frame.top} fill="none" stroke="#111827" strokeWidth={LINE.thick} />
-      {views ? (
+      {ready ? (
         <>
           <ViewLines projection={views.front} box={layout.front} scale={scale.value} />
           <ViewLines projection={views.top} box={layout.top} scale={scale.value} />
@@ -316,17 +323,3 @@ export function TechnicalSheet({ model, info, scaleSetting = 'auto', className =
   )
 }
 
-/** Prints only the drawing sheet on A4 landscape. */
-export const printSheet = () => {
-  const pageStyle = document.createElement('style')
-  pageStyle.textContent = '@page { size: A4 landscape; margin: 0; }'
-  document.head.appendChild(pageStyle)
-  document.body.classList.add('td-printing-sheet')
-  const cleanup = () => {
-    document.body.classList.remove('td-printing-sheet')
-    pageStyle.remove()
-    window.removeEventListener('afterprint', cleanup)
-  }
-  window.addEventListener('afterprint', cleanup)
-  window.print()
-}

@@ -1,6 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import toast from 'react-hot-toast'
 import { Link } from 'react-router-dom'
+import FitToWidth from '../components/FitToWidth'
+import { printElement } from '../utils/printDrawing'
 
 const views = [
   { id: 'front', label: 'Hình chiếu đứng', axes: ['x', 'z'], note: 'Nhìn từ trước: rộng theo chiều ngang, cao theo chiều đứng.' },
@@ -451,6 +453,7 @@ function TechnicalDrawingSheet({
   const topView = views.find((view) => view.id === 'top')
   const rightView = views.find((view) => view.id === 'right')
   const safeValue = (value, fallback) => value?.trim() || fallback
+  const sheetRef = useRef(null)
 
   return (
     <section className="rounded-2xl border border-slate-200 bg-slate-100 p-4 shadow-sm">
@@ -459,11 +462,17 @@ function TechnicalDrawingSheet({
           <p className="muted-label text-indigo-600">Khung làm việc bản vẽ</p>
           <h2 className="text-2xl font-black text-slate-950">Bản vẽ chi tiết theo bố cục kĩ thuật</h2>
         </div>
-        <p className="text-xs font-bold text-slate-500">Khung bản vẽ · hình chiếu · kích thước · yêu cầu kĩ thuật · khung tên</p>
+        <div className="flex flex-wrap items-center gap-3">
+          <p className="text-xs font-bold text-slate-500">Khung bản vẽ · hình chiếu · kích thước · yêu cầu kĩ thuật · khung tên</p>
+          <button type="button" className="secondary-button" onClick={() => printElement(sheetRef.current, { contentSize: { width: 1000, height: 650 } })}>
+            In bản vẽ (A4 ngang)
+          </button>
+        </div>
       </div>
 
-      <div className="overflow-auto rounded-lg bg-white p-4">
-        <div className="relative mx-auto h-[650px] w-[1000px] border-2 border-slate-950 bg-white">
+      <div className="rounded-lg bg-white p-4">
+        <FitToWidth ref={sheetRef} width={1000} height={650}>
+        <div className="relative h-[650px] w-[1000px] border-2 border-slate-950 bg-white">
           <div className="absolute inset-5 border border-slate-950" />
 
           <div className="absolute left-[70px] top-[54px] h-[390px] w-[610px]">
@@ -547,6 +556,7 @@ function TechnicalDrawingSheet({
             </div>
           </div>
         </div>
+        </FitToWidth>
       </div>
     </section>
   )
@@ -679,7 +689,7 @@ export default function ProjectionPractice() {
         </div>
       </section>
 
-      <div className="grid gap-6 xl:grid-cols-[320px_1fr]">
+      <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
         <aside className="space-y-5">
           <section className="panel p-5">
             <h2 className="font-black text-slate-950">Chọn vật thể</h2>
@@ -806,7 +816,7 @@ export default function ProjectionPractice() {
           </section>
         </aside>
 
-        <main className="space-y-5">
+        <main className="min-w-0 space-y-5">
           <section className="grid gap-4 lg:grid-cols-3">
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold leading-6 text-emerald-950">
               Sau khi kiểm tra: viền xanh là nét đúng.
@@ -849,7 +859,7 @@ export default function ProjectionPractice() {
               </div>
             </div>
 
-            <div className="mt-5 grid gap-4 xl:grid-cols-[1fr_360px]">
+            <div className="mt-5 grid gap-4 xl:grid-cols-[minmax(0,1fr)_360px]">
               <div className="space-y-3">
                 {drawingTasks.map((task) => (
                   <label

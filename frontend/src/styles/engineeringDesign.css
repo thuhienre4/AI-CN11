@@ -233,6 +233,8 @@
 .td-legend i { display: inline-block; width: 22px; border-top: 2px solid #111827; }
 .td-legend i.is-hidden { border-top-style: dashed; border-top-width: 1.5px; }
 .td-legend i.is-thin { border-top-width: 1px; }
+.td-export-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 14px; }
+.td-export-row .ed-muted { flex-basis: 100%; }
 .ed-dossier-drawing { width: 100%; border: 1px solid #d7dfda; margin: 4px 0 12px; }
 
 @media (max-width: 1180px) {
@@ -262,13 +264,12 @@
   .ed-title-input { order: -1; flex-basis: 100%; font-size: 19px; padding: 4px 0; }
 }
 
+/* Scoped to a body class set by printDossier(): this stylesheet stays loaded after leaving the
+   studio, and an unscoped rule would blank every other page printed with Ctrl+P. */
 @media print {
-  body * { visibility: hidden; }
-  .ed-dossier, .ed-dossier * { visibility: visible; }
-  .ed-dossier { position: absolute; inset: 0 0 auto 0; border: 0; padding: 0; }
-  .ed-noprint { display: none !important; }
-  /* "In bản vẽ" prints only the A4 sheet, edge to edge on a landscape page. */
-  body.td-printing-sheet .td-sheet-frame, body.td-printing-sheet .td-sheet-frame * { visibility: visible; }
-  body.td-printing-sheet .td-sheet-frame { position: fixed; inset: 0; padding: 0; border: 0; background: #fff; overflow: visible; }
-  body.td-printing-sheet .td-sheet { width: 297mm; height: 210mm; min-width: 0; box-shadow: none; }
+  html:has(body.ed-printing-dossier), body.ed-printing-dossier { background: #fff !important; }
+  body.ed-printing-dossier * { visibility: hidden; }
+  body.ed-printing-dossier .ed-dossier, body.ed-printing-dossier .ed-dossier * { visibility: visible; }
+  body.ed-printing-dossier .ed-dossier { position: absolute; inset: 0 0 auto 0; border: 0; padding: 0; }
+  body.ed-printing-dossier .ed-dossier-drawing { break-inside: avoid; }
 }
