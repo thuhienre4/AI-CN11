@@ -73,6 +73,30 @@ def can_manage_content(user: User) -> bool:
     return user.role in {"teacher", "admin", "moderator"}
 
 
+def teacher_class_names(user: User) -> set[str]:
+    """Classes a teacher is assigned to; ``student_class`` holds them comma-separated."""
+    return {name.strip() for name in (user.student_class or "").split(",") if name.strip()}
+
+
+def can_view_student(viewer: User, student: User) -> bool:
+    if viewer.id == student.id or viewer.role in {"admin", "moderator"}:
+        return True
+    return (
+        viewer.role == "teacher"
+        and student.role == "student"
+        and (student.student_class or "").strip() in teacher_class_names(viewer)
+    )
+
+
+def ensure_student_scope(db: Session, target_user_id: int, current_user: User, detail: str) -> None:
+    """Allow the owner, an administrator, or a teacher assigned to the student's class."""
+    if current_user.id == target_user_id or current_user.role in {"admin", "moderator"}:
+        return
+    student = db.query(User).filter(User.id == target_user_id).first()
+    if student is None or not can_view_student(current_user, student):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail=detail)
+
+
 def require_teacher_user(user: User = Depends(get_authenticated_user)) -> User:
     if not can_manage_content(user):
         raise HTTPException(

@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
 from auth import create_access_token, hash_password
-from database import Base, get_db
+from database import Base, configure_sqlite_transactions, get_db
 from main import app
 from models import (
     Course,
@@ -28,6 +28,7 @@ def api():
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
+    configure_sqlite_transactions(engine)
     TestingSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     Base.metadata.create_all(bind=engine)
 

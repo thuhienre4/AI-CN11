@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { sampleCourses, sampleLessons } from '../data/courseCatalog'
+import TeacherAnalyticsPanel from '../components/TeacherAnalyticsPanel'
 import { classroomAPI } from '../services/api'
 import { useAuthStore } from '../store'
 import {
@@ -484,7 +485,6 @@ export default function Classroom() {
     try {
       const formData = new FormData()
       formData.append('student_name', studentName)
-      if (user?.id) formData.append('student_user_id', Number(user.id))
       formData.append('content', submissionForm.content)
       if (submissionForm.file) formData.append('file', submissionForm.file)
       await classroomAPI.submitAssignment(submissionAssignmentId, formData)
@@ -616,6 +616,8 @@ export default function Classroom() {
           <p className="mt-1 text-base font-bold">Quản lý nộp bài riêng cho từng lớp.</p>
         </div>
       </section>
+
+      {isTeacher && !isLocalSession() && <TeacherAnalyticsPanel />}
 
       <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
         <aside className="space-y-6">

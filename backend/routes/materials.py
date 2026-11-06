@@ -66,7 +66,7 @@ def list_materials(
 
 
 @router.post("", response_model=ReferenceMaterialResponse, status_code=status.HTTP_201_CREATED)
-async def upload_material(
+def upload_material(
     file: UploadFile = File(...),
     title: str = Form(""),
     description: str = Form(""),
@@ -78,6 +78,7 @@ async def upload_material(
     current_user: User = Depends(require_teacher_user),
 ):
     extension = _validate_file(file)
+    db.rollback()  # an upload can take minutes: do not hold the database during it
     UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 
     original_name = Path(file.filename or "tai-lieu").name
@@ -89,7 +90,7 @@ async def upload_material(
     try:
       with destination.open("wb") as output:
           while True:
-              chunk = await file.read(1024 * 1024)
+              chunk = file.file.read(1024 * 1024)
               if not chunk:
                   break
               size += len(chunk)
@@ -103,7 +104,7 @@ async def upload_material(
               checksum.update(chunk)
               output.write(chunk)
     finally:
-        await file.close()
+        file.file.close()
 
     file_checksum = checksum.hexdigest()
     duplicate = (

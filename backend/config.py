@@ -25,6 +25,12 @@ class Settings(BaseSettings):
 
     # Database
     database_url: str = DEFAULT_DATABASE_URL
+    db_pool_size: int = 20
+    db_max_overflow: int = 20
+    db_pool_timeout_seconds: float = 30.0
+    # Must exceed db_pool_size + db_max_overflow: a request only returns its connection when a worker
+    # thread runs its cleanup, so workers all waiting for a connection would deadlock until timeout.
+    worker_threads: int = 120
 
     # Redis
     redis_url: str = "redis://localhost:6379/0"

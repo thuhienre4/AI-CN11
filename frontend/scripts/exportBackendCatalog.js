@@ -14,6 +14,21 @@ const asText = (value, fallback = '') => {
   return JSON.stringify(value)
 }
 
+// Source questions list the correct answer first; rotate ids and order so neither reveals it.
+const rotateOptions = (options, questionId) => {
+  const sorted = [...options].sort((a, b) => a.order - b.order)
+  const ids = sorted.map((option) => option.id)
+  const orders = sorted.map((option) => option.order)
+  const shift = questionId % Math.max(sorted.length, 1)
+  return sorted
+    .map((option, index) => ({
+      ...option,
+      id: ids[(index + shift) % sorted.length],
+      order: orders[(index + shift) % sorted.length],
+    }))
+    .sort((a, b) => a.order - b.order)
+}
+
 const catalog = {
   generated_at: new Date().toISOString(),
   courses: sampleCourses.map((course) => ({
@@ -39,12 +54,15 @@ const catalog = {
     question_type: question.question_type || 'multiple_choice',
     difficulty: question.difficulty || 'medium',
     points: Number(question.points || 1),
-    options: (question.options || []).map((option, index) => ({
-      id: Number(option.id),
-      text: asText(option.text || option.option_text || option.label),
-      is_correct: Boolean(option.is_correct ?? option.correct),
-      order: Number(option.order ?? index + 1),
-    })),
+    options: rotateOptions(
+      (question.options || []).map((option, index) => ({
+        id: Number(option.id),
+        text: asText(option.text || option.option_text || option.label),
+        is_correct: Boolean(option.is_correct ?? option.correct),
+        order: Number(option.order ?? index + 1),
+      })),
+      Number(question.id),
+    ),
   })),
 }
 

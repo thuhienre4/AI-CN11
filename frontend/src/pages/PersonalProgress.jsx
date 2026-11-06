@@ -211,6 +211,10 @@ export default function PersonalProgress() {
         analytics: item.analytics || { risk_reasons: [item.reason] },
       })),
       intervention_plan: dashboard?.intervention_plan ?? localDashboard?.intervention_plan ?? [],
+      active_lessons_without_quiz: dashboard?.active_lessons_without_quiz ?? 0,
+      score_note:
+        dashboard?.score_note ||
+        'Điểm do quy tắc tạm thời tạo ra, chưa được hiệu chuẩn bằng dữ liệu thực; không dùng để chẩn đoán năng lực hoặc kết luận nguy cơ.',
     }
   }, [dashboard, user?.id])
 
@@ -304,8 +308,8 @@ export default function PersonalProgress() {
       <section className="mb-6 rounded-lg border border-sky-200 bg-gradient-to-r from-white via-sky-50 to-emerald-50 p-5 shadow-sm">
         <div className="mb-4 flex flex-col justify-between gap-2 md:flex-row md:items-end">
           <div>
-            <p className="text-sm font-black uppercase text-sky-700">Hồ sơ học tập thông minh</p>
-            <h2 className="text-2xl font-bold text-slate-950">Phân tích cá nhân hóa và cảnh báo sớm</h2>
+            <p className="text-sm font-black uppercase text-sky-700">Hồ sơ học tập</p>
+            <h2 className="text-2xl font-bold text-slate-950">Gợi ý ôn tập theo quy tắc</h2>
           </div>
           <div
             className={`rounded-lg border px-4 py-3 text-sm font-black ${
@@ -316,28 +320,34 @@ export default function PersonalProgress() {
                   : 'border-emerald-200 bg-emerald-50 text-emerald-900'
             }`}
           >
-            Risk: {smartAnalytics.risk_level === 'high' ? 'Cao' : smartAnalytics.risk_level === 'medium' ? 'Vua' : 'On dinh'}
+            Tín hiệu: {smartAnalytics.risk_level === 'high' ? 'Cần xem sớm' : smartAnalytics.risk_level === 'medium' ? 'Nên xem' : 'Chưa có tín hiệu'}
           </div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-3">
           <div className="rounded-lg bg-white p-4 shadow-sm">
-            <p className="text-sm font-semibold text-slate-500">Mức độ làm chủ</p>
+            <p className="text-sm font-semibold text-slate-500">Điểm làm chủ (tham khảo)</p>
             <p className="mt-2 text-3xl font-bold text-sky-700">{smartAnalytics.mastery_score}%</p>
           </div>
           <div className="rounded-lg bg-white p-4 shadow-sm">
-            <p className="text-sm font-semibold text-slate-500">Mức độ tham gia</p>
+            <p className="text-sm font-semibold text-slate-500">Điểm tham gia (tham khảo)</p>
             <p className="mt-2 text-3xl font-bold text-emerald-700">{smartAnalytics.engagement_score}%</p>
           </div>
           <div className="rounded-lg bg-white p-4 shadow-sm">
-            <p className="text-sm font-semibold text-slate-500">Mức độ rủi ro</p>
+            <p className="text-sm font-semibold text-slate-500">Điểm tín hiệu (tham khảo)</p>
             <p className="mt-2 text-3xl font-bold text-rose-700">{smartAnalytics.risk_score}%</p>
           </div>
         </div>
 
+        <p className="mt-3 text-sm leading-6 text-slate-600">
+          {smartAnalytics.score_note}
+          {smartAnalytics.active_lessons_without_quiz > 0 &&
+            ` Có ${smartAnalytics.active_lessons_without_quiz} bài chưa có điểm quiz nên điểm làm chủ của các bài này chỉ là ước lượng.`}
+        </p>
+
         <div className="mt-4 grid gap-4 lg:grid-cols-3">
           <div className="rounded-lg border border-slate-100 bg-white p-4">
-            <h3 className="font-bold text-slate-950">Lộ trình AI tiếp theo</h3>
+            <h3 className="font-bold text-slate-950">Bài nên học tiếp</h3>
             <div className="mt-3 space-y-2">
               {smartAnalytics.learning_path.length ? (
                 smartAnalytics.learning_path.map((item) => (

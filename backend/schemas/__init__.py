@@ -301,6 +301,9 @@ class LearningDashboardResponse(BaseModel):
     weak_alerts: List[LearningRecommendation] = Field(default_factory=list)
     learning_path: List[LearningRecommendation] = Field(default_factory=list)
     intervention_plan: List[str] = Field(default_factory=list)
+    active_lessons: int = 0
+    active_lessons_without_quiz: int = 0
+    score_note: str = ""
 
 
 # ============= Reference Material Schemas =============

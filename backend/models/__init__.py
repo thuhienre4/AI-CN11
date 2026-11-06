@@ -267,10 +267,14 @@ class LearningEvent(Base):
     """Fine-grained activity log for personalization."""
     __tablename__ = "learning_events"
 
+    __table_args__ = (
+        UniqueConstraint("user_id", "client_event_id", name="uq_learning_event_user_client"),
+    )
+
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
     lesson_id = Column(Integer, ForeignKey("lessons.id"), nullable=True, index=True)
-    client_event_id = Column(String(80), nullable=True, unique=True, index=True)
+    client_event_id = Column(String(80), nullable=True, index=True)
     event_type = Column(String(50), nullable=False, index=True)
     duration_seconds = Column(Integer, default=0)
     score = Column(Float, nullable=True)

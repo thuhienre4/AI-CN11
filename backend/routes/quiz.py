@@ -1,8 +1,10 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from auth import can_manage_content, get_authenticated_user, require_teacher_user
+from auth import ensure_student_scope, get_authenticated_user, require_teacher_user
 from database import get_db
 from models import LearningEvent, LessonProgress, QuizAttempt, QuizResult, Question, User
 from schemas import (
@@ -13,17 +15,13 @@ from schemas import (
     QuizResultCreate,
 )
 from realtime import learning_connections
+from routes.progress import QUIZ_COMPLETE_SCORE, get_or_create_progress, recompute_status
 
 router = APIRouter(prefix="/api", tags=["Quiz"])
 
 
-def ensure_user_scope(target_user_id: int, current_user: User) -> None:
-    if current_user.id == target_user_id or can_manage_content(current_user):
-        return
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="You can only access your own quiz data.",
-    )
+def ensure_user_scope(db: Session, target_user_id: int, current_user: User) -> None:
+    ensure_student_scope(db, target_user_id, current_user, "You can only access your own quiz data.")
 
 
 def finalize_attempt_progress(
@@ -31,38 +29,39 @@ def finalize_attempt_progress(
     attempt: QuizAttempt,
     client_event_id: str | None = None,
 ) -> QuizAttempt:
-    if attempt.status == "submitted":
-        return attempt
-
-    attempt.status = "submitted"
-    learning_event = LearningEvent(
-        user_id=attempt.user_id,
-        lesson_id=attempt.lesson_id,
-        client_event_id=client_event_id,
-        event_type="quiz_submitted",
-        duration_seconds=attempt.time_spent_seconds,
-        score=attempt.score_percent,
-        payload={
-            "attempt_id": attempt.id,
-            "correct_answers": attempt.correct_answers,
-            "total_questions": attempt.total_questions,
-        },
+    # The conditional update is what makes concurrent finalize calls count once.
+    claimed = (
+        db.query(QuizAttempt)
+        .filter(QuizAttempt.id == attempt.id, QuizAttempt.status != "submitted")
+        .update({"status": "submitted"}, synchronize_session=False)
     )
-    db.add(learning_event)
+    if not claimed:
+        return attempt
+    attempt.status = "submitted"
 
-    progress = (
-        db.query(LessonProgress)
-        .filter(
-            LessonProgress.user_id == attempt.user_id,
-            LessonProgress.lesson_id == attempt.lesson_id,
-        )
+    already_stored = client_event_id and (
+        db.query(LearningEvent)
+        .filter(LearningEvent.user_id == attempt.user_id, LearningEvent.client_event_id == client_event_id)
         .first()
     )
-    if not progress:
-        progress = LessonProgress(user_id=attempt.user_id, lesson_id=attempt.lesson_id)
-        db.add(progress)
-        db.flush()
+    if not already_stored:
+        db.add(
+            LearningEvent(
+                user_id=attempt.user_id,
+                lesson_id=attempt.lesson_id,
+                client_event_id=client_event_id,
+                event_type="quiz_submitted",
+                duration_seconds=attempt.time_spent_seconds,
+                score=attempt.score_percent,
+                payload={
+                    "attempt_id": attempt.id,
+                    "correct_answers": attempt.correct_answers,
+                    "total_questions": attempt.total_questions,
+                },
+            )
+        )
 
+    progress = get_or_create_progress(db, attempt.user_id, attempt.lesson_id)
     progress.quiz_attempt_count += 1
     progress.time_spent_seconds += attempt.time_spent_seconds
     progress.last_activity_type = "quiz_submitted"
@@ -72,19 +71,23 @@ def finalize_attempt_progress(
         (previous_total + attempt.score_percent) / progress.quiz_attempt_count,
         2,
     )
-    progress.progress_percent = max(progress.progress_percent, 100 if attempt.score_percent >= 70 else 75)
-    progress.status = "completed" if progress.progress_percent >= 100 else "needs_review"
+    progress.progress_percent = max(
+        progress.progress_percent,
+        100 if attempt.score_percent >= QUIZ_COMPLETE_SCORE else 75,
+    )
+    progress.last_accessed_at = datetime.utcnow()
+    recompute_status(progress)
     return attempt
 
 
 @router.post("/quiz/attempts", response_model=QuizAttemptResponse, status_code=status.HTTP_201_CREATED)
-async def start_quiz_attempt(
+def start_quiz_attempt(
     user_id: int,
     payload: QuizAttemptCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
 ):
-    ensure_user_scope(user_id, current_user)
+    ensure_user_scope(db, user_id, current_user)
     if not db.query(User).filter(User.id == user_id).first():
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     if not db.query(Question).filter(Question.lesson_id == payload.lesson_id).first():
@@ -94,15 +97,11 @@ async def start_quiz_attempt(
     db.add(attempt)
     db.commit()
     db.refresh(attempt)
-    await learning_connections.publish_learning_update(
-        attempt.user_id,
-        {"event_type": "quiz_submitted", "lesson_id": attempt.lesson_id, "score": attempt.score_percent},
-    )
     return attempt
 
 
 @router.post("/quiz/attempts/{attempt_id}/finalize", response_model=QuizAttemptResponse)
-async def finalize_quiz_attempt(
+def finalize_quiz_attempt(
     attempt_id: int,
     payload: QuizAttemptFinalize,
     db: Session = Depends(get_db),
@@ -111,22 +110,29 @@ async def finalize_quiz_attempt(
     attempt = db.query(QuizAttempt).filter(QuizAttempt.id == attempt_id).first()
     if not attempt:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Quiz attempt not found")
-    ensure_user_scope(attempt.user_id, current_user)
+    ensure_user_scope(db, attempt.user_id, current_user)
     finalize_attempt_progress(db, attempt, payload.client_event_id)
+    student = db.query(User).filter(User.id == attempt.user_id).first()
+    student_class = (student.student_class or "") if student else ""
     db.commit()
     db.refresh(attempt)
+    learning_connections.publish_from_thread(
+        attempt.user_id,
+        {"event_type": "quiz_submitted", "lesson_id": attempt.lesson_id, "score": attempt.score_percent},
+        student_class,
+    )
     return attempt
 
 
 @router.post("/quiz/submit", response_model=QuizResultResponse, status_code=status.HTTP_201_CREATED)
-async def submit_quiz_answer(
+def submit_quiz_answer(
     user_id: int,
     result_data: QuizResultCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
 ):
     """Submit an answer to a quiz question."""
-    ensure_user_scope(user_id, current_user)
+    ensure_user_scope(db, user_id, current_user)
     # Verify user exists
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -177,6 +183,23 @@ async def submit_quiz_answer(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="Quiz attempt not found",
             )
+        if attempt.status == "submitted":
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="This quiz attempt is already finished.",
+            )
+        if attempt.lesson_id != question.lesson_id:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="This question does not belong to the quiz attempt.",
+            )
+        already_answered = (
+            db.query(QuizResult)
+            .filter(QuizResult.attempt_id == attempt.id, QuizResult.question_id == question.id)
+            .first()
+        )
+        if already_answered:  # a retried request keeps the first answer and scores nothing new
+            return already_answered
 
     if not attempt:
         attempt = QuizAttempt(
@@ -188,7 +211,7 @@ async def submit_quiz_answer(
             points_earned=0.0,
             score_percent=0.0,
             time_spent_seconds=0,
-            status="submitted",
+            status="in_progress",
         )
         db.add(attempt)
         db.flush()
@@ -220,7 +243,6 @@ async def submit_quiz_answer(
     )
 
     if standalone_attempt:
-        attempt.status = "in_progress"
         finalize_attempt_progress(db, attempt)
     db.commit()
     db.refresh(quiz_result)
@@ -229,7 +251,7 @@ async def submit_quiz_answer(
 
 
 @router.get("/quiz/attempts/user/{user_id}", response_model=List[QuizAttemptResponse])
-async def get_user_attempts(
+def get_user_attempts(
     user_id: int,
     lesson_id: int | None = None,
     skip: int = 0,
@@ -238,7 +260,7 @@ async def get_user_attempts(
     current_user: User = Depends(get_authenticated_user),
 ):
     """Get quiz attempts for a user, grouped by lesson/session."""
-    ensure_user_scope(user_id, current_user)
+    ensure_user_scope(db, user_id, current_user)
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(
@@ -259,7 +281,7 @@ async def get_user_attempts(
 
 
 @router.get("/quiz/results/user/{user_id}", response_model=List[QuizResultResponse])
-async def get_user_results(
+def get_user_results(
     user_id: int,
     skip: int = 0,
     limit: int = 50,
@@ -267,7 +289,7 @@ async def get_user_results(
     current_user: User = Depends(get_authenticated_user),
 ):
     """Get all quiz results for a user."""
-    ensure_user_scope(user_id, current_user)
+    ensure_user_scope(db, user_id, current_user)
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(
@@ -286,7 +308,7 @@ async def get_user_results(
 
 
 @router.get("/quiz/results/question/{question_id}")
-async def get_question_stats(
+def get_question_stats(
     question_id: int,
     db: Session = Depends(get_db),
     _current_user: User = Depends(require_teacher_user),
@@ -319,7 +341,7 @@ async def get_question_stats(
 
 
 @router.get("/quiz/results/{result_id}", response_model=QuizResultResponse)
-async def get_quiz_result(
+def get_quiz_result(
     result_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
@@ -331,5 +353,5 @@ async def get_quiz_result(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Quiz result not found",
         )
-    ensure_user_scope(result.user_id, current_user)
+    ensure_user_scope(db, result.user_id, current_user)
     return result

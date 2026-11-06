@@ -13,8 +13,9 @@ router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-async def register(user_data: UserCreate, db: Session = Depends(get_db)):
+def register(user_data: UserCreate, db: Session = Depends(get_db)):
     """Register a new user."""
+    password_hash = hash_password(user_data.password)  # slow on purpose: keep it outside the transaction
     existing_user = db.query(User).filter(
         (User.username == user_data.username) | (User.email == user_data.email)
     ).first()
@@ -40,7 +41,7 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
         username=user_data.username,
         email=user_data.email,
         full_name=user_data.full_name,
-        password_hash=hash_password(user_data.password),
+        password_hash=password_hash,
         role=user_data.role.value,
         student_class=user_data.student_class.strip(),
     )
@@ -53,17 +54,21 @@ async def register(user_data: UserCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/login", response_model=Token)
-async def login(credentials: UserLogin, db: Session = Depends(get_db)):
+def login(credentials: UserLogin, db: Session = Depends(get_db)):
     """Authenticate user and return JWT token."""
     username_or_email = credentials.username.strip()
     user = db.query(User).filter(
         (User.username == username_or_email) | (User.email == username_or_email)
     ).first()
 
+    if user:
+        db.expunge(user)  # keeps the loaded fields usable without reopening a transaction
+    db.rollback()  # password hashing is slow on purpose: do not hold the database during it
+
     if not user or not verify_password(credentials.password, user.password_hash):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Sai tai khoan/email hoac mat khau. Neu chua co tai khoan, hay dang ky truoc.",
+            detail="Sai tài khoản/email hoặc mật khẩu. Nếu chưa có tài khoản, hãy đăng ký trước.",
             headers={"WWW-Authenticate": "Bearer"},
         )
 
@@ -86,6 +91,6 @@ async def login(credentials: UserLogin, db: Session = Depends(get_db)):
 
 
 @router.get("/me", response_model=UserResponse)
-async def get_current_user(current_user: User = Depends(get_authenticated_user)):
+def get_current_user(current_user: User = Depends(get_authenticated_user)):
     """Get the authenticated user from the Bearer token."""
     return current_user

@@ -1,5 +1,8 @@
 import logging
 
+from contextlib import asynccontextmanager
+
+import anyio.to_thread
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,8 +26,15 @@ Base.metadata.create_all(bind=engine)
 run_startup_migrations(engine)
 seed_catalog_if_empty()
 
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    anyio.to_thread.current_default_thread_limiter().total_tokens = settings.worker_threads
+    yield
+
+
 # Initialize FastAPI app
 app = FastAPI(
+    lifespan=lifespan,
     title=settings.app_name,
     description="AI-powered educational platform",
     version=settings.version,

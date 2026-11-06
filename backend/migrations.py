@@ -10,14 +10,38 @@ def _add_column_if_missing(connection, inspector, table_name, column_name, ddl):
     connection.execute(text(f"ALTER TABLE {table_name} ADD COLUMN {ddl}"))
 
 
+def _scope_event_ids_to_user(connection, inspector):
+    """client_event_id is unique per user, so two accounts can never collide on one id."""
+    indexes = {index["name"]: index for index in inspector.get_indexes("learning_events")}
+    legacy = indexes.get("ix_learning_events_client_event_id")
+    if legacy and legacy.get("unique"):
+        connection.execute(text("DROP INDEX ix_learning_events_client_event_id"))
+        legacy = None
+    if not legacy:
+        connection.execute(
+            text(
+                "CREATE INDEX IF NOT EXISTS ix_learning_events_client_event_id "
+                "ON learning_events (client_event_id)"
+            )
+        )
+    constraints = {item["name"] for item in inspector.get_unique_constraints("learning_events")}
+    if "uq_learning_event_user_client" not in constraints:
+        connection.execute(
+            text(
+                "CREATE UNIQUE INDEX IF NOT EXISTS uq_learning_event_user_client "
+                "ON learning_events (user_id, client_event_id)"
+            )
+        )
+
+
 def run_startup_migrations(engine):
     """Small SQLite-friendly migrations for existing local installs.
 
     This project does not use Alembic yet. These additive migrations keep old
     local databases compatible after new LMS features add columns.
     """
-    inspector = inspect(engine)
     with engine.begin() as connection:
+        inspector = inspect(connection)
         _add_column_if_missing(
             connection,
             inspector,
@@ -61,12 +85,7 @@ def run_startup_migrations(engine):
             "occurred_at DATETIME",
         )
         if inspector.has_table("learning_events"):
-            connection.execute(
-                text(
-                    "CREATE UNIQUE INDEX IF NOT EXISTS ix_learning_events_client_event_id "
-                    "ON learning_events (client_event_id)"
-                )
-            )
+            _scope_event_ids_to_user(connection, inspector)
         _add_column_if_missing(
             connection,
             inspector,

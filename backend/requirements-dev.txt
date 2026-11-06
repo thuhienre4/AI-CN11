@@ -1,0 +1,4 @@
+-r requirements.txt
+aiohttp>=3.13,<4
+anyio>=4.11,<5
+coverage>=7.6,<8

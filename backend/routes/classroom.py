@@ -7,7 +7,7 @@ from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, s
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
-from auth import get_authenticated_user, require_teacher_user
+from auth import can_manage_content, can_view_student, get_authenticated_user, require_teacher_user
 from database import get_db
 from models import Assignment, AssignmentSubmission, ClassroomPost, User
 from schemas import (
@@ -42,13 +42,31 @@ def _assignment_response(assignment: Assignment) -> AssignmentResponse:
     )
 
 
+def _visible_status(requested: str | None, user: User) -> str | None:
+    """Only staff may browse unpublished posts and assignments."""
+    return requested if can_manage_content(user) else "published"
+
+
+def _submission_in_scope(db: Session, submission: AssignmentSubmission, viewer: User) -> bool:
+    student = db.query(User).filter(User.id == submission.student_user_id).first()
+    return student is not None and can_view_student(viewer, student)
+
+
+def _scoped_submission_or_404(db: Session, submission_id: int, viewer: User) -> AssignmentSubmission:
+    submission = db.query(AssignmentSubmission).filter(AssignmentSubmission.id == submission_id).first()
+    if not submission or not _submission_in_scope(db, submission, viewer):
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy bài nộp.")
+    return submission
+
+
 @router.get("/posts", response_model=list[ClassroomPostResponse])
 def list_posts(
     course_id: int | None = None,
     status_filter: str | None = "published",
     db: Session = Depends(get_db),
-    _current_user: User = Depends(get_authenticated_user),
+    current_user: User = Depends(get_authenticated_user),
 ):
+    status_filter = _visible_status(status_filter, current_user)
     query = db.query(ClassroomPost)
     if course_id is not None:
         query = query.filter(ClassroomPost.course_id == course_id)
@@ -77,8 +95,9 @@ def list_assignments(
     course_id: int | None = None,
     status_filter: str | None = "published",
     db: Session = Depends(get_db),
-    _current_user: User = Depends(get_authenticated_user),
+    current_user: User = Depends(get_authenticated_user),
 ):
+    status_filter = _visible_status(status_filter, current_user)
     query = db.query(Assignment)
     if course_id is not None:
         query = query.filter(Assignment.course_id == course_id)
@@ -107,17 +126,18 @@ def create_assignment(
 def list_submissions(
     assignment_id: int,
     db: Session = Depends(get_db),
-    _current_user: User = Depends(require_teacher_user),
+    current_user: User = Depends(require_teacher_user),
 ):
     assignment = db.query(Assignment).filter(Assignment.id == assignment_id).first()
     if not assignment:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy nhiệm vụ.")
-    return (
+    submissions = (
         db.query(AssignmentSubmission)
         .filter(AssignmentSubmission.assignment_id == assignment_id)
         .order_by(AssignmentSubmission.submitted_at.desc())
         .all()
     )
+    return [item for item in submissions if _submission_in_scope(db, item, current_user)]
 
 
 @router.post(
@@ -125,10 +145,9 @@ def list_submissions(
     response_model=AssignmentSubmissionResponse,
     status_code=status.HTTP_201_CREATED,
 )
-async def submit_assignment(
+def submit_assignment(
     assignment_id: int,
     student_name: str = Form("Học sinh"),
-    student_user_id: int | None = Form(None),
     content: str = Form(""),
     file: UploadFile | None = File(None),
     db: Session = Depends(get_db),
@@ -143,6 +162,7 @@ async def submit_assignment(
     file_type = ""
     file_size = 0
     file_checksum = None
+    db.rollback()  # an upload can take minutes: do not hold the database during it
 
     if file and file.filename:
         SUBMISSION_DIR.mkdir(parents=True, exist_ok=True)
@@ -157,7 +177,7 @@ async def submit_assignment(
         try:
             with destination.open("wb") as output:
                 while True:
-                    chunk = await file.read(1024 * 1024)
+                    chunk = file.file.read(1024 * 1024)
                     if not chunk:
                         break
                     file_size += len(chunk)
@@ -171,12 +191,12 @@ async def submit_assignment(
                     checksum.update(chunk)
                     output.write(chunk)
         finally:
-            await file.close()
+            file.file.close()
         file_checksum = checksum.hexdigest()
 
     submission = AssignmentSubmission(
         assignment_id=assignment_id,
-        student_user_id=student_user_id or current_user.id,
+        student_user_id=current_user.id,
         student_name=student_name.strip() or "Học sinh",
         content=content.strip(),
         file_name=file_name,
@@ -199,9 +219,7 @@ def grade_submission(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_teacher_user),
 ):
-    submission = db.query(AssignmentSubmission).filter(AssignmentSubmission.id == submission_id).first()
-    if not submission:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy bài nộp.")
+    submission = _scoped_submission_or_404(db, submission_id, current_user)
 
     submission.score = payload.score
     submission.feedback = payload.feedback.strip()
@@ -216,11 +234,9 @@ def grade_submission(
 def download_submission(
     submission_id: int,
     db: Session = Depends(get_db),
-    _current_user: User = Depends(require_teacher_user),
+    current_user: User = Depends(require_teacher_user),
 ):
-    submission = db.query(AssignmentSubmission).filter(AssignmentSubmission.id == submission_id).first()
-    if not submission:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy bài nộp.")
+    submission = _scoped_submission_or_404(db, submission_id, current_user)
     if not submission.stored_file_name:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Bài nộp không có file đính kèm.")
 

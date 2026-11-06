@@ -1,5 +1,9 @@
 import logging
+from functools import partial
+from types import SimpleNamespace
 from typing import Iterable
+
+import anyio.from_thread
 
 import httpx
 
@@ -26,6 +30,18 @@ Quy tắc:
 - Nếu câu hỏi ngoài môn học, nhẹ nhàng hướng học sinh quay lại nội dung Công nghệ.
 - Câu trả lời mặc định ngắn gọn, có thể dùng gạch đầu dòng; kết thúc bằng một câu hỏi kiểm tra hiểu bài khi phù hợp.
 """
+
+
+def detached_copy(item, *fields):
+    """Plain copy of ORM data, so the database connection can be released during a slow provider call."""
+    if item is None:
+        return None
+    return SimpleNamespace(**{field: getattr(item, field, None) for field in fields})
+
+
+LESSON_CONTEXT_FIELDS = ("id", "title", "description", "content")
+USER_CONTEXT_FIELDS = ("id", "role", "student_class")
+PROGRESS_CONTEXT_FIELDS = ("progress_percent", "best_quiz_score", "quiz_attempt_count")
 
 
 def _lesson_context(lesson, user, progress) -> str:
@@ -88,6 +104,11 @@ def _extract_text(data: dict) -> str:
     if not text:
         raise AITutorError("Gemini returned an empty answer")
     return text
+
+
+def generate_reply_from_thread(generate, message: str, **kwargs) -> str:
+    """Run the async provider call from a synchronous handler in the worker pool."""
+    return anyio.from_thread.run(partial(generate, message, **kwargs))
 
 
 async def generate_ai_tutor_reply(

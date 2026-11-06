@@ -12,7 +12,7 @@ router = APIRouter(prefix="/api", tags=["Lessons & Courses"])
 
 # ============= Course Endpoints =============
 @router.post("/courses", response_model=CourseResponse, status_code=status.HTTP_201_CREATED)
-async def create_course(
+def create_course(
     course_data: CourseCreate,
     db: Session = Depends(get_db),
     _current_user=Depends(require_teacher_user),
@@ -31,14 +31,14 @@ async def create_course(
 
 
 @router.get("/courses", response_model=List[CourseResponse])
-async def list_courses(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def list_courses(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
     """List all courses with pagination."""
     courses = db.query(Course).offset(skip).limit(limit).all()
     return courses
 
 
 @router.get("/courses/{course_id}", response_model=CourseResponse)
-async def get_course(course_id: int, db: Session = Depends(get_db)):
+def get_course(course_id: int, db: Session = Depends(get_db)):
     """Get a course by ID."""
     course = db.query(Course).filter(Course.id == course_id).first()
     if not course:
@@ -50,7 +50,7 @@ async def get_course(course_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/courses/{course_id}", response_model=CourseResponse)
-async def update_course(
+def update_course(
     course_id: int,
     course_data: CourseCreate,
     db: Session = Depends(get_db),
@@ -73,7 +73,7 @@ async def update_course(
 
 
 @router.delete("/courses/{course_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_course(
+def delete_course(
     course_id: int,
     db: Session = Depends(get_db),
     _current_user=Depends(require_teacher_user),
@@ -91,7 +91,7 @@ async def delete_course(
 
 # ============= Lesson Endpoints =============
 @router.post("/lessons", response_model=LessonResponse, status_code=status.HTTP_201_CREATED)
-async def create_lesson(
+def create_lesson(
     lesson_data: LessonCreate,
     db: Session = Depends(get_db),
     _current_user=Depends(require_teacher_user),
@@ -120,7 +120,7 @@ async def create_lesson(
 
 
 @router.get("/courses/{course_id}/lessons", response_model=List[LessonResponse])
-async def list_lessons(course_id: int, db: Session = Depends(get_db)):
+def list_lessons(course_id: int, db: Session = Depends(get_db)):
     """List all lessons for a course."""
     course = db.query(Course).filter(Course.id == course_id).first()
     if not course:
@@ -134,7 +134,7 @@ async def list_lessons(course_id: int, db: Session = Depends(get_db)):
 
 
 @router.get("/lessons/{lesson_id}", response_model=LessonResponse)
-async def get_lesson(lesson_id: int, db: Session = Depends(get_db)):
+def get_lesson(lesson_id: int, db: Session = Depends(get_db)):
     """Get a lesson by ID."""
     lesson = db.query(Lesson).filter(Lesson.id == lesson_id).first()
     if not lesson:
@@ -146,7 +146,7 @@ async def get_lesson(lesson_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/lessons/{lesson_id}", response_model=LessonResponse)
-async def update_lesson(
+def update_lesson(
     lesson_id: int,
     lesson_data: LessonCreate,
     db: Session = Depends(get_db),
@@ -170,7 +170,7 @@ async def update_lesson(
 
 
 @router.delete("/lessons/{lesson_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_lesson(
+def delete_lesson(
     lesson_id: int,
     db: Session = Depends(get_db),
     _current_user=Depends(require_teacher_user),

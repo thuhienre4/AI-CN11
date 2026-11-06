@@ -1,3 +1,5 @@
+from random import Random
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
@@ -10,8 +12,16 @@ from auth import get_authenticated_user, require_teacher_user
 router = APIRouter(prefix="/api", tags=["Questions"])
 
 
+def shuffled_for_learner(question: Question, user_id: int) -> QuizQuestionResponse:
+    response = QuizQuestionResponse.model_validate(question)
+    Random(f"{user_id}:{question.id}").shuffle(response.options)
+    for position, option in enumerate(response.options, start=1):
+        option.order = position
+    return response
+
+
 @router.post("/questions", response_model=QuestionResponse, status_code=status.HTTP_201_CREATED)
-async def create_question(
+def create_question(
     question_data: QuestionCreate,
     db: Session = Depends(get_db),
     _current_user=Depends(require_teacher_user),
@@ -52,12 +62,12 @@ async def create_question(
 
 
 @router.get("/lessons/{lesson_id}/questions", response_model=List[QuizQuestionResponse])
-async def list_questions(
+def list_questions(
     lesson_id: int,
     db: Session = Depends(get_db),
-    _current_user=Depends(get_authenticated_user),
+    current_user=Depends(get_authenticated_user),
 ):
-    """List all questions for a lesson."""
+    """List a lesson's questions; each learner sees a stable, personal option order."""
     lesson = db.query(Lesson).filter(Lesson.id == lesson_id).first()
     if not lesson:
         raise HTTPException(
@@ -66,11 +76,11 @@ async def list_questions(
         )
 
     questions = db.query(Question).filter(Question.lesson_id == lesson_id).all()
-    return questions
+    return [shuffled_for_learner(question, current_user.id) for question in questions]
 
 
 @router.get("/questions/{question_id}", response_model=QuestionResponse)
-async def get_question(
+def get_question(
     question_id: int,
     db: Session = Depends(get_db),
     _current_user=Depends(require_teacher_user),
@@ -86,7 +96,7 @@ async def get_question(
 
 
 @router.put("/questions/{question_id}", response_model=QuestionResponse)
-async def update_question(
+def update_question(
     question_id: int,
     question_data: QuestionCreate,
     db: Session = Depends(get_db),
@@ -126,7 +136,7 @@ async def update_question(
 
 
 @router.delete("/questions/{question_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_question(
+def delete_question(
     question_id: int,
     db: Session = Depends(get_db),
     _current_user=Depends(require_teacher_user),

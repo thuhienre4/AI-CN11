@@ -805,19 +805,19 @@
       "options": [
         {
           "id": 10001011,
-          "text": "Công nghệ không chỉ là máy móc mà còn gồm tri thức, quy trình, kĩ năng và cách tổ chức để tạo ra sản phẩm hoặc dịch vụ.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Công nghệ không chỉ là máy móc mà còn gồm tri thức, quy trình, kĩ năng và cách tổ chức để tạo ra sản phẩm hoặc dịch vụ.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10001013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -833,20 +833,20 @@
       "options": [
         {
           "id": 10001014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10001016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -861,20 +861,20 @@
       "options": [
         {
           "id": 10001021,
-          "text": "Hệ thống kĩ thuật gồm các phần tử liên kết với nhau để tạo ra chức năng chung, không nên xem từng bộ phận một cách rời rạc.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10001023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Hệ thống kĩ thuật gồm các phần tử liên kết với nhau để tạo ra chức năng chung, không nên xem từng bộ phận một cách rời rạc.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -945,19 +945,19 @@
       "options": [
         {
           "id": 10001034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10001036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -973,19 +973,19 @@
       "options": [
         {
           "id": 10001041,
-          "text": "AI, IoT, robot và dữ liệu lớn giúp thiết bị, quy trình sản xuất và dịch vụ trở nên thông minh hơn.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001042,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "AI, IoT, robot và dữ liệu lớn giúp thiết bị, quy trình sản xuất và dịch vụ trở nên thông minh hơn.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10001043,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -1001,20 +1001,20 @@
       "options": [
         {
           "id": 10001044,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001045,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10001046,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1029,20 +1029,20 @@
       "options": [
         {
           "id": 10001051,
-          "text": "Đánh giá công nghệ giúp lựa chọn giải pháp phù hợp, hiệu quả và an toàn, không nhất thiết là giải pháp đắt hoặc mới nhất.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001052,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10001053,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Đánh giá công nghệ giúp lựa chọn giải pháp phù hợp, hiệu quả và an toàn, không nhất thiết là giải pháp đắt hoặc mới nhất.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1113,19 +1113,19 @@
       "options": [
         {
           "id": 10001064,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001065,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10001066,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -1141,19 +1141,19 @@
       "options": [
         {
           "id": 10001071,
-          "text": "Nghề kĩ thuật, công nghệ gắn với giải quyết vấn đề thực tiễn bằng tri thức, quy trình, công cụ và tiêu chuẩn an toàn.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001072,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Nghề kĩ thuật, công nghệ gắn với giải quyết vấn đề thực tiễn bằng tri thức, quy trình, công cụ và tiêu chuẩn an toàn.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10001073,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -1169,20 +1169,20 @@
       "options": [
         {
           "id": 10001074,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10001075,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10001076,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1197,20 +1197,20 @@
       "options": [
         {
           "id": 10002011,
-          "text": "Bản vẽ kĩ thuật là phương tiện giao tiếp quan trọng giữa người thiết kế, người chế tạo, người thi công và người kiểm tra.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10002013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Bản vẽ kĩ thuật là phương tiện giao tiếp quan trọng giữa người thiết kế, người chế tạo, người thi công và người kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1281,19 +1281,19 @@
       "options": [
         {
           "id": 10002024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10002026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -1309,19 +1309,19 @@
       "options": [
         {
           "id": 10002031,
-          "text": "Hình cắt giúp biểu diễn rõ cấu tạo bên trong mà hình chiếu bình thường khó thể hiện.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Hình cắt giúp biểu diễn rõ cấu tạo bên trong mà hình chiếu bình thường khó thể hiện.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10002033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -1337,20 +1337,20 @@
       "options": [
         {
           "id": 10002034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10002036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1365,20 +1365,20 @@
       "options": [
         {
           "id": 10002041,
-          "text": "Hình chiếu trục đo giúp hình dung nhanh dạng 3D của vật thể trên mặt phẳng bản vẽ.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002042,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10002043,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Hình chiếu trục đo giúp hình dung nhanh dạng 3D của vật thể trên mặt phẳng bản vẽ.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1449,19 +1449,19 @@
       "options": [
         {
           "id": 10002054,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002055,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10002056,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -1477,19 +1477,19 @@
       "options": [
         {
           "id": 10002061,
-          "text": "Ren được dùng để lắp ghép tháo được, điều chỉnh vị trí, kẹp chặt hoặc truyền chuyển động.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002062,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Ren được dùng để lắp ghép tháo được, điều chỉnh vị trí, kẹp chặt hoặc truyền chuyển động.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10002063,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -1505,20 +1505,20 @@
       "options": [
         {
           "id": 10002064,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002065,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10002066,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1533,20 +1533,20 @@
       "options": [
         {
           "id": 10002071,
-          "text": "Bản vẽ chi tiết cung cấp thông tin để chế tạo và kiểm tra một chi tiết riêng lẻ.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002072,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10002073,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Bản vẽ chi tiết cung cấp thông tin để chế tạo và kiểm tra một chi tiết riêng lẻ.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1617,19 +1617,19 @@
       "options": [
         {
           "id": 10002084,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002085,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10002086,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -1645,19 +1645,19 @@
       "options": [
         {
           "id": 10002091,
-          "text": "CAD giúp tăng tốc độ vẽ, sửa, sao chép, quản lí lớp, ghi kích thước và chia sẻ bản vẽ.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002092,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "CAD giúp tăng tốc độ vẽ, sửa, sao chép, quản lí lớp, ghi kích thước và chia sẻ bản vẽ.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10002093,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -1673,20 +1673,20 @@
       "options": [
         {
           "id": 10002094,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10002095,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10002096,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1729,19 +1729,19 @@
       "options": [
         {
           "id": 10003014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10003015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10003016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -1757,19 +1757,19 @@
       "options": [
         {
           "id": 10003021,
-          "text": "Quy trình thiết kế bắt đầu từ xác định đúng vấn đề và yêu cầu, không bắt đầu ngay bằng việc làm sản phẩm.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10003022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Quy trình thiết kế bắt đầu từ xác định đúng vấn đề và yêu cầu, không bắt đầu ngay bằng việc làm sản phẩm.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10003023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -1785,20 +1785,20 @@
       "options": [
         {
           "id": 10003024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10003025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10003026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1813,20 +1813,20 @@
       "options": [
         {
           "id": 10003031,
-          "text": "Nhu cầu người dùng và điều kiện sử dụng quyết định sản phẩm cần giải quyết vấn đề gì và hoạt động trong bối cảnh nào.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10003032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10003033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Nhu cầu người dùng và điều kiện sử dụng quyết định sản phẩm cần giải quyết vấn đề gì và hoạt động trong bối cảnh nào.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1897,19 +1897,19 @@
       "options": [
         {
           "id": 10003044,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10003045,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10003046,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -1925,19 +1925,19 @@
       "options": [
         {
           "id": 10003051,
-          "text": "Phác thảo và sơ đồ giúp biểu đạt nhanh ý tưởng ở giai đoạn đầu, khi phương án còn cần thay đổi.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10003052,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Phác thảo và sơ đồ giúp biểu đạt nhanh ý tưởng ở giai đoạn đầu, khi phương án còn cần thay đổi.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 10003053,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -1953,20 +1953,20 @@
       "options": [
         {
           "id": 10003054,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10003055,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10003056,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -1981,20 +1981,20 @@
       "options": [
         {
           "id": 10003061,
-          "text": "Vấn đề, người dùng, yêu cầu và tiêu chí đánh giá phải được xác định rõ trước khi tạo sản phẩm.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 10003062,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 10003063,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Vấn đề, người dùng, yêu cầu và tiêu chí đánh giá phải được xác định rõ trước khi tạo sản phẩm.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2037,20 +2037,20 @@
       "options": [
         {
           "id": 11001011,
-          "text": "Cơ khí chế tạo tạo ra chi tiết, máy, thiết bị phục vụ sản xuất và đời sống.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11001012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11001013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Cơ khí chế tạo tạo ra chi tiết, máy, thiết bị phục vụ sản xuất và đời sống.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2121,19 +2121,19 @@
       "options": [
         {
           "id": 11001024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11001025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11001026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -2177,19 +2177,19 @@
       "options": [
         {
           "id": 11002014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11002015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11002016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -2205,19 +2205,19 @@
       "options": [
         {
           "id": 11002021,
-          "text": "Kim loại và hợp kim có độ bền, độ dẻo, độ cứng, khả năng dẫn nhiệt, dẫn điện và khả năng gia công khác nhau.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11002022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Kim loại và hợp kim có độ bền, độ dẻo, độ cứng, khả năng dẫn nhiệt, dẫn điện và khả năng gia công khác nhau.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11002023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -2233,20 +2233,20 @@
       "options": [
         {
           "id": 11002024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11002025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11002026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2261,20 +2261,20 @@
       "options": [
         {
           "id": 11002031,
-          "text": "Vật liệu phi kim loại có ưu điểm về khối lượng, cách điện, chống ăn mòn hoặc giảm ma sát.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11002032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11002033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Vật liệu phi kim loại có ưu điểm về khối lượng, cách điện, chống ăn mòn hoặc giảm ma sát.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2345,19 +2345,19 @@
       "options": [
         {
           "id": 11002044,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11002045,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11002046,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -2373,19 +2373,19 @@
       "options": [
         {
           "id": 11003011,
-          "text": "Gia công cơ khí làm thay đổi hình dạng, kích thước, bề mặt hoặc tính chất của phôi.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11003012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Gia công cơ khí làm thay đổi hình dạng, kích thước, bề mặt hoặc tính chất của phôi.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11003013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -2401,20 +2401,20 @@
       "options": [
         {
           "id": 11003014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11003015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11003016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2429,20 +2429,20 @@
       "options": [
         {
           "id": 11003021,
-          "text": "Mỗi phương pháp gia công có nguyên lí, dụng cụ, thiết bị và phạm vi ứng dụng riêng.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11003022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11003023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Mỗi phương pháp gia công có nguyên lí, dụng cụ, thiết bị và phạm vi ứng dụng riêng.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2513,19 +2513,19 @@
       "options": [
         {
           "id": 11003034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11003035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11003036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -2541,19 +2541,19 @@
       "options": [
         {
           "id": 11003041,
-          "text": "Dự án gia công cần bắt đầu từ yêu cầu sản phẩm, bản vẽ phác thảo, vật liệu và phương án công nghệ.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11003042,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Dự án gia công cần bắt đầu từ yêu cầu sản phẩm, bản vẽ phác thảo, vật liệu và phương án công nghệ.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11003043,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -2569,20 +2569,20 @@
       "options": [
         {
           "id": 11003044,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11003045,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11003046,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2597,20 +2597,20 @@
       "options": [
         {
           "id": 11004011,
-          "text": "Sản xuất cơ khí gồm chuẩn bị kĩ thuật, chuẩn bị vật tư, gia công, lắp ráp, kiểm tra và hoàn thiện.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11004012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11004013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Sản xuất cơ khí gồm chuẩn bị kĩ thuật, chuẩn bị vật tư, gia công, lắp ráp, kiểm tra và hoàn thiện.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2681,19 +2681,19 @@
       "options": [
         {
           "id": 11004024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11004025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11004026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -2709,19 +2709,19 @@
       "options": [
         {
           "id": 11004031,
-          "text": "Tự động hóa 4.0 gắn với cảm biến, kết nối dữ liệu, giám sát thời gian thực và tối ưu bằng phần mềm.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11004032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Tự động hóa 4.0 gắn với cảm biến, kết nối dữ liệu, giám sát thời gian thực và tối ưu bằng phần mềm.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11004033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -2737,20 +2737,20 @@
       "options": [
         {
           "id": 11004034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11004035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11004036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2765,20 +2765,20 @@
       "options": [
         {
           "id": 11004041,
-          "text": "Nguy cơ cơ khí gồm va chạm, kẹp cuốn, mảnh văng, tiếng ồn, bụi, nhiệt và hóa chất.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11004042,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11004043,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Nguy cơ cơ khí gồm va chạm, kẹp cuốn, mảnh văng, tiếng ồn, bụi, nhiệt và hóa chất.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2849,19 +2849,19 @@
       "options": [
         {
           "id": 11005014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11005015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11005016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -2877,19 +2877,19 @@
       "options": [
         {
           "id": 11005021,
-          "text": "Nghề cơ khí động lực gồm thiết kế, lắp ráp, vận hành, chẩn đoán, sửa chữa và kiểm định.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11005022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Nghề cơ khí động lực gồm thiết kế, lắp ráp, vận hành, chẩn đoán, sửa chữa và kiểm định.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11005023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -2905,20 +2905,20 @@
       "options": [
         {
           "id": 11005024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11005025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11005026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2933,19 +2933,19 @@
       "options": [
         {
           "id": 11006011,
-          "text": "Động cơ đốt trong biến đổi nhiệt năng của nhiên liệu cháy trong xi lanh thành cơ năng.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11006012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Động cơ đốt trong biến đổi nhiệt năng của nhiên liệu cháy trong xi lanh thành cơ năng.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11006013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -2961,20 +2961,20 @@
       "options": [
         {
           "id": 11006014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11006015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11006016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -2989,20 +2989,20 @@
       "options": [
         {
           "id": 11006021,
-          "text": "Động cơ bốn kì gồm nạp, nén, cháy - giãn nở và thải.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11006022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11006023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Động cơ bốn kì gồm nạp, nén, cháy - giãn nở và thải.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3073,19 +3073,19 @@
       "options": [
         {
           "id": 11006034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11006035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11006036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -3101,19 +3101,19 @@
       "options": [
         {
           "id": 11006041,
-          "text": "Các hệ thống phụ trợ bảo đảm động cơ có nhiên liệu, nhiệt độ, ma sát và điều kiện khởi động phù hợp.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11006042,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Các hệ thống phụ trợ bảo đảm động cơ có nhiên liệu, nhiệt độ, ma sát và điều kiện khởi động phù hợp.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11006043,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -3129,20 +3129,20 @@
       "options": [
         {
           "id": 11006044,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11006045,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11006046,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3157,20 +3157,20 @@
       "options": [
         {
           "id": 11007011,
-          "text": "Ô tô gồm nguồn động lực, hệ truyền lực, hệ thống treo, lái, phanh, thân vỏ và hệ thống điện - điện tử.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11007012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11007013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Ô tô gồm nguồn động lực, hệ truyền lực, hệ thống treo, lái, phanh, thân vỏ và hệ thống điện - điện tử.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3241,19 +3241,19 @@
       "options": [
         {
           "id": 11007024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11007025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11007026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -3269,19 +3269,19 @@
       "options": [
         {
           "id": 11007031,
-          "text": "Bánh xe tiếp xúc mặt đường, truyền lực kéo, lực phanh và lực lái.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11007032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Bánh xe tiếp xúc mặt đường, truyền lực kéo, lực phanh và lực lái.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11007033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -3297,20 +3297,20 @@
       "options": [
         {
           "id": 11007034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11007035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11007036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3325,20 +3325,20 @@
       "options": [
         {
           "id": 11007041,
-          "text": "Hệ thống lái thay đổi hướng chuyển động của ô tô theo điều khiển của người lái hoặc bộ điều khiển.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11007042,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 11007043,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Hệ thống lái thay đổi hướng chuyển động của ô tô theo điều khiển của người lái hoặc bộ điều khiển.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3409,19 +3409,19 @@
       "options": [
         {
           "id": 11007054,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 11007055,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 11007056,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -3465,19 +3465,19 @@
       "options": [
         {
           "id": 12001014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12001015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12001016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -3493,19 +3493,19 @@
       "options": [
         {
           "id": 12001021,
-          "text": "Ngành nghề kĩ thuật điện gồm thiết kế, lắp đặt, vận hành, bảo trì hệ thống điện và thiết bị điện.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12001022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Ngành nghề kĩ thuật điện gồm thiết kế, lắp đặt, vận hành, bảo trì hệ thống điện và thiết bị điện.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12001023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -3521,20 +3521,20 @@
       "options": [
         {
           "id": 12001024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12001025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12001026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3549,19 +3549,19 @@
       "options": [
         {
           "id": 12002011,
-          "text": "Mạch điện ba pha dùng phổ biến trong sản xuất và truyền tải điện năng.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12002012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Mạch điện ba pha dùng phổ biến trong sản xuất và truyền tải điện năng.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12002013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -3577,20 +3577,20 @@
       "options": [
         {
           "id": 12002014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12002015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12002016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3605,20 +3605,20 @@
       "options": [
         {
           "id": 12002021,
-          "text": "Hệ thống điện quốc gia gồm nguồn điện, lưới truyền tải, lưới phân phối, phụ tải và điều khiển bảo vệ.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12002022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12002023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Hệ thống điện quốc gia gồm nguồn điện, lưới truyền tải, lưới phân phối, phụ tải và điều khiển bảo vệ.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3689,19 +3689,19 @@
       "options": [
         {
           "id": 12002034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12002035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12002036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -3717,19 +3717,19 @@
       "options": [
         {
           "id": 12002041,
-          "text": "Mạng điện sản xuất quy mô nhỏ cần cấp điện đủ công suất, tin cậy và thuận tiện vận hành.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12002042,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Mạng điện sản xuất quy mô nhỏ cần cấp điện đủ công suất, tin cậy và thuận tiện vận hành.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12002043,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -3745,20 +3745,20 @@
       "options": [
         {
           "id": 12002044,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12002045,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12002046,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3773,20 +3773,20 @@
       "options": [
         {
           "id": 12002051,
-          "text": "Mạng điện hạ áp cấp điện trực tiếp cho hộ gia đình và phụ tải sinh hoạt.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12002052,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12002053,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Mạng điện hạ áp cấp điện trực tiếp cho hộ gia đình và phụ tải sinh hoạt.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3829,20 +3829,20 @@
       "options": [
         {
           "id": 12003011,
-          "text": "Hệ thống điện gia đình gồm nguồn cấp, thiết bị bảo vệ, dây dẫn, thiết bị điều khiển và đồ dùng điện.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12003012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12003013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Hệ thống điện gia đình gồm nguồn cấp, thiết bị bảo vệ, dây dẫn, thiết bị điều khiển và đồ dùng điện.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -3913,19 +3913,19 @@
       "options": [
         {
           "id": 12003024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12003025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12003026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -3941,19 +3941,19 @@
       "options": [
         {
           "id": 12003031,
-          "text": "Thiết kế mạch cần xác định yêu cầu, chọn thiết bị, vẽ sơ đồ nguyên lí và sơ đồ lắp đặt.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12003032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Thiết kế mạch cần xác định yêu cầu, chọn thiết bị, vẽ sơ đồ nguyên lí và sơ đồ lắp đặt.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12003033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -3969,20 +3969,20 @@
       "options": [
         {
           "id": 12003034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12003035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12003036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4025,19 +4025,19 @@
       "options": [
         {
           "id": 12004014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12004015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12004016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -4053,19 +4053,19 @@
       "options": [
         {
           "id": 12004021,
-          "text": "Tiết kiệm điện giúp giảm chi phí, giảm tải hệ thống và bảo vệ môi trường.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12004022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Tiết kiệm điện giúp giảm chi phí, giảm tải hệ thống và bảo vệ môi trường.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12004023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -4081,20 +4081,20 @@
       "options": [
         {
           "id": 12004024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12004025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12004026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4109,19 +4109,19 @@
       "options": [
         {
           "id": 12005011,
-          "text": "Kĩ thuật điện tử làm việc chủ yếu với tín hiệu và mạch điều khiển.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12005012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Kĩ thuật điện tử làm việc chủ yếu với tín hiệu và mạch điều khiển.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12005013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -4137,20 +4137,20 @@
       "options": [
         {
           "id": 12005014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12005015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12005016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4165,20 +4165,20 @@
       "options": [
         {
           "id": 12005021,
-          "text": "Lĩnh vực điện tử cần nhân lực thiết kế mạch, lập trình nhúng, lắp ráp, đo kiểm, bảo trì và hỗ trợ kĩ thuật.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12005022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12005023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Lĩnh vực điện tử cần nhân lực thiết kế mạch, lập trình nhúng, lắp ráp, đo kiểm, bảo trì và hỗ trợ kĩ thuật.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4221,20 +4221,20 @@
       "options": [
         {
           "id": 12006011,
-          "text": "Điện trở hạn chế dòng điện, phân áp hoặc tạo tải trong mạch.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12006012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12006013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Điện trở hạn chế dòng điện, phân áp hoặc tạo tải trong mạch.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4305,19 +4305,19 @@
       "options": [
         {
           "id": 12006024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12006025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12006026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -4333,19 +4333,19 @@
       "options": [
         {
           "id": 12006031,
-          "text": "Thực hành cần đọc sơ đồ, nhận dạng linh kiện, lắp đúng cực tính và kiểm tra nguồn.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12006032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Thực hành cần đọc sơ đồ, nhận dạng linh kiện, lắp đúng cực tính và kiểm tra nguồn.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12006033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -4361,20 +4361,20 @@
       "options": [
         {
           "id": 12006034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12006035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12006036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4417,19 +4417,19 @@
       "options": [
         {
           "id": 12007014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12007015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12007016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -4445,19 +4445,19 @@
       "options": [
         {
           "id": 12007021,
-          "text": "Khuếch đại thuật toán là linh kiện tích hợp dùng để khuếch đại và xử lí tín hiệu tương tự.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12007022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Khuếch đại thuật toán là linh kiện tích hợp dùng để khuếch đại và xử lí tín hiệu tương tự.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12007023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -4473,20 +4473,20 @@
       "options": [
         {
           "id": 12007024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12007025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12007026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4501,20 +4501,20 @@
       "options": [
         {
           "id": 12007031,
-          "text": "Mạch khuếch đại đảo cho tín hiệu ra ngược pha với tín hiệu vào.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12007032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12007033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Mạch khuếch đại đảo cho tín hiệu ra ngược pha với tín hiệu vào.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4557,19 +4557,19 @@
       "options": [
         {
           "id": 12008011,
-          "text": "Tín hiệu số thường biểu diễn bằng hai mức logic 0 và 1.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12008012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Tín hiệu số thường biểu diễn bằng hai mức logic 0 và 1.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12008013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -4585,20 +4585,20 @@
       "options": [
         {
           "id": 12008014,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12008015,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12008016,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4613,20 +4613,20 @@
       "options": [
         {
           "id": 12008021,
-          "text": "Mạch tổ hợp có đầu ra phụ thuộc vào trạng thái đầu vào hiện tại.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12008022,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12008023,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Mạch tổ hợp có đầu ra phụ thuộc vào trạng thái đầu vào hiện tại.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4697,19 +4697,19 @@
       "options": [
         {
           "id": 12008034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12008035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12008036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -4725,20 +4725,20 @@
       "options": [
         {
           "id": 12009011,
-          "text": "Vi điều khiển là bộ điều khiển nhỏ gọn có thể lập trình để xử lí tín hiệu và điều khiển thiết bị.",
-          "is_correct": true,
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12009012,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12009013,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
-          "is_correct": false,
+          "text": "Vi điều khiển là bộ điều khiển nhỏ gọn có thể lập trình để xử lí tín hiệu và điều khiển thiết bị.",
+          "is_correct": true,
           "order": 3
         }
       ]
@@ -4809,19 +4809,19 @@
       "options": [
         {
           "id": 12009024,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12009025,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12009026,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
           "is_correct": false,
           "order": 3
         }
@@ -4837,19 +4837,19 @@
       "options": [
         {
           "id": 12009031,
-          "text": "Dự án cần xác định yêu cầu, cảm biến ánh sáng, thuật toán điều khiển và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12009032,
-          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
-          "is_correct": false,
+          "text": "Dự án cần xác định yêu cầu, cảm biến ánh sáng, thuật toán điều khiển và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 2
         },
         {
           "id": 12009033,
-          "text": "Có thể bỏ qua yêu cầu an toàn nếu câu trả lời có đủ thuật ngữ.",
+          "text": "Chỉ cần ghi nhớ tên bài, không cần giải thích hoặc vận dụng.",
           "is_correct": false,
           "order": 3
         }
@@ -4865,20 +4865,20 @@
       "options": [
         {
           "id": 12009034,
-          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
-          "is_correct": true,
+          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 12009035,
-          "text": "Một đoạn chép lại rời rạc, không có quan hệ giữa các ý.",
+          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 12009036,
-          "text": "Hình trang trí không thể hiện chức năng, dòng năng lượng hoặc quy trình.",
-          "is_correct": false,
+          "text": "Sơ đồ hoặc quy trình có thuật ngữ đúng, ví dụ thực tế và tiêu chí kiểm tra.",
+          "is_correct": true,
           "order": 3
         }
       ]

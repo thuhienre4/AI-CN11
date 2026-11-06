@@ -7,6 +7,12 @@ import { getSampleLesson } from '../data/courseCatalog'
 import { getSimulationExperimentForLesson } from '../data/simulationExperiments'
 import { useAuthStore } from '../store'
 import { recordLocalLearningEvent } from '../utils/learningProgress'
+import {
+  FOUR_STROKE_CYCLE_RADIANS,
+  FOUR_STROKE_SIMPLIFICATION_NOTE,
+  crankSliderPosition,
+  fourStrokeState,
+} from '../utils/fourStrokeCycle'
 
 const chapterSimulations = {
   1: {
@@ -1760,9 +1766,10 @@ export default function ThreeDSimulation() {
       if (isPlaying) angle += 0.025 * speed
       root.rotation.y = simulation.modelId === 8 ? 0 : Math.sin(angle * 0.25) * 0.18
 
-      const cycleDuration = isFourStrokeMode ? Math.PI * 4 : Math.PI * 2
+      const cycleDuration = isFourStrokeMode ? FOUR_STROKE_CYCLE_RADIANS : Math.PI * 2
       const cyclePhase = ((angle % cycleDuration) + cycleDuration) % cycleDuration
       const cycleProgress = cyclePhase / cycleDuration
+      const engineState = fourStrokeState(cyclePhase)
       const step = Math.floor(cycleProgress * displayedSimulation.layers.length)
       if (step !== lastStep) {
         lastStep = step
@@ -1793,33 +1800,26 @@ export default function ThreeDSimulation() {
           const crankRadius = (mesh.userData.tdcY - mesh.userData.bdcY) / 2
           const crankCenterY = -1.12
           const rodLength = (mesh.userData.tdcY + mesh.userData.bdcY) / 2 - crankCenterY
-          const crankAngle = Math.PI / 2 - cyclePhase
-          const crankPinX = crankRadius * Math.cos(crankAngle)
-          const crankPinY = crankCenterY + crankRadius * Math.sin(crankAngle)
-          mesh.position.y = crankPinY + Math.sqrt(Math.max(rodLength ** 2 - crankPinX ** 2, 0))
+          mesh.position.y = crankSliderPosition({ cyclePhase, crankRadius, crankCenterY, rodLength }).pistonPinY
         }
         if (type === 'dieselSingleRod') {
-          const crankAngle = Math.PI / 2 - cyclePhase
-          const crankPinX = mesh.userData.crankRadius * Math.cos(crankAngle)
-          const crankPinY = mesh.userData.crankCenterY + mesh.userData.crankRadius * Math.sin(crankAngle)
-          const pistonPinY = crankPinY + Math.sqrt(
-            Math.max(mesh.userData.length ** 2 - crankPinX ** 2, 0)
-          )
+          const { crankPinX, crankPinY, pistonPinY } = crankSliderPosition({
+            cyclePhase,
+            crankRadius: mesh.userData.crankRadius,
+            crankCenterY: mesh.userData.crankCenterY,
+            rodLength: mesh.userData.length,
+          })
           mesh.position.set(crankPinX / 2, (pistonPinY + crankPinY) / 2, 0)
           mesh.rotation.z = Math.atan2(crankPinX, pistonPinY - crankPinY)
         }
         if (type === 'dieselSingleCrank') mesh.rotation.z = Math.PI / 2 - cyclePhase
         if (type === 'dieselIntakeValve' || type === 'dieselExhaustValve') {
-          const open = type === 'dieselIntakeValve'
-            ? cycleProgress < 0.25
-            : cycleProgress >= 0.75
+          const open = type === 'dieselIntakeValve' ? engineState.intakeOpen : engineState.exhaustOpen
           mesh.position.y = open ? mesh.userData.openY : mesh.userData.closedY
           mesh.material.color.setHex(open ? (type === 'dieselIntakeValve' ? 0x0ea5e9 : 0xf97316) : 0x475569)
         }
         if (type === 'dieselIntakeFlow' || type === 'dieselExhaustFlow') {
-          const active = type === 'dieselIntakeFlow'
-            ? cycleProgress < 0.25
-            : cycleProgress >= 0.75
+          const active = type === 'dieselIntakeFlow' ? engineState.intakeOpen : engineState.exhaustOpen
           mesh.traverse((part) => {
             if (part.material) {
               part.material.opacity = active ? 0.9 : 0.12
@@ -1828,7 +1828,7 @@ export default function ThreeDSimulation() {
           })
         }
         if (type === 'dieselCombustion') {
-          const active = cycleProgress >= 0.5 && cycleProgress < 0.62
+          const active = engineState.combustionActive
           mesh.scale.setScalar(active ? 1.15 + Math.sin(angle * 8) * 0.18 : 0.35)
           mesh.material.opacity = active ? 0.85 : 0.08
           mesh.material.transparent = true
@@ -1952,6 +1952,9 @@ export default function ThreeDSimulation() {
           <p className="muted-label">Phòng mô phỏng Nova 3D</p>
           <h2 className="mt-2 text-2xl font-bold text-slate-950">{lesson?.title}</h2>
           <p className="mt-3 text-sm leading-6 text-slate-600">{displayedSimulation.objective}</p>
+          {isFourStrokeMode && (
+            <p className="mt-2 text-xs leading-5 text-slate-500">{FOUR_STROKE_SIMPLIFICATION_NOTE}</p>
+          )}
 
           <section className="mt-5 rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-cyan-950">
             <p className="text-xs font-black uppercase tracking-wide text-cyan-700">Thí nghiệm của bài này</p>

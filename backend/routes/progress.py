@@ -1,11 +1,19 @@
 from datetime import datetime
+from types import SimpleNamespace
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func
-from sqlalchemy.orm import Session
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session, joinedload
 
-from auth import can_manage_content, get_authenticated_user, require_teacher_user
+from auth import (
+    can_manage_content,
+    ensure_student_scope,
+    get_authenticated_user,
+    require_teacher_user,
+    teacher_class_names,
+)
 from database import get_db
 from models import LearningEvent, Lesson, LessonProgress, QuizResult, User
 from schemas import (
@@ -20,14 +28,30 @@ from realtime import learning_connections
 
 router = APIRouter(prefix="/api/learning", tags=["Personalized Learning"])
 
+# Provisional expert rules, not validated measures: they order signals for a teacher to review and
+# must not be read as a diagnosis. Calibrate them with real classroom data before relying on them.
+QUIZ_PASS_SCORE = 60
+QUIZ_COMPLETE_SCORE = 70
+NO_QUIZ_NEUTRAL_SCORE = 50
+MASTERY_WEIGHTS = {"progress": 0.45, "quiz": 0.40, "activity": 0.15}
+RISK_POINTS = {"quiz_below_pass": 45, "unfinished": 25, "no_simulation": 15, "inactive": 15}
+RISK_LEVEL_THRESHOLDS = {"medium": 40, "high": 70}
+UNFINISHED_BELOW_PERCENT = 70
+INACTIVE_AFTER_DAYS = 7
+SCORE_NOTE = (
+    "Điểm do quy tắc tạm thời tạo ra để giáo viên xem xét, chưa được hiệu chuẩn bằng dữ liệu thực; "
+    "không dùng để chẩn đoán năng lực hoặc kết luận nguy cơ."
+)
 
-def ensure_learning_data_access(target_user_id: int, current_user: User) -> None:
-    if current_user.id == target_user_id or can_manage_content(current_user):
-        return
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="You can only access your own learning data.",
-    )
+
+def ensure_learning_data_access(db: Session, target_user_id: int, current_user: User) -> None:
+    ensure_student_scope(db, target_user_id, current_user, "You can only access your own learning data.")
+
+
+def risk_level_for(score: int | float) -> str:
+    if score >= RISK_LEVEL_THRESHOLDS["high"]:
+        return "high"
+    return "medium" if score >= RISK_LEVEL_THRESHOLDS["medium"] else "low"
 
 
 def get_user_or_404(db: Session, user_id: int) -> User:
@@ -51,14 +75,15 @@ def get_lesson_or_404(db: Session, lesson_id: int) -> Lesson:
 
 
 def get_or_create_progress(db: Session, user_id: int, lesson_id: int) -> LessonProgress:
-    progress = (
+    query = (
         db.query(LessonProgress)
         .filter(
             LessonProgress.user_id == user_id,
             LessonProgress.lesson_id == lesson_id,
         )
-        .first()
+        .with_for_update()
     )
+    progress = query.first()
     if progress:
         return progress
 
@@ -68,8 +93,11 @@ def get_or_create_progress(db: Session, user_id: int, lesson_id: int) -> LessonP
         status="not_started",
         progress_percent=0,
     )
-    db.add(progress)
-    db.flush()
+    try:
+        with db.begin_nested():
+            db.add(progress)
+    except IntegrityError:  # another request created the row first
+        return query.one()
     return progress
 
 
@@ -77,7 +105,7 @@ def recompute_status(progress: LessonProgress) -> None:
     if progress.progress_percent >= 100:
         progress.status = "completed"
         progress.completed_at = progress.completed_at or datetime.utcnow()
-    elif progress.quiz_attempt_count > 0 and progress.best_quiz_score < 60:
+    elif progress.quiz_attempt_count > 0 and progress.best_quiz_score < QUIZ_PASS_SCORE:
         progress.status = "needs_review"
         progress.completed_at = None
     elif progress.progress_percent > 0:
@@ -105,13 +133,8 @@ def apply_activity_to_progress(progress: LessonProgress, event: LearningEventCre
     elif event.event_type == "assistant_question":
         progress.assistant_question_count += 1
         progress.progress_percent = max(progress.progress_percent, 60)
-    elif event.event_type == "quiz_submitted":
-        progress.quiz_attempt_count += 1
-        if event.score is not None:
-            progress.best_quiz_score = max(progress.best_quiz_score, event.score)
-            previous_total = progress.average_quiz_score * (progress.quiz_attempt_count - 1)
-            progress.average_quiz_score = round((previous_total + event.score) / progress.quiz_attempt_count, 2)
-            progress.progress_percent = max(progress.progress_percent, 100 if event.score >= 70 else 75)
+    # "quiz_submitted" is stored as an activity only: quiz evidence comes from server-graded attempts,
+    # never from a score the browser reports.
     elif event.event_type == "lesson_completed":
         progress.progress_percent = 100
 
@@ -171,33 +194,38 @@ def knowledge_unit_for_lesson(lesson: Lesson | None) -> str:
 
 def lesson_analytics(progress: LessonProgress) -> dict:
     has_quiz = progress.quiz_attempt_count > 0
-    quiz_score = progress.best_quiz_score if has_quiz else 50
+    quiz_score = progress.best_quiz_score if has_quiz else NO_QUIZ_NEUTRAL_SCORE
     activity_score = (
         min(progress.view_count, 2) * 10
         + min(progress.simulation_count, 2) * 15
         + min(progress.assistant_question_count, 3) * 8
     )
-    mastery_score = clamp_score(progress.progress_percent * 0.45 + quiz_score * 0.4 + min(activity_score, 100) * 0.15)
+    mastery_score = clamp_score(
+        progress.progress_percent * MASTERY_WEIGHTS["progress"]
+        + quiz_score * MASTERY_WEIGHTS["quiz"]
+        + min(activity_score, 100) * MASTERY_WEIGHTS["activity"]
+    )
     engagement_score = clamp_score(activity_score + min(progress.time_spent_seconds / 60, 30))
     risk_reasons = []
     risk_score = 0
 
-    if progress.status == "needs_review" or (has_quiz and progress.best_quiz_score < 60):
-        risk_score += 45
+    if progress.status == "needs_review" or (has_quiz and progress.best_quiz_score < QUIZ_PASS_SCORE):
+        risk_score += RISK_POINTS["quiz_below_pass"]
         risk_reasons.append("Điểm quiz dưới ngưỡng đạt, cần ôn lại ngay.")
-    if 0 < progress.progress_percent < 70:
-        risk_score += 25
+    if 0 < progress.progress_percent < UNFINISHED_BELOW_PERCENT:
+        risk_score += RISK_POINTS["unfinished"]
         risk_reasons.append("Bài học đã bắt đầu nhưng chưa hoàn thành đủ hoạt động.")
     if progress.progress_percent > 0 and progress.simulation_count == 0:
-        risk_score += 15
+        risk_score += RISK_POINTS["no_simulation"]
         risk_reasons.append("Chưa mở mô phỏng, thiếu quan sát trực quan.")
-    if progress.progress_percent > 0 and days_since(progress.last_accessed_at) >= 7:
-        risk_score += 15
+    if progress.progress_percent > 0 and days_since(progress.last_accessed_at) >= INACTIVE_AFTER_DAYS:
+        risk_score += RISK_POINTS["inactive"]
         risk_reasons.append("Đã lâu chưa quay lại bài học này.")
 
     risk_score = clamp_score(risk_score)
-    risk_level = "high" if risk_score >= 70 else "medium" if risk_score >= 40 else "low"
+    risk_level = risk_level_for(risk_score)
     return {
+        "has_quiz_evidence": has_quiz,
         "mastery_score": mastery_score,
         "engagement_score": engagement_score,
         "risk_score": risk_score,
@@ -205,6 +233,43 @@ def lesson_analytics(progress: LessonProgress) -> dict:
         "risk_reasons": risk_reasons,
         "knowledge_unit": knowledge_unit_for_lesson(progress.lesson),
     }
+
+
+def blank_progress(user_id: int, lesson: Lesson) -> SimpleNamespace:
+    """In-memory progress for a lesson with no activity yet, so read requests never write."""
+    now = datetime.utcnow()
+    return SimpleNamespace(
+        id=0,
+        user_id=user_id,
+        lesson_id=lesson.id,
+        lesson=lesson,
+        status="not_started",
+        progress_percent=0.0,
+        view_count=0,
+        simulation_count=0,
+        assistant_question_count=0,
+        quiz_attempt_count=0,
+        best_quiz_score=0.0,
+        average_quiz_score=0.0,
+        time_spent_seconds=0,
+        last_activity_type=None,
+        last_accessed_at=now,
+        completed_at=None,
+        created_at=now,
+        updated_at=now,
+    )
+
+
+def load_dashboard_progress(db: Session, user_id: int, lessons: List[Lesson]) -> list:
+    """Return one row per lesson, in lesson order, with a single query."""
+    rows = (
+        db.query(LessonProgress)
+        .options(joinedload(LessonProgress.lesson))
+        .filter(LessonProgress.user_id == user_id, LessonProgress.lesson_id.in_([item.id for item in lessons]))
+        .all()
+    )
+    stored = {row.lesson_id: row for row in rows}
+    return [stored.get(lesson.id) or blank_progress(user_id, lesson) for lesson in lessons]
 
 
 def smart_recommendations(progress_rows: List[LessonProgress]) -> List[LearningRecommendation]:
@@ -278,12 +343,18 @@ def intervention_plan(risk_level: str) -> List[str]:
 
 
 def persist_learning_event(db: Session, user_id: int, event_data: LearningEventCreate) -> LearningEvent:
-    if event_data.client_event_id:
-        existing = (
+    def stored_event():
+        return (
             db.query(LearningEvent)
-            .filter(LearningEvent.client_event_id == event_data.client_event_id)
+            .filter(
+                LearningEvent.user_id == user_id,
+                LearningEvent.client_event_id == event_data.client_event_id,
+            )
             .first()
         )
+
+    if event_data.client_event_id:
+        existing = stored_event()
         if existing:
             return existing
 
@@ -300,7 +371,11 @@ def persist_learning_event(db: Session, user_id: int, event_data: LearningEventC
         payload=event_data.payload,
         occurred_at=event_data.occurred_at or datetime.utcnow(),
     )
-    db.add(event)
+    try:
+        with db.begin_nested():
+            db.add(event)
+    except IntegrityError:  # the same id was delivered concurrently
+        return stored_event()
 
     if event_data.lesson_id is not None:
         progress = get_or_create_progress(db, user_id, event_data.lesson_id)
@@ -309,37 +384,40 @@ def persist_learning_event(db: Session, user_id: int, event_data: LearningEventC
 
 
 @router.post("/users/{user_id}/events", response_model=LearningEventResponse, status_code=status.HTTP_201_CREATED)
-async def track_learning_event(
+def track_learning_event(
     user_id: int,
     event_data: LearningEventCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
 ):
     """Record one learning activity and update the student's lesson progress."""
-    ensure_learning_data_access(user_id, current_user)
-    get_user_or_404(db, user_id)
+    ensure_learning_data_access(db, user_id, current_user)
+    student = get_user_or_404(db, user_id)
+    student_class = student.student_class or ""
 
     event = persist_learning_event(db, user_id, event_data)
 
     db.commit()
     db.refresh(event)
-    await learning_connections.publish_learning_update(
+    learning_connections.publish_from_thread(
         user_id,
         {"event_type": event.event_type, "lesson_id": event.lesson_id},
+        student_class,
     )
     return event
 
 
 @router.post("/users/{user_id}/events/batch", response_model=List[LearningEventResponse])
-async def track_learning_events_batch(
+def track_learning_events_batch(
     user_id: int,
     events: List[LearningEventCreate],
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
 ):
     """Persist an offline event queue idempotently after connectivity returns."""
-    ensure_learning_data_access(user_id, current_user)
-    get_user_or_404(db, user_id)
+    ensure_learning_data_access(db, user_id, current_user)
+    student = get_user_or_404(db, user_id)
+    student_class = student.student_class or ""
     if len(events) > 100:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -350,23 +428,24 @@ async def track_learning_events_batch(
     db.commit()
     for row in rows:
         db.refresh(row)
-    await learning_connections.publish_learning_update(
+    learning_connections.publish_from_thread(
         user_id,
         {"event_type": "batch_synced", "event_count": len(rows)},
+        student_class,
     )
     return rows
 
 
 @router.put("/users/{user_id}/lessons/{lesson_id}/progress", response_model=LessonProgressResponse)
-async def update_lesson_progress(
+def update_lesson_progress(
     user_id: int,
     lesson_id: int,
     progress_data: LessonProgressUpdate,
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_authenticated_user),
+    current_user: User = Depends(require_teacher_user),
 ):
-    """Manually update progress for a lesson."""
-    ensure_learning_data_access(user_id, current_user)
+    """Let staff correct a student's progress; students earn it through events and graded attempts."""
+    ensure_learning_data_access(db, user_id, current_user)
     get_user_or_404(db, user_id)
     get_lesson_or_404(db, lesson_id)
 
@@ -393,32 +472,34 @@ async def update_lesson_progress(
 
 
 @router.get("/users/{user_id}/lessons/{lesson_id}/progress", response_model=LessonProgressResponse)
-async def get_lesson_progress(
+def get_lesson_progress(
     user_id: int,
     lesson_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
 ):
     """Get progress for one student and one lesson."""
-    ensure_learning_data_access(user_id, current_user)
+    ensure_learning_data_access(db, user_id, current_user)
     get_user_or_404(db, user_id)
-    get_lesson_or_404(db, lesson_id)
 
-    progress = get_or_create_progress(db, user_id, lesson_id)
-    db.commit()
-    db.refresh(progress)
-    return progress
+    lesson = get_lesson_or_404(db, lesson_id)
+    stored = (
+        db.query(LessonProgress)
+        .filter(LessonProgress.user_id == user_id, LessonProgress.lesson_id == lesson_id)
+        .first()
+    )
+    return stored or blank_progress(user_id, lesson)
 
 
 @router.get("/users/{user_id}/dashboard", response_model=LearningDashboardResponse)
-async def get_learning_dashboard(
+def get_learning_dashboard(
     user_id: int,
     course_id: Optional[int] = None,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
 ):
     """Return personalized progress, activity and review suggestions for a student."""
-    ensure_learning_data_access(user_id, current_user)
+    ensure_learning_data_access(db, user_id, current_user)
     get_user_or_404(db, user_id)
 
     lesson_query = db.query(Lesson)
@@ -427,13 +508,7 @@ async def get_learning_dashboard(
     lessons = lesson_query.order_by(Lesson.course_id, Lesson.order).all()
     lesson_ids = [lesson.id for lesson in lessons]
 
-    progress_rows = []
-    for lesson in lessons:
-        progress_rows.append(get_or_create_progress(db, user_id, lesson.id))
-
-    db.commit()
-    for progress in progress_rows:
-        db.refresh(progress)
+    progress_rows = load_dashboard_progress(db, user_id, lessons)
 
     completed_lessons = sum(1 for item in progress_rows if item.status == "completed")
     in_progress_lessons = sum(1 for item in progress_rows if item.status in ("in_progress", "needs_review"))
@@ -459,7 +534,7 @@ async def get_learning_dashboard(
         else 0
     )
     risk_score = max((item["risk_score"] for item in analytics_rows), default=0)
-    risk_level = "high" if risk_score >= 70 else "medium" if risk_score >= 40 else "low"
+    risk_level = risk_level_for(risk_score)
     recommendations = smart_recommendations(progress_rows)
 
     event_query = db.query(LearningEvent).filter(LearningEvent.user_id == user_id)
@@ -486,36 +561,49 @@ async def get_learning_dashboard(
         weak_alerts=[item for item in recommendations if item.priority == "high"],
         learning_path=smart_learning_path(progress_rows),
         intervention_plan=intervention_plan(risk_level),
+        active_lessons=len(analytics_rows),
+        active_lessons_without_quiz=sum(1 for item in analytics_rows if not item["has_quiz_evidence"]),
+        score_note=SCORE_NOTE,
     )
 
 
 @router.get("/teacher/analytics")
-async def get_teacher_learning_analytics(
+def get_teacher_learning_analytics(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_teacher_user),
 ):
     """Return class-level analytics for teacher dashboards and early intervention."""
     student_query = db.query(User).filter(User.role == "student")
-    if current_user.role == "teacher" and current_user.student_class:
-        student_query = student_query.filter(User.student_class == current_user.student_class)
+    if current_user.role == "teacher":
+        student_query = student_query.filter(User.student_class.in_(teacher_class_names(current_user)))
     students = student_query.all()
-    lessons = db.query(Lesson).order_by(Lesson.course_id, Lesson.order).all()
+    progress_by_student = {}
+    active_progress = (
+        db.query(LessonProgress)
+        .options(joinedload(LessonProgress.lesson))
+        .filter(
+            LessonProgress.user_id.in_([student.id for student in students]),
+            LessonProgress.progress_percent > 0,
+        )
+        .all()
+    )
+    for progress in active_progress:
+        progress_by_student.setdefault(progress.user_id, []).append(progress)
     student_rows = []
     class_rows = {}
     weak_units = {}
 
     for student in students:
-        progress_rows = [get_or_create_progress(db, student.id, lesson.id) for lesson in lessons]
-        active_progress_rows = [item for item in progress_rows if item.progress_percent > 0]
-        analytics_rows = [lesson_analytics(item) for item in active_progress_rows]
+        progress_rows = progress_by_student.get(student.id, [])
+        analytics_rows = [lesson_analytics(item) for item in progress_rows]
         mastery_score = (
             round(sum(item["mastery_score"] for item in analytics_rows) / len(analytics_rows), 2)
             if analytics_rows
             else 0
         )
         risk_score = max((item["risk_score"] for item in analytics_rows), default=0)
-        risk_level = "high" if risk_score >= 70 else "medium" if risk_score >= 40 else "low"
-        active_lessons = sum(1 for item in progress_rows if item.progress_percent > 0)
+        risk_level = risk_level_for(risk_score)
+        active_lessons = len(progress_rows)
         student_row = {
             "student_id": student.id,
             "name": student.full_name or student.username,
@@ -552,8 +640,6 @@ async def get_teacher_learning_analytics(
                 weak_units[unit]["count"] += 1
                 weak_units[unit]["lesson_titles"].append(progress.lesson.title if progress.lesson else f"Bài {progress.lesson_id}")
 
-    db.commit()
-
     for row in class_rows.values():
         row["average_mastery"] = (
             round(row["average_mastery"] / row["student_count"], 2)
@@ -562,6 +648,8 @@ async def get_teacher_learning_analytics(
         )
 
     return {
+        "score_note": SCORE_NOTE,
+        "needs_class_assignment": current_user.role == "teacher" and not teacher_class_names(current_user),
         "summary": {
             "total_students": len(students),
             "active_students": sum(1 for item in student_rows if item["active_lessons"] > 0),
@@ -575,7 +663,7 @@ async def get_teacher_learning_analytics(
 
 
 @router.get("/users/{user_id}/events", response_model=List[LearningEventResponse])
-async def get_learning_events(
+def get_learning_events(
     user_id: int,
     lesson_id: Optional[int] = None,
     limit: int = 50,
@@ -583,7 +671,7 @@ async def get_learning_events(
     current_user: User = Depends(get_authenticated_user),
 ):
     """List recent learning events for a student."""
-    ensure_learning_data_access(user_id, current_user)
+    ensure_learning_data_access(db, user_id, current_user)
     get_user_or_404(db, user_id)
 
     query = db.query(LearningEvent).filter(LearningEvent.user_id == user_id)

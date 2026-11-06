@@ -1,26 +1,30 @@
 from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect
+from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 from typing import List
 
-from auth import can_manage_content, decode_token, get_authenticated_user
+from auth import can_view_student, decode_token, ensure_student_scope, get_authenticated_user
 from database import get_db
 from models import ChatHistory, LearningEvent, Lesson, LessonProgress, QuizResult, User
 from schemas import ChatMessageResponse, ChatMessageCreate
-from ai_tutor import AITutorError, generate_ai_tutor_reply
+from ai_tutor import (
+    LESSON_CONTEXT_FIELDS,
+    PROGRESS_CONTEXT_FIELDS,
+    USER_CONTEXT_FIELDS,
+    AITutorError,
+    detached_copy,
+    generate_ai_tutor_reply,
+    generate_reply_from_thread,
+)
 from config import settings
 
 router = APIRouter(prefix="/api", tags=["Chat"])
 
 
-def ensure_user_scope(target_user_id: int, current_user: User) -> None:
-    if current_user.id == target_user_id or can_manage_content(current_user):
-        return
-    raise HTTPException(
-        status_code=status.HTTP_403_FORBIDDEN,
-        detail="You can only access your own chat data.",
-    )
+def ensure_user_scope(db: Session, target_user_id: int, current_user: User) -> None:
+    ensure_student_scope(db, target_user_id, current_user, "You can only access your own chat data.")
 
 
 def build_tutor_reply(message: str, lesson: Lesson | None = None) -> str:
@@ -58,7 +62,10 @@ def update_assistant_progress(
     question: str,
     client_event_id: str | None = None,
 ) -> None:
-    if client_event_id and db.query(LearningEvent).filter(LearningEvent.client_event_id == client_event_id).first():
+    if client_event_id and db.query(LearningEvent).filter(
+        LearningEvent.user_id == user_id,
+        LearningEvent.client_event_id == client_event_id,
+    ).first():
         return
     event = LearningEvent(
         user_id=user_id,
@@ -92,14 +99,14 @@ def update_assistant_progress(
 
 
 @router.post("/chat/message", response_model=ChatMessageResponse, status_code=status.HTTP_201_CREATED)
-async def create_chat_message(
+def create_chat_message(
     user_id: int,
     message_data: ChatMessageCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
 ):
     """Create a new chat message."""
-    ensure_user_scope(user_id, current_user)
+    ensure_user_scope(db, user_id, current_user)
     # Verify user exists
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -129,18 +136,25 @@ async def create_chat_message(
         history_query = history_query.filter(ChatHistory.session_id == message_data.session_id)
     recent_history = list(reversed(history_query.order_by(ChatHistory.created_at.desc()).limit(6).all()))
 
+    lesson_context = detached_copy(lesson, *LESSON_CONTEXT_FIELDS)
+    user_context = detached_copy(user, *USER_CONTEXT_FIELDS)
+    progress_context = detached_copy(progress, *PROGRESS_CONTEXT_FIELDS)
+    history_context = [detached_copy(item, "user_message", "ai_response") for item in recent_history]
+    db.rollback()  # the provider can take seconds; do not hold a connection for it
+
     response_mode = "gemini"
     try:
-        ai_response = await generate_ai_tutor_reply(
+        ai_response = generate_reply_from_thread(
+            generate_ai_tutor_reply,
             message_data.user_message,
-            lesson=lesson,
-            user=user,
-            progress=progress,
-            history=recent_history,
+            lesson=lesson_context,
+            user=user_context,
+            progress=progress_context,
+            history=history_context,
         )
     except AITutorError:
         response_mode = "fallback"
-        ai_response = build_tutor_reply(message_data.user_message, lesson)
+        ai_response = build_tutor_reply(message_data.user_message, lesson_context)
     chat_message = ChatHistory(
         user_id=user_id,
         lesson_id=message_data.lesson_id,
@@ -164,7 +178,7 @@ async def create_chat_message(
 
 
 @router.get("/chat/status")
-async def get_chat_status(current_user: User = Depends(get_authenticated_user)):
+def get_chat_status(current_user: User = Depends(get_authenticated_user)):
     """Report whether the real AI provider is configured without exposing secrets."""
     return {
         "enabled": settings.enable_chatbot,
@@ -176,7 +190,7 @@ async def get_chat_status(current_user: User = Depends(get_authenticated_user)):
 
 
 @router.get("/chat/history/{user_id}", response_model=List[ChatMessageResponse])
-async def get_chat_history(
+def get_chat_history(
     user_id: int,
     lesson_id: int = None,
     session_id: str | None = None,
@@ -186,7 +200,7 @@ async def get_chat_history(
     current_user: User = Depends(get_authenticated_user),
 ):
     """Get chat history for a user."""
-    ensure_user_scope(user_id, current_user)
+    ensure_user_scope(db, user_id, current_user)
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(
@@ -206,7 +220,7 @@ async def get_chat_history(
 
 
 @router.get("/chat/message/{message_id}", response_model=ChatMessageResponse)
-async def get_chat_message(
+def get_chat_message(
     message_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
@@ -218,12 +232,12 @@ async def get_chat_message(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Message not found",
         )
-    ensure_user_scope(message.user_id, current_user)
+    ensure_user_scope(db, message.user_id, current_user)
     return message
 
 
 @router.put("/chat/message/{message_id}", response_model=ChatMessageResponse)
-async def update_chat_message(
+def update_chat_message(
     message_id: int,
     message_data: ChatMessageCreate,
     db: Session = Depends(get_db),
@@ -236,7 +250,7 @@ async def update_chat_message(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Message not found",
         )
-    ensure_user_scope(message.user_id, current_user)
+    ensure_user_scope(db, message.user_id, current_user)
 
     if hasattr(message_data, "ai_response"):
         message.ai_response = message_data.ai_response
@@ -247,7 +261,7 @@ async def update_chat_message(
 
 
 @router.delete("/chat/message/{message_id}", status_code=status.HTTP_204_NO_CONTENT)
-async def delete_chat_message(
+def delete_chat_message(
     message_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_authenticated_user),
@@ -259,7 +273,7 @@ async def delete_chat_message(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Message not found",
         )
-    ensure_user_scope(message.user_id, current_user)
+    ensure_user_scope(db, message.user_id, current_user)
     db.delete(message)
     db.commit()
 
@@ -273,16 +287,26 @@ async def websocket_endpoint(
     db: Session = Depends(get_db),
 ):
     """Authenticated WebSocket channel reserved for realtime tutor updates."""
-    token_data = decode_token(token or "")
-    current_user = (
-        db.query(User).filter(User.username == token_data.username, User.is_active.is_(True)).first()
-        if token_data
-        else None
-    )
-    if not current_user:
+    def authorize():
+        try:
+            token_data = decode_token(token or "")
+            current_user = (
+                db.query(User).filter(User.username == token_data.username, User.is_active.is_(True)).first()
+                if token_data
+                else None
+            )
+            if not current_user:
+                return 4401
+            target = db.query(User).filter(User.id == user_id).first()
+            return None if target and can_view_student(current_user, target) else 4403
+        finally:
+            db.close()  # the socket can stay open for hours; it must not keep a pooled connection
+
+    refusal = await run_in_threadpool(authorize)
+    if refusal == 4401:
         await websocket.close(code=4401, reason="Authentication is required.")
         return
-    if current_user.id != user_id and not can_manage_content(current_user):
+    if refusal == 4403:
         await websocket.close(code=4403, reason="You cannot access this chat channel.")
         return
 

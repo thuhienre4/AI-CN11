@@ -4,7 +4,15 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
-from ai_tutor import AITutorError, generate_ai_tutor_reply
+from ai_tutor import (
+    LESSON_CONTEXT_FIELDS,
+    PROGRESS_CONTEXT_FIELDS,
+    USER_CONTEXT_FIELDS,
+    AITutorError,
+    detached_copy,
+    generate_ai_tutor_reply,
+    generate_reply_from_thread,
+)
 from auth import can_manage_content, get_authenticated_user
 from database import get_db
 from models import Lesson, LessonProgress, User
@@ -34,7 +42,7 @@ def list_lessons(db: Session = Depends(get_db), user: User = Depends(get_authent
 
 
 @router.post("/generate")
-async def generate(data: WorkspaceRequest, db: Session = Depends(get_db), user: User = Depends(get_authenticated_user)):
+def generate(data: WorkspaceRequest, db: Session = Depends(get_db), user: User = Depends(get_authenticated_user)):
     if data.task in TEACHER_TASKS and not can_manage_content(user):
         raise HTTPException(403, "Tác vụ này dành cho giáo viên.")
     if not data.request.strip():
@@ -51,12 +59,28 @@ async def generate(data: WorkspaceRequest, db: Session = Depends(get_db), user: 
         "Phân biệt nội dung dựa trên bài học với ví dụ bổ sung. Không khẳng định đã tra cứu tài liệu khác. "
         + TASKS[data.task]
     )
+    lesson_context = detached_copy(lesson, *LESSON_CONTEXT_FIELDS)
+    user_context = detached_copy(user, *USER_CONTEXT_FIELDS)
+    progress_context = detached_copy(progress, *PROGRESS_CONTEXT_FIELDS)
+    db.rollback()  # the provider can take seconds; do not hold a connection for it
     try:
-        answer = await generate_ai_tutor_reply(data.request, lesson=lesson, user=user, progress=progress, instruction=instruction, max_output_tokens=4096)
+        answer = generate_reply_from_thread(
+            generate_ai_tutor_reply,
+            data.request,
+            lesson=lesson_context,
+            user=user_context,
+            progress=progress_context,
+            instruction=instruction,
+            max_output_tokens=4096,
+        )
     except AITutorError as exc:
         raise HTTPException(503, "AI hiện chưa sẵn sàng. Vui lòng kiểm tra cấu hình hoặc thử lại sau.") from exc
     return {
         "answer": answer,
         "is_draft": data.task in TEACHER_TASKS,
-        "context": {"lesson_id": lesson.id, "title": lesson.title, "has_content": bool(lesson.content or lesson.description)},
+        "context": {
+            "lesson_id": lesson_context.id,
+            "title": lesson_context.title,
+            "has_content": bool(lesson_context.content or lesson_context.description),
+        },
     }

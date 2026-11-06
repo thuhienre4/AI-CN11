@@ -27,7 +27,7 @@ const roles = [
 ]
 
 const highlights = [
-  { icon: BookOpenCheck, title: 'Học liệu thông minh', text: 'Bài học, quiz và mô phỏng trực quan.' },
+  { icon: BookOpenCheck, title: 'Học liệu tích hợp', text: 'Bài học, quiz và mô phỏng trực quan.' },
   { icon: Sparkles, title: 'Trợ giảng AI', text: 'Hỗ trợ giải đáp trong suốt hành trình học.' },
   { icon: ShieldCheck, title: 'Tiến độ bảo mật', text: 'Dữ liệu học tập được lưu riêng cho bạn.' },
 ]
@@ -126,7 +126,7 @@ export default function Register() {
 
           <div className="register-intro">
             <span className="register-kicker"><i /> Nền tảng học tập ứng dụng AI</span>
-            <h1>Khởi đầu hành trình<br /><em>Công nghệ thông minh.</em></h1>
+            <h1>Khởi đầu hành trình<br /><em>môn Công nghệ.</em></h1>
             <p>Một không gian học tập dành riêng cho môn Công nghệ THPT — trực quan, chủ động và phù hợp với từng người học.</p>
           </div>
 
