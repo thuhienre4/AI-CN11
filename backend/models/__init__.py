@@ -37,6 +37,7 @@ class User(Base):
     role = Column(String(20), default=UserRole.STUDENT.value)
     student_class = Column(String(50), default="")
     is_active = Column(Boolean, default=True)
+    account_status = Column(String(20), default="verified", nullable=False, index=True)  # pending, verified, rejected
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -229,6 +230,34 @@ class ChatHistory(Base):
 
     def __repr__(self):
         return f"<ChatHistory(id={self.id}, user_id={self.user_id})>"
+
+
+class AccountReview(Base):
+    """Audit trail of account verification decisions."""
+    __tablename__ = "account_reviews"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    reviewer_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    decision = Column(String(20), nullable=False)
+    note = Column(String(500), default="")
+    classes = Column(String(50), default="")
+    created_at = Column(DateTime, default=datetime.utcnow, index=True)
+
+
+class ClassJoinCode(Base):
+    """Code a teacher hands out in class; entering it proves the student was told it there."""
+    __tablename__ = "class_join_codes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    code = Column(String(16), unique=True, index=True, nullable=False)
+    class_name = Column(String(50), nullable=False, index=True)
+    created_by_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    max_uses = Column(Integer, nullable=False)
+    used_count = Column(Integer, default=0, nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    revoked_at = Column(DateTime, nullable=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
 
 
 class LessonProgress(Base):

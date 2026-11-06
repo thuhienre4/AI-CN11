@@ -5,7 +5,7 @@ from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 from typing import List
 
-from auth import can_view_student, decode_token, ensure_student_scope, get_authenticated_user
+from auth import ACCOUNT_REJECTED, can_view_student, decode_token, ensure_student_scope, get_authenticated_user
 from database import get_db
 from models import ChatHistory, LearningEvent, Lesson, LessonProgress, QuizResult, User
 from schemas import ChatMessageResponse, ChatMessageCreate
@@ -295,7 +295,7 @@ async def websocket_endpoint(
                 if token_data
                 else None
             )
-            if not current_user:
+            if not current_user or current_user.account_status == ACCOUNT_REJECTED:
                 return 4401
             target = db.query(User).filter(User.id == user_id).first()
             return None if target and can_view_student(current_user, target) else 4403

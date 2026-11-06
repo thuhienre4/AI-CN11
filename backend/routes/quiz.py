@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from auth import ensure_student_scope, get_authenticated_user, require_teacher_user
+from auth import confirmed_class, ensure_student_scope, get_authenticated_user, require_teacher_user
 from database import get_db
 from models import LearningEvent, LessonProgress, QuizAttempt, QuizResult, Question, User
 from schemas import (
@@ -113,7 +113,7 @@ def finalize_quiz_attempt(
     ensure_user_scope(db, attempt.user_id, current_user)
     finalize_attempt_progress(db, attempt, payload.client_event_id)
     student = db.query(User).filter(User.id == attempt.user_id).first()
-    student_class = (student.student_class or "") if student else ""
+    student_class = confirmed_class(student) if student else ""
     db.commit()
     db.refresh(attempt)
     learning_connections.publish_from_thread(

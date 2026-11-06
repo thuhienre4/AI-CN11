@@ -49,6 +49,14 @@ def run_startup_migrations(engine):
             "student_class",
             "student_class VARCHAR(50) DEFAULT ''",
         )
+        # Accounts that predate verification stay usable.
+        _add_column_if_missing(
+            connection,
+            inspector,
+            "users",
+            "account_status",
+            "account_status VARCHAR(20) NOT NULL DEFAULT 'verified'",
+        )
         _add_column_if_missing(
             connection,
             inspector,

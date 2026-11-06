@@ -174,7 +174,8 @@ def test_teacher_self_registration_and_nova_generation_are_restricted(api):
             "student_class": "",
         },
     )
-    assert registration.status_code == 403
+    assert registration.status_code == 201
+    assert registration.json()["account_status"] == "pending"
     assert client.post(
         "/api/nova3d/four-stroke-engine",
         json={},

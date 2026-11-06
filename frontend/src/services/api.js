@@ -43,6 +43,21 @@ export const authAPI = {
   getMe: () => api.get('/api/auth/me'),
 }
 
+// Account verification
+export const accountsAPI = {
+  pending: () => api.get('/api/accounts/pending'),
+  review: (userId, data) => api.post(`/api/accounts/${userId}/review`, data),
+  teachers: () => api.get('/api/accounts/teachers'),
+  assignClasses: (userId, data) => api.put(`/api/accounts/${userId}/classes`, data),
+  reviews: () => api.get('/api/accounts/reviews'),
+  reviewBatch: (data) => api.post('/api/accounts/review-batch', data),
+  reset: (userId, data) => api.post(`/api/accounts/${userId}/reset`, data),
+  classMembers: () => api.get('/api/accounts/class-members'),
+  classCodes: () => api.get('/api/accounts/class-codes'),
+  createClassCode: (data) => api.post('/api/accounts/class-codes', data),
+  revokeClassCode: (id) => api.delete(`/api/accounts/class-codes/${id}`),
+}
+
 // Courses
 export const coursesAPI = {
   list: (skip = 0, limit = 10) => api.get('/api/courses', { params: { skip, limit } }),

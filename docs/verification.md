@@ -33,9 +33,9 @@ npm run build
 
 | Bộ kiểm thử | Trước | Sau |
 |---|---|---|
-| Máy chủ (pytest) | 8 ca | 160 ca, tất cả đạt |
-| Độ phủ máy chủ (dòng và nhánh) | 49% | 71% |
-| Giao diện (Vitest) | 2 ca | 19 ca, tất cả đạt |
+| Máy chủ (pytest) | 8 ca | 205 ca, tất cả đạt |
+| Độ phủ máy chủ (dòng và nhánh, đo ở 160 ca) | 49% | 71% |
+| Giao diện (Vitest) | 2 ca | 31 ca, tất cả đạt |
 
 Bộ máy chủ gồm: quét mọi endpoint được bảo vệ với người dùng ẩn danh, học sinh gọi endpoint của giáo viên, truy cập chéo giữa học sinh, token giả/hết hạn/`alg: none`, WebSocket, gửi lại sự kiện, lỗi nhà cung cấp AI (giả lập tầng mạng), biên của Risk Score, toàn vẹn danh mục.
 
@@ -83,6 +83,8 @@ WebSocket: trước khi sửa dừng ở 15 kết nối; sau khi sửa 41/41 k�
 
 Cách đọc: p95 của các thao tác ghi (quiz, đồng bộ, trợ lý) tăng so với trước vì SQLite chỉ cho một người ghi tại một thời điểm và các yêu cầu phải xếp hàng. Độ trễ lớn nhất trong kịch bản lớp học lên tới khoảng 19 giây. Không có lỗi khóa hay hết pool trong cả 5 lần chạy. Kết quả này không suy rộng cho nhiều lớp, cho PostgreSQL hoặc cho mạng thực.
 
+Phép đo trên được thực hiện trước khi thêm mô hình động cơ mới và tính năng xác minh tài khoản; chưa đo lại.
+
 ## Toàn vẹn dữ liệu
 
 Cả 5 lần chạy đều cho cùng kết quả:
@@ -119,11 +121,39 @@ Các trường hợp cần lưu ý, chưa thể gọi là sai dương hoặc sai
 
 ## Mô phỏng động cơ bốn kỳ
 
-`frontend/src/utils/fourStrokeCycle.js` có kiểm thử cho: hai vòng quay trục khuỷu mỗi chu trình, điểm chết trên và dưới, hướng piston và trạng thái xupap ở từng kỳ. Mô hình bỏ qua góc mở sớm, đóng muộn của xupap và góc đánh lửa sớm, và giao diện có ghi chú điều này. Việc đối chiếu với tài liệu chuyên môn cần giáo viên bộ môn xác nhận.
+`frontend/src/utils/fourStrokeCycle.js` và `frontend/src/simulations/fourStrokeEngineModel.js` có kiểm thử cho: hai vòng quay trục khuỷu mỗi chu trình, trục cam quay nửa tốc độ, điểm chết trên và dưới, hướng piston, độ nâng xupap ở từng kỳ, chiều dài thanh truyền không đổi và piston không chạm xupap. Mô hình bỏ qua góc mở sớm, đóng muộn của xupap và góc đánh lửa sớm, và giao diện có ghi chú điều này. Việc đối chiếu với tài liệu chuyên môn cần giáo viên bộ môn xác nhận.
 
 ## Trợ lý AI
 
 Chưa đánh giá Gemini trực tuyến. Kiểm thử chỉ xác nhận lớp tích hợp, xử lý lỗi và nhãn `response_mode`. `data/ai_tutor_eval_set.json` có 13 câu về đúng nội dung, ảo giác, an toàn, riêng tư và sư phạm; chạy bằng `scripts/evaluate_ai_tutor.py` khi có khóa. Kết quả từ khóa chỉ để sàng lọc, giáo viên phải chấm theo rubric.
+
+## Xác minh tài khoản
+
+| Vai trò | Khi đăng kí | Ai xác minh | Trước khi xác minh | Sau khi xác minh |
+|---|---|---|---|---|
+| Giáo viên | Chờ xác minh | Quản trị viên, kèm gán lớp | Đăng nhập được nhưng không có quyền giáo viên, không xem được dữ liệu lớp | Quyền giáo viên trong các lớp được gán |
+| Học sinh có lớp | Chờ xác nhận | Giáo viên của lớp hoặc quản trị viên | Tự học bình thường, chưa thuộc danh sách lớp, giáo viên chưa xem được dữ liệu | Vào danh sách lớp |
+| Học sinh không có lớp | Đã xác minh | Không cần | Tự học | Tự học |
+| Quản trị viên | Không đăng kí qua web | Tạo bằng `scripts/create_admin.py` | | |
+
+Tài khoản bị từ chối không đăng nhập được và token cũ mất hiệu lực. Từ chối bắt buộc có lí do. Mọi quyết định và lần gán lớp đều lưu trong bảng `account_reviews`. Tài khoản có sẵn trước tính năng này giữ trạng thái đã xác minh.
+
+Giáo viên có thêm các công cụ:
+
+- **Mã lớp:** 8 kí tự, tạo cho lớp mình phụ trách, có hạn (1–30 ngày) và số lượt (1–100). Mỗi lớp chỉ có một mã còn hiệu lực. Học sinh nhập đúng mã được xác nhận ngay; lớp lấy từ mã, không lấy từ phần học sinh tự khai. Nhập sai 10 lần trong 10 phút thì bị chặn tạm thời (đếm theo địa chỉ IP, trong từng tiến trình máy chủ).
+- **Duyệt hàng loạt:** tối đa 100 học sinh một lần; tài khoản ngoài phạm vi được báo lại và không bị thay đổi.
+- **Danh sách lớp:** gỡ học sinh xác nhận nhầm hoặc mở lại tài khoản bị từ chối, bắt buộc ghi lí do.
+
+Mã lớp chỉ chứng minh người đăng kí đã nhận được mã, không chứng minh danh tính: mã bị chia sẻ ra ngoài thì người ngoài vẫn vào được cho đến khi giáo viên thu hồi.
+
+Tạo quản trị viên đầu tiên:
+
+```bash
+cd backend
+python scripts/create_admin.py --username admin --email admin@truong.edu.vn
+```
+
+Giới hạn: hệ thống chưa kiểm tra thân phận thật (email trường, giấy tờ); người duyệt chịu trách nhiệm đối chiếu. Giao diện vẫn hiện một số nút giáo viên cho tài khoản chờ duyệt, nhưng máy chủ từ chối các thao tác đó.
 
 ## Chưa thực hiện
 

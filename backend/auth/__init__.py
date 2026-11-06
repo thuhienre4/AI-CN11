@@ -13,6 +13,10 @@ from schemas import TokenData
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+ACCOUNT_PENDING = "pending"
+ACCOUNT_VERIFIED = "verified"
+ACCOUNT_REJECTED = "rejected"
+
 
 def hash_password(password: str) -> str:
     return pwd_context.hash(password)
@@ -61,7 +65,7 @@ def get_authenticated_user(
         )
 
     user = db.query(User).filter(User.username == token_data.username).first()
-    if not user or not user.is_active:
+    if not user or not user.is_active or user.account_status == ACCOUNT_REJECTED:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="No active account was found for this token.",
@@ -69,28 +73,44 @@ def get_authenticated_user(
     return user
 
 
+def is_verified(user: User) -> bool:
+    return user.account_status == ACCOUNT_VERIFIED
+
+
+def is_administrator(user: User) -> bool:
+    return user.role in {"admin", "moderator"}
+
+
 def can_manage_content(user: User) -> bool:
-    return user.role in {"teacher", "admin", "moderator"}
+    """A teacher holds teacher rights only once an administrator has verified the account."""
+    return is_administrator(user) or (user.role == "teacher" and is_verified(user))
 
 
 def teacher_class_names(user: User) -> set[str]:
-    """Classes a teacher is assigned to; ``student_class`` holds them comma-separated."""
+    """Classes a verified teacher is assigned to; ``student_class`` holds them comma-separated."""
+    if not is_verified(user):
+        return set()
     return {name.strip() for name in (user.student_class or "").split(",") if name.strip()}
 
 
+def confirmed_class(student: User) -> str:
+    """The student's class, once a teacher has confirmed the student belongs to it."""
+    return (student.student_class or "").strip() if is_verified(student) else ""
+
+
 def can_view_student(viewer: User, student: User) -> bool:
-    if viewer.id == student.id or viewer.role in {"admin", "moderator"}:
+    if viewer.id == student.id or is_administrator(viewer):
         return True
     return (
         viewer.role == "teacher"
         and student.role == "student"
-        and (student.student_class or "").strip() in teacher_class_names(viewer)
+        and confirmed_class(student) in teacher_class_names(viewer)
     )
 
 
 def ensure_student_scope(db: Session, target_user_id: int, current_user: User, detail: str) -> None:
     """Allow the owner, an administrator, or a teacher assigned to the student's class."""
-    if current_user.id == target_user_id or current_user.role in {"admin", "moderator"}:
+    if current_user.id == target_user_id or is_administrator(current_user):
         return
     student = db.query(User).filter(User.id == target_user_id).first()
     if student is None or not can_view_student(current_user, student):
@@ -102,6 +122,15 @@ def require_teacher_user(user: User = Depends(get_authenticated_user)) -> User:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only teacher or admin accounts can perform this action.",
+        )
+    return user
+
+
+def require_admin_user(user: User = Depends(get_authenticated_user)) -> User:
+    if not is_administrator(user):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Only administrators can perform this action.",
         )
     return user
 

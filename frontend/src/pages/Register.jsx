@@ -21,7 +21,7 @@ const roles = [
     title: 'Giáo viên Công nghệ',
     shortTitle: 'Giáo viên',
     subtitle: 'Tổ chức và quản lý lớp học',
-    note: 'Quản lý học liệu, giao nhiệm vụ và theo dõi quá trình học tập của học sinh.',
+    note: 'Quản lý học liệu, giao nhiệm vụ và theo dõi học sinh sau khi quản trị viên xác minh tài khoản.',
     icon: UsersRound,
   },
 ]
@@ -59,6 +59,7 @@ export default function Register() {
     password: '',
     full_name: '',
     student_class: '',
+    class_code: '',
     role: 'student',
   })
 
@@ -95,8 +96,8 @@ export default function Register() {
       toast.error('Học sinh cần nhập đầy đủ họ và tên')
       return
     }
-    if (formData.role === 'student' && !formData.student_class.trim()) {
-      toast.error('Học sinh cần nhập lớp')
+    if (formData.role === 'student' && !formData.student_class.trim() && !formData.class_code.trim()) {
+      toast.error('Học sinh cần nhập lớp hoặc mã lớp')
       return
     }
 
@@ -106,11 +107,18 @@ export default function Register() {
       formData.password,
       formData.full_name.trim(),
       formData.role,
-      formData.student_class.trim()
+      formData.student_class.trim(),
+      formData.role === 'student' ? formData.class_code.trim() : ''
     )
 
     if (result.success) {
-      toast.success('Tạo tài khoản thành công. Bạn có thể đăng nhập ngay!')
+      toast.success(
+        formData.role === 'teacher'
+          ? 'Đã gửi đăng kí. Quản trị viên cần xác minh trước khi bạn dùng được quyền giáo viên.'
+          : formData.class_code.trim()
+            ? 'Tạo tài khoản thành công. Bạn đã vào lớp bằng mã của giáo viên.'
+            : 'Tạo tài khoản thành công. Giáo viên sẽ xác nhận bạn vào lớp.'
+      )
       navigate('/login', { state: { role: formData.role, username: formData.username.trim() } })
     } else {
       toast.error(result.error || error || 'Tạo tài khoản thất bại')
@@ -198,17 +206,30 @@ export default function Register() {
               </Field>
 
               {formData.role === 'student' ? (
-                <Field icon={School} label="Lớp" hint="bắt buộc">
-                  <input
-                    type="text"
-                    name="student_class"
-                    value={formData.student_class}
-                    onChange={handleChange}
-                    placeholder="VD: 11A1"
-                    autoComplete="organization"
-                    required
-                  />
-                </Field>
+                <>
+                  <Field icon={School} label="Mã lớp" hint="giáo viên cung cấp">
+                    <input
+                      type="text"
+                      name="class_code"
+                      value={formData.class_code}
+                      onChange={handleChange}
+                      placeholder="VD: K7M2QX9T"
+                      autoComplete="off"
+                      maxLength={16}
+                    />
+                  </Field>
+                  <Field icon={School} label="Lớp" hint="nếu chưa có mã">
+                    <input
+                      type="text"
+                      name="student_class"
+                      value={formData.student_class}
+                      onChange={handleChange}
+                      placeholder="VD: 11A1"
+                      autoComplete="organization"
+                      disabled={Boolean(formData.class_code.trim())}
+                    />
+                  </Field>
+                </>
               ) : (
                 <Field icon={School} label="Chuyên môn">
                   <input type="text" value="Giáo viên Công nghệ" disabled readOnly />

@@ -22,6 +22,7 @@ class UserBase(BaseModel):
 
 class UserCreate(UserBase):
     password: str = Field(..., min_length=8)
+    class_code: Optional[str] = Field(default=None, max_length=16)
 
 
 class UserLogin(BaseModel):
@@ -32,6 +33,7 @@ class UserLogin(BaseModel):
 class UserResponse(UserBase):
     id: int
     is_active: bool
+    account_status: str = "verified"
     created_at: datetime
 
     class Config:

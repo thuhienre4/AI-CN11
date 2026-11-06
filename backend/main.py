@@ -107,11 +107,12 @@ async def root():
 
 
 # ============= Import Routes =============
-from routes import auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime, ai_workspace
+from routes import accounts, auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime, ai_workspace
 
 app.include_router(ai_workspace.router)
 
 app.include_router(auth.router)
+app.include_router(accounts.router)
 app.include_router(lessons.router)
 app.include_router(questions.router)
 app.include_router(quiz.router)

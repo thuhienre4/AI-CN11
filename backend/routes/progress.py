@@ -8,7 +8,9 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, joinedload
 
 from auth import (
+    ACCOUNT_VERIFIED,
     can_manage_content,
+    confirmed_class,
     ensure_student_scope,
     get_authenticated_user,
     require_teacher_user,
@@ -393,7 +395,7 @@ def track_learning_event(
     """Record one learning activity and update the student's lesson progress."""
     ensure_learning_data_access(db, user_id, current_user)
     student = get_user_or_404(db, user_id)
-    student_class = student.student_class or ""
+    student_class = confirmed_class(student)
 
     event = persist_learning_event(db, user_id, event_data)
 
@@ -417,7 +419,7 @@ def track_learning_events_batch(
     """Persist an offline event queue idempotently after connectivity returns."""
     ensure_learning_data_access(db, user_id, current_user)
     student = get_user_or_404(db, user_id)
-    student_class = student.student_class or ""
+    student_class = confirmed_class(student)
     if len(events) > 100:
         raise HTTPException(
             status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
@@ -573,7 +575,7 @@ def get_teacher_learning_analytics(
     current_user: User = Depends(require_teacher_user),
 ):
     """Return class-level analytics for teacher dashboards and early intervention."""
-    student_query = db.query(User).filter(User.role == "student")
+    student_query = db.query(User).filter(User.role == "student", User.account_status == ACCOUNT_VERIFIED)
     if current_user.role == "teacher":
         student_query = student_query.filter(User.student_class.in_(teacher_class_names(current_user)))
     students = student_query.all()

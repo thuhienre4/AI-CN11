@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { BookOpen, Bot, ChartNoAxesCombined, GraduationCap, LogOut, Menu, X } from 'lucide-react'
+import { BookOpen, Bot, ChartNoAxesCombined, GraduationCap, LogOut, Menu, ShieldCheck, X } from 'lucide-react'
 import { useAuthStore } from '../store'
 
 export default function Navigation() {
@@ -16,6 +16,8 @@ export default function Navigation() {
   if (['/login', '/register'].includes(location.pathname)) return null
   const teacher = ['teacher', 'admin', 'moderator'].includes(user?.role)
   const links = [['/', 'Tổng quan', BookOpen], ['/ai-workspace', 'Không gian AI', Bot], ['/classroom', 'Lớp học', GraduationCap], ['/practice-bank', teacher ? 'Kho đề' : 'Luyện tập', BookOpen], ['/progress', 'Tiến độ', ChartNoAxesCombined]]
+  const canReviewAccounts = teacher && (user?.account_status ?? 'verified') === 'verified'
+  if (canReviewAccounts) links.splice(3, 0, ['/accounts', 'Xác minh', ShieldCheck])
   return <header className="app-header"><div className="app-header-inner">
     <Link to="/" className="app-brand" aria-label="EngineLab AI — Trang chủ"><span className="app-brand-mark"><GraduationCap size={22} /></span><strong>EngineLab<span> AI</span></strong></Link>
     {isAuthenticated ? <><nav className="app-desktop-nav" aria-label="Điều hướng chính">{links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/'}>{label}</NavLink>)}</nav><div className="app-account"><span><strong>{user?.full_name || user?.username}</strong><small>{teacher ? 'Giáo viên' : 'Học sinh'}</small></span><button type="button" onClick={logout} aria-label="Đăng xuất" title="Đăng xuất"><LogOut size={18} /></button></div><button type="button" className="app-menu-toggle" aria-label={open ? 'Đóng menu' : 'Mở menu'} aria-expanded={open} aria-controls="app-mobile-menu" onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button></> : <Link to="/login" className="studio-button">Đăng nhập</Link>}

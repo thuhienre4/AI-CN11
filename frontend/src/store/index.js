@@ -247,18 +247,19 @@ export const useAuthStore = create((set, get) => ({
     }
   },
 
-  register: async (username, email, password, full_name, role = 'student', student_class = '') => {
+  register: async (username, email, password, full_name, role = 'student', student_class = '', class_code = '') => {
     set({ isLoading: true, error: null })
     try {
-      await authAPI.register({
+      const response = await authAPI.register({
         username,
         email,
         password,
         full_name,
         role,
         student_class,
+        class_code: class_code || null,
       })
-      saveProfileMeta(username, { role, student_class, full_name })
+      saveProfileMeta(username, { role, student_class: response.data?.student_class ?? student_class, full_name })
       set({ isLoading: false })
       return { success: true }
     } catch (error) {

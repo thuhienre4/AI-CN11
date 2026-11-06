@@ -94,6 +94,7 @@ def start_server(database, log_path):
         **os.environ,
         "ENGINE_LAB_DATABASE_URL": f"sqlite:///{database.as_posix()}",
         "ENGINE_LAB_ALLOW_TEACHER_SELF_REGISTRATION": "true",
+        "ENGINE_LAB_REQUIRE_STUDENT_VERIFICATION": "false",
         "ENGINE_LAB_SECRET_KEY": "review-load-test-secret",
         "GEMINI_API_KEY": "",
         "ENGINE_LAB_AI_API_KEY": "",

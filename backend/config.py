@@ -65,6 +65,7 @@ class Settings(BaseSettings):
     enable_3d_simulation: bool = True
     enable_chatbot: bool = True
     enable_gamification: bool = True
-    allow_teacher_self_registration: bool = False
+    allow_teacher_self_registration: bool = False  # True skips administrator approval
+    require_student_verification: bool = True
 
 settings = Settings()

@@ -29,6 +29,7 @@ const CourseDetail = lazyPage(() => import('./pages/CourseDetail'))
 const LessonDetail = lazyPage(() => import('./pages/LessonDetail'))
 const ChatBot = lazyPage(() => import('./pages/ChatBot'))
 const AIWorkspace = lazyPage(() => import('./pages/AIWorkspace'))
+const AccountVerification = lazyPage(() => import('./pages/AccountVerification'))
 const Quiz = lazyPage(() => import('./pages/Quiz'))
 const PersonalProgress = lazyPage(() => import('./pages/PersonalProgress'))
 const ChapterTests = lazyPage(() => import('./pages/ChapterTests'))
@@ -44,6 +45,7 @@ const ThreeDSimulation = lazyPage(() => import('./pages/ThreeDSimulation'))
 const NotFound = lazyPage(() => import('./pages/NotFound'))
 
 // Components
+import AccountStatusNotice from './components/AccountStatusNotice'
 import Navigation from './components/Navigation'
 import SEO from './components/SEO'
 import { Skeleton } from './components/ui'
@@ -202,6 +204,7 @@ function App() {
       />
       <div className="min-h-screen bg-transparent">
         <Navigation />
+        <AccountStatusNotice />
         <AppErrorBoundary>
           <Suspense fallback={<PageFallback />}>
           <Routes>
@@ -241,6 +244,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Navigate to="/classroom" replace />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/accounts"
+            element={
+              <ProtectedRoute>
+                <AccountVerification />
               </ProtectedRoute>
             }
           />

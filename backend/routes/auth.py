@@ -1,19 +1,35 @@
 from datetime import timedelta
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlalchemy.orm import Session
 
-from auth import create_access_token, get_authenticated_user, hash_password, verify_password
+from auth import (
+    ACCOUNT_PENDING,
+    ACCOUNT_REJECTED,
+    ACCOUNT_VERIFIED,
+    create_access_token,
+    get_authenticated_user,
+    hash_password,
+    verify_password,
+)
 from config import settings
 from database import get_db
-from models import User
+from models import AccountReview, User
+from routes.accounts import redeem_class_code
 from schemas import Token, UserCreate, UserLogin, UserResponse
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
 
+def initial_account_status(user_data: UserCreate) -> str:
+    if user_data.role.value == "teacher":
+        return ACCOUNT_VERIFIED if settings.allow_teacher_self_registration else ACCOUNT_PENDING
+    needs_class_check = settings.require_student_verification and user_data.student_class.strip()
+    return ACCOUNT_PENDING if needs_class_check else ACCOUNT_VERIFIED
+
+
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def register(user_data: UserCreate, db: Session = Depends(get_db)):
+def register(user_data: UserCreate, request: Request, db: Session = Depends(get_db)):
     """Register a new user."""
     password_hash = hash_password(user_data.password)  # slow on purpose: keep it outside the transaction
     existing_user = db.query(User).filter(
@@ -31,11 +47,11 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin and moderator accounts must be created by an administrator.",
         )
-    if user_data.role.value == "teacher" and not settings.allow_teacher_self_registration:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Teacher accounts must be approved and created by an administrator.",
-        )
+
+    join_code = None
+    if user_data.class_code and user_data.class_code.strip() and user_data.role.value == "student":
+        client_key = request.client.host if request.client else "unknown"
+        join_code = redeem_class_code(db, user_data.class_code, client_key)
 
     new_user = User(
         username=user_data.username,
@@ -43,10 +59,22 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
         full_name=user_data.full_name,
         password_hash=password_hash,
         role=user_data.role.value,
-        student_class=user_data.student_class.strip(),
+        student_class=join_code.class_name if join_code else user_data.student_class.strip(),
+        account_status=ACCOUNT_VERIFIED if join_code else initial_account_status(user_data),
     )
 
     db.add(new_user)
+    if join_code:
+        db.flush()
+        db.add(
+            AccountReview(
+                user_id=new_user.id,
+                reviewer_id=join_code.created_by_id,
+                decision="class_code",
+                note="",
+                classes=join_code.class_name,
+            )
+        )
     db.commit()
     db.refresh(new_user)
 
@@ -76,6 +104,11 @@ def login(credentials: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User account is inactive",
+        )
+    if user.account_status == ACCOUNT_REJECTED:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Tài khoản đã bị từ chối xác minh. Vui lòng liên hệ giáo viên hoặc quản trị viên.",
         )
 
     access_token = create_access_token(

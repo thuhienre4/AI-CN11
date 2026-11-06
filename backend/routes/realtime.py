@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 
-from auth import decode_token, teacher_class_names
+from auth import ACCOUNT_REJECTED, decode_token, teacher_class_names
 from database import get_db
 from models import User
 from realtime import learning_connections
@@ -20,7 +20,7 @@ def _identify(db: Session, token: str | None):
             if token_data
             else None
         )
-        if not user:
+        if not user or user.account_status == ACCOUNT_REJECTED:
             return None
         if user.role in {"admin", "moderator"}:
             return user.id, None
