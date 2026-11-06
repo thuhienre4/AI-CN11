@@ -244,6 +244,14 @@ a {
     @apply block text-xs font-black uppercase tracking-wide text-slate-950;
   }
 
+  .simulation-part-chip {
+    @apply max-w-none whitespace-nowrap px-2 py-1;
+  }
+
+  .simulation-part-chip::after {
+    @apply h-2;
+  }
+
   .simulation-part-label small {
     @apply mt-1 block text-[11px] font-semibold leading-4 text-slate-600;
   }

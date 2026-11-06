@@ -1,17 +1,18 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import * as THREE from 'three'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { lessonsAPI, nova3dAPI } from '../services/api'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import EngineCycleConsole from '../components/EngineCycleConsole'
+import { lessonsAPI } from '../services/api'
 import { getSampleLesson } from '../data/courseCatalog'
 import { getSimulationExperimentForLesson } from '../data/simulationExperiments'
 import { useAuthStore } from '../store'
 import { recordLocalLearningEvent } from '../utils/learningProgress'
+import { ENGINE_PARTS, createFourStrokeEngine, pickEnginePart } from '../simulations/fourStrokeEngineModel'
 import {
   FOUR_STROKE_CYCLE_RADIANS,
   FOUR_STROKE_SIMPLIFICATION_NOTE,
-  crankSliderPosition,
-  fourStrokeState,
+  normalizeCyclePhase,
 } from '../utils/fourStrokeCycle'
 
 const chapterSimulations = {
@@ -647,44 +648,15 @@ const dieselFourStrokeSimulation = {
   ],
 }
 
-const nova3D = {
-  name: 'Nova 3D',
-  mode: 'Lesson simulation',
-  status: 'Đang dựng mô hình bài học',
-  description: 'Lớp mô phỏng Nova 3D giúp quan sát cấu tạo, chuyển động và các điểm kiến thức chính trong cùng một không gian.',
+const gasolineFourStrokeSimulation = {
+  ...dieselFourStrokeSimulation,
+  layers: [
+    { id: 'intake', name: 'a. Kì nạp', note: 'Piston đi xuống, xupap nạp mở, hòa khí được hút vào xi lanh; xupap thải đóng.' },
+    { id: 'compression', name: 'b. Kì nén', note: 'Piston đi lên, hai xupap đều đóng, hòa khí bị nén.' },
+    { id: 'power', name: 'c. Kì cháy - giãn nở', note: 'Bugi bật tia lửa điện cuối kì nén, hòa khí cháy, khí giãn nở đẩy piston đi xuống sinh công.' },
+    { id: 'exhaust', name: 'd. Kì thải', note: 'Piston đi lên, xupap thải mở, khí thải được đẩy qua đường thải ra ngoài; xupap nạp đóng.' },
+  ],
 }
-
-const fourStrokeEngineNovaPrompt = `
-Create a structured, editable GLB model for a Vietnamese Grade 11 Technology textbook lesson:
-"Mô hình cắt bổ và nguyên lí làm việc của động cơ đốt trong 4 kì".
-
-Model an educational single-cylinder four-stroke engine with separate named parts:
-- cylinder block and transparent cylinder wall
-- piston
-- piston pin
-- connecting rod
-- crankshaft, crank web, and crank pin
-- crankcase
-- intake valve and exhaust valve
-- valve springs and camshaft
-- intake manifold and exhaust manifold
-- central spark plug or diesel injector
-- combustion chamber
-- blue arrows for fresh charge entering through the intake valve
-- orange arrows for exhaust gas out of the exhaust port
-- yellow/orange combustion volume above the piston
-
-Show the textbook working principle:
-1. Intake stroke: piston moves from TDC to BDC, intake valve open, exhaust valve closed.
-2. Compression stroke: piston moves from BDC to TDC, both valves closed.
-3. Power stroke: ignition occurs near TDC; expanding gas drives the piston to BDC, both valves closed.
-4. Exhaust stroke: piston moves from BDC to TDC, exhaust valve open, intake valve closed.
-
-The crankshaft must rotate exactly two revolutions per complete four-stroke cycle and the camshaft one revolution. Keep the piston, connecting rod, crank pin, and crankshaft mechanically aligned throughout the animation.
-
-Preserve semantic part names in the scene graph. Keep parts separated and editable, not a single merged mesh.
-Use simple textbook-style colors, clean geometry, and no decorative background. Prioritize correct working principle over visual complexity.
-`.trim()
 
 const material = (color, opacity = 1) => {
   const meshMaterial = new THREE.MeshPhongMaterial({
@@ -958,173 +930,6 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     animated.push({ mesh: part, type: 'belt' }, { mesh: arm, type: 'robot' })
   }
 
-  if (courseId === 6 && engineMode === 'diesel4') {
-    const chamberTop = 1.95
-    const tdcY = 1.45
-    const bdcY = 0.15
-    const crankCenterY = -1.12
-    const crankRadius = (tdcY - bdcY) / 2
-    const connectingRodLength = (tdcY + bdcY) / 2 - crankCenterY
-
-    const cylinderWall = cylinder(0.78, 2.7, 0x64748b, 0.2)
-    cylinderWall.name = 'compression'
-    cylinderWall.position.y = 0.72
-    root.add(cylinderWall)
-
-    const cutaway = box(0.18, 2.6, 1.62, 0xe2e8f0, 0.16)
-    cutaway.name = 'compression'
-    cutaway.position.set(-0.84, 0.72, 0)
-    root.add(cutaway)
-
-    const head = box(1.75, 0.28, 1.12, 0x334155, 0.92)
-    head.name = 'compression'
-    head.position.y = 2.12
-    root.add(head)
-
-    const crankcase = cylinder(1.05, 1.02, 0x94a3b8, 0.26)
-    crankcase.name = 'power'
-    crankcase.rotation.x = Math.PI / 2
-    crankcase.position.y = crankCenterY
-    root.add(crankcase)
-
-    const pistonGroup = new THREE.Group()
-    pistonGroup.name = 'power'
-    pistonGroup.userData.tdcY = tdcY
-    pistonGroup.userData.bdcY = bdcY
-    const piston = cylinder(0.58, 0.34, 0x2563eb)
-    piston.rotation.x = Math.PI / 2
-    pistonGroup.add(piston)
-    const pistonRing = cylinder(0.6, 0.035, 0x0f172a)
-    pistonRing.rotation.x = Math.PI / 2
-    pistonRing.position.y = 0.1
-    pistonGroup.add(pistonRing)
-    const wristPin = cylinder(0.08, 0.92, 0xf8fafc)
-    wristPin.rotation.z = Math.PI / 2
-    pistonGroup.add(wristPin)
-    pistonGroup.position.y = tdcY
-    root.add(pistonGroup)
-
-    const rod = box(0.11, connectingRodLength, 0.11, 0xf97316)
-    rod.name = 'power'
-    rod.userData.length = connectingRodLength
-    rod.userData.crankRadius = crankRadius
-    rod.userData.crankCenterY = crankCenterY
-    rod.position.y = (tdcY + crankCenterY + crankRadius) / 2
-    root.add(rod)
-
-    const crank = new THREE.Group()
-    crank.name = 'power'
-    crank.position.y = crankCenterY
-    const crankWheel = new THREE.Mesh(new THREE.TorusGeometry(crankRadius, 0.06, 12, 80), material(0x111827))
-    crankWheel.rotation.x = Math.PI / 2
-    crank.add(crankWheel)
-    const crankPin = cylinder(0.09, 0.22, 0x0ea5e9)
-    crankPin.rotation.x = Math.PI / 2
-    crankPin.position.set(crankRadius, 0, 0)
-    crank.add(crankPin)
-    root.add(crank)
-
-    const injector = cylinder(0.055, 0.62, 0xfacc15)
-    injector.name = 'power'
-    injector.position.set(0, 2.55, 0)
-    root.add(injector)
-    const injectorTip = cone(0.09, 0.22, 0xf59e0b)
-    injectorTip.name = 'power'
-    injectorTip.rotation.x = Math.PI
-    injectorTip.position.set(0, 2.18, 0)
-    root.add(injectorTip)
-
-    const intakeValve = cylinder(0.055, 0.7, 0x0ea5e9)
-    intakeValve.name = 'intake'
-    intakeValve.userData.closedY = 2.02
-    intakeValve.userData.openY = 1.8
-    intakeValve.position.set(-0.34, 2.02, 0)
-    root.add(intakeValve)
-
-    const exhaustValve = cylinder(0.055, 0.7, 0xf97316)
-    exhaustValve.name = 'exhaust'
-    exhaustValve.userData.closedY = 2.02
-    exhaustValve.userData.openY = 1.8
-    exhaustValve.position.set(0.34, 2.02, 0)
-    root.add(exhaustValve)
-
-    const intakePipe = box(1.18, 0.16, 0.26, 0x0ea5e9, 0.75)
-    intakePipe.name = 'intake'
-    intakePipe.position.set(-1.05, 2.18, 0)
-    intakePipe.rotation.z = -0.32
-    root.add(intakePipe)
-
-    const exhaustPipe = box(1.18, 0.16, 0.26, 0xf97316, 0.75)
-    exhaustPipe.name = 'exhaust'
-    exhaustPipe.position.set(1.05, 2.18, 0)
-    exhaustPipe.rotation.z = 0.32
-    root.add(exhaustPipe)
-
-    const intakeFlow = createFlowArrow(0.82, 0x0ea5e9)
-    intakeFlow.name = 'intake'
-    intakeFlow.position.set(-1.25, 2.45, 0.35)
-    intakeFlow.rotation.y = Math.PI
-    intakeFlow.traverse((part) => {
-      if (part.material) part.material.userData.dynamicOpacity = true
-    })
-    root.add(intakeFlow)
-
-    const exhaustFlow = createFlowArrow(0.82, 0xf97316)
-    exhaustFlow.name = 'exhaust'
-    exhaustFlow.position.set(1.25, 2.45, 0.35)
-    exhaustFlow.traverse((part) => {
-      if (part.material) part.material.userData.dynamicOpacity = true
-    })
-    root.add(exhaustFlow)
-
-    const combustion = new THREE.Mesh(new THREE.SphereGeometry(0.28, 32, 32), material(0xfacc15, 0.78))
-    combustion.name = 'power'
-    combustion.position.set(0, 1.82, 0)
-    combustion.material.userData.dynamicOpacity = true
-    root.add(combustion)
-
-    const strokeLine = box(0.04, tdcY - bdcY, 0.04, 0x111827)
-    strokeLine.name = 'compression'
-    strokeLine.position.set(-1.25, (tdcY + bdcY) / 2, 0)
-    root.add(strokeLine)
-    const tdcMark = box(0.42, 0.035, 0.035, 0x111827)
-    tdcMark.name = 'compression'
-    tdcMark.position.set(-1.25, tdcY, 0)
-    root.add(tdcMark)
-    const bdcMark = box(0.42, 0.035, 0.035, 0x111827)
-    bdcMark.name = 'compression'
-    bdcMark.position.set(-1.25, bdcY, 0)
-    root.add(bdcMark)
-    const boreLine = box(1.16, 0.035, 0.035, 0x111827)
-    boreLine.name = 'compression'
-    boreLine.position.set(0, chamberTop, 0)
-    root.add(boreLine)
-
-    const radiusLine = box(crankRadius, 0.035, 0.035, 0xf97316)
-    radiusLine.name = 'power'
-    radiusLine.position.set(crankRadius / 2, crankCenterY + 0.02, 0.05)
-    root.add(radiusLine)
-
-    addAnnotation(annotations, root, 'compression', 'ĐCT / ĐCD và hành trình S', 'Piston chuyển động giữa điểm chết trên và điểm chết dưới; S là quãng đường piston đi được trong một hành trình.', -1.75, 0.85, 0)
-    addAnnotation(annotations, root, 'compression', 'D - Đường kính xi lanh', 'D biểu thị đường kính trong của xi lanh, liên quan tới thể tích công tác.', 0, 2.35, 0)
-    addAnnotation(annotations, root, 'power', '1. Trục khuỷu - R', 'Bán kính quay R của trục khuỷu tạo chuyển động quay và quyết định hành trình piston.', 1.15, -0.9, 0)
-    addAnnotation(annotations, root, 'power', '2. Thanh truyền - 3. Piston', 'Thanh truyền nối piston với trục khuỷu để biến đổi chuyển động.', 0.92, 0.55, 0)
-    addAnnotation(annotations, root, 'compression', '4. Xi lanh', 'Không gian piston chuyển động và diễn ra quá trình nạp, nén, cháy - giãn nở, thải.', -0.9, 1.8, 0)
-    addAnnotation(annotations, root, 'intake', '5. Xupap thải / 7. Xupap nạp', 'Hai xupap đóng mở đúng thời điểm để điều khiển dòng khí.', 0, 2.82, 0)
-    addAnnotation(annotations, root, 'power', '6. Vòi phun Diesel', 'Phun nhiên liệu vào cuối kì nén; nhiên liệu tự bốc cháy trong không khí nóng.', 0.62, 2.55, 0)
-
-    animated.push(
-      { mesh: pistonGroup, type: 'dieselSinglePiston' },
-      { mesh: rod, type: 'dieselSingleRod' },
-      { mesh: crank, type: 'dieselSingleCrank' },
-      { mesh: intakeValve, type: 'dieselIntakeValve' },
-      { mesh: exhaustValve, type: 'dieselExhaustValve' },
-      { mesh: intakeFlow, type: 'dieselIntakeFlow' },
-      { mesh: exhaustFlow, type: 'dieselExhaustFlow' },
-      { mesh: combustion, type: 'dieselCombustion' }
-    )
-  }
-
   if (courseId === 6 && engineMode !== 'diesel4') {
     const cylinderWall = cylinder(0.62, 2.65, 0x64748b, 0.2)
     cylinderWall.name = 'compression'
@@ -1164,14 +969,11 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     const pistonGroup = new THREE.Group()
     pistonGroup.name = 'power'
     const piston = cylinder(0.5, 0.38, 0x2563eb)
-    piston.rotation.x = Math.PI / 2
     pistonGroup.add(piston)
     const pistonRingTop = cylinder(0.52, 0.035, 0x0f172a)
-    pistonRingTop.rotation.x = Math.PI / 2
     pistonRingTop.position.y = 0.11
     pistonGroup.add(pistonRingTop)
     const pistonRingBottom = cylinder(0.52, 0.035, 0x0f172a)
-    pistonRingBottom.rotation.x = Math.PI / 2
     pistonRingBottom.position.y = -0.11
     pistonGroup.add(pistonRingBottom)
     pistonGroup.position.y = 1.58
@@ -1194,7 +996,6 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     crank.name = 'power'
     crank.position.y = -0.82
     const crankWheel = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.055, 12, 72), material(0x111827))
-    crankWheel.rotation.x = Math.PI / 2
     crank.add(crankWheel)
     const crankPin = cylinder(0.1, 0.26, 0x0ea5e9)
     crankPin.rotation.x = Math.PI / 2
@@ -1328,7 +1129,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     addAnnotation(annotations, root, 'transmission', courseId === 5 ? 'Hệ truyền động' : 'Hệ thống truyền lực', courseId === 5 ? 'Truyền và biến đổi công suất đến bộ phận công tác' : 'Truyền mô men từ nguồn động lực đến bánh xe chủ động', 0.2, 0.45, 0)
 
     ;[-1.7, 1.7].forEach((x) => {
-      ;[-0.85, 0.85].forEach((z) => {
+      [-0.85, 0.85].forEach((z) => {
         const wheel = cylinder(0.42, 0.32, 0x111827)
         wheel.name = 'chassis'
         wheel.rotation.z = Math.PI / 2
@@ -1462,7 +1263,9 @@ export default function ThreeDSimulation() {
   const selectedLayerRef = useRef('all')
   const [lesson, setLesson] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [isPlaying, setIsPlaying] = useState(true)
+  const [isPlaying, setIsPlaying] = useState(
+    () => !window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+  )
   const [speed, setSpeed] = useState(1)
   const [selectedLayer, setSelectedLayer] = useState('all')
   const [activeStep, setActiveStep] = useState(0)
@@ -1471,10 +1274,18 @@ export default function ThreeDSimulation() {
   const [assessmentScore, setAssessmentScore] = useState(null)
   const simulationStartedAt = useRef(Date.now())
   const [engineMode, setEngineMode] = useState('twoStroke')
-  const [novaWorkflowId, setNovaWorkflowId] = useState(null)
-  const [novaModelUrl, setNovaModelUrl] = useState(null)
-  const [novaStatus, setNovaStatus] = useState('Đang kiểm tra cấu hình Nova 3D...')
-  const [novaError, setNovaError] = useState(null)
+  const [fuel, setFuel] = useState('diesel')
+  const [selectedPart, setSelectedPart] = useState(null)
+  const [showLabels, setShowLabels] = useState(true)
+  const [renderFailed, setRenderFailed] = useState(false)
+  const motion = useRef({ angle: 0, cyclePhase: 0, isPlaying, speed, showLabels })
+  const viewControls = useRef({ reset: () => {}, highlight: () => {} })
+
+  useEffect(() => {
+    motion.current.isPlaying = isPlaying
+    motion.current.speed = speed
+    motion.current.showLabels = showLabels
+  }, [isPlaying, speed, showLabels])
 
   useEffect(() => {
     selectedLayerRef.current = selectedLayer
@@ -1518,11 +1329,9 @@ export default function ThreeDSimulation() {
         : mechanical11SpecializedSimulations[simulationKey] || knttSimulations[simulationKey] || mechanical11SpecializedSimulations[1]
       : technology10Simulations[simulationKey] || technology10Simulations[1]
   const isFourStrokeMode = simulation.modelId === 6 && (engineMode === 'diesel4' || isFourStrokeLesson)
-  const displayedSimulation = isFourStrokeMode
-    ? dieselFourStrokeSimulation
-    : simulation
+  const fourStrokeSimulation = fuel === 'gasoline' ? gasolineFourStrokeSimulation : dieselFourStrokeSimulation
+  const displayedSimulation = isFourStrokeMode ? fourStrokeSimulation : simulation
   const simulationExperiment = getSimulationExperimentForLesson(lesson)
-  const shouldUseNovaApi = false
   const activeLayer = selectedLayer === 'all'
     ? { name: 'Tổng quan', note: displayedSimulation.objective }
     : displayedSimulation.layers.find((layer) => layer.id === selectedLayer)
@@ -1532,9 +1341,23 @@ export default function ThreeDSimulation() {
     [displayedSimulation]
   )
 
+  const seekEngine = useCallback((degrees) => {
+    motion.current.angle = (degrees * Math.PI) / 180
+    setIsPlaying(false)
+  }, [])
+
+  const togglePlaying = useCallback(() => setIsPlaying((value) => !value), [])
+
   const selectKnowledgeLayer = (layerId) => {
     setSelectedLayer(layerId)
     setVisitedLayers((current) => new Set([...current, layerId]))
+    const strokeIndex = displayedSimulation.layers.findIndex((layer) => layer.id === layerId)
+    if (isFourStrokeMode && strokeIndex >= 0) seekEngine(strokeIndex * 180 + 90)
+  }
+
+  const closePartCard = () => {
+    setSelectedPart(null)
+    viewControls.current.highlight(null)
   }
 
   const toggleCheckpoint = (checkpoint) => {
@@ -1568,96 +1391,6 @@ export default function ThreeDSimulation() {
   }
 
   useEffect(() => {
-    if (isLoading || !shouldUseNovaApi) {
-      setNovaStatus('Nova 3D dùng mô hình dựng sẵn cho chương này.')
-      return undefined
-    }
-
-    let cancelled = false
-    const cacheKey = `nova3d_four_stroke_engine_${lessonId}`
-
-    const runNovaGeneration = async () => {
-      const cached = localStorage.getItem(cacheKey)
-      if (cached) {
-        setNovaModelUrl(cached)
-        setNovaStatus('Đang dùng mô hình GLB đã tạo từ Nova 3D.')
-        return
-      }
-
-      try {
-        const response = await nova3dAPI.generateFourStrokeEngine({
-          prompt: fourStrokeEngineNovaPrompt,
-          wait_for_result: false,
-        })
-        if (cancelled) return
-
-        const data = response.data
-        if (!data.configured) {
-          setNovaStatus('Chưa cấu hình API Nova 3D, đang dùng mô phỏng chuẩn SGK dựng trong app.')
-          return
-        }
-        if (data.glb_url) {
-          localStorage.setItem(cacheKey, data.glb_url)
-          setNovaModelUrl(data.glb_url)
-          setNovaStatus('Đã nhận mô hình GLB từ Nova 3D.')
-          return
-        }
-        if (!data.workflow_id) {
-          setNovaStatus(data.message || 'Nova 3D chưa trả về workflow.')
-          return
-        }
-
-        setNovaWorkflowId(data.workflow_id)
-        setNovaStatus('Nova 3D đang tạo mô hình động cơ 4 kì...')
-
-        for (let attempt = 0; attempt < 90 && !cancelled; attempt += 1) {
-          await new Promise((resolve) => setTimeout(resolve, 3000))
-          const statusResponse = await nova3dAPI.getWorkflowStatus(data.workflow_id)
-          if (cancelled) return
-
-          const runtime = statusResponse.data?.runtime || {}
-          const state = String(runtime.state || '').toLowerCase()
-          const lastNode = runtime.last_exit_node_id
-          setNovaStatus(
-            state && state !== 'undefined'
-              ? `Nova 3D workflow ${state}...`
-              : 'Nova 3D đang dựng hình và kiểm tra mô hình...'
-          )
-
-          const completed = ['completed', 'succeeded', 'success'].includes(state)
-            || ['success_final', 'success_original_glb'].includes(lastNode)
-          const failed = ['failed', 'terminated', 'cancelled', 'timed_out', 'timeout', 'budget_exhausted'].includes(state)
-
-          if (completed || failed) {
-            const resultResponse = await nova3dAPI.getWorkflowResult(data.workflow_id)
-            if (cancelled) return
-            const url = resultResponse.data?.glb_url
-            if (url) {
-              localStorage.setItem(cacheKey, url)
-              setNovaModelUrl(url)
-              setNovaStatus('Đã tải mô hình động cơ 4 kì từ Nova 3D.')
-            } else {
-              setNovaStatus('Nova 3D chưa trả về GLB, đang dùng mô phỏng chuẩn SGK dựng trong app.')
-            }
-            return
-          }
-        }
-
-        setNovaStatus('Nova 3D tạo mô hình lâu hơn dự kiến, đang dùng mô phỏng chuẩn SGK dựng trong app.')
-      } catch (error) {
-        if (cancelled) return
-        setNovaError(error.response?.data?.detail || error.message)
-        setNovaStatus('Không gọi được Nova 3D, đang dùng mô phỏng chuẩn SGK dựng trong app.')
-      }
-    }
-
-    runNovaGeneration()
-    return () => {
-      cancelled = true
-    }
-  }, [isLoading, shouldUseNovaApi, lessonId])
-
-  useEffect(() => {
     if (!containerRef.current || isLoading) return undefined
 
     const container = containerRef.current
@@ -1676,9 +1409,15 @@ export default function ThreeDSimulation() {
     }
     camera.updateProjectionMatrix()
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true })
-    renderer.setPixelRatio(window.devicePixelRatio)
-    renderer.shadowMap.enabled = true
+    let renderer
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true })
+    } catch {
+      setRenderFailed(true)
+      return undefined
+    }
+    setRenderFailed(false)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     container.appendChild(renderer.domElement)
 
     const labelLayer = document.createElement('div')
@@ -1688,88 +1427,129 @@ export default function ThreeDSimulation() {
     labelLayer.style.zIndex = '2'
     container.appendChild(labelLayer)
 
-    scene.add(new THREE.AmbientLight(0xffffff, 0.7))
-    const light = new THREE.DirectionalLight(0xffffff, 1.1)
+    scene.add(new THREE.AmbientLight(0xffffff, isFourStrokeMode ? 1.1 : 0.7))
+    const light = new THREE.DirectionalLight(0xffffff, isFourStrokeMode ? 1.8 : 1.1)
     light.position.set(4, 8, 5)
     scene.add(light)
+    if (isFourStrokeMode) {
+      const fillLight = new THREE.DirectionalLight(0xffffff, 0.8)
+      fillLight.position.set(-5, 2, 6)
+      scene.add(fillLight)
+    }
 
+    const engine = isFourStrokeMode ? createFourStrokeEngine({ fuel }) : null
     const base = new THREE.GridHelper(8, 8, 0xcbd5e1, 0xe2e8f0)
-    base.position.y = -0.65
+    base.position.y = engine ? -2.52 : -0.65
     scene.add(base)
 
-    const { root, animated, annotations } = buildChapterModel(
-      simulation.modelId,
-      isFourStrokeLesson ? 'diesel4' : engineMode
-    )
+    const { root, animated, annotations } = engine || buildChapterModel(simulation.modelId, engineMode)
     if (simulation.modelId === 8) {
       root.scale.setScalar(0.78)
       root.position.set(0, -0.18, 0.12)
     }
     scene.add(root)
 
-    if (novaModelUrl) {
-      root.visible = false
-      const loader = new GLTFLoader()
-      loader.load(
-        novaModelUrl,
-        (gltf) => {
-          const model = gltf.scene
-          model.name = 'nova3d-four-stroke-engine'
-          const box3 = new THREE.Box3().setFromObject(model)
-          const size = new THREE.Vector3()
-          const center = new THREE.Vector3()
-          box3.getSize(size)
-          box3.getCenter(center)
-          model.position.sub(center)
-          const maxAxis = Math.max(size.x, size.y, size.z, 1)
-          model.scale.setScalar(4 / maxAxis)
-          model.position.y = 0.35
-          scene.add(model)
-        },
-        undefined,
-        () => {
-          root.visible = true
-          setNovaStatus('Không tải được GLB Nova 3D, đang dùng mô phỏng chuẩn SGK dựng trong app.')
-        }
-      )
+    const controls = new OrbitControls(camera, renderer.domElement)
+    controls.enableDamping = true
+    controls.dampingFactor = 0.08
+    controls.enablePan = false
+    controls.target.copy(engine ? engine.framing.center : new THREE.Vector3(0, 0.3, 0))
+
+    const fitEngineView = () => {
+      const { center, width, height } = engine.framing
+      const halfFov = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
+      const distance = Math.max(height / 2 / halfFov, width / 2 / (halfFov * camera.aspect)) * 1.08
+      const direction = new THREE.Vector3(0.42, 0.14, 1).normalize()
+      camera.position.copy(center).addScaledVector(direction, distance)
+      controls.target.copy(center)
+      controls.minDistance = distance * 0.35
+      controls.maxDistance = distance * 1.8
+      controls.update()
     }
 
     const annotationViews = annotations.map((annotation) => {
       const element = document.createElement('div')
-      element.className = 'simulation-part-label'
-      element.innerHTML = `<span>${annotation.label}</span><small>${annotation.note}</small>`
+      element.className = annotation.compact ? 'simulation-part-label simulation-part-chip' : 'simulation-part-label'
+      element.innerHTML = annotation.compact
+        ? `<span>${annotation.label}</span>`
+        : `<span>${annotation.label}</span><small>${annotation.note}</small>`
       labelLayer.appendChild(element)
       return { ...annotation, element }
     })
 
+    let hasFittedEngine = false
     const resize = () => {
       const rect = container.getBoundingClientRect()
-      const width = Math.max(rect.width, 320)
-      const height = Math.max(rect.height, 420)
+      const width = Math.max(rect.width, 280)
+      const height = Math.max(rect.height, 240)
       camera.aspect = width / height
       camera.updateProjectionMatrix()
       renderer.setSize(width, height)
       renderer.domElement.style.width = '100%'
       renderer.domElement.style.height = '100%'
+      if (engine && !hasFittedEngine) {
+        hasFittedEngine = true
+        fitEngineView()
+      }
     }
 
     resize()
-    window.addEventListener('resize', resize)
+    const resizeObserver = new ResizeObserver(resize)
+    resizeObserver.observe(container)
+
+    const raycaster = new THREE.Raycaster()
+    const pointer = new THREE.Vector2()
+    let pressedAt = null
+    const onPointerDown = (event) => {
+      pressedAt = { x: event.clientX, y: event.clientY }
+    }
+    const onPointerUp = (event) => {
+      if (!engine || !pressedAt) return
+      const moved = Math.hypot(event.clientX - pressedAt.x, event.clientY - pressedAt.y)
+      pressedAt = null
+      if (moved > 6) return
+      const rect = renderer.domElement.getBoundingClientRect()
+      pointer.set(
+        ((event.clientX - rect.left) / rect.width) * 2 - 1,
+        -((event.clientY - rect.top) / rect.height) * 2 + 1
+      )
+      raycaster.setFromCamera(pointer, camera)
+      const part = pickEnginePart(raycaster.intersectObject(root, true))
+      engine.highlightPart(part)
+      setSelectedPart(part)
+    }
+    renderer.domElement.addEventListener('pointerdown', onPointerDown)
+    renderer.domElement.addEventListener('pointerup', onPointerUp)
+
+    viewControls.current = {
+      reset: () => (engine ? fitEngineView() : controls.reset()),
+      highlight: (part) => engine?.highlightPart(part),
+    }
 
     let frame
-    let angle = 0
     let lastStep = -1
+    let lastFrameAt = performance.now()
     const projected = new THREE.Vector3()
     const worldPosition = new THREE.Vector3()
 
     const animate = () => {
-      if (isPlaying) angle += 0.025 * speed
-      root.rotation.y = simulation.modelId === 8 ? 0 : Math.sin(angle * 0.25) * 0.18
+      const now = performance.now()
+      const frames = Math.min((now - lastFrameAt) / (1000 / 60), 6)
+      lastFrameAt = now
+      const running = motion.current
+      const stepScale = running.isPlaying ? running.speed * frames : 0
+      running.angle += 0.025 * stepScale
+      const angle = running.angle
+      controls.update()
+      if (!engine) root.rotation.y = simulation.modelId === 8 ? 0 : Math.sin(angle * 0.25) * 0.18
 
       const cycleDuration = isFourStrokeMode ? FOUR_STROKE_CYCLE_RADIANS : Math.PI * 2
       const cyclePhase = ((angle % cycleDuration) + cycleDuration) % cycleDuration
       const cycleProgress = cyclePhase / cycleDuration
-      const engineState = fourStrokeState(cyclePhase)
+      if (engine) {
+        running.cyclePhase = normalizeCyclePhase(angle)
+        engine.update(running.cyclePhase)
+      }
       const step = Math.floor(cycleProgress * displayedSimulation.layers.length)
       if (step !== lastStep) {
         lastStep = step
@@ -1777,7 +1557,7 @@ export default function ThreeDSimulation() {
       }
 
       animated.forEach(({ mesh, type }) => {
-        if (type === 'spin' || type === 'wheel') mesh.rotation.y += 0.05 * speed
+        if (type === 'spin' || type === 'wheel') mesh.rotation.y += 0.05 * stepScale
         if (type === 'tool') mesh.position.y = 0.35 + Math.sin(angle * 2) * 0.18
         if (type === 'belt') mesh.position.x = -2.8 + ((angle * 0.9) % 5.6)
         if (type === 'robot') mesh.rotation.z = -0.65 + Math.sin(angle * 1.4) * 0.28
@@ -1796,44 +1576,7 @@ export default function ThreeDSimulation() {
           mesh.position.y = mesh.userData.baseY + Math.cos(angle + mesh.userData.phase) * 0.1
           mesh.rotation.z = Math.sin(angle + mesh.userData.phase) * 0.22
         }
-        if (type === 'dieselSinglePiston') {
-          const crankRadius = (mesh.userData.tdcY - mesh.userData.bdcY) / 2
-          const crankCenterY = -1.12
-          const rodLength = (mesh.userData.tdcY + mesh.userData.bdcY) / 2 - crankCenterY
-          mesh.position.y = crankSliderPosition({ cyclePhase, crankRadius, crankCenterY, rodLength }).pistonPinY
-        }
-        if (type === 'dieselSingleRod') {
-          const { crankPinX, crankPinY, pistonPinY } = crankSliderPosition({
-            cyclePhase,
-            crankRadius: mesh.userData.crankRadius,
-            crankCenterY: mesh.userData.crankCenterY,
-            rodLength: mesh.userData.length,
-          })
-          mesh.position.set(crankPinX / 2, (pistonPinY + crankPinY) / 2, 0)
-          mesh.rotation.z = Math.atan2(crankPinX, pistonPinY - crankPinY)
-        }
-        if (type === 'dieselSingleCrank') mesh.rotation.z = Math.PI / 2 - cyclePhase
-        if (type === 'dieselIntakeValve' || type === 'dieselExhaustValve') {
-          const open = type === 'dieselIntakeValve' ? engineState.intakeOpen : engineState.exhaustOpen
-          mesh.position.y = open ? mesh.userData.openY : mesh.userData.closedY
-          mesh.material.color.setHex(open ? (type === 'dieselIntakeValve' ? 0x0ea5e9 : 0xf97316) : 0x475569)
-        }
-        if (type === 'dieselIntakeFlow' || type === 'dieselExhaustFlow') {
-          const active = type === 'dieselIntakeFlow' ? engineState.intakeOpen : engineState.exhaustOpen
-          mesh.traverse((part) => {
-            if (part.material) {
-              part.material.opacity = active ? 0.9 : 0.12
-              part.material.transparent = true
-            }
-          })
-        }
-        if (type === 'dieselCombustion') {
-          const active = engineState.combustionActive
-          mesh.scale.setScalar(active ? 1.15 + Math.sin(angle * 8) * 0.18 : 0.35)
-          mesh.material.opacity = active ? 0.85 : 0.08
-          mesh.material.transparent = true
-        }
-        if (type === 'crank') mesh.rotation.z -= 0.06 * speed
+        if (type === 'crank') mesh.rotation.z -= 0.06 * stepScale
         if (type === 'flowPulse') {
           const pulse = 0.35 + Math.abs(Math.sin(angle * 2.4)) * 0.65
           mesh.traverse((part) => {
@@ -1867,7 +1610,7 @@ export default function ThreeDSimulation() {
       })
 
       const selected = selectedLayerRef.current
-      root.traverse((object) => {
+      if (!engine) root.traverse((object) => {
         if (!object.isMesh) return
         if (object.material.userData.dynamicOpacity) return
         const shouldDim = selected !== 'all' && object.name && object.name !== selected
@@ -1878,6 +1621,7 @@ export default function ThreeDSimulation() {
 
       renderer.render(scene, camera)
 
+      labelLayer.style.display = running.showLabels ? 'block' : 'none'
       annotationViews.forEach((annotation) => {
         annotation.anchor.getWorldPosition(worldPosition)
         projected.copy(worldPosition).project(camera)
@@ -1886,7 +1630,7 @@ export default function ThreeDSimulation() {
         const x = (projected.x * 0.5 + 0.5) * width
         const y = (-projected.y * 0.5 + 0.5) * height
         const outside = projected.z < -1 || projected.z > 1 || x < -120 || x > width + 120 || y < -80 || y > height + 80
-        const shouldDim = selected !== 'all' && annotation.layerId !== selected
+        const shouldDim = !annotation.compact && selected !== 'all' && annotation.layerId !== selected
 
         annotation.element.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -100%)`
         annotation.element.style.opacity = outside ? '0' : shouldDim ? '0.28' : '1'
@@ -1899,12 +1643,21 @@ export default function ThreeDSimulation() {
 
     return () => {
       cancelAnimationFrame(frame)
-      window.removeEventListener('resize', resize)
+      resizeObserver.disconnect()
+      renderer.domElement.removeEventListener('pointerdown', onPointerDown)
+      renderer.domElement.removeEventListener('pointerup', onPointerUp)
+      controls.dispose()
+      scene.traverse((object) => {
+        object.geometry?.dispose()
+        const materials = Array.isArray(object.material) ? object.material : [object.material]
+        materials.forEach((item) => item?.dispose())
+      })
       renderer.dispose()
       labelLayer.remove()
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
+      setSelectedPart(null)
     }
-  }, [simulation.modelId, displayedSimulation.layers.length, engineMode, isFourStrokeLesson, isFourStrokeMode, isLoading, isPlaying, speed, novaModelUrl])
+  }, [simulation.modelId, displayedSimulation.layers.length, engineMode, fuel, isFourStrokeMode, isLoading])
 
   if (isLoading) {
     return <div className="page-container text-center text-slate-600">Đang tải mô phỏng 3D...</div>
@@ -1913,44 +1666,84 @@ export default function ThreeDSimulation() {
   const currentLayer = displayedSimulation.layers[activeStep] || displayedSimulation.layers[0]
 
   return (
-    <div className="min-h-[calc(100vh-64px)] bg-slate-50">
-      <div className="grid min-h-[calc(100vh-64px)] lg:grid-cols-[1fr_420px]">
-        <main className="relative min-h-[560px] border-r border-slate-200 bg-slate-100">
-          <div ref={containerRef} className="absolute inset-0" />
-          <div className="absolute left-5 top-5 max-w-xl rounded-lg border border-white/70 bg-white/90 p-4 shadow-sm backdrop-blur">
-            <div className="mb-2 flex flex-wrap items-center gap-2">
-              <span className="rounded-md bg-slate-950 px-2 py-1 text-xs font-black uppercase text-white">
-                {nova3D.name}
-              </span>
+    <div className="bg-slate-50 lg:h-[calc(100vh-77px)] lg:overflow-hidden">
+      <div className="grid lg:h-full lg:grid-cols-[minmax(0,1fr)_380px]">
+        <main className="flex min-w-0 flex-col border-r border-slate-200 bg-slate-100 lg:h-full lg:min-h-0">
+          <header className="border-b border-slate-200 bg-white px-4 py-2">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
               <span className="rounded-md bg-sky-50 px-2 py-1 text-xs font-bold text-sky-700">
                 {displayedSimulation.label}
               </span>
+              <h1 className="text-lg font-bold text-slate-950">{displayedSimulation.title}</h1>
+              <Link to={`/lessons/${lessonId}`} className="ml-auto text-sm font-semibold text-sky-700 hover:underline">
+                Về bài học
+              </Link>
             </div>
-            <h1 className="mt-1 text-2xl font-bold text-slate-950">{displayedSimulation.title}</h1>
-            <p className="mt-2 text-sm leading-6 text-slate-600">{displayedSimulation.subtitle}</p>
-          </div>
-          <div className="absolute bottom-5 left-5 right-5 rounded-lg border border-slate-200 bg-white/92 p-4 shadow-sm backdrop-blur">
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase text-slate-500">{nova3D.name} đang mô phỏng</p>
-                <p className="mt-1 font-bold text-slate-950">{currentLayer.name}</p>
-                <p className="mt-1 text-sm text-slate-600">{currentLayer.note}</p>
-              </div>
-              <div className="flex gap-2">
-                <button type="button" onClick={() => setIsPlaying((value) => !value)} className="primary-button">
-                  {isPlaying ? 'Tạm dừng' : 'Phát'}
-                </button>
-                <Link to={`/lessons/${lessonId}`} className="secondary-button">
-                  Về bài học
-                </Link>
-              </div>
+          </header>
+
+          <div className="relative h-[52vh] min-h-[320px] lg:h-auto lg:min-h-0 lg:flex-1">
+            <div ref={containerRef} className="absolute inset-0" />
+            {renderFailed && (
+              <p role="alert" className="absolute inset-4 flex items-center justify-center rounded-lg bg-white p-6 text-center text-slate-700">
+                Thiết bị hoặc trình duyệt này chưa bật WebGL nên không hiển thị được mô hình 3D. Hãy bật tăng tốc phần cứng hoặc dùng trình duyệt khác; nội dung bài ở cột bên vẫn đọc được.
+              </p>
+            )}
+            <div className="absolute bottom-2 right-3 z-10 flex gap-2">
+              <button type="button" className="rounded-md border border-slate-300 bg-white/95 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-white" onClick={() => setShowLabels((value) => !value)}>
+                {showLabels ? 'Ẩn nhãn' : 'Hiện nhãn'}
+              </button>
+              <button type="button" className="rounded-md border border-slate-300 bg-white/95 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-white" onClick={() => viewControls.current.reset()}>
+                Góc nhìn chuẩn
+              </button>
             </div>
+            <p className="pointer-events-none absolute bottom-2 left-3 z-10 hidden rounded bg-white/80 px-2 py-0.5 text-xs text-slate-600 sm:block">
+              Kéo để xoay, cuộn hoặc chụm tay để phóng to{isFourStrokeMode ? ', bấm vào chi tiết để xem tên và chức năng' : ''}
+            </p>
+            {selectedPart && ENGINE_PARTS[selectedPart] && (
+              <div className="absolute left-3 top-3 z-10 max-w-xs rounded-lg border border-blue-200 bg-white p-3 shadow-sm">
+                <div className="flex items-start justify-between gap-3">
+                  <h2 className="font-bold text-slate-950">{ENGINE_PARTS[selectedPart].name}</h2>
+                  <button type="button" onClick={closePartCard} aria-label="Đóng" className="text-lg leading-none text-slate-500 hover:text-slate-900">×</button>
+                </div>
+                <p className="mt-1 text-sm leading-5 text-slate-700">{ENGINE_PARTS[selectedPart].role}</p>
+              </div>
+            )}
           </div>
+
+          {isFourStrokeMode ? (
+            <EngineCycleConsole
+              motion={motion}
+              isPlaying={isPlaying}
+              speed={speed}
+              onSpeedChange={setSpeed}
+              onTogglePlay={togglePlaying}
+              onSeek={seekEngine}
+            />
+          ) : (
+            <section className="flex flex-wrap items-center gap-4 border-t border-slate-200 bg-white px-4 py-3">
+              <div className="min-w-0 flex-1 basis-64">
+                <p className="font-bold text-slate-950">{currentLayer.name}</p>
+                <p className="text-sm text-slate-600">{currentLayer.note}</p>
+              </div>
+              <label className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+                Tốc độ {speed.toFixed(1)}×
+                <input type="range" min="0.5" max="2.2" step="0.1" value={speed} onChange={(event) => setSpeed(Number(event.target.value))} />
+              </label>
+              <button type="button" onClick={togglePlaying} className="primary-button">
+                {isPlaying ? 'Tạm dừng' : 'Phát'}
+              </button>
+            </section>
+          )}
         </main>
 
-        <aside className="overflow-y-auto bg-white p-6">
-          <p className="muted-label">Phòng mô phỏng Nova 3D</p>
-          <h2 className="mt-2 text-2xl font-bold text-slate-950">{lesson?.title}</h2>
+        <aside className="bg-white p-5 lg:h-full lg:overflow-y-auto">
+          <h2 className="text-xl font-bold text-slate-950">{lesson?.title}</h2>
+          {isFourStrokeMode && (
+            <section className="mt-3 rounded-lg border border-blue-100 bg-blue-50 p-3 text-blue-950">
+              <p className="font-bold">{currentLayer.name}</p>
+              <p className="mt-1 text-sm leading-6">{currentLayer.note}</p>
+            </section>
+          )}
           <p className="mt-3 text-sm leading-6 text-slate-600">{displayedSimulation.objective}</p>
           {isFourStrokeMode && (
             <p className="mt-2 text-xs leading-5 text-slate-500">{FOUR_STROKE_SIMPLIFICATION_NOTE}</p>
@@ -1979,7 +1772,6 @@ export default function ThreeDSimulation() {
                       setEngineMode(mode.id)
                       setSelectedLayer('all')
                       setActiveStep(0)
-                      setNovaModelUrl(null)
                     }}
                     className={`rounded-md px-3 py-2 text-sm font-bold transition ${
                       (isFourStrokeLesson ? mode.id === 'diesel4' : engineMode === mode.id)
@@ -1995,46 +1787,31 @@ export default function ThreeDSimulation() {
             </section>
           )}
 
-          <section className="mt-5 rounded-lg border border-slate-200 bg-slate-50 p-4">
-            <div className="flex items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-semibold uppercase text-slate-500">Engine</p>
-                <h3 className="mt-1 font-bold text-slate-950">{nova3D.name}</h3>
+          {isFourStrokeMode && (
+            <section className="mt-3 rounded-lg border border-slate-200 bg-white p-2" aria-label="Loại nhiên liệu">
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  { id: 'diesel', label: 'Diesel: vòi phun' },
+                  { id: 'gasoline', label: 'Xăng: bugi' },
+                ].map((option) => (
+                  <button
+                    key={option.id}
+                    type="button"
+                    aria-pressed={fuel === option.id}
+                    onClick={() => setFuel(option.id)}
+                    className={`rounded-md px-3 py-2 text-sm font-bold transition ${
+                      fuel === option.id ? 'bg-slate-950 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
               </div>
-              <span className={`rounded-md px-3 py-1 text-xs font-black uppercase ${
-                novaModelUrl
-                  ? 'bg-emerald-50 text-emerald-700'
-                  : shouldUseNovaApi
-                    ? 'bg-amber-50 text-amber-700'
-                    : 'bg-slate-100 text-slate-600'
-              }`}>
-                {novaModelUrl ? 'GLB' : shouldUseNovaApi ? 'API' : 'Local'}
-              </span>
-            </div>
-            <p className="mt-3 text-sm leading-6 text-slate-600">{nova3D.description}</p>
-            <div className="mt-3 rounded-md bg-white p-3 text-sm leading-6 text-slate-700">
-              <p className="font-bold text-slate-950">{novaStatus}</p>
-              {novaWorkflowId && <p className="mt-1 text-xs text-slate-500">Workflow: {novaWorkflowId}</p>}
-              {novaError && <p className="mt-2 text-xs text-rose-700">{novaError}</p>}
-            </div>
-          </section>
+            </section>
+          )}
 
           <section className="mt-6">
-            <div className="mb-3 flex items-center justify-between">
-              <h3 className="font-bold text-slate-950">Lớp kiến thức</h3>
-              <label className="text-sm font-semibold text-slate-600">
-                Tốc độ {speed.toFixed(1)}x
-              </label>
-            </div>
-            <input
-              type="range"
-              min="0.5"
-              max="2.2"
-              step="0.1"
-              value={speed}
-              onChange={(event) => setSpeed(Number(event.target.value))}
-              className="mb-4 w-full"
-            />
+            <h3 className="mb-3 font-bold text-slate-950">{isFourStrokeMode ? 'Xem từng kì' : 'Lớp kiến thức'}</h3>
             <div className="grid grid-cols-2 gap-2">
               {layerButtons.map((layer) => (
                 <button

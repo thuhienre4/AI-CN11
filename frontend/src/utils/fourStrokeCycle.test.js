@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { FOUR_STROKE_CYCLE_RADIANS, crankSliderPosition, fourStrokeState } from './fourStrokeCycle'
+import { FOUR_STROKE_CYCLE_RADIANS, crankSliderPosition, fourStrokeState, normalizeCyclePhase } from './fourStrokeCycle'
 
 const geometry = { crankRadius: 0.9, crankCenterY: -1.12, rodLength: 2.2 }
 const pistonAt = (cyclePhase) => crankSliderPosition({ ...geometry, cyclePhase }).pistonPinY
@@ -43,5 +43,27 @@ describe('four-stroke teaching model', () => {
       const state = fourStrokeState((step / 720) * FOUR_STROKE_CYCLE_RADIANS)
       expect(state.intakeOpen && state.exhaustOpen).toBe(false)
     }
+  })
+})
+
+describe('four-stroke readouts', () => {
+  it('names the stroke and crank angle at every mid-stroke', () => {
+    const names = [0, 1, 2, 3].map((index) => fourStrokeState(midStroke(index)))
+    expect(names.map((state) => state.stroke.id)).toEqual(['intake', 'compression', 'power', 'exhaust'])
+    expect(names.map((state) => Math.round(state.crankDegrees))).toEqual([90, 270, 450, 630])
+  })
+
+  it('lifts each valve smoothly from closed to full and back within its own stroke', () => {
+    expect(fourStrokeState(0).intakeLift).toBeCloseTo(0)
+    expect(fourStrokeState(Math.PI / 2).intakeLift).toBeCloseTo(1)
+    expect(fourStrokeState(Math.PI - 0.0001).intakeLift).toBeCloseTo(0)
+    expect(fourStrokeState(3.5 * Math.PI).exhaustLift).toBeCloseTo(1)
+    expect(fourStrokeState(2 * Math.PI).intakeLift).toBe(0)
+    expect(fourStrokeState(2 * Math.PI).exhaustLift).toBe(0)
+  })
+
+  it('wraps any angle into one cycle', () => {
+    expect(normalizeCyclePhase(FOUR_STROKE_CYCLE_RADIANS + 1)).toBeCloseTo(1)
+    expect(normalizeCyclePhase(-1)).toBeCloseTo(FOUR_STROKE_CYCLE_RADIANS - 1)
   })
 })
