@@ -9,6 +9,8 @@ import { getSimulationExperimentForLesson } from '../data/simulationExperiments'
 import { useAuthStore } from '../store'
 import { recordLocalLearningEvent } from '../utils/learningProgress'
 import { ENGINE_PARTS, createFourStrokeEngine, engineGeometry, pickEnginePart } from '../simulations/fourStrokeEngineModel'
+import { createLessonFlowModel } from '../simulations/lessonFlowModel'
+import { lessonModelSimulation } from '../data/knttLessonModels'
 import {
   FOUR_STROKE_CYCLE_RADIANS,
   FOUR_STROKE_SIMPLIFICATION_NOTE,
@@ -658,6 +660,13 @@ const gasolineFourStrokeSimulation = {
     { id: 'power', name: 'c. Kì nổ (cháy - giãn nở)', note: 'Cuối kì nén, bu gi phóng tia lửa điện; hòa khí cháy giãn nở đẩy pít tông từ ĐCT đến ĐCD, sinh công.' },
     { id: 'exhaust', name: 'd. Kì thải', note: 'Pít tông đi lên, xu páp thải mở, khí thải được đẩy qua đường thải ra ngoài; xu páp nạp đóng.' },
   ],
+}
+
+const LOGIC_BOARD_FRAMING = {
+  center: new THREE.Vector3(0, 0.35, 0),
+  width: 8.6,
+  height: 4.2,
+  direction: new THREE.Vector3(0, 0.62, 1).normalize(),
 }
 
 const material = (color, opacity = 1) => {
@@ -1322,14 +1331,16 @@ export default function ThreeDSimulation() {
   }, [user?.id, lessonId])
 
   const simulationKey = getSimulationKey(lesson)
-  const isFourStrokeLesson = Number(lesson?.grade_level) === 11 && Number(lesson?.source_id || lesson?.id) === 602
-  const simulation = lesson?.grade_level === 12
+  // Bài 17, 18 and 19 all describe the four-stroke engine
+  const isFourStrokeLesson = Number(lesson?.grade_level) === 11 && [601, 602, 603].includes(Number(lesson?.source_id || lesson?.id))
+  const chapterSimulation = lesson?.grade_level === 12
     ? getIndustrial12Simulation(simulationKey)
     : lesson?.grade_level === 11
       ? simulationKey === 'blastFurnace'
         ? blastFurnaceSimulation
         : mechanical11SpecializedSimulations[simulationKey] || knttSimulations[simulationKey] || mechanical11SpecializedSimulations[1]
       : technology10Simulations[simulationKey] || technology10Simulations[1]
+  const simulation = lessonModelSimulation(lesson, chapterSimulation) || chapterSimulation
   const isFourStrokeMode = simulation.modelId === 6 && (engineMode === 'diesel4' || isFourStrokeLesson)
   const fourStrokeSimulation = fuel === 'gasoline' ? gasolineFourStrokeSimulation : dieselFourStrokeSimulation
   const displayedSimulation = isFourStrokeMode ? fourStrokeSimulation : simulation
@@ -1440,11 +1451,13 @@ export default function ThreeDSimulation() {
     }
 
     const engine = isFourStrokeMode ? createFourStrokeEngine({ fuel }) : null
-    const base = new THREE.GridHelper(8, 8, 0xcbd5e1, 0xe2e8f0)
-    base.position.y = engine ? -2.52 : -0.65
+    const lessonModel = simulation.lessonModel ? createLessonFlowModel(simulation.lessonModel) : null
+    const base = new THREE.GridHelper(lessonModel ? 16 : 8, lessonModel ? 16 : 8, 0xcbd5e1, 0xe2e8f0)
+    base.position.y = engine ? -2.52 : lessonModel ? lessonModel.floorY : -0.65
     scene.add(base)
 
-    const { root, animated, annotations } = engine || buildChapterModel(simulation.modelId, engineMode)
+    const { root, animated, annotations, framing: modelFraming } = engine || lessonModel || buildChapterModel(simulation.modelId, engineMode)
+    const framing = modelFraming || (simulation.modelId === 8 ? LOGIC_BOARD_FRAMING : null)
     if (simulation.modelId === 8) {
       root.scale.setScalar(0.78)
       root.position.set(0, -0.18, 0.12)
@@ -1455,21 +1468,35 @@ export default function ThreeDSimulation() {
     controls.enableDamping = true
     controls.dampingFactor = 0.08
     controls.enablePan = false
-    controls.target.copy(engine ? engine.framing.center : new THREE.Vector3(0, 0.3, 0))
+    controls.target.copy(framing ? framing.center : new THREE.Vector3(0, 0.3, 0))
 
-    const fitEngineView = () => {
-      const { center, width, height } = engine.framing
+    const engineViewDistance = () => {
+      const { width, height } = framing
       const halfFov = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2))
-      const distance = Math.max(height / 2 / halfFov, width / 2 / (halfFov * camera.aspect)) * 1.08
-      const direction = new THREE.Vector3(0.42, 0.14, 1).normalize()
-      camera.position.copy(center).addScaledVector(direction, distance)
-      controls.target.copy(center)
+      return Math.max(height / 2 / halfFov, width / 2 / (halfFov * camera.aspect)) * 1.04
+    }
+
+    const setEngineZoomLimits = (distance) => {
       controls.minDistance = distance * 0.35
       controls.maxDistance = distance * 1.8
+    }
+
+    const fitEngineView = () => {
+      const { center } = framing
+      const distance = engineViewDistance()
+      const direction = framing.direction || new THREE.Vector3(0.42, 0.14, 1).normalize()
+      camera.position.copy(center).addScaledVector(direction, distance)
+      controls.target.copy(center)
+      setEngineZoomLimits(distance)
       controls.update()
     }
 
-    const annotationViews = annotations.map((annotation) => {
+    // Labels with a note only fit a wide view; the same notes stay in the panel beside the model
+    const shortLabels = container.getBoundingClientRect().width < 1100
+    const annotationViews = annotations.map((item, index) => {
+      // Labels of the logic board stand side by side, so every other one is raised
+      const lift = shortLabels && simulation.modelId === 8 ? (index % 3) * 26 : 0
+      const annotation = { ...item, compact: item.compact || shortLabels, lift }
       const element = document.createElement('div')
       element.className = annotation.compact ? 'simulation-part-label simulation-part-chip' : 'simulation-part-label'
       element.innerHTML = annotation.compact
@@ -1479,7 +1506,7 @@ export default function ThreeDSimulation() {
       return { ...annotation, element }
     })
 
-    let hasFittedEngine = false
+    let fittedDistance = 0
     const resize = () => {
       const rect = container.getBoundingClientRect()
       const width = Math.max(rect.width, 280)
@@ -1489,10 +1516,16 @@ export default function ThreeDSimulation() {
       renderer.setSize(width, height)
       renderer.domElement.style.width = '100%'
       renderer.domElement.style.height = '100%'
-      if (engine && !hasFittedEngine) {
-        hasFittedEngine = true
+      if (framing && !fittedDistance) {
         fitEngineView()
+      } else if (framing) {
+        // Keeps the student's angle and zoom while the whole engine still fits the new size
+        const offset = camera.position.clone().sub(controls.target)
+        camera.position.copy(controls.target).addScaledVector(offset, engineViewDistance() / fittedDistance)
+        setEngineZoomLimits(engineViewDistance())
+        controls.update()
       }
+      if (framing) fittedDistance = engineViewDistance()
     }
 
     resize()
@@ -1524,7 +1557,7 @@ export default function ThreeDSimulation() {
     renderer.domElement.addEventListener('pointerup', onPointerUp)
 
     viewControls.current = {
-      reset: () => (engine ? fitEngineView() : controls.reset()),
+      reset: () => (framing ? fitEngineView() : controls.reset()),
       highlight: (part) => engine?.highlightPart(part),
     }
 
@@ -1543,7 +1576,7 @@ export default function ThreeDSimulation() {
       running.angle += 0.025 * stepScale
       const angle = running.angle
       controls.update()
-      if (!engine) root.rotation.y = simulation.modelId === 8 ? 0 : Math.sin(angle * 0.25) * 0.18
+      if (!framing) root.rotation.y = simulation.modelId === 8 ? 0 : Math.sin(angle * 0.25) * 0.18
 
       const cycleDuration = isFourStrokeMode ? FOUR_STROKE_CYCLE_RADIANS : Math.PI * 2
       const cyclePhase = ((angle % cycleDuration) + cycleDuration) % cycleDuration
@@ -1560,6 +1593,12 @@ export default function ThreeDSimulation() {
 
       animated.forEach(({ mesh, type }) => {
         if (type === 'spin' || type === 'wheel') mesh.rotation.y += 0.05 * stepScale
+        if (type === 'spinZ') mesh.rotation.z -= 0.04 * stepScale
+        if (type === 'spinX') mesh.rotation.x -= 0.08 * stepScale
+        if (type === 'flow') {
+          const { begin, end, offset } = mesh.userData.flow
+          mesh.position.lerpVectors(begin, end, (angle * 0.35 + offset) % 1)
+        }
         if (type === 'tool') mesh.position.y = 0.35 + Math.sin(angle * 2) * 0.18
         if (type === 'belt') mesh.position.x = -2.8 + ((angle * 0.9) % 5.6)
         if (type === 'robot') mesh.rotation.z = -0.65 + Math.sin(angle * 1.4) * 0.28
@@ -1631,10 +1670,12 @@ export default function ThreeDSimulation() {
         const height = renderer.domElement.clientHeight
         const x = (projected.x * 0.5 + 0.5) * width
         const y = (-projected.y * 0.5 + 0.5) * height
-        const outside = projected.z < -1 || projected.z > 1 || x < -120 || x > width + 120 || y < -80 || y > height + 80
+        // On a small view the secondary labels would cover the model; those parts stay clickable
+        const crowded = annotation.minor && (width < 560 || height < 420)
+        const outside = crowded || projected.z < -1 || projected.z > 1 || x < -120 || x > width + 120 || y < -80 || y > height + 80
         const shouldDim = !annotation.compact && selected !== 'all' && annotation.layerId !== selected
 
-        annotation.element.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -100%)`
+        annotation.element.style.transform = `translate3d(${x}px, ${y - annotation.lift}px, 0) translate(-50%, -100%)`
         annotation.element.style.opacity = outside ? '0' : shouldDim ? '0.28' : '1'
         annotation.element.style.visibility = outside ? 'hidden' : 'visible'
       })
@@ -1659,7 +1700,7 @@ export default function ThreeDSimulation() {
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
       setSelectedPart(null)
     }
-  }, [simulation.modelId, displayedSimulation.layers.length, engineMode, fuel, isFourStrokeMode, isLoading])
+  }, [simulation.modelId, simulation.lessonModel, displayedSimulation.layers.length, engineMode, fuel, isFourStrokeMode, isLoading])
 
   if (isLoading) {
     return <div className="page-container text-center text-slate-600">Đang tải mô phỏng 3D...</div>
@@ -1668,22 +1709,22 @@ export default function ThreeDSimulation() {
   const currentLayer = displayedSimulation.layers[activeStep] || displayedSimulation.layers[0]
 
   return (
-    <div className="bg-slate-50 lg:h-[calc(100vh-77px)] lg:overflow-hidden">
+    <div className="bg-slate-50 lg:h-[calc(100dvh-77px)] lg:overflow-hidden">
       <div className="grid lg:h-full lg:grid-cols-[minmax(0,1fr)_380px]">
-        <main className="flex min-w-0 flex-col border-r border-slate-200 bg-slate-100 lg:h-full lg:min-h-0">
-          <header className="border-b border-slate-200 bg-white px-4 py-2">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <main className="flex h-[calc(100dvh-77px)] min-h-[460px] min-w-0 flex-col border-r border-slate-200 bg-slate-100 lg:h-full lg:min-h-0">
+          <header className="border-b border-slate-200 bg-white px-4 py-1">
+            <div className="flex items-center gap-x-3">
               <span className="rounded-md bg-sky-50 px-2 py-1 text-xs font-bold text-sky-700">
                 {displayedSimulation.label}
               </span>
-              <h1 className="text-lg font-bold text-slate-950">{displayedSimulation.title}</h1>
-              <Link to={`/lessons/${lessonId}`} className="ml-auto text-sm font-semibold text-sky-700 hover:underline">
+              <h1 className="truncate text-base font-bold text-slate-950">{displayedSimulation.title}</h1>
+              <Link to={`/lessons/${lessonId}`} className="ml-auto shrink-0 text-sm font-semibold text-sky-700 hover:underline">
                 Về bài học
               </Link>
             </div>
           </header>
 
-          <div className="relative h-[52vh] min-h-[320px] lg:h-auto lg:min-h-0 lg:flex-1">
+          <div className="relative min-h-0 flex-1">
             <div ref={containerRef} className="absolute inset-0" />
             {renderFailed && (
               <p role="alert" className="absolute inset-4 flex items-center justify-center rounded-lg bg-white p-6 text-center text-slate-700">

@@ -140,6 +140,18 @@ Khác với sách hoặc với động cơ thật, và đều được ghi chú 
 
 Các ngân hàng câu hỏi, nội dung bài học và dữ liệu bộ Cánh diều chưa được đổi thuật ngữ.
 
+## Mô hình theo từng bài học
+
+Trước đây mô hình gắn theo chương và nhiều chương dùng nhầm mô hình của môn khác: Hệ thống điện quốc gia hiện dây chuyền robot, Mạng điện trong nhà hiện máy tiện, Vi điều khiển hiện ô tô, Vẽ kĩ thuật hiện vật liệu cơ khí, Bài 17 và 19 lớp 11 mở mô hình 2 kì.
+
+Nay mỗi bài của ba cuốn Kết nối tri thức (Thiết kế và công nghệ 10, Công nghệ cơ khí 11, Công nghệ điện - điện tử 12) có mô hình riêng trong `frontend/src/data/knttLessonModels.js`, dựng bằng `frontend/src/simulations/lessonFlowModel.js`. Tám bài giữ mô hình vẽ riêng: lớp 11 Bài 4 (lò cao), Bài 12 (dây chuyền robot), Bài 17-19 (động cơ), Bài 21 (ô tô); lớp 12 Bài 21, 23 (bảng mạch logic). Kiểm thử bảo đảm không bài nào thiếu mô hình.
+
+Giới hạn:
+
+- Đây là mô hình khối thể hiện thành phần và trình tự, không phải mô phỏng vật lí hay bản dựng chi tiết của thiết bị.
+- Thành phần và thuật ngữ lấy từ trang giải bài và giáo án trên mạng, chưa đối chiếu với sách in. Riêng lớp 12 Bài 13-18, 20, 23, 26 và lớp 11 Bài 10, lớp 10 Bài 1, 4, 22 chưa có trang giải đầy đủ nên dựa trên tên bài, nội dung bài trong app và hiểu biết chung; giáo viên cần soát kĩ các bài này.
+- Một số tên bài trong app khác với trang giải bài (lớp 10 Bài 7, Bài 13; lớp 11 Bài 13, Bài 23; lớp 12 Bài 7) và chưa được sửa.
+
 ## Trợ lý AI
 
 Chưa đánh giá Gemini trực tuyến. Kiểm thử chỉ xác nhận lớp tích hợp, xử lý lỗi và nhãn `response_mode`. `data/ai_tutor_eval_set.json` có 13 câu về đúng nội dung, ảo giác, an toàn, riêng tư và sư phạm; chạy bằng `scripts/evaluate_ai_tutor.py` khi có khóa. Kết quả từ khóa chỉ để sàng lọc, giáo viên phải chấm theo rubric.

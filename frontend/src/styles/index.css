@@ -245,7 +245,11 @@ a {
   }
 
   .simulation-part-chip {
-    @apply max-w-none whitespace-nowrap px-2 py-1;
+    @apply max-w-none whitespace-nowrap px-1.5 py-0.5;
+  }
+
+  .simulation-part-chip span {
+    @apply text-[10px] leading-4;
   }
 
   .simulation-part-chip::after {
