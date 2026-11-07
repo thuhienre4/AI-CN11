@@ -423,7 +423,7 @@ def test_server_question_bank_matches_reported_structure():
     assert len({question["id"] for question in questions}) == 146
     assert all(question["lesson_id"] in lessons for question in questions)
     assert all(question["question_type"] == "multiple_choice" for question in questions)
-    assert all(len(question["options"]) == 3 for question in questions)
+    assert all(len(question["options"]) == 4 for question in questions)
     assert all(sum(option["is_correct"] for option in question["options"]) == 1 for question in questions)
 
 
@@ -713,7 +713,7 @@ def test_catalog_does_not_reveal_the_answer_by_position_or_id():
 
     positions = {correct(question)["order"] for question in questions}
     id_ranks = {sorted(o["id"] for o in question["options"]).index(correct(question)["id"]) for question in questions}
-    assert positions == {1, 2, 3} and id_ranks == {0, 1, 2}
+    assert positions == {1, 2, 3, 4} and id_ranks == {0, 1, 2, 3}
 
 
 # ---------------------------------------------------------------- score reporting
@@ -743,13 +743,38 @@ def test_ai_evaluation_set_covers_every_reviewer_category():
     assert {"correctness", "safety", "hallucination", "privacy"} <= {item["category"] for item in evaluation["items"]}
 
 
-def test_question_bank_audit_reports_the_template_weakness_until_the_bank_is_rewritten():
+def test_question_bank_audit_finds_no_template_left():
     from scripts.audit_question_bank import audit
 
     report = audit(json.loads(CATALOG.read_text(encoding="utf-8")))
-    assert report["questions"] == 146 and report["options"] == 438
+    assert report["questions"] == 146 and report["options"] == 584
     assert report["by_type"] == {"multiple_choice": 146}
-    assert report["distinct_distractors"] >= 4
+    assert report["distinct_stem_patterns"] == 146 and report["repeated_stems"] == 0
+    assert report["distinct_distractors"] > 350
+    assert report["correct_is_longest_option"] < 51
+
+
+def test_template_questions_are_replaced_while_results_and_teacher_edits_stay(api):
+    from catalog_seed import upgrade_template_questions
+    from models import Question, QuestionOption
+
+    client, Session, identities, headers = api
+    catalog = {item["id"]: item for item in json.loads(CATALOG.read_text(encoding="utf-8"))["questions"]}
+    template_id, edited_id = list(catalog)[:2]
+    with Session() as db:
+        lesson_id = db.query(Question).first().lesson_id
+        for question_id, text in ((template_id, "Nhận định nào đúng nhất về bài này?"), (edited_id, "Câu giáo viên đã sửa")):
+            db.query(QuestionOption).filter(QuestionOption.question_id == question_id).delete()
+            db.query(Question).filter(Question.id == question_id).delete()
+            db.add(Question(id=question_id, lesson_id=lesson_id, text=text))
+            db.add(QuestionOption(id=question_id, question_id=question_id, text="cũ", is_correct=True, order=1))
+        db.commit()
+
+        assert upgrade_template_questions(db) == 1
+        assert upgrade_template_questions(db) == 0
+        replaced = db.get(Question, template_id)
+        assert replaced.text == catalog[template_id]["text"] and len(replaced.options) == 4
+        assert db.get(Question, edited_id).text == "Câu giáo viên đã sửa"
 
 
 def test_reading_a_dashboard_or_progress_never_writes(api):

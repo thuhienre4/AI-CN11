@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>EngineLab AI</title>
+    <script>
+      // GitHub Pages has no route rewrites: it answers every app route with this page and status 404.
+      // Send the visitor to the app root with the route kept, so that the app itself loads with 200.
+      var parts = location.pathname.split('/')
+      var root = '/' + parts[1] + '/'
+      var route = parts.slice(2).join('/') + location.search + location.hash
+      location.replace(root + '?route=' + encodeURIComponent(route))
+    </script>
+  </head>
+  <body></body>
+</html>

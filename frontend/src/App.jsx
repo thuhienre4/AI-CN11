@@ -4,9 +4,19 @@ import { Toaster } from 'react-hot-toast'
 import { useAuthStore } from './store'
 
 // Pages
+const reloadFresh = () => {
+  // A new address skips any cached copy of the page that still names files of the old deployment
+  const url = new URL(window.location.href)
+  url.searchParams.set('v', Date.now())
+  window.location.replace(url)
+}
+
 const lazyPage = (loader) =>
   lazy(() =>
-    loader().catch((error) => {
+    loader().then((page) => {
+      sessionStorage.removeItem('chunk-reload-attempted')
+      return page
+    }).catch((error) => {
       const message = String(error?.message || error || '')
       const isChunkError =
         message.includes('Failed to fetch dynamically imported module') ||
@@ -15,7 +25,8 @@ const lazyPage = (loader) =>
 
       if (isChunkError && sessionStorage.getItem('chunk-reload-attempted') !== 'true') {
         sessionStorage.setItem('chunk-reload-attempted', 'true')
-        window.location.reload()
+        reloadFresh()
+        return new Promise(() => {})
       }
 
       throw error
@@ -42,6 +53,7 @@ const AvatarStudio = lazyPage(() => import('./pages/AvatarStudio'))
 const MechanicalWorkshop = lazyPage(() => import('./pages/MechanicalWorkshop'))
 const GameDemo = lazyPage(() => import('./pages/GameDemo'))
 const ThreeDSimulation = lazyPage(() => import('./pages/ThreeDSimulation'))
+const ThptExam = lazyPage(() => import('./pages/ThptExam'))
 const NotFound = lazyPage(() => import('./pages/NotFound'))
 
 // Components
@@ -91,12 +103,12 @@ class AppErrorBoundary extends Component {
 
   retry = () => {
     sessionStorage.removeItem('chunk-reload-attempted')
-    window.location.reload()
+    reloadFresh()
   }
 
   goHome = () => {
     sessionStorage.removeItem('chunk-reload-attempted')
-    window.location.href = '/'
+    window.location.href = import.meta.env.BASE_URL
   }
 
   render() {
@@ -276,6 +288,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Navigate to="/practice-bank" replace />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/thpt-exam"
+            element={
+              <ProtectedRoute>
+                <ThptExam />
               </ProtectedRoute>
             }
           />

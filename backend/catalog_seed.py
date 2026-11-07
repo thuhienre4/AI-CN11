@@ -10,6 +10,7 @@ from models import Course, Lesson, Question, QuestionOption
 
 logger = logging.getLogger("enginelab.catalog")
 CATALOG_PATH = Path(__file__).resolve().parent / "data" / "course_catalog.json"
+TEMPLATE_STEMS = ("Nhận định nào đúng nhất về", "Sản phẩm học tập nào phù hợp nhất với cách học môn Công nghệ")
 
 
 def seed_catalog(db: Session, *, force: bool = False) -> dict[str, int | bool]:
@@ -59,10 +60,39 @@ def seed_catalog(db: Session, *, force: bool = False) -> dict[str, int | bool]:
     return result
 
 
+def upgrade_template_questions(db: Session) -> int:
+    """Replace questions still holding the old generated text.
+
+    Ids stay the same, so past results keep pointing to their question. A question a teacher has
+    rewritten no longer matches the templates and is left alone.
+    """
+    if not CATALOG_PATH.exists():
+        return 0
+    catalog = {item["id"]: item for item in json.loads(CATALOG_PATH.read_text(encoding="utf-8")).get("questions", [])}
+    upgraded = 0
+    for question in db.query(Question).filter(Question.id.in_(list(catalog))).all():
+        if not question.text.startswith(TEMPLATE_STEMS):
+            continue
+        item = catalog[question.id]
+        question.text = item["text"]
+        question.difficulty = item["difficulty"]
+        question.options.clear()
+        db.flush()
+        for option in item["options"]:
+            db.add(QuestionOption(question_id=question.id, **option))
+        upgraded += 1
+    db.commit()
+    if upgraded:
+        logger.info("Replaced %s template questions", upgraded)
+    return upgraded
+
+
 def seed_catalog_if_empty() -> dict[str, int | bool]:
     db = SessionLocal()
     try:
-        return seed_catalog(db)
+        result = seed_catalog(db)
+        upgrade_template_questions(db)
+        return result
     except Exception:
         db.rollback()
         logger.exception("Unable to seed the learning catalog")

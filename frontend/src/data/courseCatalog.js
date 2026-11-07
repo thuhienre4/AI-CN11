@@ -20,6 +20,8 @@ import {
   chapterAssessments as grade12Assessments,
 } from './knttIndustrial12Data'
 
+import { withThptBank } from './thptQuestionBank'
+
 const gradeConfigs = {
   10: {
     gradeLevel: 10,
@@ -194,11 +196,21 @@ export const engineCycleSteps = [
 
 export const sampleCourses = [...grade10MappedCourses, ...grade11MappedCourses, ...grade12MappedCourses]
 export const sampleLessons = [...grade10MappedLessons, ...grade11MappedLessons, ...grade12MappedLessons]
-export const sampleQuestions = [
+const mappedQuestions = [
   ...grade10Questions.map((question) => mapQuestion(question, grade10Config)),
   ...grade11Questions.map((question) => mapQuestion(question, grade11Config)),
   ...grade12Questions.map((question) => mapQuestion(question, grade12Config)),
 ]
+
+const lessonsById = new Map(sampleLessons.map((lesson) => [lesson.id, lesson]))
+const questionIndex = new Map()
+
+// Lesson questions come from the bank written for the exam format; ids stay as they were.
+export const sampleQuestions = mappedQuestions.map((question) => {
+  const index = questionIndex.get(question.lesson_id) || 0
+  questionIndex.set(question.lesson_id, index + 1)
+  return withThptBank(question, lessonsById.get(question.lesson_id), question.grade_level, index)
+})
 
 const interactiveActivities = {
   ...mapActivities(grade10Activities, grade10Lessons, grade10Config),

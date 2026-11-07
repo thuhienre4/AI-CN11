@@ -33,7 +33,14 @@ const sendFile = (res, filePath, statusCode = 200) => {
 }
 
 const server = http.createServer((req, res) => {
-  const urlPath = decodeURIComponent((req.url || '/').split('?')[0])
+  let urlPath
+  try {
+    urlPath = decodeURIComponent((req.url || '/').split('?')[0])
+  } catch {
+    res.writeHead(400)
+    res.end()
+    return
+  }
   const safePath = path.normalize(urlPath).replace(/^(\.\.[/\\])+/, '')
   const candidate = path.join(root, safePath)
 
@@ -45,6 +52,13 @@ const server = http.createServer((req, res) => {
   fs.stat(candidate, (error, stats) => {
     if (!error && stats.isFile()) {
       sendFile(res, candidate)
+      return
+    }
+
+    // A missing file of an old deployment must fail as such, not arrive as an HTML page
+    if (urlPath.startsWith('/assets/')) {
+      res.writeHead(404, { 'Cache-Control': 'no-store' })
+      res.end()
       return
     }
 

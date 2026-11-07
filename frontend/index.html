@@ -54,6 +54,13 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // Restores the route kept by public/404.html before the router reads the address.
+      ;(function () {
+        var route = new URLSearchParams(location.search).get('route')
+        if (route !== null) history.replaceState(null, '', location.pathname + route)
+      })()
+    </script>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

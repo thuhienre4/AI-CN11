@@ -99,13 +99,36 @@ Cả 5 lần chạy đều cho cùng kết quả:
 
 Khóa hàng cho PostgreSQL (`with_for_update`) đã được thêm nhưng chưa chạy thử trên PostgreSQL.
 
-## Ngân hàng câu hỏi
+## Thẩm định và thiết kế lại ngân hàng câu hỏi
 
-`scripts/audit_question_bank.py` cho kết quả sau trên ngân hàng phía máy chủ:
+Căn cứ: Chương trình môn Công nghệ (Thông tư 32/2018, năm thành phần năng lực công nghệ) và định dạng đề thi tốt nghiệp THPT từ 2025 theo Quyết định 764/QĐ-BGDĐT: 50 phút, Phần I 24 câu bốn phương án (0,25 điểm/câu), Phần II 4 câu đúng/sai, mỗi câu 4 ý (0,1; 0,25; 0,5; 1 điểm khi đúng 1, 2, 3, 4 ý). Các nguồn tổng hợp thống nhất về định dạng này, nhưng tôi chưa đọc được bản gốc của Quyết định và chưa tìm thấy ma trận chính thức cho môn này.
 
-- 146 câu trắc nghiệm một đáp án, mỗi câu 3 phương án, tổng 438 phương án. Không có câu đúng–sai.
-- 73 câu mức dễ, 73 câu mức trung bình; lớp 10, 11, 12 lần lượt có 44, 50, 52 câu.
-- **Hạn chế về nội dung:** chỉ có 2 mẫu thân câu và 4 phương án nhiễu dùng chung; 141/146 câu có đáp án đúng là phương án dài nhất. Ngân hàng này chưa đủ làm công cụ đánh giá và cần giáo viên bộ môn biên soạn lại.
+| Chỉ số | Bộ cũ | Bộ mới |
+|---|---|---|
+| Câu hỏi bài học | 146 | 146, giữ nguyên mã câu |
+| Số phương án | 3 | 4 |
+| Mẫu câu dẫn khác nhau | 2 | 146 |
+| Câu dẫn lặp lại | 72 | 0 |
+| Phương án sai khác nhau | 4 | 434 |
+| Đáp án đúng là phương án dài nhất | 141/146 (97%) | 42/146 (29%) |
+| Mức độ | không gắn | Biết 67, Hiểu 39, Vận dụng 40 |
+| Năng lực công nghệ | không gắn | Gắn cho từng câu |
+| Lời giải thích | không có | Có cho từng câu |
+| Chùm đúng/sai 4 ý | không có | 19, mỗi chương một chùm |
+
+Kết luận thẩm định bộ cũ: không đạt. 73 câu thứ hai của các bài là cùng một câu về cách học, 73 câu đầu chỉ hỏi "Nhận định nào đúng nhất" với đáp án sai dùng chung, nên học sinh chọn đúng mà không cần kiến thức bài học.
+
+`frontend/src/data/thptBank10.js`, `thptBank11.js`, `thptBank12.js` chứa bộ mới. Khi máy chủ khởi động, `upgrade_template_questions` chỉ thay các câu còn nguyên văn mẫu cũ; câu giáo viên đã sửa và kết quả làm bài cũ được giữ. Trang `/thpt-exam` tạo đề 24 + 4 câu, 50 phút, chấm theo thang trên.
+
+Giới hạn:
+
+- Toàn bộ câu hỏi do AI soạn, chưa được giáo viên bộ môn thẩm định, chưa thử trên học sinh nên chưa có độ khó, độ phân biệt thực nghiệm. Nhãn mức độ là dự kiến của người soạn.
+- Mỗi bài chỉ có 2 câu và mỗi chương 1 chùm đúng/sai; số đề khác nhau có hạn, chùm đúng/sai của lớp 12 sẽ lặp lại sau vài đề.
+- Tỉ lệ đề luyện (lớp 10: 5, lớp 11: 7, lớp 12: 12 câu Phần I; tỉ lệ mức độ 40/30/30) là thiết kế của EngineLab, suy từ đề mẫu, không phải ma trận của Bộ.
+- Đáp án trang đề luyện nằm trong mã giao diện vì đây là bài tự luyện; không dùng trang này để kiểm tra lấy điểm.
+- Bộ đề theo chương (64 câu) chưa được soát lại.
+
+## Ngân hàng kiểm tra chương
 
 Câu 4 lựa chọn và đúng–sai thuộc ngân hàng kiểm tra chương riêng ở giao diện (`knttChapterAssessmentBanks.js`): lớp 11 có 28 câu, lớp 12 có 36 câu, mỗi chương gồm 1 câu trắc nghiệm, 1 đúng–sai, 1 chọn nhiều và 1 ghép cặp.
 

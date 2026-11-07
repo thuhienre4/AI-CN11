@@ -34,6 +34,7 @@ def audit(catalog: dict) -> dict:
         "distinct_distractors": len(distractors),
         "distractor_uses": sum(distractors.values()),
         "correct_position": dict(Counter(correct(q)["order"] for q in questions)),
+        "repeated_stems": sum(count - 1 for count in Counter(q["text"] for q in questions).values() if count > 1),
         "correct_is_longest_option": sum(
             max(q["options"], key=lambda option: len(option["text"]))["is_correct"] for q in questions
         ),
