@@ -8,7 +8,7 @@ import { getSampleLesson } from '../data/courseCatalog'
 import { getSimulationExperimentForLesson } from '../data/simulationExperiments'
 import { useAuthStore } from '../store'
 import { recordLocalLearningEvent } from '../utils/learningProgress'
-import { ENGINE_PARTS, createFourStrokeEngine, pickEnginePart } from '../simulations/fourStrokeEngineModel'
+import { ENGINE_PARTS, createFourStrokeEngine, engineGeometry, pickEnginePart } from '../simulations/fourStrokeEngineModel'
 import {
   FOUR_STROKE_CYCLE_RADIANS,
   FOUR_STROKE_SIMPLIFICATION_NOTE,
@@ -87,20 +87,20 @@ const chapterSimulations = {
     title: 'Mô phỏng động cơ đốt trong 4 kì',
     subtitle: 'Nạp, nén, cháy - giãn nở và thải',
     objective:
-      'Giúp học sinh hiểu động cơ đốt trong biến nhiệt năng của nhiên liệu thành cơ năng thông qua piston, thanh truyền và trục khuỷu.',
+      'Giúp học sinh hiểu động cơ đốt trong biến nhiệt năng của nhiên liệu thành cơ năng thông qua pít tông, thanh truyền và trục khuỷu.',
     layers: [
-      { id: 'intake', name: 'Kì nạp', note: 'Piston đi xuống, xupap nạp mở, môi chất đi vào xi lanh.' },
-      { id: 'compression', name: 'Kì nén', note: 'Piston đi lên, hai xupap đóng, môi chất bị nén.' },
-      { id: 'power', name: 'Kì cháy - giãn nở', note: 'Khí cháy giãn nở đẩy piston đi xuống và sinh công.' },
-      { id: 'exhaust', name: 'Kì thải', note: 'Piston đi lên, xupap thải mở, khí thải ra ngoài.' },
+      { id: 'intake', name: 'Kì nạp', note: 'Pít tông đi xuống, xu páp nạp mở, môi chất đi vào xi lanh.' },
+      { id: 'compression', name: 'Kì nén', note: 'Pít tông đi lên, hai xu páp đóng, môi chất bị nén.' },
+      { id: 'power', name: 'Kì nổ (cháy - giãn nở)', note: 'Khí cháy giãn nở đẩy pít tông đi xuống và sinh công.' },
+      { id: 'exhaust', name: 'Kì thải', note: 'Pít tông đi lên, xu páp thải mở, khí thải ra ngoài.' },
     ],
     checkpoints: [
       'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến thành chuyển động quay.',
-      'Kì cháy - giãn nở là kì sinh công.',
+      'Kì nổ (cháy - giãn nở) là kì sinh công.',
       'Các hệ thống nạp, nhiên liệu, đánh lửa, làm mát và bôi trơn giúp động cơ làm việc ổn định.',
     ],
     teacherPrompts: [
-      'Ở kì nào hai xupap đều đóng?',
+      'Ở kì nào hai xu páp đều đóng?',
       'Vì sao động cơ cần hệ thống làm mát và bôi trơn?',
     ],
   },
@@ -248,23 +248,23 @@ const knttSimulations = {
     modelId: 6,
     label: 'KNTT - Chương VI',
     title: 'Mô phỏng động cơ xăng 2 kì',
-    subtitle: 'Bugi, piston, cửa nạp, cửa quét, cửa thải, cacte và trục khuỷu',
+    subtitle: 'Bu gi, pít tông, cửa nạp, cửa quét, cửa thải, các te và trục khuỷu',
     objective:
-      'Bám theo sơ đồ cấu tạo động cơ xăng 2 kì trong SGK Công nghệ 11: quan sát chuyển động piston - thanh truyền - trục khuỷu và quá trình nạp, nén, cháy - giãn nở, quét thải qua các cửa khí.',
+      'Bám theo sơ đồ cấu tạo động cơ xăng 2 kì trong SGK Công nghệ 11: quan sát chuyển động pít tông - thanh truyền - trục khuỷu và quá trình nạp, nén, cháy - giãn nở, quét thải qua các cửa khí.',
     layers: [
-      { id: 'intake', name: 'Cửa nạp - cacte', note: 'Khi piston đi lên, áp suất trong cacte giảm, hòa khí đi qua cửa nạp vào cacte.' },
-      { id: 'compression', name: 'Nén trong xi lanh', note: 'Piston đi lên che cửa quét và cửa thải, hòa khí phía trên piston bị nén; bugi chuẩn bị đánh lửa.' },
-      { id: 'power', name: 'Cháy - giãn nở', note: 'Bugi đánh lửa, khí cháy giãn nở đẩy piston đi xuống, qua thanh truyền làm trục khuỷu quay sinh công.' },
-      { id: 'exhaust', name: 'Quét - thải', note: 'Piston đi xuống mở cửa thải và cửa quét; khí cháy thoát ra, hòa khí từ cacte qua đường quét đi vào xi lanh.' },
+      { id: 'intake', name: 'Cửa nạp - các te', note: 'Khi pít tông đi lên, áp suất trong các te giảm, hòa khí đi qua cửa nạp vào các te.' },
+      { id: 'compression', name: 'Nén trong xi lanh', note: 'Pít tông đi lên che cửa quét và cửa thải, hòa khí phía trên pít tông bị nén; bu gi chuẩn bị đánh lửa.' },
+      { id: 'power', name: 'Cháy - giãn nở', note: 'Bu gi đánh lửa, khí cháy giãn nở đẩy pít tông đi xuống, qua thanh truyền làm trục khuỷu quay sinh công.' },
+      { id: 'exhaust', name: 'Quét - thải', note: 'Pít tông đi xuống mở cửa thải và cửa quét; khí cháy thoát ra, hòa khí từ các te qua đường quét đi vào xi lanh.' },
     ],
     checkpoints: [
-      'Động cơ xăng 2 kì hoàn thành một chu trình công tác trong hai hành trình piston, tương ứng một vòng quay trục khuỷu.',
-      'Không dùng xupap như nhiều động cơ 4 kì; quá trình nạp, quét và thải được điều khiển chủ yếu bằng cửa nạp, cửa quét và cửa thải.',
-      'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay của trục khuỷu.',
+      'Động cơ xăng 2 kì hoàn thành một chu trình công tác trong hai hành trình pít tông, tương ứng một vòng quay trục khuỷu.',
+      'Không dùng xu páp như nhiều động cơ 4 kì; quá trình nạp, quét và thải được điều khiển chủ yếu bằng cửa nạp, cửa quét và cửa thải.',
+      'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của pít tông thành chuyển động quay của trục khuỷu.',
     ],
     teacherPrompts: [
-      'Vì sao cửa quét và cửa thải phải được piston đóng/mở đúng thời điểm?',
-      'Trong động cơ 2 kì, cacte tham gia vào quá trình nạp và quét khí như thế nào?',
+      'Vì sao cửa quét và cửa thải phải được pít tông đóng/mở đúng thời điểm?',
+      'Trong động cơ 2 kì, các te tham gia vào quá trình nạp và quét khí như thế nào?',
     ],
   },
   7: {
@@ -627,34 +627,36 @@ const dieselFourStrokeSimulation = {
   ...knttSimulations[6],
   label: 'Bài 18',
   title: 'Mô hình 3D nguyên lí động cơ 4 kì',
-  subtitle: 'Nạp, nén, cháy - giãn nở và thải theo Bài 18 Công nghệ 11',
+  subtitle: 'Nạp, nén, nổ và thải theo Bài 18, 19 Công nghệ 11 (Kết nối tri thức)',
   objective:
-    'Mô phỏng nguyên lí làm việc của động cơ 4 kì trên lược đồ động cơ đốt trong: piston chuyển động giữa ĐCT và ĐCD, hành trình S, đường kính xi lanh D, bán kính quay trục khuỷu R, cùng cơ cấu phối khí và quá trình sinh công.',
+    'Mô phỏng nguyên lí làm việc của động cơ 4 kì trên lược đồ động cơ đốt trong: pít tông chuyển động giữa ĐCT và ĐCD, hành trình S, đường kính xi lanh D, bán kính quay trục khuỷu R, cùng cơ cấu phối khí và quá trình sinh công.',
   layers: [
-    { id: 'intake', name: 'a. Kì nạp', note: 'Piston đi xuống, xupap nạp mở, không khí được hút qua ống nạp vào xi lanh; xupap thải đóng.' },
-    { id: 'compression', name: 'b. Kì nén', note: 'Piston đi lên, hai xupap đều đóng, không khí trong xi lanh bị nén tới áp suất và nhiệt độ cao.' },
-    { id: 'power', name: 'c. Kì cháy - giãn nở', note: 'Vòi phun phun nhiên liệu vào không khí nóng; nhiên liệu tự bốc cháy, khí giãn nở đẩy piston đi xuống sinh công.' },
-    { id: 'exhaust', name: 'd. Kì thải', note: 'Piston đi lên, xupap thải mở, khí thải được đẩy qua ống thải ra ngoài; xupap nạp đóng.' },
+    { id: 'intake', name: 'a. Kì nạp', note: 'Pít tông đi xuống, xu páp nạp mở, không khí được hút qua ống nạp vào xi lanh; xu páp thải đóng.' },
+    { id: 'compression', name: 'b. Kì nén', note: 'Pít tông đi lên, hai xu páp đều đóng, không khí trong xi lanh bị nén tới áp suất và nhiệt độ cao.' },
+    { id: 'power', name: 'c. Kì nổ (cháy - giãn nở)', note: 'Cuối kì nén, nhiên liệu được phun vào xi lanh với áp suất cao rồi tự cháy; khí cháy giãn nở đẩy pít tông từ ĐCT đến ĐCD, sinh công.' },
+    { id: 'exhaust', name: 'd. Kì thải', note: 'Pít tông đi lên, xu páp thải mở, khí thải được đẩy qua ống thải ra ngoài; xu páp nạp đóng.' },
   ],
   checkpoints: [
-    'Piston chuyển động tịnh tiến trong xi lanh từ ĐCT đến ĐCD hoặc ngược lại; quãng đường đó là hành trình S.',
-    'Động cơ 4 kì hoàn thành một chu trình công tác trong bốn hành trình piston, tương ứng hai vòng quay trục khuỷu.',
-    'Ở cuối kì nén, động cơ xăng dùng bugi đánh lửa còn động cơ Diesel phun nhiên liệu vào không khí nóng để tự bốc cháy.',
+    'Pít tông chuyển động tịnh tiến trong xi lanh từ ĐCT đến ĐCD hoặc ngược lại; quãng đường đó là hành trình S.',
+    'Động cơ 4 kì hoàn thành một chu trình công tác trong bốn hành trình pít tông, tương ứng hai vòng quay trục khuỷu.',
+    'Cuối kì nén, khi pít tông gần đến ĐCT, động cơ xăng dùng bu gi đánh lửa, còn động cơ Diesel phun nhiên liệu vào xi lanh để hỗn hợp tự cháy.',
+    'Vc là thể tích khi pít tông ở ĐCT, Va khi ở ĐCD, Va = Vc + Vs; tỉ số nén ε = Va/Vc.',
+    'Trục khuỷu dẫn động trục cam qua bộ truyền xích; trục cam quay 1 vòng khi trục khuỷu quay 2 vòng.',
     'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay của trục khuỷu; bán kính quay R liên hệ với hành trình piston.',
   ],
   teacherPrompts: [
-    'Vì sao kì cháy - giãn nở được gọi là kì sinh công?',
-    'Ở những kì nào hai xupap đều đóng, và điều đó giúp quá trình trong xi lanh diễn ra như thế nào?',
+    'Vì sao chỉ kì nổ sinh công, còn các kì khác pít tông vẫn chuyển động được?',
+    'Ở những kì nào hai xu páp đều đóng, và điều đó giúp quá trình trong xi lanh diễn ra như thế nào?',
   ],
 }
 
 const gasolineFourStrokeSimulation = {
   ...dieselFourStrokeSimulation,
   layers: [
-    { id: 'intake', name: 'a. Kì nạp', note: 'Piston đi xuống, xupap nạp mở, hòa khí được hút vào xi lanh; xupap thải đóng.' },
-    { id: 'compression', name: 'b. Kì nén', note: 'Piston đi lên, hai xupap đều đóng, hòa khí bị nén.' },
-    { id: 'power', name: 'c. Kì cháy - giãn nở', note: 'Bugi bật tia lửa điện cuối kì nén, hòa khí cháy, khí giãn nở đẩy piston đi xuống sinh công.' },
-    { id: 'exhaust', name: 'd. Kì thải', note: 'Piston đi lên, xupap thải mở, khí thải được đẩy qua đường thải ra ngoài; xupap nạp đóng.' },
+    { id: 'intake', name: 'a. Kì nạp', note: 'Pít tông đi xuống, xu páp nạp mở, hòa khí được hút vào xi lanh; xu páp thải đóng.' },
+    { id: 'compression', name: 'b. Kì nén', note: 'Pít tông đi lên, hai xu páp đều đóng, hòa khí bị nén.' },
+    { id: 'power', name: 'c. Kì nổ (cháy - giãn nở)', note: 'Cuối kì nén, bu gi phóng tia lửa điện; hòa khí cháy giãn nở đẩy pít tông từ ĐCT đến ĐCD, sinh công.' },
+    { id: 'exhaust', name: 'd. Kì thải', note: 'Pít tông đi lên, xu páp thải mở, khí thải được đẩy qua đường thải ra ngoài; xu páp nạp đóng.' },
   ],
 }
 
@@ -935,7 +937,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     cylinderWall.name = 'compression'
     cylinderWall.position.y = 1.12
     root.add(cylinderWall)
-    addAnnotation(annotations, root, 'compression', '10. Xi lanh', 'Buồng làm việc nơi piston nén hòa khí và khí cháy giãn nở sinh công', -0.82, 2.2, 0)
+    addAnnotation(annotations, root, 'compression', '10. Xi lanh', 'Buồng làm việc nơi pít tông nén hòa khí và khí cháy giãn nở sinh công', -0.82, 2.2, 0)
 
     const cylinderCut = box(0.16, 2.54, 1.42, 0xe2e8f0, 0.18)
     cylinderCut.name = 'compression'
@@ -964,7 +966,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     sparkTip.rotation.x = Math.PI
     sparkTip.position.set(0, 2.65, 0)
     root.add(sparkTip)
-    addAnnotation(annotations, root, 'power', '1. Bugi', 'Đánh lửa khi hòa khí bị nén để bắt đầu kì cháy - giãn nở', 0.55, 3.05, 0)
+    addAnnotation(annotations, root, 'power', '1. Bu gi', 'Đánh lửa khi hòa khí bị nén để bắt đầu kì nổ (cháy - giãn nở)', 0.55, 3.05, 0)
 
     const pistonGroup = new THREE.Group()
     pistonGroup.name = 'power'
@@ -978,7 +980,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     pistonGroup.add(pistonRingBottom)
     pistonGroup.position.y = 1.58
     root.add(pistonGroup)
-    addAnnotation(annotations, pistonGroup, 'power', '2. Piston', 'Đóng mở các cửa khí và nhận lực khí cháy để chuyển động lên xuống', 0.92, 0.15, 0)
+    addAnnotation(annotations, pistonGroup, 'power', '2. Pít tông', 'Đóng mở các cửa khí và nhận lực khí cháy để chuyển động lên xuống', 0.92, 0.15, 0)
 
     const crankcase = new THREE.Group()
     crankcase.name = 'intake'
@@ -990,7 +992,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     crankcaseBase.position.y = -1.48
     crankcase.add(crankcaseBase)
     root.add(crankcase)
-    addAnnotation(annotations, root, 'intake', '7. Cacte', 'Khoang dưới piston nhận hòa khí từ cửa nạp rồi ép sang cửa quét', -1.2, -0.65, 0)
+    addAnnotation(annotations, root, 'intake', '7. Các te', 'Khoang dưới pít tông nhận hòa khí từ cửa nạp rồi ép sang cửa quét', -1.2, -0.65, 0)
 
     const crank = new THREE.Group()
     crank.name = 'power'
@@ -1002,13 +1004,13 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     crankPin.position.set(0.43, 0, 0)
     crank.add(crankPin)
     root.add(crank)
-    addAnnotation(annotations, crank, 'power', '6. Trục khuỷu', 'Biến chuyển động tịnh tiến của piston thành chuyển động quay', 0.95, -0.15, 0)
+    addAnnotation(annotations, crank, 'power', '6. Trục khuỷu', 'Biến chuyển động tịnh tiến của pít tông thành chuyển động quay', 0.95, -0.15, 0)
 
     const rod = box(0.12, 1.78, 0.12, 0xf97316)
     rod.name = 'power'
     rod.position.y = 0.32
     root.add(rod)
-    addAnnotation(annotations, rod, 'power', '5. Thanh truyền', 'Nối piston với trục khuỷu để truyền lực', 0.38, 0, 0)
+    addAnnotation(annotations, rod, 'power', '5. Thanh truyền', 'Nối pít tông với trục khuỷu để truyền lực', 0.38, 0, 0)
 
     const intakePipe = box(1.18, 0.24, 0.34, 0x38bdf8, 0.82)
     intakePipe.name = 'intake'
@@ -1018,7 +1020,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     intakePort.name = 'intake'
     intakePort.position.set(0.6, 0.12, 0)
     root.add(intakePort)
-    addAnnotation(annotations, root, 'intake', '4. Cửa nạp', 'Đưa hòa khí vào cacte khi piston đi lên tạo áp suất thấp', 1.75, 0.42, 0)
+    addAnnotation(annotations, root, 'intake', '4. Cửa nạp', 'Đưa hòa khí vào các te khi pít tông đi lên tạo áp suất thấp', 1.75, 0.42, 0)
 
     const exhaustPipe = box(1.34, 0.34, 0.42, 0xf97316, 0.86)
     exhaustPipe.name = 'exhaust'
@@ -1028,7 +1030,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     exhaustPort.name = 'exhaust'
     exhaustPort.position.set(0.6, 1.25, 0)
     root.add(exhaustPort)
-    addAnnotation(annotations, root, 'exhaust', '3. Cửa thải', 'Mở khi piston đi xuống để khí cháy thoát ra ngoài', 1.86, 1.58, 0)
+    addAnnotation(annotations, root, 'exhaust', '3. Cửa thải', 'Mở khi pít tông đi xuống để khí cháy thoát ra ngoài', 1.86, 1.58, 0)
 
     const transferPipe = box(0.26, 1.8, 0.34, 0x22c55e, 0.55)
     transferPipe.name = 'exhaust'
@@ -1038,8 +1040,8 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     transferTop.name = 'exhaust'
     transferTop.position.set(-0.43, 1.02, 0)
     root.add(transferTop)
-    addAnnotation(annotations, root, 'exhaust', '8. Đường thông cacte - cửa quét', 'Dẫn hòa khí từ cacte lên cửa quét.', -1.28, 0.62, 0)
-    addAnnotation(annotations, root, 'exhaust', '9. Cửa quét', 'Mở khi piston đi xuống để hòa khí từ cacte đi vào xi lanh và đẩy khí thải.', -0.86, 1.26, 0)
+    addAnnotation(annotations, root, 'exhaust', '8. Đường thông các te - cửa quét', 'Dẫn hòa khí từ các te lên cửa quét.', -1.28, 0.62, 0)
+    addAnnotation(annotations, root, 'exhaust', '9. Cửa quét', 'Mở khi pít tông đi xuống để hòa khí từ các te đi vào xi lanh và đẩy khí thải.', -0.86, 1.26, 0)
 
     const intakeFlow = createFlowArrow(0.82, 0x0ea5e9)
     intakeFlow.name = 'intake'
@@ -1713,6 +1715,7 @@ export default function ThreeDSimulation() {
           {isFourStrokeMode ? (
             <EngineCycleConsole
               motion={motion}
+              geometry={engineGeometry(fuel)}
               isPlaying={isPlaying}
               speed={speed}
               onSpeedChange={setSpeed}
@@ -1792,7 +1795,7 @@ export default function ThreeDSimulation() {
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: 'diesel', label: 'Diesel: vòi phun' },
-                  { id: 'gasoline', label: 'Xăng: bugi' },
+                  { id: 'gasoline', label: 'Xăng: bu gi' },
                 ].map((option) => (
                   <button
                     key={option.id}

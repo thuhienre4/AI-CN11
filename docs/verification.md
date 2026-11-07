@@ -121,7 +121,24 @@ Các trường hợp cần lưu ý, chưa thể gọi là sai dương hoặc sai
 
 ## Mô phỏng động cơ bốn kỳ
 
-`frontend/src/utils/fourStrokeCycle.js` và `frontend/src/simulations/fourStrokeEngineModel.js` có kiểm thử cho: hai vòng quay trục khuỷu mỗi chu trình, trục cam quay nửa tốc độ, điểm chết trên và dưới, hướng piston, độ nâng xupap ở từng kỳ, chiều dài thanh truyền không đổi và piston không chạm xupap. Mô hình bỏ qua góc mở sớm, đóng muộn của xupap và góc đánh lửa sớm, và giao diện có ghi chú điều này. Việc đối chiếu với tài liệu chuyên môn cần giáo viên bộ môn xác nhận.
+`frontend/src/utils/fourStrokeCycle.js` và `frontend/src/simulations/fourStrokeEngineModel.js` có kiểm thử cho: hai vòng quay trục khuỷu mỗi chu trình, trục cam quay nửa tốc độ, điểm chết trên và dưới, hướng pít tông, độ nâng xu páp ở từng kì, hành trình con đội, đũa đẩy và xu páp bằng nhau, tốc độ xích, chiều dài thanh truyền không đổi, pít tông không chạm xu páp, số xéc măng và tỉ số nén.
+
+Mô hình được đối chiếu với Bài 17, 18, 19 SGK Công nghệ 11 - Công nghệ cơ khí (Kết nối tri thức). Việc đối chiếu dùng trang giải bài, tóm tắt lí thuyết và giáo án trên mạng, chưa dùng bản sách in, nên giáo viên bộ môn cần xác nhận lại với sách.
+
+| Nội dung trong sách | Trong mô hình |
+|---|---|
+| Thuật ngữ: pít tông, xu páp, bu gi, các te, kì nổ | Dùng trên mô hình, bảng điều khiển và thẻ thí nghiệm; kì nổ ghi kèm "(cháy - giãn nở)" |
+| Góc quay: nạp 0-180°, nén 180-360°, nổ 360-540°, thải 540-720° | Đúng như sách |
+| Bu gi đánh lửa, vòi phun phun nhiên liệu cuối kì nén, gần ĐCT | Hiển thị từ 331° đến 364° |
+| Xu páp treo (Hình 19.6): trục cam trong thân máy, bộ truyền xích, con đội, đũa đẩy, cò mổ | Dựng đủ chuỗi truyền động; đĩa xích trục cam lớn gấp đôi nên quay nửa tốc độ |
+| Pít tông có xéc măng khí và xéc măng dầu | Hai xéc măng khí, một xéc măng dầu |
+| Thanh truyền tiết diện chữ I; trục khuỷu có chốt khuỷu, má khuỷu, đối trọng | Có hình dạng và chọn được từng chi tiết |
+| Thân máy, nắp máy, các te | Chọn được từng phần |
+| S = 2R, Va = Vc + Vs, ε = Va/Vc | Bảng điều khiển hiện V theo % Va và ε theo tỉ lệ mô hình: xăng 11,0, Diesel 15,4 |
+
+Khác với sách hoặc với động cơ thật, và đều được ghi chú trên giao diện: mô hình tách hai vấu cam sang hai bên thành hai trục cam để không che nhau; tỉ lệ kích thước không theo động cơ thật; xu páp đóng mở đúng tại ĐCT và ĐCD, không có góc mở sớm, đóng muộn. Khoảng tỉ số nén dùng trong kiểm thử (xăng 6-12, Diesel 14-25) lấy từ tài liệu của bộ Cánh diều vì chưa tìm thấy số liệu của bộ Kết nối tri thức. Các nguồn ghi kí hiệu thể tích công tác của động cơ khác nhau (Vh, Vn), nên mô hình chưa dùng kí hiệu này.
+
+Các ngân hàng câu hỏi, nội dung bài học và dữ liệu bộ Cánh diều chưa được đổi thuật ngữ.
 
 ## Trợ lý AI
 

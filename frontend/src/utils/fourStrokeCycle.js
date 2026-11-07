@@ -1,16 +1,16 @@
-// Teaching model of a four-stroke engine: each stroke spans exactly half a crank turn. Real engines
-// open valves early and close them late (valve overlap) and ignite before top dead centre; both are
-// left out on purpose so that grade 11 students can follow the basic sequence.
+// Teaching model that follows SGK Công nghệ 11 (Kết nối tri thức), Bài 18: each stroke spans exactly half
+// a crank turn and ignition or injection happens late in compression, near top dead centre. Real engines
+// also open valves early and close them late; that is left out, as it is in the textbook.
 export const FOUR_STROKE_CYCLE_RADIANS = Math.PI * 4
 export const FOUR_STROKE_CYCLE_DEGREES = 720
 
 export const FOUR_STROKE_SIMPLIFICATION_NOTE =
-  'Mô hình sơ đồ hóa cho học sinh THPT: mỗi kì ứng với đúng nửa vòng quay trục khuỷu, chưa thể hiện góc mở sớm, đóng muộn của xupap và góc đánh lửa sớm.'
+  'Mô hình sơ đồ hóa theo Bài 18, 19 SGK Công nghệ 11 (Kết nối tri thức): mỗi kì ứng với đúng nửa vòng quay trục khuỷu, chưa thể hiện góc mở sớm, đóng muộn của xu páp. Hai vấu cam được tách sang hai bên để dễ quan sát, tỉ lệ kích thước không theo động cơ thật.'
 
 export const FOUR_STROKES = [
   { id: 'intake', name: 'Nạp', pistonDirection: 'down' },
   { id: 'compression', name: 'Nén', pistonDirection: 'up' },
-  { id: 'power', name: 'Cháy - giãn nở', pistonDirection: 'down' },
+  { id: 'power', name: 'Nổ (cháy - giãn nở)', pistonDirection: 'down' },
   { id: 'exhaust', name: 'Thải', pistonDirection: 'up' },
 ]
 
@@ -47,4 +47,10 @@ export const crankSliderPosition = ({ cyclePhase, crankRadius, crankCenterY, rod
   const crankPinY = crankCenterY + crankRadius * Math.sin(crankAngle)
   const pistonPinY = crankPinY + Math.sqrt(Math.max(rodLength ** 2 - crankPinX ** 2, 0))
   return { crankAngle, crankPinX, crankPinY, pistonPinY }
+}
+
+// Space above the crown as a share of Va. Vc is the clearance volume at top dead centre, Va = Vc + Vs.
+export const cylinderVolumeShare = ({ cyclePhase, crankRadius, crankCenterY, rodLength, stroke, clearance }) => {
+  const heightAt = (phase) => crankSliderPosition({ cyclePhase: phase, crankRadius, crankCenterY, rodLength }).pistonPinY
+  return (clearance + heightAt(0) - heightAt(cyclePhase)) / (clearance + stroke)
 }

@@ -242,22 +242,22 @@ export const getSimulationExperimentForLesson = (lesson) => {
       title: 'Mô hình 3D nguyên lí động cơ 4 kì',
       unit: 'Bài 18. Nguyên lí làm việc của động cơ đốt trong',
       duration: '12 phút',
-      modelFocus: 'Xi lanh, piston, thanh truyền, trục khuỷu, xupap nạp, xupap thải, vòi phun/bugi và dòng khí qua bốn kì.',
+      modelFocus: 'Xi lanh, pít tông, thanh truyền, trục khuỷu, xu páp nạp, xu páp thải, vòi phun/bu gi và dòng khí qua bốn kì.',
       objective: 'Giúp học sinh quan sát trực tiếp chu trình nạp, nén, cháy - giãn nở và thải; từ đó giải thích cách động cơ biến nhiệt năng thành cơ năng.',
       setup: [
         'Mở mô phỏng 3D của Bài 18 và để chế độ Động cơ 4 kì.',
-        'Quan sát piston đi giữa ĐCT và ĐCD, đồng thời theo dõi trạng thái hai xupap.',
+        'Quan sát pít tông đi giữa ĐCT và ĐCD, đồng thời theo dõi trạng thái hai xu páp.',
         'Dừng ở từng lớp kiến thức: nạp, nén, cháy - giãn nở, thải để đọc ghi chú và đối chiếu với sơ đồ SGK.',
       ],
       tasks: [
-        'Lập bảng bốn kì với ba cột: chiều chuyển động piston, trạng thái xupap, nhiệm vụ của kì.',
-        'Chỉ ra đường truyền lực từ khí cháy đến piston, thanh truyền và trục khuỷu.',
+        'Lập bảng bốn kì với ba cột: chiều chuyển động pít tông, trạng thái xu páp, nhiệm vụ của kì.',
+        'Chỉ ra đường truyền lực từ khí cháy đến pít tông, thanh truyền và trục khuỷu.',
         'Giải thích vì sao kì cháy - giãn nở là kì sinh công, còn ba kì còn lại là kì chuẩn bị hoặc làm sạch xi lanh.',
       ],
       observe: [
-        'Kì nào xupap nạp mở, kì nào xupap thải mở?',
-        'Ở kì nén và kì cháy - giãn nở, vì sao hai xupap đều phải đóng?',
-        'Một chu trình 4 kì ứng với mấy hành trình piston và mấy vòng quay trục khuỷu?',
+        'Kì nào xu páp nạp mở, kì nào xu páp thải mở?',
+        'Ở kì nén và kì nổ, vì sao hai xu páp đều phải đóng?',
+        'Một chu trình 4 kì ứng với mấy hành trình pít tông và mấy vòng quay trục khuỷu?',
       ],
       safety: 'Chỉ thao tác trên mô phỏng. Nếu quan sát động cơ thật cần tắt máy, tránh bộ phận quay/nóng và có giáo viên hướng dẫn.',
     }, lesson)
@@ -276,7 +276,7 @@ export const getSimulationExperimentForLesson = (lesson) => {
       title: 'Mô phỏng động cơ đốt trong và ô tô',
       unit: 'Cơ khí động lực',
       duration: '12 phút',
-      modelFocus: 'Piston, xupap, trục khuỷu, truyền lực, phanh, lái và hệ thống điện trên ô tô.',
+      modelFocus: 'Pít tông, xu páp, trục khuỷu, truyền lực, phanh, lái và hệ thống điện trên ô tô.',
       objective: 'Quan sát chuyển động và mối liên hệ giữa các hệ thống trong cơ khí động lực.',
     }, lesson)
   }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { FOUR_STROKE_CYCLE_RADIANS, crankSliderPosition, fourStrokeState, normalizeCyclePhase } from './fourStrokeCycle'
+import { FOUR_STROKE_CYCLE_RADIANS, crankSliderPosition, cylinderVolumeShare, fourStrokeState, normalizeCyclePhase } from './fourStrokeCycle'
 
 const geometry = { crankRadius: 0.9, crankCenterY: -1.12, rodLength: 2.2 }
 const pistonAt = (cyclePhase) => crankSliderPosition({ ...geometry, cyclePhase }).pistonPinY
@@ -27,7 +27,7 @@ describe('four-stroke teaching model', () => {
     expect(fourStrokeState(midStroke(index))).toMatchObject(expected)
   })
 
-  it('kì cháy - giãn nở: piston goes down, both valves stay closed, combustion starts at top dead centre', () => {
+  it('kì nổ: piston goes down, both valves stay closed, combustion starts at top dead centre', () => {
     expect(pistonAt(3 * Math.PI)).toBeLessThan(pistonAt(2 * Math.PI))
     expect(fourStrokeState(2 * Math.PI)).toMatchObject({
       intakeOpen: false,
@@ -47,6 +47,14 @@ describe('four-stroke teaching model', () => {
 })
 
 describe('four-stroke readouts', () => {
+  it('reports Vc at top dead centre and Va at bottom dead centre', () => {
+    const volumes = { ...geometry, stroke: 2 * geometry.crankRadius, clearance: 0.2 }
+    const share = (cyclePhase) => cylinderVolumeShare({ ...volumes, cyclePhase })
+    const compressionRatio = (volumes.stroke + volumes.clearance) / volumes.clearance
+    expect(share(0)).toBeCloseTo(1 / compressionRatio)
+    expect(share(Math.PI)).toBeCloseTo(1)
+  })
+
   it('names the stroke and crank angle at every mid-stroke', () => {
     const names = [0, 1, 2, 3].map((index) => fourStrokeState(midStroke(index)))
     expect(names.map((state) => state.stroke.id)).toEqual(['intake', 'compression', 'power', 'exhaust'])

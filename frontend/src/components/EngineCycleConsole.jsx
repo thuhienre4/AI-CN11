@@ -3,6 +3,7 @@ import {
   FOUR_STROKES,
   FOUR_STROKE_CYCLE_DEGREES,
   crankSliderPosition,
+  cylinderVolumeShare,
   fourStrokeState,
 } from '../utils/fourStrokeCycle'
 
@@ -56,7 +57,7 @@ function Reading({ label, value, tone = 'text-slate-950' }) {
   )
 }
 
-function EngineCycleConsole({ motion, isPlaying, speed, onSpeedChange, onTogglePlay, onSeek }) {
+function EngineCycleConsole({ motion, geometry, isPlaying, speed, onSpeedChange, onTogglePlay, onSeek }) {
   const [degrees, setDegrees] = useState(0)
 
   // The console follows the animation by itself so the whole page does not re-render every frame.
@@ -73,6 +74,7 @@ function EngineCycleConsole({ motion, isPlaying, speed, onSpeedChange, onToggleP
 
   const state = fourStrokeState(toPhase(degrees))
   const strokeIndex = state.strokeIndex
+  const volumeShare = cylinderVolumeShare({ ...geometry, cyclePhase: toPhase(degrees) })
   const seekStroke = (offset) => onSeek(((strokeIndex + offset + 4) % 4) * 180 + 90)
   const nudge = (offset) => onSeek((degrees + offset + FOUR_STROKE_CYCLE_DEGREES) % FOUR_STROKE_CYCLE_DEGREES)
   const button = 'rounded-md border border-slate-300 bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-700 hover:bg-slate-100'
@@ -82,10 +84,13 @@ function EngineCycleConsole({ motion, isPlaying, speed, onSpeedChange, onToggleP
       <dl className="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-5">
         <Reading label="Kì" value={`${strokeIndex + 1}. ${state.stroke.name}`} tone="text-blue-700" />
         <Reading label="Góc quay trục khuỷu" value={`${degrees}°`} />
-        <Reading label="Piston" value={direction[state.stroke.pistonDirection]} />
-        <Reading label="Xupap nạp" value={state.intakeOpen ? 'Mở' : 'Đóng'} tone={state.intakeOpen ? 'text-sky-600' : 'text-slate-500'} />
-        <Reading label="Xupap thải" value={state.exhaustOpen ? 'Mở' : 'Đóng'} tone={state.exhaustOpen ? 'text-orange-600' : 'text-slate-500'} />
+        <Reading label="Pít tông" value={direction[state.stroke.pistonDirection]} />
+        <Reading label="Xu páp nạp" value={state.intakeOpen ? 'Mở' : 'Đóng'} tone={state.intakeOpen ? 'text-sky-600' : 'text-slate-500'} />
+        <Reading label="Xu páp thải" value={state.exhaustOpen ? 'Mở' : 'Đóng'} tone={state.exhaustOpen ? 'text-orange-600' : 'text-slate-500'} />
       </dl>
+      <p className="mt-1 text-xs text-slate-600">
+        V = {Math.round(volumeShare * 100)}% V<sub>a</sub> · S = 2R · V<sub>a</sub> = V<sub>c</sub> + V<sub>s</sub> · ε = V<sub>a</sub>/V<sub>c</sub> ≈ {geometry.compressionRatio.toFixed(1).replace('.', ',')} (theo tỉ lệ mô hình)
+      </p>
 
       <div className="mt-2 overflow-hidden rounded-md border border-slate-200">
         <CycleChart degrees={degrees} />
