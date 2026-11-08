@@ -20,10 +20,30 @@ api.interceptors.request.use((config) => {
   return config
 })
 
+// A static host without the API (GitHub Pages, the Node static server) answers /api/... with an
+// HTML page: 200 with index.html, 404 or 405. Such an answer is "no server", never data, so it is
+// turned into an error without a response, which every caller already treats as working offline.
+const isHtmlResponse = (response) =>
+  String(response?.headers?.['content-type'] || '').includes('text/html')
+  || (typeof response?.data === 'string' && /^\s*<!doctype html|^\s*<html/i.test(response.data))
+
+const noBackendError = (config) => {
+  const error = new Error('Chưa kết nối máy chủ API')
+  error.code = 'NO_BACKEND'
+  error.config = config
+  return error
+}
+
+export const isBackendUnavailable = (error) =>
+  !error?.response || error.code === 'NO_BACKEND' || error.response.status >= 502
+
 // Handle response errors
 api.interceptors.response.use(
-  (response) => response,
+  (response) => (isHtmlResponse(response) ? Promise.reject(noBackendError(response.config)) : response),
   (error) => {
+    if (error.response && isHtmlResponse(error.response)) {
+      return Promise.reject(noBackendError(error.config))
+    }
     const token = localStorage.getItem('token')
     const isLocalSession = token?.startsWith('local-token-')
     const isAuthPage = ['/login', '/register'].includes(window.location.pathname)

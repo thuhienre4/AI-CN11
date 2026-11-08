@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { sampleCourses, sampleLessons } from '../data/courseCatalog'
+import { isBackendUnavailable } from '../services/api'
 import { useAuthStore } from '../store'
 import {
   createReferenceMaterial,
@@ -35,8 +36,8 @@ export default function ReferenceMaterials() {
     try {
       setIsLoading(true)
       setMaterials(await readReferenceMaterials())
-    } catch {
-      toast.error('Không đọc được kho tài liệu trên server')
+    } catch (error) {
+      if (!isBackendUnavailable(error)) toast.error('Không đọc được kho tài liệu trên server')
     } finally {
       setIsLoading(false)
     }

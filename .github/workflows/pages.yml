@@ -37,6 +37,8 @@ jobs:
         working-directory: frontend
         env:
           VITE_BASE_PATH: /AI-CN11/
+          # Repository variable with the FastAPI address; empty keeps the offline demo mode
+          VITE_API_URL: ${{ vars.VITE_API_URL }}
         run: npm run build
 
       - name: Prepare Pages output

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { coursesAPI, lessonsAPI } from '../services/api'
+import { coursesAPI, isBackendUnavailable, lessonsAPI } from '../services/api'
 import {
   getChapterAssessmentsByCourse,
   getSampleCourse,
@@ -201,8 +201,9 @@ export default function CourseDetail() {
   const loadMaterials = async () => {
     try {
       setMaterials(await readReferenceMaterials())
-    } catch {
-      toast.error('Không đọc được tài liệu của chương')
+    } catch (error) {
+      // Without an API server the chapter still shows its bundled slides and documents.
+      if (!isBackendUnavailable(error)) toast.error('Không đọc được tài liệu của chương')
     }
   }
 

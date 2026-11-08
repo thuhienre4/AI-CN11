@@ -41,7 +41,7 @@ class Settings(BaseSettings):
     algorithm: str = "HS256"
 
     # CORS
-    cors_origins: list = ["http://localhost:3000", "http://localhost:5173"]
+    cors_origins: list = ["http://localhost:3000", "http://localhost:5173", "https://thuhienre4.github.io"]
 
     # AI Service0
     ai_provider: str = "gemini"

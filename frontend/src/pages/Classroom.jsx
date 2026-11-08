@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 import { sampleCourses, sampleLessons } from '../data/courseCatalog'
 import TeacherAnalyticsPanel from '../components/TeacherAnalyticsPanel'
-import { classroomAPI } from '../services/api'
+import { classroomAPI, isBackendUnavailable } from '../services/api'
 import { useAuthStore } from '../store'
 import {
   createReferenceMaterial,
@@ -312,6 +312,16 @@ export default function Classroom() {
         visibleAssignments.some((assignment) => assignment.id === prev) ? prev : visibleAssignments[0]?.id || null,
       )
     } catch (error) {
+      if (isBackendUnavailable(error)) {
+        // No API server: the class works from what this device has stored.
+        const localAssignments = applyAssignmentClassMeta(readLocalAssignments())
+          .filter((assignment) => isAssignmentVisibleToUser(assignment, user, isTeacher))
+        setAssignments(localAssignments)
+        setActiveAssignmentId((prev) =>
+          localAssignments.some((assignment) => assignment.id === prev) ? prev : localAssignments[0]?.id || null,
+        )
+        return
+      }
       toast.error(getErrorMessage(error, 'Không đọc được dữ liệu phòng học chung'))
     } finally {
       setIsLoading(false)
@@ -322,9 +332,9 @@ export default function Classroom() {
     try {
       const serverMaterials = await readReferenceMaterials()
       setMaterials([...readLocalMaterials(), ...asList(serverMaterials)])
-    } catch {
+    } catch (error) {
       setMaterials(readLocalMaterials())
-      toast.error('Không đọc được kho tài liệu trên server')
+      if (!isBackendUnavailable(error)) toast.error('Không đọc được kho tài liệu trên server')
     }
   }
 
@@ -338,7 +348,7 @@ export default function Classroom() {
         [assignmentId]: [...localSubmissions, ...asList(response.data)],
       }))
     } catch (error) {
-      if (isLocalAuthError(error)) {
+      if (isLocalAuthError(error) || isBackendUnavailable(error)) {
         setSubmissionsByAssignment((prev) => ({ ...prev, [assignmentId]: localSubmissions }))
         return
       }

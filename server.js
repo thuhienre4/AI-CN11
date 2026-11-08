@@ -55,6 +55,13 @@ const server = http.createServer((req, res) => {
       return
     }
 
+    // This server holds only the built app: an API call must not get index.html as if it were data
+    if (urlPath.startsWith('/api/')) {
+      res.writeHead(503, { 'Content-Type': 'text/plain; charset=utf-8', 'Cache-Control': 'no-store' })
+      res.end('API server is not part of this deployment')
+      return
+    }
+
     // A missing file of an old deployment must fail as such, not arrive as an HTML page
     if (urlPath.startsWith('/assets/')) {
       res.writeHead(404, { 'Cache-Control': 'no-store' })
