@@ -14,10 +14,18 @@ import { lessonModelSimulation } from '../data/knttLessonModels'
 import { createLabelSprite, isImmersiveVrSupported, requestVrSession, vrStageTransform } from '../simulations/vrSupport'
 import { TWO_STROKE, pistonPinY, portOpenings, rodPose, sparkOn, twoStrokePhase } from '../simulations/twoStrokeKinematics'
 import {
+  FOUR_STROKES,
   FOUR_STROKE_CYCLE_RADIANS,
   FOUR_STROKE_SIMPLIFICATION_NOTE,
+  fourStrokeState,
   normalizeCyclePhase,
 } from '../utils/fourStrokeCycle'
+
+// One row per stroke for the cycle table: valve states are read from the model at mid-stroke
+const FOUR_STROKE_TABLE = FOUR_STROKES.map((stroke, index) => {
+  const state = fourStrokeState(((index * 180 + 90) * Math.PI) / 180)
+  return { ...stroke, intakeOpen: state.intakeOpen, exhaustOpen: state.exhaustOpen }
+})
 
 const knttSimulations = {
   1: {
@@ -1167,10 +1175,11 @@ export default function ThreeDSimulation() {
   const [vrSupported, setVrSupported] = useState(false)
   const [inVr, setInVr] = useState(false)
   const [vrError, setVrError] = useState('')
+  const [exploded, setExploded] = useState(false)
   const rendererRef = useRef(null)
   const vrActions = useRef({ nextLayer: () => {}, togglePlay: () => {} })
-  const motion = useRef({ angle: 0, cyclePhase: 0, isPlaying, speed, showLabels })
-  const viewControls = useRef({ reset: () => {}, highlight: () => {} })
+  const motion = useRef({ angle: 0, cyclePhase: 0, isPlaying, speed, showLabels, explode: 0, explodeTarget: 0 })
+  const viewControls = useRef({ reset: () => {}, highlight: () => {}, refit: () => {} })
 
   useEffect(() => {
     motion.current.isPlaying = isPlaying
@@ -1282,6 +1291,15 @@ export default function ThreeDSimulation() {
     }
   }
 
+  const toggleExploded = () => {
+    const next = !exploded
+    setExploded(next)
+    motion.current.explodeTarget = next ? 1 : 0
+    // Parts are easier to look at while the engine stands still
+    if (next) setIsPlaying(false)
+    viewControls.current.refit()
+  }
+
   const closePartCard = () => {
     setSelectedPart(null)
     viewControls.current.highlight(null)
@@ -1378,6 +1396,12 @@ export default function ThreeDSimulation() {
 
     const { root, animated, annotations, framing: modelFraming } = engine || lessonModel || buildChapterModel(simulation.modelId, engineMode)
     const framing = modelFraming || (simulation.modelId === 8 ? LOGIC_BOARD_FRAMING : null)
+    // The taken-apart engine is taller, so the camera frames it differently
+    const assembledFraming = engine ? { ...engine.framing } : null
+    const applyEngineFraming = () => {
+      if (engine) Object.assign(framing, motion.current.explodeTarget ? engine.explodedFraming : assembledFraming)
+    }
+    applyEngineFraming()
     if (simulation.modelId === 8) {
       root.scale.setScalar(0.78)
       root.position.set(0, -0.18, 0.12)
@@ -1480,6 +1504,10 @@ export default function ThreeDSimulation() {
     viewControls.current = {
       reset: () => (framing ? fitEngineView() : controls.reset()),
       highlight: (part) => engine?.highlightPart(part),
+      refit: () => {
+        applyEngineFraming()
+        if (framing) fitEngineView()
+      },
     }
 
     // VR: labels become sprites, made once the size of the model in the headset is known
@@ -1554,7 +1582,10 @@ export default function ThreeDSimulation() {
       const cycleProgress = cyclePhase / cycleDuration
       if (engine) {
         running.cyclePhase = normalizeCyclePhase(angle)
-        engine.update(running.cyclePhase)
+        // Parts glide apart or back together instead of jumping
+        running.explode += (running.explodeTarget - running.explode) * Math.min(1, 0.1 * frames)
+        if (Math.abs(running.explodeTarget - running.explode) < 0.001) running.explode = running.explodeTarget
+        engine.update(running.cyclePhase, running.explode)
       }
       const ports = isTwoStrokeMode ? portOpenings(angle) : null
       const step = isTwoStrokeMode
@@ -1731,6 +1762,19 @@ export default function ThreeDSimulation() {
               <button type="button" className="rounded-md border border-slate-300 bg-white/95 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-white" onClick={() => viewControls.current.reset()}>
                 Góc nhìn chuẩn
               </button>
+              {isFourStrokeMode && !renderFailed && (
+                <button
+                  type="button"
+                  aria-pressed={exploded}
+                  className={`rounded-md border px-2.5 py-1.5 text-xs font-semibold ${
+                    exploded ? 'border-slate-950 bg-slate-950 text-white' : 'border-slate-300 bg-white/95 text-slate-700 hover:bg-white'
+                  }`}
+                  onClick={toggleExploded}
+                  title="Tách nắp máy, xu páp, cò mổ, pít tông, chốt pít tông, thanh truyền, trục khuỷu và trục cam ra để quan sát cấu tạo bên trong"
+                >
+                  {exploded ? 'Lắp lại' : 'Tháo rời chi tiết'}
+                </button>
+              )}
               {vrSupported && !renderFailed && (
                 <button
                   type="button"
@@ -1800,6 +1844,36 @@ export default function ThreeDSimulation() {
           <p className="mt-3 text-sm leading-6 text-slate-600">{displayedSimulation.objective}</p>
           {isFourStrokeMode && (
             <p className="mt-2 text-xs leading-5 text-slate-500">{FOUR_STROKE_SIMPLIFICATION_NOTE}</p>
+          )}
+          {isFourStrokeMode && (
+            <section className="mt-4" aria-label="Chu trình làm việc">
+              <h3 className="font-bold text-slate-950">Chu trình làm việc</h3>
+              <table className="mt-2 w-full border-collapse text-left text-xs">
+                <thead>
+                  <tr className="border-b border-slate-300 text-slate-500">
+                    <th className="py-1 pr-2 font-semibold">Kì</th>
+                    <th className="py-1 pr-2 font-semibold">Pít tông</th>
+                    <th className="py-1 pr-2 font-semibold">Xu páp nạp</th>
+                    <th className="py-1 font-semibold">Xu páp thải</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {FOUR_STROKE_TABLE.map((row, index) => (
+                    <tr
+                      key={row.id}
+                      onClick={() => selectKnowledgeLayer(row.id)}
+                      aria-current={activeStep === index ? 'step' : undefined}
+                      className={`cursor-pointer border-b border-slate-100 ${activeStep === index ? 'bg-blue-50 font-bold text-blue-950' : 'text-slate-700 hover:bg-slate-50'}`}
+                    >
+                      <td className="py-1.5 pr-2">{index + 1}. {row.name}</td>
+                      <td className="py-1.5 pr-2">{row.pistonDirection === 'down' ? 'ĐCT → ĐCD' : 'ĐCD → ĐCT'}</td>
+                      <td className={`py-1.5 pr-2 ${row.intakeOpen ? 'text-sky-700' : 'text-slate-500'}`}>{row.intakeOpen ? 'Mở' : 'Đóng'}</td>
+                      <td className={`py-1.5 ${row.exhaustOpen ? 'text-orange-700' : 'text-slate-500'}`}>{row.exhaustOpen ? 'Mở' : 'Đóng'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
           )}
 
           <section className="mt-5 rounded-lg border border-cyan-200 bg-cyan-50 p-4 text-cyan-950">

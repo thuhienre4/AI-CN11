@@ -131,3 +131,54 @@ describe('four-stroke engine model', () => {
     expect(pickEnginePart([])).toBeNull()
   })
 })
+
+describe('exploded view', () => {
+  const positions = (engine) => {
+    const list = []
+    engine.root.traverse((child) => list.push(child.position.clone()))
+    return list
+  }
+
+  it('puts every part back exactly when the engine is reassembled', () => {
+    const engine = createFourStrokeEngine()
+    engine.update(1.3)
+    const assembled = positions(engine)
+    engine.update(1.3, 1)
+    engine.update(1.3, 0.4)
+    engine.update(1.3, 0)
+    positions(engine).forEach((position, index) => expect(position.distanceTo(assembled[index])).toBeCloseTo(0))
+  })
+
+  it('lifts the valves out above the cylinder head and the piston out of the cylinder', () => {
+    const engine = createFourStrokeEngine()
+    const { deckY } = engineGeometry()
+    engine.update(0, 1)
+    const { piston, intakeValve, exhaustValve } = engine.moving
+    const headTop = engine.root.children.find((child) => child.userData.part === 'head')
+    const headBox = new THREE.Box3().setFromObject(headTop)
+    expect(intakeValve.position.y).toBeGreaterThan(headBox.max.y)
+    expect(exhaustValve.position.y).toBeGreaterThan(headBox.max.y)
+    expect(headBox.min.y).toBeGreaterThan(deckY)
+    expect(piston.position.y + engineGeometry().crownAbovePin).toBeGreaterThan(deckY)
+  })
+
+  it('separates the piston, rod and crankshaft and pulls the piston pin out', () => {
+    const engine = createFourStrokeEngine()
+    engine.update(0, 1)
+    const { piston, rod, crank } = engine.moving
+    const pin = piston.children.find((child) => child.userData.part === 'pistonPin')
+    expect(pin.position.z).toBeGreaterThan(0.5)
+    expect(rod.position.z).toBeGreaterThan(0.3)
+    expect(crank.position.z).toBeGreaterThan(rod.position.z + 0.3)
+  })
+
+  it('hides gas, flame and chain only while taken apart', () => {
+    const engine = createFourStrokeEngine()
+    engine.update(0, 1)
+    expect(engine.moving.gas.visible).toBe(false)
+    expect(engine.moving.chainLinks.every((link) => !link.visible)).toBe(true)
+    engine.update(0, 0)
+    expect(engine.moving.gas.visible).toBe(true)
+    expect(engine.moving.chainLinks.every((link) => link.visible)).toBe(true)
+  })
+})

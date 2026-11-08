@@ -57,6 +57,21 @@ const PARTICLES_PER_PORT = 14
 const SPRAY_LENGTH = 0.26
 const COMBUSTION_END_PROGRESS = 0.62
 
+// Exploded view: how far each group moves away when the engine is fully taken apart. The cylinder head and
+// valve train lift off the top, the piston rises out of the cylinder with its pin pulled out sideways, the
+// crankshaft comes forward out of the crankcase and each camshaft moves out to its own side.
+export const EXPLODE_OFFSETS = {
+  head: [0, 1.3, 0],
+  valve: [0, 1.9, 0],
+  rocker: [0, 2.5, 0],
+  piston: [0, 0.75, 0],
+  rod: [0, 0.2, 0.65],
+  pistonPin: [0, 0, 0.9],
+  crank: [0, -0.15, 1.3],
+  camSide: 0.9,
+}
+const EXPLODED_FRAMING = { center: [0, 1.7, 0], width: 5.8, height: 9.6 }
+
 export const engineGeometry = (fuel = 'diesel') => {
   const crownAbovePin = CROWN_ABOVE_PIN[fuel]
   const clearance = DECK_Y - (TDC_PIN_Y + crownAbovePin)
@@ -363,8 +378,9 @@ export function createFourStrokeEngine({ fuel = 'diesel' } = {}) {
     new THREE.CylinderGeometry(0.92, 0.92, linerHeight, 56, 1, true, CUT_START, CUT_LENGTH),
     glass(0x64748b, 0.26), 0, linerY, 0,
   ), 'block', { pickLast: true }))
-  root.add(belongsTo(mesh(new THREE.BoxGeometry(2.1, HEAD_TOP_Y - DECK_Y, 1.5), glass(0x475569, 0.24),
-    0, (DECK_Y + HEAD_TOP_Y) / 2, 0), 'head', { pickLast: true }))
+  const head = belongsTo(mesh(new THREE.BoxGeometry(2.1, HEAD_TOP_Y - DECK_Y, 1.5), glass(0x475569, 0.24),
+    0, (DECK_Y + HEAD_TOP_Y) / 2, 0), 'head', { pickLast: true })
+  root.add(head)
   const blockBottomY = DECK_Y - linerHeight
   const baseY = CRANK_CENTER_Y - 1.32
   root.add(belongsTo(mesh(new THREE.BoxGeometry(3.2, blockBottomY - CRANK_CENTER_Y, 1.8), glass(0x94a3b8, 0.08),
@@ -391,7 +407,7 @@ export function createFourStrokeEngine({ fuel = 'diesel' } = {}) {
     const pushrod = createPushrod(side * CAM_X)
     const { mount, arm, post } = createRocker(side, color)
     root.add(tappet, pushrod, mount, post)
-    return { valve, liftOf, tappet, pushrod, arm, tappetY: tappet.position.y, pushrodY: pushrod.position.y }
+    return { side, valve, liftOf, tappet, pushrod, mount, post, arm, tappetY: tappet.position.y, pushrodY: pushrod.position.y }
   })
 
   const chain = chainLoop()
@@ -447,18 +463,42 @@ export function createFourStrokeEngine({ fuel = 'diesel' } = {}) {
 
   const scale = addStrokeScale(root, crownAbovePin)
 
+  // Parts set by update() every frame get their offset added afterwards; the others are placed from a
+  // stored base position, so taking apart and putting back never drifts.
+  const explodeParts = []
+  const explodable = (object, offset, { moving = false } = {}) => {
+    explodeParts.push({ object, offset: new THREE.Vector3(...offset), base: moving ? null : object.position.clone() })
+    return object
+  }
+  const sideways = (side) => [side * EXPLODE_OFFSETS.camSide, 0, 0]
+  ;[head, ignition, intakePort.tube, exhaustPort.tube].forEach((item) => explodable(item, EXPLODE_OFFSETS.head))
+  ;[intakeValve, exhaustValve].forEach((valve) => explodable(valve, EXPLODE_OFFSETS.valve, { moving: true }))
+  springs.forEach((coil) => explodable(coil, EXPLODE_OFFSETS.valve))
+  explodable(piston, EXPLODE_OFFSETS.piston, { moving: true })
+  explodable(rod, EXPLODE_OFFSETS.rod, { moving: true })
+  explodable(piston.children.find((child) => child.userData.part === 'pistonPin'), EXPLODE_OFFSETS.pistonPin)
+  explodable(crank, EXPLODE_OFFSETS.crank)
+  valveTrains.forEach(({ side, tappet, pushrod, mount, post }) => {
+    explodable(mount, EXPLODE_OFFSETS.rocker)
+    explodable(post, EXPLODE_OFFSETS.rocker)
+    explodable(tappet, sideways(side), { moving: true })
+    explodable(pushrod, sideways(side), { moving: true })
+  })
+  ;[intakeCam, exhaustCam].forEach((cam, index) => explodable(cam, sideways(index ? 1 : -1)))
+  const looseAnchor = (offset, x, y, z) => explodable(anchorAt(root, x, y, z), offset)
+
   const annotations = [
     { anchor: anchorAt(piston, 0.7, 0.2, 0), label: 'Pít tông' },
     { anchor: anchorAt(rod, 0.15, ROD_LENGTH * 0.45, 0), label: 'Thanh truyền' },
-    { anchor: anchorAt(root, 0.05, CRANK_CENTER_Y - 0.62, 0.8), label: 'Trục khuỷu' },
-    { anchor: anchorAt(root, -0.95, 3.2, 0), label: 'Xu páp nạp' },
-    { anchor: anchorAt(root, 0.95, 3.2, 0), label: 'Xu páp thải' },
-    { anchor: anchorAt(root, 0, 3.72, 0), label: isDiesel ? 'Vòi phun' : 'Bu gi' },
-    { anchor: anchorAt(root, CAM_X + 0.35, 2.95, LOBE_Z), label: 'Cò mổ', minor: true },
-    { anchor: anchorAt(root, CAM_X + 0.05, 1.2, LOBE_Z), label: 'Đũa đẩy', minor: true },
-    { anchor: anchorAt(root, -CAM_X - 0.3, PUSHROD_BOTTOM_Y - 0.1, LOBE_Z), label: 'Con đội', minor: true },
-    { anchor: anchorAt(root, -CAM_X - 0.42, CAM_Y - 0.3, LOBE_Z), label: 'Trục cam', minor: true },
-    { anchor: anchorAt(root, 0.72, CRANK_CENTER_Y - 0.42, CHAIN_Z), label: 'Xích', minor: true },
+    { anchor: looseAnchor(EXPLODE_OFFSETS.crank, 0.05, CRANK_CENTER_Y - 0.62, 0.8), label: 'Trục khuỷu' },
+    { anchor: looseAnchor(EXPLODE_OFFSETS.valve, -0.95, 3.2, 0), label: 'Xu páp nạp' },
+    { anchor: looseAnchor(EXPLODE_OFFSETS.valve, 0.95, 3.2, 0), label: 'Xu páp thải' },
+    { anchor: looseAnchor(EXPLODE_OFFSETS.head, 0, 3.72, 0), label: isDiesel ? 'Vòi phun' : 'Bu gi' },
+    { anchor: looseAnchor(EXPLODE_OFFSETS.rocker, CAM_X + 0.35, 2.95, LOBE_Z), label: 'Cò mổ', minor: true },
+    { anchor: looseAnchor(sideways(1), CAM_X + 0.05, 1.2, LOBE_Z), label: 'Đũa đẩy', minor: true },
+    { anchor: looseAnchor(sideways(-1), -CAM_X - 0.3, PUSHROD_BOTTOM_Y - 0.1, LOBE_Z), label: 'Con đội', minor: true },
+    { anchor: looseAnchor(sideways(-1), -CAM_X - 0.42, CAM_Y - 0.3, LOBE_Z), label: 'Trục cam', minor: true },
+    { anchor: looseAnchor(EXPLODE_OFFSETS.crank, 0.72, CRANK_CENTER_Y - 0.42, CHAIN_Z), label: 'Xích', minor: true },
     { anchor: anchorAt(root, scale.x - 0.1, scale.tdc + 0.02, 0), label: 'ĐCT' },
     { anchor: anchorAt(root, scale.x - 0.1, scale.bdc + 0.02, 0), label: 'ĐCD' },
     { anchor: anchorAt(root, scale.x - 0.1, (scale.tdc + scale.bdc) / 2, 0), label: 'S' },
@@ -493,7 +533,27 @@ export function createFourStrokeEngine({ fuel = 'diesel' } = {}) {
     })
   }
 
-  const update = (cyclePhase) => {
+  // explode: 0 assembled, 1 fully taken apart. Gas, flame and chain only make sense in the assembled engine.
+  const update = (cyclePhase, explode = 0) => {
+    runCycle(cyclePhase)
+    explodeParts.forEach(({ object, offset, base }) => {
+      if (base) object.position.copy(base)
+      object.position.addScaledVector(offset, explode)
+    })
+    if (explode > 0.02) {
+      const loose = [gas, flame, ignitionEffect, ...intakeParticles, ...exhaustParticles, ...chainLinks]
+      loose.forEach((item) => {
+        item.visible = false
+      })
+    } else {
+      gas.visible = true
+      chainLinks.forEach((link) => {
+        link.visible = true
+      })
+    }
+  }
+
+  const runCycle = (cyclePhase) => {
     const state = fourStrokeState(cyclePhase)
     const strokeProgress = (state.progress % 0.25) / 0.25
     const { crankAngle, crankPinX, crankPinY, pistonPinY } = crankSliderPosition({
@@ -512,11 +572,11 @@ export function createFourStrokeEngine({ fuel = 'diesel' } = {}) {
     intakeCam.rotation.z = intakeCam.userData.peak - camAngle
     exhaustCam.rotation.z = exhaustCam.userData.peak - camAngle
 
-    valveTrains.forEach(({ valve, liftOf, tappet, pushrod, arm, tappetY, pushrodY }, index) => {
+    valveTrains.forEach(({ side, valve, liftOf, tappet, pushrod, arm, tappetY, pushrodY }, index) => {
       const lift = liftOf(state)
       const travel = lift * MAX_VALVE_LIFT
-      tappet.position.y = tappetY + travel
-      pushrod.position.y = pushrodY + travel
+      tappet.position.set(side * CAM_X, tappetY + travel, LOBE_Z)
+      pushrod.position.set(side * CAM_X, pushrodY + travel, LOBE_Z)
       arm.rotation.z = Math.asin(((2 * lift - 1) * ROCKER_SWING) / ROCKER_HALF_LENGTH)
       valve.position.y = DECK_Y - travel
       springs[index].scale.y = DECK_Y + RETAINER_HEIGHT - travel - HEAD_TOP_Y
@@ -574,6 +634,7 @@ export function createFourStrokeEngine({ fuel = 'diesel' } = {}) {
     update,
     highlightPart,
     framing: { center: new THREE.Vector3(0, 0.58, 0), width: 5.2, height: 7.0 },
+    explodedFraming: { ...EXPLODED_FRAMING, center: new THREE.Vector3(...EXPLODED_FRAMING.center) },
     moving: { piston, rod, crank, intakeValve, exhaustValve, intakeCam, exhaustCam, gas, valveTrains, chainLinks },
   }
 }
