@@ -154,7 +154,7 @@ const SHAPES = {
   },
   gate: (g, c) => g.add(box(0.7, 0.8, 0.25, c, -0.1, 0.55, 0), facing(rod(0.4, 0.25, c, 0.25, 0.55, 0)), lying(rod(0.03, 1.5, LIGHT, 0, 0.55, 0))),
   star: (g, c) => {
-    ;[Math.PI / 2, (7 * Math.PI) / 6, (11 * Math.PI) / 6].forEach((angle) => {
+    [Math.PI / 2, (7 * Math.PI) / 6, (11 * Math.PI) / 6].forEach((angle) => {
       const arm = box(0.1, 0.58, 0.1, c, Math.cos(angle) * 0.29, 0.6 + Math.sin(angle) * 0.29, 0)
       arm.rotation.z = angle - Math.PI / 2
       g.add(arm, ball(0.1, DARK, Math.cos(angle) * 0.58, 0.6 + Math.sin(angle) * 0.58, 0))
@@ -191,7 +191,7 @@ const SHAPES = {
     g.add(item)
   },
   layers: (g, c) => {
-    ;[0, 1, 2, 3].forEach((index) => g.add(box(1 - index * 0.12, 0.16, 0.8 - index * 0.1, index % 2 ? LIGHT : c, 0, 0.14 + index * 0.2, 0)))
+    [0, 1, 2, 3].forEach((index) => g.add(box(1 - index * 0.12, 0.16, 0.8 - index * 0.1, index % 2 ? LIGHT : c, 0, 0.14 + index * 0.2, 0)))
   },
   ingot: (g, c) => g.add(solid(new THREE.CylinderGeometry(0.34, 0.5, 0.42, 4), c, 0, 0.3, 0)),
   lathe: (g, c, spin) => {

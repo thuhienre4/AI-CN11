@@ -270,7 +270,7 @@ export default function CircuitExperimentLab() {
                 Chọn linh kiện từ băng linh kiện, đặt lên bo mạch, nối dây và viết quy tắc logic để hoàn thành nhiệm vụ trong bài {lesson?.title || 'Điện tử số'}.
               </p>
             </div>
-            <div className="bg-slate-950 p-6 text-white">
+            <div className="bp-sheet-dark p-6 text-white">
               <p className="text-xs font-black uppercase text-slate-300">Đánh giá thí nghiệm</p>
               <div className="mt-3 text-5xl font-black">{score}%</div>
               <div className="mt-4 h-2 rounded-full bg-slate-800">
@@ -354,7 +354,7 @@ export default function CircuitExperimentLab() {
                       <path
                         d={`M ${a.x} ${a.y} C ${(a.x + b.x) / 2} ${a.y}, ${(a.x + b.x) / 2} ${b.y}, ${b.x} ${b.y}`}
                         fill="none"
-                        stroke="#0f172a"
+                        stroke="#0f2438"
                         strokeWidth="3"
                         strokeLinecap="round"
                       />

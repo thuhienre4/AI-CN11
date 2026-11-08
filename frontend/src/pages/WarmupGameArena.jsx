@@ -251,7 +251,7 @@ export default function WarmupGameArena() {
               trả lời đúng, huy hiệu và phần thưởng để ghi nhớ kiến thức trước hoặc sau bài học.
             </p>
           </div>
-          <div className="motion-pulse-soft w-full rounded-lg border border-slate-800 bg-slate-950 px-5 py-4 text-white shadow-sm lg:w-[320px]">
+          <div className="motion-pulse-soft w-full rounded-lg border border-slate-800 bp-sheet-dark px-5 py-4 text-white shadow-sm lg:w-[320px]">
             <div className="flex items-end justify-between gap-4">
               <div>
                 <p className="text-xs font-semibold uppercase text-blue-200">Level</p>

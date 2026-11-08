@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { ArrowRight, Eye, EyeOff, GraduationCap } from 'lucide-react'
+import { ArrowRight, Cog, Eye, EyeOff } from 'lucide-react'
 import { useAuthStore } from '../store'
 
-function Brand() { return <Link to="/" className="app-brand"><span className="app-brand-mark"><GraduationCap size={22} /></span><strong>EngineLab<span> AI</span></strong></Link> }
+function Brand() { return <Link to="/" className="app-brand"><span className="app-brand-mark"><Cog size={21} strokeWidth={1.8} /></span><strong>EngineLab<span> AI</span></strong></Link> }
 
 export default function Login() {
   const navigate = useNavigate()

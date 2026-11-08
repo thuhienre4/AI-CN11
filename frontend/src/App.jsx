@@ -208,8 +208,8 @@ function App() {
           style: {
             border: '1px solid #e2e8f0',
             borderRadius: '8px',
-            boxShadow: '0 10px 30px rgba(15, 23, 42, 0.12)',
-            color: '#0f172a',
+            boxShadow: '0 10px 30px rgba(15, 36, 56, 0.12)',
+            color: '#0f2438',
             fontWeight: 600,
           },
         }}

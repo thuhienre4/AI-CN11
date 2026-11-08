@@ -71,7 +71,7 @@ export default function AIWorkspace() {
   }
 
   return <main className="page-container ai-studio">
-    <header className="mb-6 rounded-3xl bg-slate-900 p-6 text-white">
+    <header className="mb-6 rounded-3xl bp-sheet-dark p-6 text-white">
       <p className="text-sm text-teal-300">EngineLab • Không gian AI</p>
       <h1 className="mt-2 text-3xl font-bold">{teacher ? 'Trợ lý giảng dạy' : 'Gia sư của em'}</h1>
       <p className="mt-3 text-slate-200">{teacher ? 'Chuẩn bị bài dạy, đề kiểm tra và tiêu chí đánh giá từ nội dung bài học.' : 'Chọn bài học, đặt câu hỏi và luyện tập từng bước.'}</p>

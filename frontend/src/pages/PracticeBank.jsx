@@ -84,7 +84,7 @@ export default function PracticeBank() {
 
   return (
     <div className="page-container">
-      <section className="mb-6 overflow-hidden rounded-2xl bg-slate-950 p-6 text-white shadow-2xl">
+      <section className="mb-6 overflow-hidden rounded-2xl bp-sheet-dark p-6 text-white shadow-2xl">
         <div className="grid gap-6 lg:grid-cols-[1fr_320px] lg:items-center">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-200">Kho đề EngineLab</p>

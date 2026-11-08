@@ -270,7 +270,7 @@ export default function GameDemo() {
         </section>
 
         <aside className="space-y-4">
-          <div className="rounded-3xl border border-slate-200 bg-slate-950 p-5 text-white shadow-lg">
+          <div className="rounded-3xl border border-slate-200 bp-sheet-dark p-5 text-white shadow-lg">
             <p className="text-xs font-black uppercase tracking-[0.24em] text-cyan-200">Tổng quan game</p>
             <h3 className="mt-3 text-2xl font-black">Hướng dẫn nhanh</h3>
             <ul className="mt-4 space-y-3 text-sm leading-6 text-slate-200">

@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import {
-  ArrowLeft, ArrowRight, AtSign, BookOpenCheck, Check, CheckCircle2, Eye, EyeOff,
+  ArrowLeft, ArrowRight, AtSign, BookOpenCheck, Check, CheckCircle2, Cog, Eye, EyeOff,
   GraduationCap, LockKeyhole, Mail, School, ShieldCheck, Sparkles, UserRound, UsersRound,
 } from 'lucide-react'
 import { useAuthStore } from '../store'
@@ -34,7 +34,7 @@ const highlights = [
 
 const Brand = () => (
   <Link to="/" className="register-brand" aria-label="EngineLab AI - Trang chủ">
-    <span><Sparkles aria-hidden="true" /></span>
+    <span><Cog aria-hidden="true" /></span>
     <div><strong>EngineLab</strong><em>AI</em><small>Công nghệ THPT</small></div>
   </Link>
 )

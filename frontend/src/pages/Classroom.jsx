@@ -630,7 +630,7 @@ export default function Classroom() {
       {isTeacher && !isLocalSession() && <TeacherAnalyticsPanel />}
 
       <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
-        <aside className="space-y-6">
+        <aside className="min-w-0 space-y-6">
           {isTeacher ? (
             <section className="rounded-lg border border-amber-200 bg-amber-50 p-6 shadow-sm">
               <h2 className="text-xl font-bold text-slate-950">Đăng thông báo lớp</h2>
@@ -795,7 +795,7 @@ export default function Classroom() {
           )}
         </aside>
 
-        <main className="space-y-6">
+        <main className="min-w-0 space-y-6">
           <section className="rounded-lg border border-amber-200 bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-2xl font-bold text-amber-950">Bảng tin lớp</h2>
@@ -820,23 +820,23 @@ export default function Classroom() {
           </section>
 
           <section className="rounded-lg border border-emerald-200 bg-white p-6 shadow-sm">
-            <div className="mb-4 flex flex-col justify-between gap-3 md:flex-row md:items-end">
-              <div>
+            <div className="mb-4 flex flex-col justify-between gap-3 xl:flex-row xl:items-end">
+              <div className="shrink-0">
                 <p className="text-sm font-black uppercase text-emerald-700">Học liệu trong lớp</p>
                 <h2 className="text-2xl font-bold text-emerald-950">Tài liệu giáo viên đã chia sẻ</h2>
               </div>
-              <div className="flex flex-col gap-2 sm:flex-row">
+              <div className="flex min-w-0 flex-col gap-2 sm:flex-row">
                 <input
                   type="text"
                   value={materialSearchTerm}
                   onChange={(event) => setMaterialSearchTerm(event.target.value)}
                   placeholder="Tìm tài liệu"
-                  className="rounded-md border-slate-300 px-4 py-2 text-sm focus:border-emerald-500 focus:ring-emerald-500"
+                  className="min-w-0 flex-1 rounded-md border-slate-300 px-4 py-2 text-sm focus:border-emerald-500 focus:ring-emerald-500"
                 />
                 <select
                   value={materialCourseFilter}
                   onChange={(event) => setMaterialCourseFilter(event.target.value)}
-                  className="rounded-md border-slate-300 text-sm focus:border-emerald-500 focus:ring-emerald-500"
+                  className="w-full min-w-0 rounded-md border-slate-300 text-sm sm:w-56 focus:border-emerald-500 focus:ring-emerald-500"
                 >
                   <option value="">Tất cả học phần</option>
                   {sampleCourses.map((course) => (

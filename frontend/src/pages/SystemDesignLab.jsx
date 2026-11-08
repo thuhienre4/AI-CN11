@@ -11,36 +11,36 @@ const CANVAS_WIDTH = 980
 const CANVAS_HEIGHT = 680
 
 const blockTypes = [
-  { type: 'requirement', label: 'Yêu cầu kĩ thuật', color: 'border-indigo-300 bg-indigo-50', stroke: '#4f46e5' },
-  { type: 'design', label: 'Thiết kế / bản vẽ', color: 'border-blue-300 bg-blue-50', stroke: '#2563eb' },
-  { type: 'material', label: 'Vật liệu', color: 'border-amber-300 bg-amber-50', stroke: '#d97706' },
-  { type: 'processing', label: 'Gia công', color: 'border-orange-300 bg-orange-50', stroke: '#f97316' },
-  { type: 'assembly', label: 'Lắp ráp', color: 'border-slate-300 bg-slate-50', stroke: '#334155' },
-  { type: 'inspection', label: 'Kiểm tra', color: 'border-emerald-300 bg-emerald-50', stroke: '#10b981' },
-  { type: 'safety', label: 'An toàn', color: 'border-red-300 bg-red-50', stroke: '#dc2626' },
-  { type: 'control', label: 'Điều khiển', color: 'border-violet-300 bg-violet-50', stroke: '#7c3aed' },
-  { type: 'power', label: 'Nguồn động lực', color: 'border-rose-300 bg-rose-50', stroke: '#e11d48' },
-  { type: 'transmission', label: 'Truyền lực', color: 'border-cyan-300 bg-cyan-50', stroke: '#06b6d4' },
-  { type: 'air', label: 'Nạp khí', color: 'border-sky-300 bg-sky-50', stroke: '#0ea5e9' },
-  { type: 'fuel', label: 'Nhiên liệu', color: 'border-orange-300 bg-orange-50', stroke: '#f97316' },
+  { type: 'requirement', label: 'Yêu cầu kĩ thuật', color: 'border-slate-400 bg-white', stroke: '#0f2438' },
+  { type: 'design', label: 'Thiết kế / bản vẽ', color: 'border-blue-300 bg-blue-50', stroke: '#1f4e79' },
+  { type: 'material', label: 'Vật liệu', color: 'border-amber-300 bg-amber-50', stroke: '#b7791f' },
+  { type: 'processing', label: 'Gia công', color: 'border-orange-300 bg-orange-50', stroke: '#e2661f' },
+  { type: 'assembly', label: 'Lắp ráp', color: 'border-slate-300 bg-slate-50', stroke: '#475569' },
+  { type: 'inspection', label: 'Kiểm tra', color: 'border-emerald-300 bg-emerald-50', stroke: '#1d7a55' },
+  { type: 'safety', label: 'An toàn', color: 'border-red-300 bg-red-50', stroke: '#c2362b' },
+  { type: 'control', label: 'Điều khiển', color: 'border-violet-300 bg-violet-50', stroke: '#604675' },
+  { type: 'power', label: 'Nguồn động lực', color: 'border-rose-300 bg-rose-50', stroke: '#be123c' },
+  { type: 'transmission', label: 'Truyền lực', color: 'border-cyan-300 bg-cyan-50', stroke: '#24646d' },
+  { type: 'air', label: 'Nạp khí', color: 'border-sky-200 bg-white', stroke: '#6585a8' },
+  { type: 'fuel', label: 'Nhiên liệu', color: 'border-yellow-300 bg-yellow-50', stroke: '#a16207' },
   { type: 'ignition', label: 'Đánh lửa', color: 'border-yellow-300 bg-yellow-50', stroke: '#eab308' },
-  { type: 'cylinder', label: 'Xi lanh', color: 'border-blue-300 bg-blue-50', stroke: '#2563eb' },
+  { type: 'cylinder', label: 'Xi lanh', color: 'border-blue-300 bg-blue-50', stroke: '#1f4e79' },
   { type: 'crank', label: 'Cơ cấu trục khuỷu', color: 'border-slate-300 bg-slate-50', stroke: '#334155' },
-  { type: 'cooling', label: 'Làm mát', color: 'border-cyan-300 bg-cyan-50', stroke: '#06b6d4' },
+  { type: 'cooling', label: 'Làm mát', color: 'border-cyan-300 bg-cyan-50', stroke: '#317d87' },
   { type: 'lubrication', label: 'Bôi trơn', color: 'border-lime-300 bg-lime-50', stroke: '#65a30d' },
   { type: 'exhaust', label: 'Xả khí', color: 'border-emerald-300 bg-emerald-50', stroke: '#10b981' },
   { type: 'chassis', label: 'Khung gầm', color: 'border-zinc-300 bg-zinc-50', stroke: '#52525b' },
   { type: 'brake', label: 'Phanh', color: 'border-red-300 bg-red-50', stroke: '#ef4444' },
-  { type: 'steering', label: 'Lái', color: 'border-teal-300 bg-teal-50', stroke: '#14b8a6' },
-  { type: 'electrical', label: 'Điện - điều khiển', color: 'border-purple-300 bg-purple-50', stroke: '#9333ea' },
+  { type: 'steering', label: 'Lái', color: 'border-teal-300 bg-teal-50', stroke: '#317d87' },
+  { type: 'electrical', label: 'Điện - điều khiển', color: 'border-purple-300 bg-purple-50', stroke: '#604675' },
   { type: 'source', label: 'Nguồn / tín hiệu vào', color: 'border-yellow-300 bg-yellow-50', stroke: '#ca8a04' },
-  { type: 'grid', label: 'Lưới điện', color: 'border-sky-300 bg-sky-50', stroke: '#0284c7' },
+  { type: 'grid', label: 'Lưới điện', color: 'border-sky-300 bg-sky-50', stroke: '#1f4e79' },
   { type: 'load', label: 'Phụ tải / đầu ra', color: 'border-emerald-300 bg-emerald-50', stroke: '#059669' },
   { type: 'protection', label: 'Bảo vệ', color: 'border-red-300 bg-red-50', stroke: '#dc2626' },
-  { type: 'sensor', label: 'Cảm biến', color: 'border-cyan-300 bg-cyan-50', stroke: '#0891b2' },
-  { type: 'logic', label: 'Logic / xử lí', color: 'border-violet-300 bg-violet-50', stroke: '#7c3aed' },
-  { type: 'program', label: 'Chương trình', color: 'border-indigo-300 bg-indigo-50', stroke: '#4f46e5' },
-  { type: 'actuator', label: 'Cơ cấu chấp hành', color: 'border-orange-300 bg-orange-50', stroke: '#ea580c' },
+  { type: 'sensor', label: 'Cảm biến', color: 'border-cyan-300 bg-cyan-50', stroke: '#24646d' },
+  { type: 'logic', label: 'Logic / xử lí', color: 'border-violet-300 bg-violet-50', stroke: '#604675' },
+  { type: 'program', label: 'Chương trình', color: 'border-indigo-300 bg-indigo-50', stroke: '#1f4e79' },
+  { type: 'actuator', label: 'Cơ cấu chấp hành', color: 'border-orange-300 bg-orange-50', stroke: '#c55315' },
   { type: 'feedback', label: 'Phản hồi', color: 'border-lime-300 bg-lime-50', stroke: '#65a30d' },
 ]
 
@@ -583,7 +583,7 @@ export default function SystemDesignLab() {
             </div>
           </div>
 
-          <div className="border-t border-slate-200 bg-slate-950 p-6 text-white lg:border-l lg:border-t-0">
+          <div className="border-t border-slate-200 bp-sheet-dark p-6 text-white lg:border-l lg:border-t-0">
             <p className="text-xs font-bold uppercase tracking-wide text-blue-200">Đánh giá sơ đồ</p>
             <div className="mt-4 text-5xl font-black">{completionScore}%</div>
             <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-700">

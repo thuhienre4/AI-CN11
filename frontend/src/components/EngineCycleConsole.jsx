@@ -10,7 +10,7 @@ import {
 const SPEEDS = [0.25, 0.5, 1, 2]
 const STEP_DEGREES = 15
 const CHART_HEIGHT = 74
-const STROKE_FILLS = ['#e0f2fe', '#fef3c7', '#ffedd5', '#e2e8f0']
+const STROKE_FILLS = ['#dce6f0', '#fef3c7', '#ffe4d0', '#e2e8f0']
 
 const toPhase = (degrees) => (degrees * Math.PI) / 180
 
@@ -40,10 +40,10 @@ function CycleChart({ degrees }) {
       {FOUR_STROKES.map((stroke, index) => (
         <rect key={stroke.id} x={index * 180} width="180" height={CHART_HEIGHT} fill={STROKE_FILLS[index]} />
       ))}
-      <polyline points={pistonCurve} fill="none" stroke="#1d4ed8" strokeWidth="2" vectorEffect="non-scaling-stroke" />
-      <rect x="0" y="50" width="180" height="8" rx="2" fill="#0ea5e9" />
-      <rect x="540" y="62" width="180" height="8" rx="2" fill="#f97316" />
-      <line x1={degrees} x2={degrees} y1="0" y2={CHART_HEIGHT} stroke="#0f172a" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+      <polyline points={pistonCurve} fill="none" stroke="#183f63" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+      <rect x="0" y="50" width="180" height="8" rx="2" fill="#44678e" />
+      <rect x="540" y="62" width="180" height="8" rx="2" fill="#e2661f" />
+      <line x1={degrees} x2={degrees} y1="0" y2={CHART_HEIGHT} stroke="#0f2438" strokeWidth="2" vectorEffect="non-scaling-stroke" />
     </svg>
   )
 }

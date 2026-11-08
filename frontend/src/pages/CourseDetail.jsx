@@ -123,7 +123,7 @@ function ChapterMiniTest({ test }) {
         })}
 
         {submitted ? (
-          <div className="flex flex-col gap-4 rounded-lg bg-slate-950 p-5 text-white sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-4 rounded-lg bp-sheet-dark p-5 text-white sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="text-sm font-semibold text-slate-300">Kết quả mini test</p>
               <p className="mt-1 text-2xl font-black">{score}/{test.questions.length} câu đúng</p>

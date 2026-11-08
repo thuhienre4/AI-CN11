@@ -170,7 +170,7 @@ const getDirectionFromCellClick = (event, fallbackDirectionId) => {
 const getLineBackground = (lineTypeId, angle = 90) => {
   if (lineTypeId === 'hidden') return `repeating-linear-gradient(${angle}deg,#334155 0 8px,transparent 8px 13px)`
   if (lineTypeId === 'center') {
-    return `repeating-linear-gradient(${angle}deg,#1d4ed8 0 12px,transparent 12px 16px,#1d4ed8 16px 18px,transparent 18px 22px)`
+    return `repeating-linear-gradient(${angle}deg,#183f63 0 12px,transparent 12px 16px,#183f63 16px 18px,transparent 18px 22px)`
   }
   if (lineTypeId === 'thin') return '#475569'
   return '#020617'
@@ -282,8 +282,8 @@ function VoxelPreview({ object }) {
     <svg viewBox="0 0 300 220" className="h-full w-full">
       <defs>
         <linearGradient id="topFace" x1="0" x2="1">
-          <stop stopColor="#dbeafe" />
-          <stop offset="1" stopColor="#bfdbfe" />
+          <stop stopColor="#dce6f0" />
+          <stop offset="1" stopColor="#bccbdc" />
         </linearGradient>
       </defs>
       {sortedBlocks.map((block) => {
@@ -293,8 +293,8 @@ function VoxelPreview({ object }) {
         const right = `${p.x + 25},${p.y - 12} ${p.x},${p.y} ${p.x},${p.y + 29} ${p.x + 25},${p.y + 17}`
         return (
           <g key={block.join('-')} stroke="#334155" strokeWidth="1.5">
-            <polygon points={left} fill="#93c5fd" />
-            <polygon points={right} fill="#60a5fa" />
+            <polygon points={left} fill="#91a9c3" />
+            <polygon points={right} fill="#6585a8" />
             <polygon points={top} fill="url(#topFace)" />
           </g>
         )
@@ -659,7 +659,7 @@ export default function ProjectionPractice() {
 
   return (
     <div className="page-container">
-      <section className="mb-6 rounded-2xl bg-slate-950 p-6 text-white shadow-2xl">
+      <section className="mb-6 rounded-2xl bp-sheet-dark p-6 text-white shadow-2xl">
         <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-end">
           <div>
             <p className="text-xs font-black uppercase tracking-[0.24em] text-blue-200">Công nghệ 10 · Vẽ kĩ thuật</p>
@@ -680,7 +680,7 @@ export default function ProjectionPractice() {
       </section>
 
       <div className="grid gap-6 xl:grid-cols-[320px_1fr]">
-        <aside className="space-y-5">
+        <aside className="min-w-0 space-y-5">
           <section className="panel p-5">
             <h2 className="font-black text-slate-950">Chọn vật thể</h2>
             <div className="mt-4 grid gap-2">
@@ -806,7 +806,7 @@ export default function ProjectionPractice() {
           </section>
         </aside>
 
-        <main className="space-y-5">
+        <main className="min-w-0 space-y-5">
           <section className="grid gap-4 lg:grid-cols-3">
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm font-bold leading-6 text-emerald-950">
               Sau khi kiểm tra: viền xanh là nét đúng.
