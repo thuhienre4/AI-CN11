@@ -60,7 +60,8 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
         status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
         content={
             "detail": "Request validation failed.",
-            "errors": exc.errors(),
+            # A validator's own message carries its exception in ctx, which JSON cannot hold
+            "errors": [{key: value for key, value in error.items() if key != "ctx"} for error in exc.errors()],
             "path": str(request.url.path),
         },
     )
@@ -109,7 +110,7 @@ async def root():
 
 
 # ============= Import Routes =============
-from routes import accounts, auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime, ai_workspace
+from routes import accounts, auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime, ai_workspace, game_rooms
 
 app.include_router(ai_workspace.router)
 
@@ -124,6 +125,7 @@ app.include_router(materials.router)
 app.include_router(classroom.router)
 app.include_router(nova3d.router)
 app.include_router(realtime.router)
+app.include_router(game_rooms.router)
 
 
 if __name__ == "__main__":

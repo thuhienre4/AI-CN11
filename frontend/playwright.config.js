@@ -4,6 +4,7 @@ import { defineConfig } from '@playwright/test'
 export const API = 'http://127.0.0.1:8765'
 // A port of its own, so a developer's `npm run dev` on 5173 does not collide
 const WEB = 'http://localhost:5180'
+export const E2E_ADMIN = { username: 'e2e_admin', password: 'QuanTri#E2E2026' }
 
 export default defineConfig({
   testDir: './e2e',
@@ -24,7 +25,15 @@ export default defineConfig({
       url: `${API}/health`,
       timeout: 120_000,
       reuseExistingServer: false,
-      env: { ENGINE_LAB_DATABASE_URL: 'sqlite:///./e2e.db', ENGINE_LAB_ENVIRONMENT: 'development', ENGINE_LAB_CORS_ORIGINS: JSON.stringify([WEB]) },
+      env: {
+        ENGINE_LAB_DATABASE_URL: 'sqlite:///./e2e.db',
+        ENGINE_LAB_ENVIRONMENT: 'development',
+        ENGINE_LAB_CORS_ORIGINS: JSON.stringify([WEB]),
+        // An administrator for journeys that need a verified teacher; the database is thrown away after each run
+        ENGINE_LAB_BOOTSTRAP_ADMIN_USERNAME: E2E_ADMIN.username,
+        ENGINE_LAB_BOOTSTRAP_ADMIN_EMAIL: 'e2e-admin@example.com',
+        ENGINE_LAB_BOOTSTRAP_ADMIN_PASSWORD: E2E_ADMIN.password,
+      },
     },
     {
       command: 'npx vite build && npx vite preview --port 5180 --strictPort',

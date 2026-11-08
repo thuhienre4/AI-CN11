@@ -245,6 +245,20 @@ python scripts/create_admin.py --username admin --email admin@truong.edu.vn
 
 Giới hạn: hệ thống chưa kiểm tra thân phận thật (email trường, giấy tờ); người duyệt chịu trách nhiệm đối chiếu.
 
+## Phòng quiz trò chơi (thay công cụ vẽ sơ đồ hệ thống)
+
+Công cụ "Vẽ sơ đồ hệ thống" trên trang bài học được gỡ; đường dẫn cũ `/design-lab` và `/lessons/:id/design` chuyển sang `/game-rooms`. Thay vào đó giáo viên đã xác minh có trang **Phòng quiz trò chơi**:
+
+- Thiết kế: đặt tên, lấy câu từ ngân hàng bài học (chọn khối, bài) hoặc tự soạn câu 2-4 phương án, đặt thời gian từng câu (5-120 giây), giải thích sau đáp án. Thiết kế lưu trên thiết bị của giáo viên.
+- Phòng trực tuyến: máy chủ cấp mã 6 số; học sinh vào ở `/game-rooms/join`, trả lời trên máy của mình. Điểm do máy chủ tính theo đồng hồ của máy chủ: đúng được 500 + tối đa 500 theo tốc độ, sai 0; chỉ câu trả lời đầu tiên và trong thời hạn (cộng 1 giây) được tính. Đáp án đúng chỉ gửi tới màn hình giáo viên, học sinh chỉ thấy khi công bố.
+- Trình chiếu: không cần máy chủ; 2-4 đội, giáo viên bấm phương án của từng đội, đội đúng được 100 điểm. Khi tạo phòng trực tuyến mà không có máy chủ, trang tự chuyển sang chế độ này.
+
+Kiểm thử: `backend/tests/test_game_rooms.py` (20 ca: luật tính điểm, trả lời muộn hoặc trả lời lại, câu hỏi gửi đi không chứa đáp án, chỉ giáo viên đã xác minh mở được phòng, câu hỏi sai dạng bị từ chối, học sinh không điều khiển được phòng, WebSocket cần token hợp lệ, một ván chơi trọn vẹn); `frontend/src/utils/gameRoom.test.js` (8 ca); hành trình đầu - cuối thứ năm trong `frontend/e2e/journeys.spec.js`: quản trị viên duyệt giáo viên, giáo viên thiết kế và mở phòng, học sinh vào từ trình duyệt khác, trả lời, xem kết quả và bảng xếp hạng chung cuộc.
+
+Khi viết kiểm thử, phát hiện lỗi sẵn có: trình xử lí lỗi 422 trong `backend/main.py` trả 500 khi một bộ kiểm tra dữ liệu báo lỗi bằng thông điệp riêng (đối tượng lỗi trong `ctx` không chuyển được sang JSON). Đã sửa.
+
+Giới hạn: phòng lưu trong bộ nhớ của một tiến trình máy chủ, mất khi máy chủ khởi động lại và không dùng được khi chạy nhiều tiến trình; tối đa 60 người chơi mỗi phòng; phòng tự xóa sau 4 giờ.
+
 ## Chưa thực hiện
 
 - Đo tải và kiểm thử đồng thời trên PostgreSQL, nhiều tiến trình, mạng thực.
@@ -252,3 +266,4 @@ Giới hạn: hệ thống chưa kiểm tra thân phận thật (email trường
 - Đánh giá khả dụng và thực nghiệm sư phạm với giáo viên, học sinh.
 - Hiệu năng 3D trên máy học sinh chưa đo.
 - Chế độ VR chưa thử trên kính thật.
+- Phòng quiz trực tuyến chưa thử với cả lớp thật trên mạng trường.

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { BookOpen, Bot, ChartNoAxesCombined, Cog, GraduationCap, LogOut, Menu, ShieldCheck, X } from 'lucide-react'
+import { BookOpen, Bot, ChartNoAxesCombined, Cog, Gamepad2, GraduationCap, LogOut, Menu, ShieldCheck, X } from 'lucide-react'
 import { useAuthStore } from '../store'
 import { canActAsTeacher, isStaffRole, isVerified } from '../utils/roles'
 
@@ -17,7 +17,7 @@ export default function Navigation() {
   if (['/login', '/register'].includes(location.pathname)) return null
   const teacher = canActAsTeacher(user)
   const awaitingReview = isStaffRole(user) && !isVerified(user)
-  const links = [['/', 'Tổng quan', BookOpen], ['/ai-workspace', 'Không gian AI', Bot], ['/classroom', 'Lớp học', GraduationCap], ['/practice-bank', teacher ? 'Kho đề' : 'Luyện tập', BookOpen], ['/progress', 'Tiến độ', ChartNoAxesCombined]]
+  const links = [['/', 'Tổng quan', BookOpen], ['/ai-workspace', 'Không gian AI', Bot], ['/classroom', 'Lớp học', GraduationCap], ['/practice-bank', teacher ? 'Kho đề' : 'Luyện tập', BookOpen], [teacher ? '/game-rooms' : '/game-rooms/join', 'Phòng quiz', Gamepad2], ['/progress', 'Tiến độ', ChartNoAxesCombined]]
   const canReviewAccounts = teacher
   if (canReviewAccounts) links.splice(3, 0, ['/accounts', 'Xác minh', ShieldCheck])
   return <header className="app-header"><div className="app-header-inner">

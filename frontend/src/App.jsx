@@ -45,7 +45,8 @@ const Quiz = lazyPage(() => import('./pages/Quiz'))
 const PersonalProgress = lazyPage(() => import('./pages/PersonalProgress'))
 const ChapterTests = lazyPage(() => import('./pages/ChapterTests'))
 const Classroom = lazyPage(() => import('./pages/Classroom'))
-const SystemDesignLab = lazyPage(() => import('./pages/SystemDesignLab'))
+const GameRoomStudio = lazyPage(() => import('./pages/GameRoomStudio'))
+const GameRoomJoin = lazyPage(() => import('./pages/GameRoomJoin'))
 const PracticeBank = lazyPage(() => import('./pages/PracticeBank'))
 const ProjectionPractice = lazyPage(() => import('./pages/ProjectionPractice'))
 const CircuitExperimentLab = lazyPage(() => import('./pages/CircuitExperimentLab'))
@@ -342,13 +343,23 @@ function App() {
             }
           />
           <Route
-            path="/design-lab"
+            path="/game-rooms"
             element={
               <ProtectedRoute>
-                <SystemDesignLab />
+                <GameRoomStudio />
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/game-rooms/join"
+            element={
+              <ProtectedRoute>
+                <GameRoomJoin />
+              </ProtectedRoute>
+            }
+          />
+          {/* The system-diagram tool was replaced by quiz rooms; old links land there */}
+          <Route path="/design-lab" element={<Navigate to="/game-rooms" replace />} />
           <Route
             path="/courses/:courseId/chapter-tests"
             element={
@@ -405,14 +416,7 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/lessons/:lessonId/design"
-            element={
-              <ProtectedRoute>
-                <SystemDesignLab />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/lessons/:lessonId/design" element={<Navigate to="/game-rooms" replace />} />
           <Route
             path="/lessons/:lessonId/circuit-lab"
             element={

@@ -63,7 +63,7 @@ const contests = [
     badge: 'CN10',
     color: 'from-amber-500 to-orange-400',
     time: '15 phút',
-    route: '/design-lab',
+    route: '/game-rooms',
     description:
       'Thi theo nhóm: xác định vấn đề, đề xuất phương án, chọn tiêu chí, tạo mẫu nhanh và nêu hướng cải tiến.',
     learningGoals: [
@@ -86,7 +86,7 @@ const contests = [
     badge: 'CN11',
     color: 'from-violet-500 to-fuchsia-400',
     time: '15 phút',
-    route: '/design-lab',
+    route: '/game-rooms',
     description:
       'Thi trình bày dự án nghiên cứu cơ khí: vấn đề, mục tiêu, kế hoạch, mô hình thử, dữ liệu đo và cải tiến.',
     learningGoals: [

@@ -105,6 +105,12 @@ export const questionsAPI = {
   delete: (id) => api.delete(`/api/questions/${id}`),
 }
 
+// Live quiz rooms: a teacher opens one, students join with its code
+export const gameRoomsAPI = {
+  create: (data) => api.post('/api/game-rooms', data),
+  get: (code) => api.get(`/api/game-rooms/${code}`),
+}
+
 // Quiz
 export const quizAPI = {
   startAttempt: (userId, lessonId) => api.post(`/api/quiz/attempts?user_id=${userId}`, { lesson_id: Number(lessonId) }),

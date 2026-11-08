@@ -1,6 +1,6 @@
 // End-to-end journeys through the real interface and the real API.
 import { expect, test } from '@playwright/test'
-import { API } from '../playwright.config.js'
+import { API, E2E_ADMIN } from '../playwright.config.js'
 
 const run = Date.now().toString(36)
 const PASSWORD = 'MatKhau#2026'
@@ -94,4 +94,49 @@ test('the chapter test follows its blueprint and scores the objective part', asy
   await page.getByRole('button', { name: 'Nộp bài' }).click()
   await expect(page.getByText('Trắc nghiệm: 0 / 7 điểm')).toBeVisible()
   await expect(page.getByText('Hướng dẫn chấm')).toHaveCount(2)
+})
+
+test('a teacher runs a live quiz room and a student plays it on another device', async ({ page, browser, request }) => {
+  // The administrator approves the new teacher, as happens in a school
+  const teacherName = `gvq${run}`
+  await register(page, { role: 'teacher', username: teacherName, fullName: 'Cô Hiền' })
+  const admin = await (await request.post(`${API}/api/auth/login`, { data: E2E_ADMIN })).json()
+  const adminHeaders = { Authorization: `Bearer ${admin.access_token}` }
+  const pending = await (await request.get(`${API}/api/accounts/pending`, { headers: adminHeaders })).json()
+  const teacherAccount = pending.find((account) => account.username === teacherName)
+  expect((await request.post(`${API}/api/accounts/${teacherAccount.id}/review`, { headers: adminHeaders, data: { decision: 'approve', classes: '11A1' } })).ok()).toBe(true)
+  await login(page, teacherName, 'teacher')
+
+  // Design a one-question game and open the room
+  await page.goto('/game-rooms')
+  await page.getByPlaceholder(/Ai nhanh hơn/).fill('Thi nhanh Bài 18')
+  await page.getByRole('button', { name: '+ Câu tự soạn' }).click()
+  await page.getByLabel('Nội dung câu 1').fill('Kì nào hai xu páp đều đóng?')
+  const options = page.getByPlaceholder(/Phương án/)
+  await options.nth(0).fill('Kì nạp')
+  await options.nth(1).fill('Kì nén')
+  await page.getByLabel('Phương án B là đáp án đúng').check()
+  await page.getByRole('button', { name: 'Mở phòng trực tuyến' }).click()
+  const code = (await page.locator('p.font-mono').innerText()).trim()
+  expect(code).toMatch(/^\d{6}$/)
+
+  // A student joins from a separate browser
+  const studentContext = await browser.newContext()
+  const student = await studentContext.newPage()
+  const studentName = `hsq${run}`
+  await register(student, { role: 'student', username: studentName, fullName: 'Bạn An', studentClass: '11A1' })
+  await login(student, studentName)
+  await student.goto(`/game-rooms/join?code=${code}`)
+  await student.getByRole('button', { name: 'Vào phòng' }).click()
+  await expect(student.getByText('Bạn đã vào phòng!')).toBeVisible()
+  await expect(page.getByText('Bạn An')).toBeVisible()
+
+  // Play: the student answers, the room reveals once everyone has answered
+  await page.getByRole('button', { name: /Bắt đầu/ }).click()
+  await student.getByRole('button', { name: /Kì nén/ }).click()
+  await expect(student.getByText(/Chính xác! \+\d+/)).toBeVisible()
+  await page.getByRole('button', { name: 'Xem kết quả chung cuộc' }).click()
+  await expect(student.getByText('Kết thúc!')).toBeVisible()
+  await expect(page.getByText('Kết quả chung cuộc')).toBeVisible()
+  await studentContext.close()
 })

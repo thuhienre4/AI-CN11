@@ -8,6 +8,7 @@ import { useAuthStore } from '../store'
 import { getInteractiveActivity, getSampleLesson } from '../data/courseCatalog'
 import { recordLocalLearningEvent } from '../utils/learningProgress'
 import { useLearningSession } from '../hooks/useLearningSession'
+import { canActAsTeacher } from '../utils/roles'
 
 function InteractiveLearning({ activity }) {
   const [openCard, setOpenCard] = useState(null)
@@ -309,6 +310,11 @@ export default function LessonDetail() {
   if (isLoading) return <div className="page-container text-center text-slate-600">Đang tải...</div>
 
   const activity = getInteractiveActivity(lessonId)
+  // Teachers open a quiz room seeded with this lesson's questions; students join one with its code
+  const lessonNumber = Number(/^Bài\s+(\d+)/.exec(lesson?.title || '')?.[1]) || ''
+  const quizRoomLink = canActAsTeacher(user)
+    ? `/game-rooms?grade=${lesson?.grade_level || ''}&lesson=${lessonNumber}`
+    : '/game-rooms/join'
   const showCircuitLab = lesson?.grade_level === 12 && Number(lesson?.source_course_id || lesson?.course_id) >= 5
   const usesEngineLabels =
     lesson?.flow === 'engine'
@@ -438,9 +444,9 @@ export default function LessonDetail() {
                 <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs">AI</span>
                 Trợ lý học tập
               </Link>
-              <Link to={`/lessons/${lessonId}/design`} className="secondary-button w-full">
-                <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs">S</span>
-                Vẽ sơ đồ hệ thống
+              <Link to={quizRoomLink} className="secondary-button w-full">
+                <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs">G</span>
+                {canActAsTeacher(user) ? 'Tạo phòng quiz trò chơi' : 'Vào phòng quiz'}
               </Link>
               {showCircuitLab && (
                 <Link to={`/lessons/${lessonId}/circuit-lab`} className="secondary-button w-full">
@@ -489,7 +495,7 @@ export default function LessonDetail() {
             <h3 className="font-bold text-blue-950">Cách học gợi ý</h3>
             <ol className="mt-3 space-y-2 text-sm leading-6 text-blue-900">
               <li>1. Đọc nội dung để nắm nhiệm vụ của bộ phận hoặc hệ thống.</li>
-              <li>2. Dùng sơ đồ hoặc bản vẽ để hệ thống hóa kiến thức trọng tâm.</li>
+              <li>2. Xem mô phỏng 3D để quan sát cấu tạo và nguyên lí.</li>
               <li>3. Dùng trợ lý học tập để hỏi lại phần chưa hiểu.</li>
               <li>4. Làm kiểm tra nhanh để đánh giá khả năng liên hệ kiến thức.</li>
             </ol>

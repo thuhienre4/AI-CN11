@@ -35,9 +35,13 @@ const privatePageSeo = {
     title: 'Luyện tập hình chiếu - EngineLab Công nghệ',
     description: 'Công cụ luyện tập hình chiếu và đọc bản vẽ kỹ thuật trong môn Công nghệ.',
   },
-  '/design-lab': {
-    title: 'Phòng thiết kế hệ thống - EngineLab Công nghệ',
-    description: 'Thực hành thiết kế sơ đồ hệ thống, cấu trúc cơ khí và quy trình kỹ thuật.',
+  '/game-rooms': {
+    title: 'Phòng quiz trò chơi - EngineLab Công nghệ',
+    description: 'Giáo viên thiết kế trò chơi câu hỏi, mở phòng có mã cho học sinh thi đua hoặc trình chiếu chia đội.',
+  },
+  '/game-rooms/join': {
+    title: 'Vào phòng quiz - EngineLab Công nghệ',
+    description: 'Nhập mã phòng để thi đua trả lời câu hỏi cùng lớp.',
   },
   '/progress': {
     title: 'Tiến độ cá nhân - EngineLab Công nghệ',

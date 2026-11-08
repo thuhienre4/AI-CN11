@@ -156,7 +156,7 @@ export default function WarmupGameArena() {
       type: 'design',
       title: 'Thiết kế sơ đồ kiến thức',
       steps: [
-        'Mở xưởng sơ đồ, chọn mẫu phù hợp với bài hoặc chương đang học.',
+        'Mở phòng quiz trò chơi, chọn mẫu phù hợp với bài hoặc chương đang học.',
         'Thêm khối, kéo thả để sắp xếp cấu tạo, quy trình hoặc dòng năng lượng.',
         'Nối mũi tên giữa các khối và ghi chú nhiệm vụ của từng phần, sau đó lưu sơ đồ.',
       ],
@@ -316,8 +316,8 @@ export default function WarmupGameArena() {
             </ol>
           </div>
           {activeGuide.type === 'design' && (
-            <Link to="/design-lab" className="primary-button shrink-0">
-              Mở xưởng sơ đồ
+            <Link to="/game-rooms" className="primary-button shrink-0">
+              Mở phòng quiz trò chơi
             </Link>
           )}
         </div>
