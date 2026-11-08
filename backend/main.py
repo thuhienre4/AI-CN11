@@ -11,6 +11,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from starlette import status
 
 from config import settings
+from bootstrap import ensure_bootstrap_admin
 from catalog_seed import seed_catalog_if_empty
 from database import Base, engine
 from migrations import run_startup_migrations
@@ -25,6 +26,7 @@ if settings.environment.lower() == "production" and settings.secret_key == "your
 Base.metadata.create_all(bind=engine)
 run_startup_migrations(engine)
 seed_catalog_if_empty()
+ensure_bootstrap_admin()
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):

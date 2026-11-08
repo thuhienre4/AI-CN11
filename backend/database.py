@@ -4,7 +4,16 @@ from sqlalchemy.orm import sessionmaker
 from starlette.requests import HTTPConnection
 from config import settings
 
-is_sqlite = settings.database_url.startswith("sqlite")
+def normalize_database_url(url: str) -> str:
+    """Hosts such as Railway hand out postgres:// or postgresql:// URLs; the installed driver is psycopg 3."""
+    for prefix in ("postgres://", "postgresql://"):
+        if url.startswith(prefix):
+            return "postgresql+psycopg://" + url[len(prefix):]
+    return url
+
+
+DATABASE_URL = normalize_database_url(settings.database_url)
+is_sqlite = DATABASE_URL.startswith("sqlite")
 engine_options = {
     "echo": settings.debug,
     "pool_pre_ping": True,
@@ -33,7 +42,7 @@ def configure_sqlite_transactions(sqlite_engine):
 
 
 # Create database engine
-engine = create_engine(settings.database_url, **engine_options)
+engine = create_engine(DATABASE_URL, **engine_options)
 if is_sqlite:
     configure_sqlite_transactions(engine)
 read_engine = engine.execution_options(read_only_request=True)

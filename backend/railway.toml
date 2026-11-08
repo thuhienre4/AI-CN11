@@ -1,0 +1,16 @@
+# Railway service for the FastAPI backend.
+# In the service settings: Root Directory = /backend, Config-as-code path = /backend/railway.toml
+# (Railway does not look for this file inside the root directory by itself).
+# Variables and the volume are listed in docs/deploy-railway.md.
+
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "Dockerfile"
+
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 120
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 5
+# One replica only: the SQLite database lives on a volume that a single instance mounts.
+numReplicas = 1

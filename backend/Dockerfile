@@ -1,21 +1,14 @@
-FROM python:3.11-slim
+FROM python:3.13-slim
 
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    gcc \
-    postgresql-client \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements
+# psycopg[binary] ships its own libpq, so no compiler or PostgreSQL client is needed.
 COPY requirements.txt .
-
-# Install Python dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
 
-# Run migrations and start app
-CMD ["python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# One process: SQLite allows one writer at a time, and this is the configuration the load test measured.
+# Railway sets PORT; 8000 is the local default.
+ENV PYTHONUNBUFFERED=1
+CMD ["sh", "-c", "python -m uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]

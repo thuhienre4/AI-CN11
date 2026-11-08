@@ -8,6 +8,7 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from auth import can_manage_content, can_view_student, get_authenticated_user, require_teacher_user
+from config import settings
 from database import get_db
 from models import Assignment, AssignmentSubmission, ClassroomPost, User
 from schemas import (
@@ -21,7 +22,7 @@ from schemas import (
 
 router = APIRouter(prefix="/api/classroom", tags=["Classroom"])
 
-SUBMISSION_DIR = Path(__file__).resolve().parents[1] / "uploads" / "submissions"
+SUBMISSION_DIR = settings.uploads_root / "submissions"
 MAX_SUBMISSION_FILE_SIZE = 300 * 1024 * 1024
 
 

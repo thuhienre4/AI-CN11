@@ -68,4 +68,20 @@ class Settings(BaseSettings):
     allow_teacher_self_registration: bool = False  # True skips administrator approval
     require_student_verification: bool = True
 
+    # Storage of uploaded files. On a host whose disk is wiped at each deploy (Railway), point this at a volume.
+    upload_dir: Optional[str] = None
+
+    # Number of reverse proxies in front of the app that append to X-Forwarded-For (Railway: 1).
+    # 0 uses the socket address. Only the entries those proxies added are trusted, never what the client sent.
+    trusted_proxy_hops: int = 0
+
+    # First administrator, created at startup when no administrator exists yet (see bootstrap.py).
+    bootstrap_admin_username: Optional[str] = None
+    bootstrap_admin_email: Optional[str] = None
+    bootstrap_admin_password: Optional[str] = None
+
+    @property
+    def uploads_root(self) -> Path:
+        return Path(self.upload_dir) if self.upload_dir else PROJECT_ROOT / "backend" / "uploads"
+
 settings = Settings()

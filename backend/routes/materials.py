@@ -7,13 +7,14 @@ from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from auth import get_authenticated_user, require_teacher_user
+from config import settings
 from database import get_db
 from models import ReferenceMaterial, User
 from schemas import ReferenceMaterialResponse
 
 router = APIRouter(prefix="/api/materials", tags=["Reference Materials"])
 
-UPLOAD_DIR = Path(__file__).resolve().parents[1] / "uploads" / "materials"
+UPLOAD_DIR = settings.uploads_root / "materials"
 MAX_FILE_SIZE = 300 * 1024 * 1024
 ALLOWED_EXTENSIONS = {".pdf", ".ppt", ".pptx", ".doc", ".docx"}
 ALLOWED_TYPES = {

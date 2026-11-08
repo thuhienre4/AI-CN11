@@ -28,6 +28,17 @@ def initial_account_status(user_data: UserCreate) -> str:
     return ACCOUNT_PENDING if needs_class_check else ACCOUNT_VERIFIED
 
 
+
+def client_address(request: Request) -> str:
+    """Address used to rate-limit class-code guesses. Behind N trusted proxies, the N-th address from the right
+    of X-Forwarded-For is the one the outermost proxy saw; entries further left come from the client and can be forged."""
+    hops = settings.trusted_proxy_hops
+    if hops > 0:
+        chain = [part.strip() for part in request.headers.get("x-forwarded-for", "").split(",") if part.strip()]
+        if len(chain) >= hops:
+            return chain[-hops]
+    return request.client.host if request.client else "unknown"
+
 @router.post("/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user_data: UserCreate, request: Request, db: Session = Depends(get_db)):
     """Register a new user."""
@@ -50,7 +61,7 @@ def register(user_data: UserCreate, request: Request, db: Session = Depends(get_
 
     join_code = None
     if user_data.class_code and user_data.class_code.strip() and user_data.role.value == "student":
-        client_key = request.client.host if request.client else "unknown"
+        client_key = client_address(request)
         join_code = redeem_class_code(db, user_data.class_code, client_key)
 
     new_user = User(
