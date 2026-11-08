@@ -25,6 +25,8 @@ backend/.pytest_cache/
 backend/.coverage
 backend/.idea/
 backend/*.db
+backend/*.db-shm
+backend/*.db-wal
 backend/uploads/
 
 # Frontend
@@ -73,3 +75,8 @@ tools/
 # OS
 .DS_Store
 Thumbs.db
+
+# End-to-end runs
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/

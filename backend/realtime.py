@@ -10,9 +10,8 @@ class LearningConnectionManager:
         # None means every class (administrators); otherwise the classes a teacher is assigned to.
         self._staff_connections: dict[WebSocket, set[str] | None] = {}
 
-    async def connect(self, websocket: WebSocket, *, user_id: int, staff_classes=False) -> None:
-        """``staff_classes`` is False for students, else the classes this account may follow."""
-        await websocket.accept()
+    def register(self, websocket: WebSocket, *, user_id: int, staff_classes=False) -> None:
+        """Track an accepted socket. ``staff_classes`` is False for students, else the classes this account may follow."""
         self._user_connections[user_id].add(websocket)
         if staff_classes is not False:
             self._staff_connections[websocket] = staff_classes

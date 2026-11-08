@@ -20,6 +20,7 @@ import {
   getGrade12DriveMaterialsByCourse,
 } from '../data/grade12DriveMaterials'
 import { useAuthStore } from '../store'
+import { canDeleteMaterial, isVerifiedTeacher } from '../utils/roles'
 import {
   createReferenceMaterial,
   deleteReferenceMaterial,
@@ -152,7 +153,7 @@ function ChapterMiniTest({ test }) {
 export default function CourseDetail() {
   const { courseId } = useParams()
   const user = useAuthStore((state) => state.user)
-  const isTeacher = user?.role === 'teacher'
+  const isTeacher = isVerifiedTeacher(user)
   const [course, setCourse] = useState(null)
   const [lessons, setLessons] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -495,7 +496,7 @@ export default function CourseDetail() {
                           Tải xuống
                         </button>
                       )}
-                      {isTeacher && !material.external_url && (
+                      {canDeleteMaterial(user, material) && !material.external_url && (
                         <button
                           type="button"
                           onClick={() => removeChapterMaterial(material.id)}

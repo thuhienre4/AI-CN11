@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { registrationErrorMessage } from '../utils/apiErrors'
 import { authAPI, coursesAPI, lessonsAPI } from '../services/api'
 
 const LOCAL_USERS_KEY = 'local_auth_users'
@@ -281,9 +282,7 @@ export const useAuthStore = create((set, get) => ({
         return result
       }
 
-      const message =
-        error.response?.data?.detail ||
-        'Registration failed'
+      const message = registrationErrorMessage(error.response?.data)
       set({
         error: message,
         isLoading: false,

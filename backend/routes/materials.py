@@ -132,8 +132,9 @@ def upload_material(
         file_type=file.content_type or "",
         file_size=size,
         file_checksum=file_checksum,
-        uploader=uploader.strip() or current_user.full_name or current_user.username,
-        uploader_user_id=uploader_user_id or current_user.id,
+        # The uploader is always the signed-in account; form fields cannot attribute a file to someone else.
+        uploader=current_user.full_name or current_user.username,
+        uploader_user_id=current_user.id,
     )
     db.add(material)
     db.commit()
@@ -171,6 +172,8 @@ def delete_material(
     material = db.query(ReferenceMaterial).filter(ReferenceMaterial.id == material_id).first()
     if not material:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Không tìm thấy tài liệu.")
+    if current_user.role not in {"admin", "moderator"} and material.uploader_user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Chỉ người tải lên hoặc quản trị viên được xóa tài liệu này.")
 
     path = UPLOAD_DIR / material.stored_file_name
     path.unlink(missing_ok=True)

@@ -20,6 +20,10 @@ export default defineConfig({
       }
     }
   },
+  test: {
+    // Playwright journeys in e2e/ run with `npx playwright test`, not with vitest
+    exclude: ['e2e/**', 'node_modules/**', 'dist/**'],
+  },
   build: {
     outDir: 'dist',
     sourcemap: false,

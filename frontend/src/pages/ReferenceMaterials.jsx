@@ -3,6 +3,7 @@ import toast from 'react-hot-toast'
 import { sampleCourses, sampleLessons } from '../data/courseCatalog'
 import { isBackendUnavailable } from '../services/api'
 import { useAuthStore } from '../store'
+import { canDeleteMaterial, isVerifiedTeacher } from '../utils/roles'
 import {
   createReferenceMaterial,
   deleteReferenceMaterial,
@@ -14,7 +15,7 @@ import {
 
 export default function ReferenceMaterials() {
   const user = useAuthStore((state) => state.user)
-  const isTeacher = user?.role === 'teacher'
+  const isTeacher = isVerifiedTeacher(user)
   const [materials, setMaterials] = useState([])
   const [formData, setFormData] = useState({
     title: '',
@@ -308,7 +309,7 @@ export default function ReferenceMaterials() {
                       <button type="button" onClick={() => handleDownload(material)} className="primary-button">
                         Tải xuống
                       </button>
-                      {isTeacher && (
+                      {canDeleteMaterial(user, material) && (
                         <button
                           type="button"
                           onClick={() => handleDelete(material.id)}

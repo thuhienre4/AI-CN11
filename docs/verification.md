@@ -33,13 +33,18 @@ npm run build
 
 | Bộ kiểm thử | Trước | Sau |
 |---|---|---|
-| Máy chủ (pytest) | 8 ca | 205 ca, tất cả đạt |
-| Độ phủ máy chủ (dòng và nhánh, đo ở 160 ca) | 49% | 71% |
-| Giao diện (Vitest) | 2 ca | 31 ca, tất cả đạt |
+| Máy chủ (pytest) | 8 ca | 228 ca, tất cả đạt |
+| Độ phủ máy chủ (dòng và nhánh) | 49% | 84% |
+| Giao diện (Vitest) | 2 ca | 150 ca, tất cả đạt |
+| Đầu – cuối (Playwright, chạy trong GitHub Actions) | không có | 4 hành trình, tất cả đạt |
 
-Bộ máy chủ gồm: quét mọi endpoint được bảo vệ với người dùng ẩn danh, học sinh gọi endpoint của giáo viên, truy cập chéo giữa học sinh, token giả/hết hạn/`alg: none`, WebSocket, gửi lại sự kiện, lỗi nhà cung cấp AI (giả lập tầng mạng), biên của Risk Score, toàn vẹn danh mục.
+Bộ máy chủ gồm: quét mọi endpoint được bảo vệ với người dùng ẩn danh, học sinh gọi endpoint của giáo viên, truy cập chéo giữa học sinh, token giả/hết hạn/`alg: none`, WebSocket, gửi lại sự kiện, lỗi nhà cung cấp AI (giả lập tầng mạng), biên của Risk Score, toàn vẹn danh mục, danh mục và câu hỏi (tạo, sửa, xóa, 404), học liệu (định dạng, trùng tệp, tải xuống, quyền xóa), Nova3D (chưa cấu hình, chưa sẵn sàng, bắt đầu, chờ xong, thất bại, thiếu mã workflow; dịch vụ ngoài được giả lập).
 
-Giới hạn còn lại: `routes/lessons.py`, `materials.py`, `nova3d.py`, `questions.py` có độ phủ dưới 40%. Các trang React chưa có kiểm thử thành phần. Lần đo trước khi bổ sung kiểm thử cho toàn bộ `frontend/src` cho độ phủ 11% số dòng.
+Độ phủ bốn mô-đun trước đây dưới 40%: `lessons.py` 100%, `materials.py` 96%, `nova3d.py` 87%, `questions.py` 98%.
+
+Kiểm thử đầu – cuối (`frontend/e2e/journeys.spec.js`) chạy máy chủ FastAPI thật với cơ sở dữ liệu SQLite mới và bản đóng gói thật của giao diện, rồi dùng trình duyệt: khách bị chuyển về trang đăng nhập; học sinh đăng kí, đăng nhập (token thật của máy chủ), mở Bài 18, làm bài kiểm tra nhanh và máy chủ ghi một lượt 2 câu; giáo viên chờ xác minh không thấy công cụ giáo viên và API trả 403; đề kiểm tra theo ma trận lớp 12 hiện 9 chương, 16 câu trắc nghiệm, chấm được phần trắc nghiệm. Chạy tại chỗ: `cd frontend && npx playwright test` (thêm `E2E_CHANNEL=chrome` để dùng Chrome có sẵn).
+
+Giới hạn còn lại: các trang React chưa có kiểm thử thành phần riêng; kiểm thử đầu – cuối mới có 4 hành trình.
 
 ## Lỗi phát hiện và đã sửa
 
@@ -60,30 +65,38 @@ Giới hạn còn lại: `routes/lessons.py`, `materials.py`, `nova3d.py`, `ques
 | D13 | Khóa chết 30 giây khi có hơn 15 yêu cầu đồng thời | Truy vấn đồng bộ chuyển khỏi event loop; số luồng lớn hơn pool kết nối |
 | D14 | Giữ kết nối trong lúc chờ AI, băm mật khẩu hoặc tải tệp | Nhả kết nối trước các thao tác chậm |
 | D15 | Giao diện không có màn hình phân tích cho giáo viên | Thêm `TeacherAnalyticsPanel` trong trang Lớp học |
+| D16 | Giáo viên nào cũng xóa được học liệu của giáo viên khác | Chỉ người tải lên hoặc quản trị viên được xóa (403 cho người khác); giao diện chỉ hiện nút Xóa cho họ |
+| D17 | Tên và mã người tải lên lấy từ form, ghi giả được | Người tải lên luôn lấy từ token |
+| D18 | Đăng kí sai dữ liệu chỉ hiện "Request validation failed." | Báo trường bị sai bằng tiếng Việt (email, tên đăng nhập, mật khẩu…) |
+
+D16, D17 được phát hiện khi viết kiểm thử cho `materials.py`; D18 được phát hiện khi chạy kiểm thử đầu – cuối.
+
+## Vá bảo mật bổ sung
+
+- **Token WebSocket không còn nằm trên URL.** Trình duyệt mở `/api/ws/learning` rồi gửi `{"type": "auth", "token": …}` làm tin nhắn đầu tiên; máy chủ chờ tối đa 10 giây, sai hoặc thiếu thì đóng với mã 4401. Token đặt trên URL không còn được chấp nhận (có kiểm thử). Nhờ vậy token không xuất hiện trong nhật kí truy cập của máy chủ hay proxy.
+- **Nút của giáo viên được ẩn với tài khoản chưa xác minh.** Giao diện dùng chung một quy tắc (`frontend/src/utils/roles.js`): vai trò giáo viên/quản trị và trạng thái đã xác minh. Trạng thái được đọc lại từ máy chủ khi mở app, nên quyết định duyệt có hiệu lực ngay. Máy chủ vẫn là nơi chặn chính.
 
 Vòng thiết kế–đánh giá–hiệu chỉnh: lần sửa đầu dùng khóa ghi cho mọi giao dịch và làm đăng nhập đồng loạt chỉ còn 29% thành công. Đo lại phát hiện vấn đề, sau đó tách giao dịch đọc và ghi, và các yêu cầu GET không còn ghi dữ liệu.
 
 ## Đo tải lớp học
 
-40 học sinh và 1 giáo viên, 5 lần lặp. Trung vị qua 5 lần, đơn vị mili giây; "Thành công" là lần chạy thấp nhất. Kịch bản lớp học chạy 30 giây, nghỉ 1–3 giây giữa các lượt.
+40 học sinh và 1 giáo viên, 5 lần lặp. Trung vị qua 5 lần, đơn vị mili giây; "Thành công" là lần chạy thấp nhất. Kịch bản lớp học chạy 30 giây, nghỉ 1–3 giây giữa các lượt. Cột "Bản hiện tại" đo lại ngày 08/11/2026, sau khi thêm xác minh tài khoản, xác thực WebSocket bằng tin nhắn đầu và trang ma trận đề.
 
-| Kịch bản | Thành công trước | p50 trước | p95 trước | Thành công sau | p50 sau | p95 sau |
-|---|---|---|---|---|---|---|
-| `/health`, 100 yêu cầu, đồng thời 10 | 100% | 12,8 | 13,7 | 100% | 7,4 | 10,0 |
-| Đọc danh mục, đồng thời 40 | 77% | 30.207 | 120.292 | 100% | 185 | 239 |
-| 41 người đăng nhập cùng lúc | 100% | 8.693 | 14.825 | 100% | 1.601 | 1.710 |
-| Làm quiz | 100% | 791 | 1.166 | 100% | 15,5 | 3.011 |
-| Đồng bộ lô 20 sự kiện | 100% | 3.906 | 4.124 | 100% | 2.693 | 4.959 |
-| Mở bảng học sinh | 100% | 8.233 | 10.029 | 100% | 764 | 810 |
-| Phân tích giáo viên | 100% | 3.327 | 3.566 | 100% | 15,7 | 22,0 |
-| Trợ lý dự phòng | 100% | 740 | 1.078 | 100% | 660 | 1.724 |
-| Kịch bản lớp học | 65,8% | 60.702 | 181.011 | 100% | 16,7 | 1.104 |
+| Kịch bản | Thành công trước | p50 trước | p95 trước | Thành công sau sửa | p50 sau sửa | p95 sau sửa | Thành công bản hiện tại | p50 bản hiện tại | p95 bản hiện tại |
+|---|---|---|---|---|---|---|---|---|---|
+| `/health`, 100 yêu cầu, đồng thời 10 | 100% | 12,8 | 13,7 | 100% | 7,4 | 10,0 | 100% | 14,0 | 21,9 |
+| Đọc danh mục, đồng thời 40 | 77% | 30.207 | 120.292 | 100% | 185 | 239 | 100% | 262 | 410 |
+| 41 người đăng nhập cùng lúc | 100% | 8.693 | 14.825 | 100% | 1.601 | 1.710 | 100% | 1.791 | 1.899 |
+| Làm quiz | 100% | 791 | 1.166 | 100% | 15,5 | 3.011 | 100% | 16,6 | 2.920 |
+| Đồng bộ lô 20 sự kiện | 100% | 3.906 | 4.124 | 100% | 2.693 | 4.959 | 100% | 2.500 | 4.815 |
+| Mở bảng học sinh | 100% | 8.233 | 10.029 | 100% | 764 | 810 | 100% | 680 | 731 |
+| Phân tích giáo viên | 100% | 3.327 | 3.566 | 100% | 15,7 | 22,0 | 100% | 15,0 | 19,8 |
+| Trợ lý dự phòng | 100% | 740 | 1.078 | 100% | 660 | 1.724 | 100% | 837 | 1.919 |
+| Kịch bản lớp học | 65,8% | 60.702 | 181.011 | 100% | 16,7 | 1.104 | 100% | 18,6 | 1.469 |
 
-WebSocket: trước khi sửa dừng ở 15 kết nối; sau khi sửa 41/41 kết nối, p95 từ lúc ghi đến khi giáo viên nhận tin 13–23 ms. Lần đo sau có thêm 41 socket mở suốt kịch bản lớp học, lần đo trước thì không.
+WebSocket: trước khi sửa dừng ở 15 kết nối; sau khi sửa và ở bản hiện tại đều giữ 41/41 kết nối. Ở bản hiện tại, p95 từ lúc ghi đến khi giáo viên nhận tin là 12–37 ms qua 5 lần. Lần đo sau sửa và bản hiện tại có thêm 41 socket mở suốt kịch bản lớp học, lần đo trước thì không.
 
-Cách đọc: p95 của các thao tác ghi (quiz, đồng bộ, trợ lý) tăng so với trước vì SQLite chỉ cho một người ghi tại một thời điểm và các yêu cầu phải xếp hàng. Độ trễ lớn nhất trong kịch bản lớp học lên tới khoảng 19 giây. Không có lỗi khóa hay hết pool trong cả 5 lần chạy. Kết quả này không suy rộng cho nhiều lớp, cho PostgreSQL hoặc cho mạng thực.
-
-Phép đo trên được thực hiện trước khi thêm mô hình động cơ mới và tính năng xác minh tài khoản; chưa đo lại.
+Cách đọc: p95 của các thao tác ghi (quiz, đồng bộ, trợ lý) cao vì SQLite chỉ cho một người ghi tại một thời điểm và các yêu cầu phải xếp hàng. Độ trễ lớn nhất trong kịch bản lớp học ở bản hiện tại là khoảng 21,6 giây (lần đo sau sửa: khoảng 19 giây). Bản hiện tại chậm hơn lần đo sau sửa ở đọc danh mục, đăng nhập, `/health` và p95 kịch bản lớp học; hai lần đo cách nhau vài tháng trên cùng máy nhưng trạng thái máy khác nhau, nên chưa tách được phần chênh do mã nguồn với phần do máy. Không có lỗi khóa hay hết pool trong cả 5 lần chạy, và hành trình đầu – cuối 7 bước qua HTTP đạt ở cả 5 lần. Kết quả này không suy rộng cho nhiều lớp, cho PostgreSQL hoặc cho mạng thực.
 
 ## Toàn vẹn dữ liệu
 
@@ -127,6 +140,16 @@ Giới hạn:
 - Tỉ lệ đề luyện (lớp 10: 5, lớp 11: 7, lớp 12: 12 câu Phần I; tỉ lệ mức độ 40/30/30) là thiết kế của EngineLab, suy từ đề mẫu, không phải ma trận của Bộ.
 - Đáp án trang đề luyện nằm trong mã giao diện vì đây là bài tự luyện; không dùng trang này để kiểm tra lấy điểm.
 - Bộ đề theo chương (64 câu) chưa được soát lại.
+
+## Ma trận đề kiểm tra theo chương
+
+Trang `/chapter-exam` (liên kết từ Kho đề) có ma trận và đề kiểm tra cuối năm 45 phút cho lớp 10, 11, 12, theo cấu trúc của Công văn 7991/BGDĐT-GDTrH: 12 câu nhiều lựa chọn (3 điểm), 4 câu đúng – sai (4 điểm, vì không dùng dạng trả lời ngắn), 2 câu tự luận (3 điểm); tỉ lệ Biết 40% – Hiểu 30% – Vận dụng 30% do giáo viên chọn. Dữ liệu ở `frontend/src/data/chapterExams.js`.
+
+- Kiểm thử bảo đảm mỗi ma trận đủ 10 điểm, đúng 4/3/3 điểm theo mức độ, mỗi chương có ít nhất một câu, tỉ lệ điểm mỗi chương lệch không quá 10 điểm phần trăm so với tỉ lệ số bài; đề mẫu khớp ma trận theo từng chương, mức độ, mẫu ý đúng – sai; đáp án rải đều A–D.
+- "Đề mới" lấy Phần I ngẫu nhiên từ ngân hàng câu hỏi bài học, đúng số câu và mức độ của từng chương, không trùng câu; chương thiếu câu ở một mức thì giữ câu của đề mẫu. Phần II, III giữ như đề mẫu vì ngân hàng chỉ có một chùm đúng – sai mỗi chương và chưa có câu tự luận.
+- Phần I, II chấm tự động (đúng – sai: 0,1/0,25/0,5/1 điểm cho 1/2/3/4 ý); Phần III hiện hướng dẫn chấm để giáo viên chấm. Giáo viên đã xác minh thấy nhãn chương – mức độ, nút Xem đáp án và In đề.
+
+Giới hạn: ba đề mẫu do AI hỗ trợ soạn, chưa được tổ chuyên môn duyệt; đáp án nằm trong mã giao diện nên trang chỉ dùng để luyện tập. Để có ba đề không trùng câu mỗi khối cần thêm 27 câu nhiều lựa chọn, 25 chùm đúng – sai và 18 câu tự luận.
 
 ## Ngân hàng kiểm tra chương
 
@@ -205,11 +228,11 @@ cd backend
 python scripts/create_admin.py --username admin --email admin@truong.edu.vn
 ```
 
-Giới hạn: hệ thống chưa kiểm tra thân phận thật (email trường, giấy tờ); người duyệt chịu trách nhiệm đối chiếu. Giao diện vẫn hiện một số nút giáo viên cho tài khoản chờ duyệt, nhưng máy chủ từ chối các thao tác đó.
+Giới hạn: hệ thống chưa kiểm tra thân phận thật (email trường, giấy tờ); người duyệt chịu trách nhiệm đối chiếu.
 
 ## Chưa thực hiện
 
 - Đo tải và kiểm thử đồng thời trên PostgreSQL, nhiều tiến trình, mạng thực.
 - Đánh giá Gemini trực tuyến, kiểm định ngân hàng câu hỏi, thẩm định độc lập.
 - Đánh giá khả dụng và thực nghiệm sư phạm với giáo viên, học sinh.
-- Token WebSocket vẫn nằm trên URL; hiệu năng 3D trên máy học sinh chưa đo.
+- Hiệu năng 3D trên máy học sinh chưa đo.

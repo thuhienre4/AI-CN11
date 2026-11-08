@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { BookOpen, Bot, ChartNoAxesCombined, Cog, GraduationCap, LogOut, Menu, ShieldCheck, X } from 'lucide-react'
 import { useAuthStore } from '../store'
+import { canActAsTeacher, isStaffRole, isVerified } from '../utils/roles'
 
 export default function Navigation() {
   const { user, isAuthenticated, logout } = useAuthStore()
@@ -14,13 +15,14 @@ export default function Navigation() {
     return () => window.removeEventListener('keydown', close)
   }, [])
   if (['/login', '/register'].includes(location.pathname)) return null
-  const teacher = ['teacher', 'admin', 'moderator'].includes(user?.role)
+  const teacher = canActAsTeacher(user)
+  const awaitingReview = isStaffRole(user) && !isVerified(user)
   const links = [['/', 'Tổng quan', BookOpen], ['/ai-workspace', 'Không gian AI', Bot], ['/classroom', 'Lớp học', GraduationCap], ['/practice-bank', teacher ? 'Kho đề' : 'Luyện tập', BookOpen], ['/progress', 'Tiến độ', ChartNoAxesCombined]]
-  const canReviewAccounts = teacher && (user?.account_status ?? 'verified') === 'verified'
+  const canReviewAccounts = teacher
   if (canReviewAccounts) links.splice(3, 0, ['/accounts', 'Xác minh', ShieldCheck])
   return <header className="app-header"><div className="app-header-inner">
     <Link to="/" className="app-brand" aria-label="EngineLab AI — Trang chủ"><span className="app-brand-mark"><Cog size={21} strokeWidth={1.8} /></span><strong>EngineLab<span> AI</span></strong></Link>
-    {isAuthenticated ? <><nav className="app-desktop-nav" aria-label="Điều hướng chính">{links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/'}>{label}</NavLink>)}</nav><div className="app-account"><span><strong>{user?.full_name || user?.username}</strong><small>{user?.role === 'teacher' ? 'Giáo viên' : teacher ? 'Quản trị viên' : 'Học sinh'}</small></span><button type="button" onClick={logout} aria-label="Đăng xuất" title="Đăng xuất"><LogOut size={18} /></button></div><button type="button" className="app-menu-toggle" aria-label={open ? 'Đóng menu' : 'Mở menu'} aria-expanded={open} aria-controls="app-mobile-menu" onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button></> : <Link to="/login" className="studio-button">Đăng nhập</Link>}
+    {isAuthenticated ? <><nav className="app-desktop-nav" aria-label="Điều hướng chính">{links.map(([to, label]) => <NavLink key={to} to={to} end={to === '/'}>{label}</NavLink>)}</nav><div className="app-account"><span><strong>{user?.full_name || user?.username}</strong><small>{awaitingReview ? 'Chờ xác minh' : user?.role === 'teacher' ? 'Giáo viên' : teacher ? 'Quản trị viên' : 'Học sinh'}</small></span><button type="button" onClick={logout} aria-label="Đăng xuất" title="Đăng xuất"><LogOut size={18} /></button></div><button type="button" className="app-menu-toggle" aria-label={open ? 'Đóng menu' : 'Mở menu'} aria-expanded={open} aria-controls="app-mobile-menu" onClick={() => setOpen(!open)}>{open ? <X /> : <Menu />}</button></> : <Link to="/login" className="studio-button">Đăng nhập</Link>}
     </div>{isAuthenticated && open && <nav id="app-mobile-menu" className="app-mobile-menu" aria-label="Điều hướng di động">{links.map(([to, label, Icon]) => <NavLink key={to} to={to} end={to === '/'}><Icon size={18} />{label}</NavLink>)}<button type="button" onClick={logout}><LogOut size={18} />Đăng xuất</button></nav>}
   </header>
 }

@@ -54,6 +54,7 @@ const MechanicalWorkshop = lazyPage(() => import('./pages/MechanicalWorkshop'))
 const GameDemo = lazyPage(() => import('./pages/GameDemo'))
 const ThreeDSimulation = lazyPage(() => import('./pages/ThreeDSimulation'))
 const ThptExam = lazyPage(() => import('./pages/ThptExam'))
+const ChapterExam = lazyPage(() => import('./pages/ChapterExam'))
 const NotFound = lazyPage(() => import('./pages/NotFound'))
 
 // Components
@@ -162,9 +163,10 @@ function App() {
       const apiBase = import.meta.env.VITE_API_URL || window.location.origin
       const socketUrl = new URL('/api/ws/learning', apiBase)
       socketUrl.protocol = socketUrl.protocol === 'https:' ? 'wss:' : 'ws:'
-      socketUrl.searchParams.set('token', token)
       socket = new WebSocket(socketUrl)
       socket.onopen = () => {
+        // The token goes in the first message, not the URL, so it never lands in server or proxy logs
+        socket.send(JSON.stringify({ type: 'auth', token }))
         retryDelay = 1000
         heartbeat = window.setInterval(() => {
           if (socket?.readyState === WebSocket.OPEN) socket.send('ping')
@@ -296,6 +298,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <ThptExam />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/chapter-exam"
+            element={
+              <ProtectedRoute>
+                <ChapterExam />
               </ProtectedRoute>
             }
           />

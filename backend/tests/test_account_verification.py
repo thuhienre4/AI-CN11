@@ -172,8 +172,9 @@ def test_rejected_account_cannot_open_a_live_socket(school):
     from starlette.websockets import WebSocketDisconnect
 
     with pytest.raises(WebSocketDisconnect) as closed:
-        with client.websocket_connect(f"/api/ws/learning?token={token}"):
-            pass
+        with client.websocket_connect("/api/ws/learning") as socket:
+            socket.send_json({"type": "auth", "token": token})
+            socket.receive_json()
     assert closed.value.code == 4401
 
 

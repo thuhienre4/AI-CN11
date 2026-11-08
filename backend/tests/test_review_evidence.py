@@ -203,19 +203,37 @@ def test_password_hash_is_never_returned(api):
 
 
 # ---------------------------------------------------------------- WebSocket
-@pytest.mark.parametrize("query", ["", "?token=invalid"])
-def test_websocket_refuses_missing_or_invalid_token(api, query):
+@pytest.mark.parametrize("first_message", [None, "ping", {"type": "auth"}, {"type": "auth", "token": "invalid"}])
+def test_websocket_refuses_missing_or_invalid_token(api, first_message):
     client, *_ = api
     with pytest.raises(WebSocketDisconnect) as closed:
-        with client.websocket_connect(f"/api/ws/learning{query}"):
-            pass
+        with client.websocket_connect("/api/ws/learning") as socket:
+            if isinstance(first_message, dict):
+                socket.send_json(first_message)
+            elif first_message is not None:
+                socket.send_text(first_message)
+            else:
+                socket.close()
+            socket.receive_json()
+    assert closed.value.code in (4401, 1000)
+
+
+def test_websocket_token_in_url_is_not_accepted(api):
+    """The token belongs in the first message; a token in the query string must not authenticate."""
+    client, _, _, headers = api
+    token = headers["student"]["Authorization"].split()[1]
+    with pytest.raises(WebSocketDisconnect) as closed:
+        with client.websocket_connect(f"/api/ws/learning?token={token}") as socket:
+            socket.send_text("ping")
+            socket.receive_json()
     assert closed.value.code == 4401
 
 
 def test_websocket_delivers_own_update_and_tolerates_heartbeat(api):
     client, _, identities, headers = api
     token = headers["student"]["Authorization"].split()[1]
-    with client.websocket_connect(f"/api/ws/learning?token={token}") as socket:
+    with client.websocket_connect("/api/ws/learning") as socket:
+        socket.send_json({"type": "auth", "token": token})
         assert socket.receive_json() == {"type": "connected", "user_id": identities["student"]}
         socket.send_text("ping")
         assert client.post(f"/api/learning/users/{identities['student']}/events", json=event("socket-event-01"),
@@ -615,7 +633,8 @@ def test_teacher_only_receives_live_updates_of_assigned_classes(api):
     client, Session, identities, headers = api
     assign_teacher_classes(Session, "11A1")
     token = headers["teacher"]["Authorization"].split()[1]
-    with client.websocket_connect(f"/api/ws/learning?token={token}") as socket:
+    with client.websocket_connect("/api/ws/learning") as socket:
+        socket.send_json({"type": "auth", "token": token})
         socket.receive_json()
         client.post(f"/api/learning/users/{identities['other']}/events", json=event("other-class-event"),
                     headers=headers["other"])

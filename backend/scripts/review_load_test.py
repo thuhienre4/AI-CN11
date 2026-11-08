@@ -161,6 +161,13 @@ def status_counts(results):
     return {str(status): statuses.count(status) for status in sorted(set(statuses))}
 
 
+
+async def open_socket(session, token, timeout):
+    """Open the learning socket the way the web client does: the token goes in the first message, not the URL."""
+    socket = await session.ws_connect(f"ws://127.0.0.1:{PORT}/api/ws/learning", timeout=timeout)
+    await socket.send_json({"type": "auth", "token": token})
+    return socket
+
 async def websocket_scenario(session, people, teacher):
     """Open one socket per person, as the web client does after sign-in, and stop at the first failure.
 
@@ -173,8 +180,7 @@ async def websocket_scenario(session, people, teacher):
     for person in [teacher, *people]:
         started = time.perf_counter()
         try:
-            socket = await session.ws_connect(
-                f"ws://127.0.0.1:{PORT}/api/ws/learning?token={person['token']}", timeout=5)
+            socket = await open_socket(session, person['token'], 5)
             sockets.append(socket)
             await socket.receive_json(timeout=5)
             connect_ms.append((time.perf_counter() - started) * 1000)
@@ -388,9 +394,7 @@ async def repetition(index, args):
                     await asyncio.sleep(random.uniform(args.think_min, args.think_max))
 
             # The web client keeps one socket per signed-in user, so the class mix runs with all of them open.
-            class_sockets = await asyncio.gather(*(
-                session.ws_connect(f"ws://127.0.0.1:{PORT}/api/ws/learning?token={person['token']}", timeout=10)
-                for person in everyone))
+            class_sockets = await asyncio.gather(*(open_socket(session, person['token'], 10) for person in everyone))
             deadline = time.perf_counter() + args.mixed_seconds
             result["classroom_mix"] = await scenario(
                 session, [lambda r, s=s: mixed_session(r, s, deadline) for s in students], args.students)

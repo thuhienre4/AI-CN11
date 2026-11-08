@@ -4,6 +4,7 @@ import { sampleCourses, sampleLessons } from '../data/courseCatalog'
 import TeacherAnalyticsPanel from '../components/TeacherAnalyticsPanel'
 import { classroomAPI, isBackendUnavailable } from '../services/api'
 import { useAuthStore } from '../store'
+import { canDeleteMaterial, isVerifiedTeacher } from '../utils/roles'
 import {
   createReferenceMaterial,
   deleteReferenceMaterial,
@@ -151,7 +152,7 @@ const isAssignmentVisibleToUser = (assignment, user, isTeacher) => {
 
 export default function Classroom() {
   const user = useAuthStore((state) => state.user)
-  const isTeacher = user?.role === 'teacher'
+  const isTeacher = isVerifiedTeacher(user)
   const [posts, setPosts] = useState([])
   const [assignments, setAssignments] = useState([])
   const [submissionsByAssignment, setSubmissionsByAssignment] = useState({})
@@ -878,7 +879,7 @@ export default function Classroom() {
                         <button type="button" onClick={() => handleMaterialDownload(material)} className="primary-button">
                           Tải xuống
                         </button>
-                        {isTeacher && (
+                        {canDeleteMaterial(user, material) && (
                           <button
                             type="button"
                             onClick={() => handleMaterialDelete(material.id)}

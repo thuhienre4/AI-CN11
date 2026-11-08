@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { chatAPI } from '../services/api'
 import { useAuthStore } from '../store'
+import { canActAsTeacher } from '../utils/roles'
 
 const studentTasks = [
   ['explain', 'Hiểu bài', 'Giải thích nội dung khó hiểu bằng ví dụ và câu hỏi gợi mở.'],
@@ -16,7 +17,7 @@ const teacherTasks = [
 
 export default function AIWorkspace() {
   const user = useAuthStore((state) => state.user)
-  const teacher = ['teacher', 'admin', 'moderator'].includes(user?.role)
+  const teacher = canActAsTeacher(user)
   const tasks = teacher ? teacherTasks : studentTasks
   const [task, setTask] = useState(tasks[0][0])
   const [lessons, setLessons] = useState([])

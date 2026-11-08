@@ -92,7 +92,7 @@ export default function PracticeBank() {
             <p className="mt-4 max-w-3xl text-base font-bold leading-7 text-slate-200">
               Đề được chia theo khối và theo chương, giúp học sinh ôn đúng mục tiêu môn Công nghệ: hiểu kiến thức, đọc sơ đồ, giải thích quy trình và vận dụng an toàn.
             </p>
-            <Link to="/thpt-exam" className="primary-button mt-4">Làm đề luyện tốt nghiệp THPT</Link>
+            <div className="mt-4 flex flex-wrap gap-2"><Link to="/thpt-exam" className="primary-button">Làm đề luyện tốt nghiệp THPT</Link><Link to="/chapter-exam" className="secondary-button">Đề kiểm tra theo ma trận chương</Link></div>
           </div>
           <div className="rounded-2xl bg-white/10 p-4">
             <p className="mb-3 text-xs font-black uppercase tracking-wide text-slate-300">Lọc nhanh</p>

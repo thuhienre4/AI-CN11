@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, BookOpen, Bot, CircuitBoard, Cuboid, GraduationCap, Search, Wrench } from 'lucide-react'
 import { sampleCourses, getSampleLessonsByCourse } from '../data/courseCatalog'
 import { useAuthStore } from '../store'
+import { canActAsTeacher } from '../utils/roles'
 import { buildLocalLearningDashboard } from '../utils/learningProgress'
 import { learningAPI } from '../services/api'
 
@@ -12,7 +13,7 @@ const normalize = (text) => text.toLowerCase().normalize('NFD').replace(/[\u0300
 
 export default function Dashboard() {
   const user = useAuthStore((state) => state.user)
-  const teacher = ['teacher', 'admin', 'moderator'].includes(user?.role)
+  const teacher = canActAsTeacher(user)
   const [grade, setGrade] = useState(11)
   const [query, setQuery] = useState('')
   const [progress, setProgress] = useState(null)

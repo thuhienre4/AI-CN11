@@ -21,7 +21,15 @@ export default function AccountStatusNotice() {
     let active = true
     authAPI
       .getMe()
-      .then(({ data }) => active && setIsPending(data.account_status === 'pending'))
+      .then(({ data }) => {
+        if (!active) return
+        setIsPending(data.account_status === 'pending')
+        // A decision made since sign-in changes which teacher tools the interface shows
+        const current = useAuthStore.getState().user
+        if (current && current.account_status !== data.account_status) {
+          useAuthStore.setState({ user: { ...current, account_status: data.account_status } })
+        }
+      })
       .catch(() => active && setIsPending(false))
     return () => {
       active = false
