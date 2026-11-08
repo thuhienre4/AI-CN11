@@ -5,7 +5,7 @@ import { KNTT_LESSON_MODELS, getLessonModel, lessonModelSimulation } from './knt
 import { LESSON_SHAPES, createLessonFlowModel } from '../simulations/lessonFlowModel'
 
 // Lessons that keep a model drawn for them alone.
-const DEDICATED = new Set(['11-4', '11-12', '11-17', '11-18', '11-19', '11-21', '12-21', '12-23'])
+const DEDICATED = new Set(['11-12', '11-17', '11-18', '11-19', '11-21', '12-21', '12-23'])
 const lessonKey = (lesson) => `${lesson.grade_level}-${/^Bài\s+(\d+)/.exec(lesson.title)[1]}`
 const textbookLessons = sampleLessons.filter((lesson) => /^Bài\s+\d+/.test(lesson.title) && [10, 11, 12].includes(lesson.grade_level))
 

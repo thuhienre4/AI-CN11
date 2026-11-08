@@ -153,25 +153,25 @@ const grade12ByCourse = {
     title: 'Nhiệm vụ hoàn thành mạch điện tử số',
     unit: 'Điện tử số',
     duration: '12 phút',
-    modelFocus: 'Cảm biến, chuẩn hóa tín hiệu, mức logic 0/1, cổng AND/OR/NOT, vi điều khiển, driver, đầu ra và phản hồi.',
+    modelFocus: 'Cảm biến, chuẩn hóa tín hiệu, mức logic 0/1, cổng AND/OR/NOT, driver và đầu ra.',
     objective: 'Học sinh hoàn thành sơ đồ khối của một hệ thống điện tử số và giải thích cách điều kiện logic tạo ra tín hiệu điều khiển.',
     setup: [
       'Chọn nhiệm vụ mạch số: báo cháy, đèn cảnh báo, cửa tự động hoặc điều khiển quạt theo điều kiện.',
       'Quy ước mức logic 0/1 cho từng tín hiệu vào, ví dụ có khói = 1, nhiệt độ cao = 1, nút tắt khẩn cấp = 0.',
-      'Kéo các khối vào đúng vị trí: cảm biến, xử lí tín hiệu, cổng logic, vi điều khiển, driver và đầu ra.',
+      'Kéo các khối vào đúng vị trí: cảm biến, chuẩn hóa tín hiệu, cổng logic, driver và đầu ra.',
     ],
     tasks: [
       'Lập bảng chân lí cho ít nhất hai tín hiệu đầu vào.',
       'Chọn cổng logic phù hợp: AND khi cần đủ điều kiện, OR khi chỉ cần một điều kiện, NOT khi cần đảo trạng thái.',
-      'Nối luồng tín hiệu từ cảm biến đến khối xử lí logic, vi điều khiển, driver và thiết bị đầu ra.',
+      'Nối luồng tín hiệu từ cảm biến đến cổng logic, driver và thiết bị đầu ra.',
       'Kiểm tra hai trường hợp đúng và một trường hợp sai để chứng minh mạch hoạt động theo yêu cầu.',
     ],
     observe: [
       'Khi một tín hiệu đầu vào đổi từ 0 sang 1, đầu ra thay đổi thế nào?',
       'Điều kiện nào bắt buộc phải dùng AND thay vì OR?',
-      'Vì sao vi điều khiển không nên cấp trực tiếp dòng lớn cho còi, đèn hoặc rơle?',
+      'Vì sao đầu ra của cổng logic không nên cấp trực tiếp dòng lớn cho còi, đèn hoặc rơle?',
     ],
-    safety: 'Nếu lắp mạch thật, chỉ dùng nguồn thấp áp theo hướng dẫn, kiểm tra cực tính linh kiện, không đấu trực tiếp tải công suất lớn vào chân vi điều khiển.',
+    safety: 'Nếu lắp mạch thật, chỉ dùng nguồn thấp áp theo hướng dẫn, kiểm tra cực tính linh kiện, không đấu trực tiếp tải công suất lớn vào đầu ra của IC logic.',
   },
   9: {
     title: 'Mô phỏng hệ thống vi điều khiển',
@@ -213,27 +213,27 @@ export const getSimulationExperimentForLesson = (lesson) => {
 
   if (grade === 11 && sourceId === 202) {
     return completeExperiment({
-      title: 'Mô phỏng sản xuất gang - thép trong lò cao',
+      title: 'So sánh mẫu vật liệu kim loại và hợp kim',
       unit: 'Bài 4. Vật liệu kim loại và hợp kim',
       duration: '12 phút',
-      modelFocus: 'Lò cao, nạp liệu quặng sắt - than cốc - đá vôi, gió nóng, vùng phản ứng, gang lỏng, xỉ và khí thải.',
-      objective: 'Giúp học sinh biến hình 3.2 thành mô hình có thể quan sát theo dòng vật chất và giải thích vai trò của từng thành phần trong sản xuất gang - thép.',
+      modelFocus: 'Bốn mẫu vật liệu: gang, thép, nhôm và hợp kim nhôm, đồng và hợp kim đồng.',
+      objective: 'Giúp học sinh phân loại vật liệu kim loại thành sắt và hợp kim của sắt, kim loại màu; so sánh tính chất và ứng dụng của từng loại.',
       setup: [
-        'Mở mô phỏng 3D của Bài 4 và bật lần lượt các lớp: Nạp liệu, Gió nóng, Gang - xỉ, Khí thải.',
-        'Quan sát chiều chuyển động ngược nhau: vật liệu rắn đi từ trên xuống, khí nóng đi từ dưới lên.',
-        'Dừng ở từng nhãn để đọc vai trò của quặng sắt, than cốc, đá vôi và cửa tháo gang/xỉ.',
+        'Mở mô phỏng 3D của Bài 4 và chọn lần lượt từng mẫu vật liệu.',
+        'Đọc ghi chú về thành phần (hàm lượng carbon với gang, thép), tính chất và ứng dụng.',
+        'Ghi kết quả vào bảng so sánh bốn cột: gang, thép, nhôm, đồng.',
       ],
       tasks: [
-        'Vẽ lại sơ đồ dòng vật chất trong lò cao bằng mũi tên.',
-        'Giải thích vai trò của than cốc, đá vôi và gió nóng trong quá trình luyện gang.',
-        'Chỉ ra vị trí gang lỏng, xỉ và khí thải trong mô hình; nêu yêu cầu xử lí môi trường.',
+        'Phân biệt gang và thép theo hàm lượng carbon và tính chất.',
+        'Nêu một ứng dụng của mỗi loại vật liệu và giải thích vì sao chọn vật liệu đó.',
+        'Chọn vật liệu cho dây dẫn điện, trục truyền, vỏ máy đúc và khung xe nhẹ.',
       ],
       observe: [
-        'Vì sao nguyên liệu được nạp từ đỉnh lò còn gió nóng lại thổi từ đáy lò?',
-        'Gang lỏng và xỉ khác nhau như thế nào nên có thể tách riêng?',
-        'Khí thải ở đỉnh lò cần được xử lí hoặc tận dụng ra sao?',
+        'Vì sao vỏ hộp số, bệ máy thường làm bằng gang?',
+        'Vì sao dây dẫn điện thường làm bằng đồng hoặc nhôm?',
+        'Thép hợp kim khác thép carbon ở điểm nào?',
       ],
-      safety: 'Chỉ quan sát trên mô phỏng. Với sản xuất thật, lò cao có nhiệt độ rất cao, khí độc, bụi và xỉ nóng nên cần hệ thống bảo hộ, che chắn, thông gió và xử lí môi trường nghiêm ngặt.',
+      safety: 'Khi quan sát mẫu vật thật, cầm mẫu cẩn thận vì cạnh kim loại có thể sắc; không thử độ cứng bằng dụng cụ khi chưa có hướng dẫn của giáo viên.',
     }, lesson)
   }
 

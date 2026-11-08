@@ -1,7 +1,7 @@
 // One model per lesson of the Kết nối tri thức textbooks. Each stage is [name, shape, note]; a stage is a
 // component or a step named in the lesson, in the order the lesson presents them.
 // `arrows: false` marks lessons whose stages are parallel groups rather than a sequence.
-// Lessons missing here keep a dedicated model: grade 11 Bài 4 (blast furnace), Bài 12 (robot line),
+// Lessons missing here keep a dedicated model: grade 11 Bài 12 (robot line),
 // Bài 17-19 (engine), Bài 21 (car); grade 12 Bài 21 and 23 (logic board).
 export const KNTT_LESSON_MODELS = {
   '10-1': { objective: 'Nhận ra mối quan hệ giữa khoa học, kĩ thuật và công nghệ, cùng tác động của công nghệ tới đời sống.', stages: [
@@ -160,6 +160,12 @@ export const KNTT_LESSON_MODELS = {
     ['Phi kim loại', 'cube', 'Chất dẻo, cao su, gốm.'],
     ['Vật liệu mới', 'layers', 'Vật liệu composite và các vật liệu tiên tiến.'],
     ['Tính chất', 'gauge', 'Cơ tính, lí tính, hóa tính, tính công nghệ.'],
+  ] },
+  '11-4': { objective: 'Phân loại vật liệu kim loại: sắt và hợp kim của sắt (gang, thép), kim loại màu (nhôm, đồng); so sánh tính chất và ứng dụng.', arrows: false, stages: [
+    ['Gang', 'ingot', 'Hợp kim sắt - carbon, C > 2,14%; cứng, giòn, đúc tốt; làm vỏ máy, bệ máy.'],
+    ['Thép', 'shaft', 'Hợp kim sắt - carbon, C ≤ 2,14%; bền, dẻo hơn gang; làm trục, bánh răng, kết cấu. Thép hợp kim chịu lực, chịu nhiệt, chống ăn mòn tốt hơn.'],
+    ['Nhôm và hợp kim nhôm', 'plane', 'Nhẹ, dẫn điện, dẫn nhiệt tốt, chống ăn mòn; làm thân máy bay, khung nhẹ, dây dẫn.'],
+    ['Đồng và hợp kim đồng', 'coil', 'Dẫn điện rất tốt, dẻo, chống ăn mòn; làm dây điện, ống, bạc lót.'],
   ] },
   '11-5': { objective: 'Phân loại vật liệu phi kim loại và nêu ứng dụng.', arrows: false, stages: [
     ['Chất dẻo', 'cube', 'Chất dẻo nhiệt và chất dẻo nhiệt rắn.'],

@@ -11,124 +11,13 @@ import { recordLocalLearningEvent } from '../utils/learningProgress'
 import { ENGINE_PARTS, createFourStrokeEngine, engineGeometry, pickEnginePart } from '../simulations/fourStrokeEngineModel'
 import { createLessonFlowModel } from '../simulations/lessonFlowModel'
 import { lessonModelSimulation } from '../data/knttLessonModels'
+import { createLabelSprite, isImmersiveVrSupported, requestVrSession, vrStageTransform } from '../simulations/vrSupport'
+import { TWO_STROKE, pistonPinY, portOpenings, rodPose, sparkOn, twoStrokePhase } from '../simulations/twoStrokeKinematics'
 import {
   FOUR_STROKE_CYCLE_RADIANS,
   FOUR_STROKE_SIMPLIFICATION_NOTE,
   normalizeCyclePhase,
 } from '../utils/fourStrokeCycle'
-
-const chapterSimulations = {
-  1: {
-    label: 'Chương 1',
-    title: 'Mô phỏng quy trình tạo sản phẩm cơ khí',
-    subtitle: 'Từ yêu cầu kĩ thuật đến sản phẩm được kiểm tra',
-    objective:
-      'Giúp học sinh nhận biết cơ khí chế tạo tạo ra chi tiết, cụm chi tiết, máy và thiết bị thông qua một quy trình có kiểm soát.',
-    layers: [
-      { id: 'requirement', name: 'Yêu cầu', note: 'Xác định công dụng, kích thước, độ bền, độ chính xác và an toàn.' },
-      { id: 'design', name: 'Thiết kế', note: 'Lập bản vẽ, xác định hình dạng, kích thước và thông số kĩ thuật.' },
-      { id: 'manufacture', name: 'Gia công', note: 'Chọn vật liệu, tạo phôi, gia công và lắp ráp theo quy trình.' },
-      { id: 'inspection', name: 'Kiểm tra', note: 'Đo kiểm để đánh giá sản phẩm có đạt yêu cầu hay không.' },
-    ],
-    checkpoints: [
-      'Sản phẩm cơ khí có thể là chi tiết, cụm chi tiết hoặc máy hoàn chỉnh.',
-      'Quy trình chế tạo phải có bước kiểm tra chất lượng.',
-      'Sai số ở khâu thiết kế hoặc gia công có thể làm sản phẩm mất an toàn.',
-    ],
-    teacherPrompts: [
-      'Vì sao không thể gia công trước khi đọc bản vẽ?',
-      'Nếu chi tiết bị sai kích thước thì cần kiểm tra lại khâu nào?',
-    ],
-  },
-  2: {
-    label: 'Chương 2',
-    title: 'Mô phỏng vật liệu và gia công cơ khí',
-    subtitle: 'Lựa chọn vật liệu, phương pháp gia công và đo kiểm',
-    objective:
-      'Giúp học sinh hiểu vật liệu phải được chọn theo công dụng, điều kiện làm việc, khả năng gia công và giá thành.',
-    layers: [
-      { id: 'material', name: 'Vật liệu', note: 'Kim loại, phi kim và composite có tính chất và phạm vi dùng khác nhau.' },
-      { id: 'blank', name: 'Phôi', note: 'Phôi là dạng ban đầu trước khi gia công thành chi tiết.' },
-      { id: 'machining', name: 'Gia công', note: 'Tiện, phay, khoan, mài, hàn hoặc đúc làm thay đổi hình dạng chi tiết.' },
-      { id: 'measure', name: 'Đo kiểm', note: 'Đánh giá kích thước, độ nhẵn và sai số sau gia công.' },
-    ],
-    checkpoints: [
-      'Chọn vật liệu phải dựa vào điều kiện làm việc của chi tiết.',
-      'Gia công cắt gọt tạo độ chính xác kích thước và bề mặt cao.',
-      'Đo kiểm là cơ sở để đánh giá chất lượng chi tiết.',
-    ],
-    teacherPrompts: [
-      'Một trục quay cần bền và chính xác thì nên chọn và gia công như thế nào?',
-      'Vì sao vật liệu nhẹ, chống ăn mòn lại phù hợp với một số chi tiết ô tô?',
-    ],
-  },
-  3: {
-    label: 'Chương 3',
-    title: 'Mô phỏng dây chuyền sản xuất tự động',
-    subtitle: 'CNC, robot, cảm biến và an toàn lao động',
-    objective:
-      'Giúp học sinh hình dung sản xuất cơ khí hiện đại theo dây chuyền, có thiết bị tự động và quy tắc an toàn.',
-    layers: [
-      { id: 'cnc', name: 'Máy CNC', note: 'Gia công theo chương trình số, có độ chính xác và tính lặp lại cao.' },
-      { id: 'robot', name: 'Robot', note: 'Thực hiện thao tác lặp lại, nặng nhọc hoặc nguy hiểm.' },
-      { id: 'sensor', name: 'Cảm biến', note: 'Thu tín hiệu để giám sát trạng thái máy, sản phẩm hoặc vị trí.' },
-      { id: 'safety', name: 'An toàn', note: 'Bảo hộ, che chắn, kiểm tra máy và vận hành đúng quy trình.' },
-    ],
-    checkpoints: [
-      'Tự động hóa giúp tăng năng suất, độ chính xác và ổn định chất lượng.',
-      'Cảm biến giúp hệ thống phát hiện trạng thái để điều khiển hoặc cảnh báo.',
-      'An toàn lao động là yêu cầu bắt buộc khi học và làm việc với máy cơ khí.',
-    ],
-    teacherPrompts: [
-      'Nếu robot dừng đột ngột, cảm biến hoặc quy trình an toàn có vai trò gì?',
-      'Vì sao không được tháo che chắn khi máy đang hoạt động?',
-    ],
-  },
-  4: {
-    label: 'Chương 4',
-    title: 'Mô phỏng động cơ đốt trong 4 kì',
-    subtitle: 'Nạp, nén, cháy - giãn nở và thải',
-    objective:
-      'Giúp học sinh hiểu động cơ đốt trong biến nhiệt năng của nhiên liệu thành cơ năng thông qua pít tông, thanh truyền và trục khuỷu.',
-    layers: [
-      { id: 'intake', name: 'Kì nạp', note: 'Pít tông đi xuống, xu páp nạp mở, môi chất đi vào xi lanh.' },
-      { id: 'compression', name: 'Kì nén', note: 'Pít tông đi lên, hai xu páp đóng, môi chất bị nén.' },
-      { id: 'power', name: 'Kì nổ (cháy - giãn nở)', note: 'Khí cháy giãn nở đẩy pít tông đi xuống và sinh công.' },
-      { id: 'exhaust', name: 'Kì thải', note: 'Pít tông đi lên, xu páp thải mở, khí thải ra ngoài.' },
-    ],
-    checkpoints: [
-      'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến thành chuyển động quay.',
-      'Kì nổ (cháy - giãn nở) là kì sinh công.',
-      'Các hệ thống nạp, nhiên liệu, đánh lửa, làm mát và bôi trơn giúp động cơ làm việc ổn định.',
-    ],
-    teacherPrompts: [
-      'Ở kì nào hai xu páp đều đóng?',
-      'Vì sao động cơ cần hệ thống làm mát và bôi trơn?',
-    ],
-  },
-  5: {
-    label: 'Chương 5',
-    title: 'Mô phỏng bố trí chung của ô tô',
-    subtitle: 'Động cơ, truyền lực, treo, lái, phanh và điện điều khiển',
-    objective:
-      'Giúp học sinh nhận biết các hệ thống chính trên ô tô và mối liên hệ giữa chúng khi xe vận hành.',
-    layers: [
-      { id: 'powertrain', name: 'Nguồn động lực', note: 'Động cơ hoặc nguồn động lực tạo công suất cho xe.' },
-      { id: 'transmission', name: 'Truyền lực', note: 'Truyền mô-men từ động cơ đến bánh xe chủ động.' },
-      { id: 'chassis', name: 'Gầm xe', note: 'Hệ thống treo, lái và phanh ảnh hưởng trực tiếp đến chuyển động an toàn.' },
-      { id: 'control', name: 'Điện - điều khiển', note: 'Hỗ trợ khởi động, chiếu sáng, tín hiệu, điều khiển và tiện nghi.' },
-    ],
-    checkpoints: [
-      'Ô tô là tổ hợp nhiều hệ thống làm việc đồng bộ.',
-      'Phanh và lái là các hệ thống liên quan trực tiếp đến an toàn.',
-      'Bảo dưỡng định kì giúp xe vận hành tin cậy, an toàn và tiết kiệm.',
-    ],
-    teacherPrompts: [
-      'Nếu hệ thống truyền lực hỏng thì xe còn nhận công suất ở bánh xe không?',
-      'Vì sao phanh được xem là hệ thống an toàn chủ động?',
-    ],
-  },
-}
 
 const knttSimulations = {
   1: {
@@ -203,24 +92,24 @@ const knttSimulations = {
   4: {
     modelId: 4,
     label: 'KNTT - Chương IV',
-    title: 'Sản xuất cơ khí',
-    subtitle: 'Quá trình sản xuất, robot, tự động hóa và an toàn môi trường',
+    title: 'Dây chuyền sản xuất tự động có robot',
+    subtitle: 'Băng tải, robot vận chuyển, robot lắp ráp và robot hỗ trợ',
     objective:
-      'Bám theo Chương IV SGK Công nghệ 11 Cơ khí Kết nối tri thức: quá trình sản xuất cơ khí, dây chuyền tự động có robot, tác động CMCN 4.0, an toàn lao động và bảo vệ môi trường.',
+      'Bám theo Bài 12 SGK Công nghệ 11 Cơ khí Kết nối tri thức: dây chuyền sản xuất tự động gồm băng tải và các robot cùng tham gia vận chuyển, lắp ráp, hàn, phun sơn sản phẩm.',
     layers: [
-      { id: 'cnc', name: 'Quá trình sản xuất', note: 'Sản xuất cơ khí tác động vào vật liệu bằng công cụ, máy và quy trình để tạo sản phẩm đáp ứng nhu cầu.' },
-      { id: 'robot', name: 'Robot công nghiệp', note: 'Robot tham gia vận chuyển, cấp phôi, hàn, lắp ráp, kiểm tra hoặc thao tác lặp lại trong dây chuyền.' },
-      { id: 'sensor', name: 'Tự động hóa 4.0', note: 'Cảm biến, dữ liệu, điều khiển số, kết nối và giám sát giúp nâng cao năng suất, độ chính xác và chất lượng.' },
-      { id: 'safety', name: 'An toàn - môi trường', note: 'Dùng bảo hộ, che chắn, quy trình vận hành, xử lí chất thải, bụi, tiếng ồn và nguy cơ mất an toàn.' },
+      { id: 'conveyor', name: 'Băng tải', note: 'Vận chuyển sản phẩm lần lượt qua các vị trí làm việc của dây chuyền.' },
+      { id: 'transport', name: 'Robot vận chuyển', note: 'Gắp, nâng và đặt phôi, sản phẩm lên hoặc xuống băng tải.' },
+      { id: 'assembly', name: 'Robot lắp ráp', note: 'Lắp các chi tiết, linh kiện lên sản phẩm, ví dụ lắp linh kiện lên bo mạch điện tử.' },
+      { id: 'support', name: 'Robot hỗ trợ', note: 'Thực hiện công việc nặng nhọc, độc hại như hàn, phun sơn.' },
     ],
     checkpoints: [
       'Dây chuyền sản xuất tự động giúp các công đoạn diễn ra liên tục, đồng bộ và dễ kiểm soát.',
-      'Robot không thay thế yêu cầu hiểu quy trình; người vận hành vẫn phải giám sát và xử lí bất thường.',
-      'An toàn lao động và bảo vệ môi trường là nội dung bắt buộc trong sản xuất cơ khí.',
+      'Robot thay con người ở công việc lặp lại, nặng nhọc, nguy hiểm, giúp tăng năng suất và ổn định chất lượng.',
+      'Người vận hành vẫn phải giám sát dây chuyền và xử lí khi có bất thường.',
     ],
     teacherPrompts: [
-      'Cảm biến giúp dây chuyền tự động phát hiện những trạng thái nào?',
-      'Vì sao khi máy đang chạy không được tháo che chắn hoặc đưa tay vào vùng nguy hiểm?',
+      'Trong dây chuyền này, công việc nào nên giao cho robot hỗ trợ? Vì sao?',
+      'Nếu băng tải dừng, các robot phía sau bị ảnh hưởng thế nào?',
     ],
   },
   5: {
@@ -273,17 +162,20 @@ const knttSimulations = {
     modelId: 7,
     label: 'KNTT - Chương VII',
     title: 'Ô tô',
-    subtitle: 'Khái quát ô tô, truyền lực, bánh xe - treo, lái, phanh và an toàn giao thông',
+    subtitle: 'Bảy bộ phận chính: động cơ, truyền lực, bánh xe - treo, lái, phanh, khung vỏ, điện - điện tử',
     objective:
-      'Bám theo Chương VII SGK Công nghệ 11 Cơ khí Kết nối tri thức: cấu tạo chung ô tô và nhiệm vụ các hệ thống truyền lực, treo, lái, phanh.',
+      'Bám theo Bài 21 SGK Công nghệ 11 Cơ khí Kết nối tri thức: cấu tạo chung của ô tô gồm động cơ, hệ thống truyền lực, bánh xe và hệ thống treo, hệ thống lái, hệ thống phanh, khung vỏ và hệ thống điện - điện tử.',
     layers: [
-      { id: 'powertrain', name: 'Nguồn động lực', note: 'Động cơ hoặc nguồn động lực tạo công suất ban đầu cho ô tô.' },
-      { id: 'transmission', name: 'Hệ thống truyền lực', note: 'Truyền và biến đổi mô men từ nguồn động lực đến bánh xe chủ động.' },
-      { id: 'chassis', name: 'Bánh xe - hệ thống treo', note: 'Bánh xe tiếp xúc mặt đường; hệ thống treo giảm dao động và giữ ổn định chuyển động.' },
-      { id: 'control', name: 'Lái - phanh', note: 'Hệ thống lái điều khiển hướng chuyển động; hệ thống phanh giảm tốc, dừng xe và bảo đảm an toàn.' },
+      { id: 'powertrain', name: 'Động cơ', note: 'Nguồn động lực tạo công suất cho ô tô.' },
+      { id: 'transmission', name: 'Hệ thống truyền lực', note: 'Truyền, biến đổi mô men từ động cơ đến bánh xe chủ động.' },
+      { id: 'suspension', name: 'Bánh xe - hệ thống treo', note: 'Bánh xe tiếp xúc mặt đường; hệ thống treo nối bánh xe với khung, giảm dao động và giữ ổn định chuyển động.' },
+      { id: 'steering', name: 'Hệ thống lái', note: 'Điều khiển hướng chuyển động của ô tô.' },
+      { id: 'brake', name: 'Hệ thống phanh', note: 'Giảm tốc độ, dừng xe và giữ xe đứng yên trên dốc.' },
+      { id: 'body', name: 'Khung vỏ', note: 'Khung là nơi lắp đặt các hệ thống; vỏ tạo khoang chở người, hàng hóa và bảo vệ.' },
+      { id: 'electrical', name: 'Hệ thống điện - điện tử', note: 'Cung cấp điện, chiếu sáng, tín hiệu, khởi động và điều khiển điện tử.' },
     ],
     checkpoints: [
-      'Ô tô là tổ hợp nhiều hệ thống phối hợp: nguồn động lực, truyền lực, di chuyển, điều khiển, điện - điện tử và thân vỏ.',
+      'Ô tô gồm động cơ, hệ thống truyền lực, bánh xe và hệ thống treo, hệ thống lái, hệ thống phanh, khung vỏ và hệ thống điện - điện tử.',
       'Hệ thống truyền lực quyết định việc công suất có đến bánh xe chủ động hay không.',
       'Hệ thống lái và phanh liên quan trực tiếp đến an toàn khi tham gia giao thông.',
     ],
@@ -519,15 +411,14 @@ const industrial12Simulations = {
       { id: 'input', name: 'Tín hiệu vào', note: 'Nút nhấn, cảm biến khói, ánh sáng hoặc nhiệt độ tạo trạng thái 0/1 cho mạch.' },
       { id: 'sensor', name: 'Cảm biến - chuẩn hóa', note: 'Cảm biến và mạch điện trở/khuếch đại/so sánh đưa tín hiệu về mức logic ổn định.' },
       { id: 'logic', name: 'Cổng logic', note: 'AND, OR, NOT hoặc IC logic quyết định đầu ra theo bảng chân lí.' },
-      { id: 'microcontroller', name: 'Vi điều khiển', note: 'Đọc tín hiệu, chống nhiễu đơn giản, xử lí điều kiện và phát lệnh điều khiển.' },
       { id: 'driver', name: 'Driver công suất', note: 'Transistor, rơle hoặc IC driver khuếch dòng để bảo vệ khối xử lí khi điều khiển tải.' },
       { id: 'output', name: 'Đầu ra', note: 'LED, còi, quạt nhỏ hoặc rơle báo trạng thái hoạt động của mạch.' },
     ],
     checkpoints: [
       'Mạch điện tử thí nghiệm nên dùng nguồn thấp áp và kiểm tra cực tính linh kiện trước khi cấp nguồn.',
       'Tín hiệu số thường được quy ước bằng hai mức logic 0 và 1; cổng logic tạo quyết định từ các mức này.',
-      'Vi điều khiển không nên cấp trực tiếp dòng lớn cho tải; cần transistor, rơle hoặc driver trung gian.',
-      'Đo kiểm từng khối giúp tìm lỗi nhanh hơn: nguồn, cảm biến, logic, chương trình, driver và đầu ra.',
+      'Đầu ra của cổng logic chỉ cấp được dòng nhỏ; tải như còi, rơle cần transistor hoặc driver trung gian.',
+      'Đo kiểm từng khối giúp tìm lỗi nhanh hơn: nguồn, cảm biến, cổng logic, driver và đầu ra.',
     ],
     teacherPrompts: [
       'Nếu cảm biến khói = 1 và cảm biến nhiệt = 1 thì dùng cổng AND hay OR để kích còi? Vì sao?',
@@ -539,21 +430,20 @@ const industrial12Simulations = {
     modelId: 8,
     label: 'KNTT 12 - Chương VIII',
     title: 'Thí nghiệm mạch điện tử số',
-    subtitle: 'Cảm biến, mức logic 0/1, cổng AND/OR/NOT, vi điều khiển và đầu ra cảnh báo',
+    subtitle: 'Cảm biến, mức logic 0/1, cổng AND/OR/NOT, driver và đầu ra cảnh báo',
     objective:
       'Mô phỏng thí nghiệm mạch báo cháy/đèn cảnh báo dùng tín hiệu số. Học sinh quan sát đường đi tín hiệu, thay đổi điều kiện vào và giải thích vì sao đầu ra bật hoặc tắt.',
     layers: [
       { id: 'input', name: 'Tín hiệu vào 0/1', note: 'Cảm biến khói, cảm biến nhiệt hoặc nút nhấn tạo tín hiệu logic đầu vào.' },
       { id: 'sensor', name: 'Chuẩn hóa tín hiệu', note: 'Mạch điện trở, lọc nhiễu hoặc so sánh giúp tín hiệu đủ rõ để đưa vào cổng logic.' },
       { id: 'logic', name: 'Cổng logic', note: 'Cổng AND/OR/NOT tạo điều kiện báo động theo bảng chân lí.' },
-      { id: 'microcontroller', name: 'Vi điều khiển', note: 'Có thể đọc tín hiệu logic, xử lí thêm thời gian trễ, ghi trạng thái và phát lệnh.' },
       { id: 'driver', name: 'Driver', note: 'Transistor hoặc rơle nhận lệnh dòng nhỏ và điều khiển tải dòng lớn hơn.' },
       { id: 'output', name: 'LED / còi báo', note: 'Đầu ra sáng hoặc kêu khi điều kiện logic đúng.' },
     ],
     checkpoints: [
       'Bảng chân lí giúp dự đoán chính xác đầu ra của mạch số.',
       'Cổng AND yêu cầu tất cả điều kiện đúng; cổng OR chỉ cần ít nhất một điều kiện đúng; cổng NOT đảo trạng thái.',
-      'Driver bảo vệ vi điều khiển và cho phép điều khiển tải cần dòng lớn hơn.',
+      'Driver bảo vệ IC logic và cho phép điều khiển tải cần dòng lớn hơn.',
       'Một mạch thí nghiệm tốt cần có nguồn thấp áp, điện trở hạn dòng, nối đất chung và kiểm tra cực tính.',
     ],
     teacherPrompts: [
@@ -586,36 +476,8 @@ const industrial12Simulations = {
   },
 }
 
-const blastFurnaceSimulation = {
-  modelId: 20,
-  label: 'KNTT - Bài 4',
-  title: 'Mô hình sản xuất gang - thép trong lò cao',
-  subtitle: 'Quặng sắt, than cốc, đá vôi, gió nóng, gang lỏng, xỉ và khí thải',
-  objective:
-    'Mô phỏng theo hình sản xuất gang - thép trong lò cao: vật liệu nạp từ miệng lò đi xuống, gió nóng thổi từ đáy lò đi lên, tạo phản ứng khử oxit sắt để thu gang lỏng và tách xỉ.',
-  layers: [
-    { id: 'furnace', name: 'Lò cao', note: 'Thân lò chịu nhiệt, nơi diễn ra quá trình cháy, khử oxit sắt, nóng chảy và tách gang - xỉ.' },
-    { id: 'charge', name: 'Nạp liệu', note: 'Quặng sắt, than cốc và đá vôi được đưa vào đỉnh lò theo từng lớp.' },
-    { id: 'hotBlast', name: 'Gió nóng', note: 'Không khí nóng thổi vào đáy lò giúp than cốc cháy, tạo nhiệt độ cao và khí khử.' },
-    { id: 'products', name: 'Gang - xỉ', note: 'Gang lỏng chảy ra cửa tháo gang; xỉ nhẹ hơn nổi lên và được tháo riêng.' },
-    { id: 'gas', name: 'Khí thải', note: 'Khí sau phản ứng đi lên đỉnh lò, cần được thu hồi, xử lí hoặc tận dụng nhiệt.' },
-  ],
-  checkpoints: [
-    'Nguyên liệu chính gồm quặng sắt, than cốc và đá vôi; mỗi thành phần có nhiệm vụ riêng trong lò cao.',
-    'Gió nóng đi từ dưới lên, còn vật liệu rắn đi từ trên xuống, tạo quá trình trao đổi nhiệt và phản ứng liên tục.',
-    'Gang lỏng và xỉ được tách ở đáy lò; khí thải ra ở đỉnh lò cần được xử lí để giảm tác động môi trường.',
-  ],
-  teacherPrompts: [
-    'Vì sao than cốc vừa là nhiên liệu vừa tham gia tạo khí khử trong lò cao?',
-    'Đá vôi có vai trò gì trong việc tạo xỉ và loại bỏ tạp chất?',
-    'Nếu gió nóng cấp vào không đủ thì năng suất và chất lượng gang bị ảnh hưởng như thế nào?',
-  ],
-}
 const getSimulationKey = (lesson) => {
   if (!lesson) return 1
-  if (Number(lesson.grade_level) === 11 && Number(lesson.source_id || lesson.id) === 202) {
-    return 'blastFurnace'
-  }
   return lesson.source_course_id || lesson.course_id || 1
 }
 
@@ -661,6 +523,9 @@ const gasolineFourStrokeSimulation = {
     { id: 'exhaust', name: 'd. Kì thải', note: 'Pít tông đi lên, xu páp thải mở, khí thải được đẩy qua đường thải ra ngoài; xu páp nạp đóng.' },
   ],
 }
+
+// Crank angles (degrees after ĐCT) at which each two-stroke layer is clearly visible
+const TWO_STROKE_LAYER_ANGLES = { power: 60, exhaust: 180, compression: 290, intake: 330 }
 
 const LOGIC_BOARD_FRAMING = {
   center: new THREE.Vector3(0, 0.35, 0),
@@ -722,120 +587,10 @@ function setLayerName(object, layerId) {
   return object
 }
 
-function buildBlastFurnaceModel() {
-  const root = new THREE.Group()
-  const animated = []
-  const annotations = []
-
-  const floor = box(7.2, 0.12, 3.2, 0xe2e8f0)
-  floor.position.set(0, -0.7, 0)
-  root.add(floor)
-
-  const furnace = setLayerName(new THREE.Group(), 'furnace')
-  const shaft = cylinder(0.72, 3.45, 0x334155, 0.24)
-  shaft.position.y = 0.95
-  furnace.add(shaft)
-  const belly = cylinder(0.92, 0.72, 0x475569, 0.32)
-  belly.position.y = -0.15
-  furnace.add(belly)
-  const hearth = cylinder(0.82, 0.5, 0x1f2937, 0.82)
-  hearth.position.y = -0.52
-  furnace.add(hearth)
-  const topBell = cone(0.58, 0.42, 0x64748b, 0.78)
-  topBell.position.y = 2.9
-  furnace.add(topBell)
-  const flame = cone(0.42, 0.82, 0xf97316, 0.62)
-  flame.position.y = -0.18
-  furnace.add(flame)
-  animated.push({ mesh: flame, type: 'blastFlame' })
-
-  const oreLayer = cylinder(0.46, 0.32, 0xef4444, 0.84)
-  oreLayer.position.y = 1.9
-  furnace.add(oreLayer)
-  const cokeLayer = cylinder(0.48, 0.32, 0x111827, 0.84)
-  cokeLayer.position.y = 1.48
-  furnace.add(cokeLayer)
-  const limestoneLayer = cylinder(0.5, 0.32, 0xf8fafc, 0.84)
-  limestoneLayer.position.y = 1.06
-  furnace.add(limestoneLayer)
-  root.add(furnace)
-
-  const charge = setLayerName(new THREE.Group(), 'charge')
-  const rail = box(0.08, 4.1, 0.08, 0x475569)
-  rail.rotation.z = -0.72
-  rail.position.set(-1.35, 1.25, 0)
-  charge.add(rail)
-  const bucket = box(0.42, 0.3, 0.38, 0xf59e0b)
-  bucket.position.set(-2.18, 0.28, 0)
-  bucket.rotation.z = -0.15
-  charge.add(bucket)
-  animated.push({ mesh: bucket, type: 'chargeBucket' })
-  const chargeArrow = setLayerName(createFlowArrow(1.15, 0xfacc15), 'charge')
-  chargeArrow.rotation.z = -0.85
-  chargeArrow.position.set(-0.82, 2.35, 0.02)
-  charge.add(chargeArrow)
-  animated.push({ mesh: chargeArrow, type: 'flowPulse' })
-  root.add(charge)
-
-  const hotBlast = setLayerName(new THREE.Group(), 'hotBlast')
-  const leftStove = cylinder(0.28, 2.35, 0x60a5fa, 0.35)
-  leftStove.position.set(-2.95, 0.55, 0)
-  hotBlast.add(leftStove)
-  const rightStove = cylinder(0.28, 2.35, 0xf9a8d4, 0.35)
-  rightStove.position.set(2.95, 0.55, 0)
-  hotBlast.add(rightStove)
-  const leftPipe = box(2.35, 0.12, 0.12, 0x0284c7)
-  leftPipe.position.set(-1.78, -0.42, 0)
-  hotBlast.add(leftPipe)
-  const rightPipe = box(2.35, 0.12, 0.12, 0xec4899)
-  rightPipe.position.set(1.78, -0.42, 0)
-  hotBlast.add(rightPipe)
-  const blastArrow = setLayerName(createFlowArrow(1.35, 0xf97316), 'hotBlast')
-  blastArrow.position.set(-1.62, -0.2, 0.18)
-  hotBlast.add(blastArrow)
-  animated.push({ mesh: blastArrow, type: 'flowPulse' })
-  root.add(hotBlast)
-
-  const products = setLayerName(new THREE.Group(), 'products')
-  const ironRunner = box(2.4, 0.1, 0.22, 0xf97316, 0.88)
-  ironRunner.position.set(1.42, -0.76, 0.34)
-  products.add(ironRunner)
-  const slagRunner = box(2.1, 0.08, 0.18, 0xfacc15, 0.8)
-  slagRunner.position.set(-1.28, -0.62, -0.38)
-  products.add(slagRunner)
-  const moltenDrop = new THREE.Mesh(new THREE.SphereGeometry(0.16, 24, 24), material(0xff6b00, 0.84))
-  moltenDrop.position.set(0.45, -0.73, 0.34)
-  products.add(moltenDrop)
-  animated.push({ mesh: moltenDrop, type: 'moltenPulse' })
-  root.add(products)
-
-  const gas = setLayerName(new THREE.Group(), 'gas')
-  const gasArrow = setLayerName(createFlowArrow(1.1, 0x94a3b8), 'gas')
-  gasArrow.rotation.z = Math.PI / 2
-  gasArrow.position.set(0.18, 2.65, 0)
-  gas.add(gasArrow)
-  animated.push({ mesh: gasArrow, type: 'flowPulse' })
-  const gasPipe = box(1.65, 0.1, 0.1, 0x64748b, 0.7)
-  gasPipe.position.set(1.12, 2.8, 0)
-  gas.add(gasPipe)
-  root.add(gas)
-
-  addAnnotation(annotations, root, 'furnace', 'Lò cao', 'Thân lò nơi quặng sắt, than cốc, đá vôi đi xuống và phản ứng với khí nóng đi lên.', 0, 2.45, 0)
-  addAnnotation(annotations, root, 'charge', 'Nạp liệu', 'Quặng sắt, than cốc và đá vôi được đưa vào miệng lò theo từng lớp.', -2.35, 2.2, 0)
-  addAnnotation(annotations, root, 'hotBlast', 'Gió nóng', 'Không khí nóng thổi vào đáy lò giúp than cốc cháy, tạo nhiệt và khí khử.', -2.72, -0.1, 0)
-  addAnnotation(annotations, root, 'products', 'Gang lỏng và xỉ', 'Gang lỏng chảy ra cửa tháo gang; xỉ nhẹ hơn được tách ra ở cửa xỉ.', 1.72, -0.42, 0.45)
-  addAnnotation(annotations, root, 'gas', 'Khí thải', 'Khí sau phản ứng đi lên đỉnh lò và được dẫn ra ngoài để xử lí hoặc tận dụng nhiệt.', 1.38, 2.98, 0)
-
-  return { root, animated, annotations }
-}
 function buildChapterModel(courseId, engineMode = 'twoStroke') {
   const root = new THREE.Group()
   const animated = []
   const annotations = []
-
-  if (courseId === 20) {
-    return buildBlastFurnaceModel()
-  }
 
   if (courseId === 1) {
     const stations = [
@@ -898,47 +653,103 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
   }
 
   if (courseId === 4) {
-    const belt = box(5.8, 0.18, 0.9, 0x475569)
-    belt.name = 'cnc'
-    belt.position.y = -0.25
-    root.add(belt)
-    addAnnotation(annotations, root, 'cnc', 'Dây chuyền sản xuất', 'Các công đoạn liên tục, đồng bộ, dễ kiểm soát', -0.4, 0.25, -0.9)
+    // Bài 12: a conveyor carries the products past robots that transport, assemble and support (weld, paint)
+    const conveyor = setLayerName(new THREE.Group(), 'conveyor')
+    const belt = box(6, 0.12, 0.9, 0x334155)
+    belt.position.y = 0.05
+    conveyor.add(belt)
+    ;[-2.9, 2.9].forEach((x) => {
+      const roller = cylinder(0.16, 0.95, 0x64748b)
+      roller.rotation.x = Math.PI / 2
+      roller.position.set(x, 0.05, 0)
+      conveyor.add(roller)
+    })
+    ;[-2.4, -0.8, 0.8, 2.4].forEach((x) => {
+      [-0.38, 0.38].forEach((z) => {
+        const leg = box(0.08, 0.6, 0.08, 0x475569)
+        leg.position.set(x, -0.3, z)
+        conveyor.add(leg)
+      })
+    })
+    root.add(conveyor)
+    addAnnotation(annotations, root, 'conveyor', 'Băng tải', 'Vận chuyển sản phẩm lần lượt qua các vị trí làm việc của dây chuyền.', -2.5, 0.5, 0.5)
 
-    const cnc = box(1.2, 1.2, 1.0, 0x2563eb)
-    cnc.name = 'cnc'
-    cnc.position.set(-2.3, 0.55, 0)
-    root.add(cnc)
-    addAnnotation(annotations, root, 'cnc', 'Máy CNC', 'Gia công theo chương trình số, chính xác và lặp lại cao', -2.3, 1.55, 0)
+    ;[0, 1.4, 2.8, 4.2].forEach((offset) => {
+      const product = setLayerName(box(0.42, 0.22, 0.36, 0x22c55e), 'conveyor')
+      product.position.set(-2.8, 0.22, 0)
+      product.userData.offset = offset
+      root.add(product)
+      animated.push({ mesh: product, type: 'belt' })
+    })
 
-    const robotBase = cylinder(0.28, 0.35, 0xf97316)
-    robotBase.name = 'robot'
-    robotBase.position.set(0.2, 0.05, 0)
-    root.add(robotBase)
-    const arm = box(0.25, 1.5, 0.25, 0xf97316)
-    arm.name = 'robot'
-    arm.position.set(0.55, 0.85, 0)
-    arm.rotation.z = -0.65
-    root.add(arm)
-    addAnnotation(annotations, arm, 'robot', 'Robot công nghiệp', 'Cấp phôi, hàn, lắp ráp, vận chuyển, kiểm tra', 0, 0.9, 0)
+    // An arm on a turning base: shoulder and elbow joints, and the tool for its task at the wrist
+    const makeRobot = (layerId, x, color, tool, phase) => {
+      const robot = setLayerName(new THREE.Group(), layerId)
+      robot.position.set(x, -0.6, -1.05)
+      const base = cylinder(0.3, 0.3, 0x1f2937)
+      base.position.y = 0.15
+      robot.add(base)
+      const turret = new THREE.Group()
+      turret.position.y = 0.3
+      robot.add(turret)
+      const column = cylinder(0.14, 0.7, color)
+      column.position.y = 0.35
+      turret.add(column)
+      const shoulder = new THREE.Group()
+      shoulder.position.y = 0.72
+      turret.add(shoulder)
+      const upperArm = box(0.16, 0.9, 0.16, color)
+      upperArm.position.y = 0.45
+      shoulder.add(upperArm)
+      const elbow = new THREE.Group()
+      elbow.position.y = 0.9
+      shoulder.add(elbow)
+      const foreArm = box(0.13, 0.75, 0.13, color)
+      foreArm.position.y = 0.37
+      elbow.add(foreArm)
+      const wrist = new THREE.Group()
+      wrist.position.y = 0.78
+      wrist.rotation.x = 1.0
+      elbow.add(wrist)
+      wrist.add(tool)
+      setLayerName(robot, layerId)
+      root.add(robot)
+      animated.push(
+        { mesh: turret, type: 'robotTurn', phase },
+        { mesh: shoulder, type: 'robotShoulder', phase },
+        { mesh: elbow, type: 'robotElbow', phase }
+      )
+      return { robot, wrist }
+    }
 
-    const sensor = cylinder(0.13, 0.55, 0x22c55e)
-    sensor.name = 'sensor'
-    sensor.position.set(1.9, 0.6, 0.55)
-    sensor.rotation.x = Math.PI / 2
-    root.add(sensor)
-    addAnnotation(annotations, root, 'sensor', 'Cảm biến', 'Thu tín hiệu để giám sát và điều khiển tự động', 1.9, 1.25, 0.55)
+    const gripper = new THREE.Group()
+    ;[-0.09, 0.09].forEach((x) => {
+      const finger = box(0.05, 0.22, 0.12, 0xe2e8f0)
+      finger.position.set(x, 0.11, 0)
+      gripper.add(finger)
+    })
+    const transport = makeRobot('transport', -1.6, 0xf97316, gripper, 0)
+    addAnnotation(annotations, transport.robot, 'transport', 'Robot vận chuyển', 'Gắp, nâng và đặt phôi, sản phẩm lên hoặc xuống băng tải.', 0, 2.75, 0)
 
-    const shield = box(5.9, 1.5, 0.06, 0x06b6d4, 0.18)
-    shield.name = 'safety'
-    shield.position.set(0, 0.55, 0.62)
-    root.add(shield)
-    addAnnotation(annotations, root, 'safety', 'Che chắn an toàn', 'Ngăn tiếp xúc vùng nguy hiểm, hạn chế phoi/bụi bắn', 0.9, 1.65, 0.75)
+    const screwdriver = new THREE.Group()
+    const spindle = cylinder(0.05, 0.3, 0x94a3b8)
+    spindle.position.y = 0.15
+    screwdriver.add(spindle)
+    const assembly = makeRobot('assembly', 0.2, 0x2563eb, screwdriver, 2.1)
+    addAnnotation(annotations, assembly.robot, 'assembly', 'Robot lắp ráp', 'Lắp các chi tiết, linh kiện lên sản phẩm, ví dụ lắp linh kiện lên bo mạch điện tử.', 0, 2.75, 0)
 
-    const part = box(0.45, 0.35, 0.35, 0xfacc15)
-    part.position.set(-2.8, 0.1, 0)
-    root.add(part)
-    addAnnotation(annotations, part, 'cnc', 'Chi tiết đang gia công', 'Sản phẩm đi qua các công đoạn của dây chuyền', 0, 0.45, 0)
-    animated.push({ mesh: part, type: 'belt' }, { mesh: arm, type: 'robot' })
+    const torch = new THREE.Group()
+    const nozzle = cone(0.07, 0.3, 0x64748b)
+    nozzle.rotation.x = Math.PI
+    nozzle.position.y = 0.15
+    torch.add(nozzle)
+    const sparkPoint = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 16), material(0xfacc15, 0.9))
+    sparkPoint.material.userData.dynamicOpacity = true
+    sparkPoint.position.y = 0.34
+    torch.add(sparkPoint)
+    const support = makeRobot('support', 1.9, 0x7c3aed, torch, 4.2)
+    animated.push({ mesh: sparkPoint, type: 'spark' })
+    addAnnotation(annotations, support.robot, 'support', 'Robot hỗ trợ (hàn, phun sơn)', 'Thực hiện các công việc nặng nhọc, độc hại như hàn, phun sơn sản phẩm.', 0, 2.75, 0)
   }
 
   if (courseId === 6 && engineMode !== 'diesel4') {
@@ -977,19 +788,25 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     root.add(sparkTip)
     addAnnotation(annotations, root, 'power', '1. Bu gi', 'Đánh lửa khi hòa khí bị nén để bắt đầu kì nổ (cháy - giãn nở)', 0.55, 3.05, 0)
 
+    // The piston is long enough to cover every port: its crown controls the exhaust and transfer ports,
+    // its skirt controls the intake port into the crankcase
     const pistonGroup = new THREE.Group()
     pistonGroup.name = 'power'
-    const piston = cylinder(0.5, 0.38, 0x2563eb)
+    const pistonLength = TWO_STROKE.crownAbovePin + TWO_STROKE.skirtBelowPin
+    const piston = cylinder(0.5, pistonLength, 0x2563eb)
+    piston.position.y = (TWO_STROKE.crownAbovePin - TWO_STROKE.skirtBelowPin) / 2
     pistonGroup.add(piston)
-    const pistonRingTop = cylinder(0.52, 0.035, 0x0f172a)
-    pistonRingTop.position.y = 0.11
-    pistonGroup.add(pistonRingTop)
-    const pistonRingBottom = cylinder(0.52, 0.035, 0x0f172a)
-    pistonRingBottom.position.y = -0.11
-    pistonGroup.add(pistonRingBottom)
-    pistonGroup.position.y = 1.58
+    ;[0.3, 0.2].forEach((y) => {
+      const ring = cylinder(0.52, 0.035, 0x0f172a)
+      ring.position.y = y
+      pistonGroup.add(ring)
+    })
+    const pistonPin = cylinder(0.08, 1.02, 0xe2e8f0)
+    pistonPin.rotation.x = Math.PI / 2
+    pistonGroup.add(pistonPin)
+    pistonGroup.position.y = pistonPinY(0)
     root.add(pistonGroup)
-    addAnnotation(annotations, pistonGroup, 'power', '2. Pít tông', 'Đóng mở các cửa khí và nhận lực khí cháy để chuyển động lên xuống', 0.92, 0.15, 0)
+    addAnnotation(annotations, pistonGroup, 'power', '2. Pít tông', 'Đóng mở các cửa khí và nhận lực khí cháy để chuyển động lên xuống', 0.92, 0.3, 0)
 
     const crankcase = new THREE.Group()
     crankcase.name = 'intake'
@@ -1005,59 +822,71 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
 
     const crank = new THREE.Group()
     crank.name = 'power'
-    crank.position.y = -0.82
+    crank.position.y = TWO_STROKE.crankY
     const crankWheel = new THREE.Mesh(new THREE.TorusGeometry(0.62, 0.055, 12, 72), material(0x111827))
     crank.add(crankWheel)
+    const crankWeb = box(0.16, TWO_STROKE.radius, 0.08, 0x334155)
+    crankWeb.position.y = TWO_STROKE.radius / 2
+    crank.add(crankWeb)
+    // Crank pin at radius R: the piston stroke S = 2R
     const crankPin = cylinder(0.1, 0.26, 0x0ea5e9)
     crankPin.rotation.x = Math.PI / 2
-    crankPin.position.set(0.43, 0, 0)
+    crankPin.position.set(0, TWO_STROKE.radius, 0)
     crank.add(crankPin)
     root.add(crank)
     addAnnotation(annotations, crank, 'power', '6. Trục khuỷu', 'Biến chuyển động tịnh tiến của pít tông thành chuyển động quay', 0.95, -0.15, 0)
 
-    const rod = box(0.12, 1.78, 0.12, 0xf97316)
+    const rod = box(0.12, TWO_STROKE.rodLength, 0.12, 0xf97316)
     rod.name = 'power'
-    rod.position.y = 0.32
+    const rodStart = rodPose(0)
+    rod.position.set(rodStart.center.x, rodStart.center.y, 0)
     root.add(rod)
     addAnnotation(annotations, rod, 'power', '5. Thanh truyền', 'Nối pít tông với trục khuỷu để truyền lực', 0.38, 0, 0)
 
-    const intakePipe = box(1.18, 0.24, 0.34, 0x38bdf8, 0.82)
+    const portBox = ([bottom, top], depth, color, opacity) => {
+      const port = box(0.18, top - bottom, depth, color, opacity)
+      port.position.set(0.6, (bottom + top) / 2, 0)
+      return port
+    }
+    const intakeY = (TWO_STROKE.intakePort[0] + TWO_STROKE.intakePort[1]) / 2
+    const intakePipe = box(1.18, TWO_STROKE.intakePort[1] - TWO_STROKE.intakePort[0], 0.34, 0x38bdf8, 0.82)
     intakePipe.name = 'intake'
-    intakePipe.position.set(1.2, 0.12, 0)
+    intakePipe.position.set(1.2, intakeY, 0)
     root.add(intakePipe)
-    const intakePort = box(0.18, 0.38, 0.52, 0x0284c7, 0.95)
+    const intakePort = portBox(TWO_STROKE.intakePort, 0.52, 0x0284c7, 0.95)
     intakePort.name = 'intake'
-    intakePort.position.set(0.6, 0.12, 0)
     root.add(intakePort)
-    addAnnotation(annotations, root, 'intake', '4. Cửa nạp', 'Đưa hòa khí vào các te khi pít tông đi lên tạo áp suất thấp', 1.75, 0.42, 0)
+    addAnnotation(annotations, root, 'intake', '4. Cửa nạp', 'Váy pít tông mở cửa nạp gần ĐCT; hòa khí đi vào các te đang có áp suất thấp', 1.75, 0.62, 0)
 
-    const exhaustPipe = box(1.34, 0.34, 0.42, 0xf97316, 0.86)
+    const exhaustY = (TWO_STROKE.exhaustPort[0] + TWO_STROKE.exhaustPort[1]) / 2
+    const exhaustPipe = box(1.34, TWO_STROKE.exhaustPort[1] - TWO_STROKE.exhaustPort[0], 0.42, 0xf97316, 0.86)
     exhaustPipe.name = 'exhaust'
-    exhaustPipe.position.set(1.35, 1.25, 0)
+    exhaustPipe.position.set(1.35, exhaustY, 0)
     root.add(exhaustPipe)
-    const exhaustPort = box(0.18, 0.44, 0.6, 0xea580c, 0.95)
+    const exhaustPort = portBox(TWO_STROKE.exhaustPort, 0.6, 0xea580c, 0.95)
     exhaustPort.name = 'exhaust'
-    exhaustPort.position.set(0.6, 1.25, 0)
     root.add(exhaustPort)
-    addAnnotation(annotations, root, 'exhaust', '3. Cửa thải', 'Mở khi pít tông đi xuống để khí cháy thoát ra ngoài', 1.86, 1.58, 0)
+    addAnnotation(annotations, root, 'exhaust', '3. Cửa thải', 'Đỉnh pít tông mở cửa thải trước cửa quét khi đi xuống, khí cháy thoát ra ngoài', 1.86, 1.86, 0)
 
-    const transferPipe = box(0.26, 1.8, 0.34, 0x22c55e, 0.55)
+    const transferY = (TWO_STROKE.transferPort[0] + TWO_STROKE.transferPort[1]) / 2
+    const transferPipe = box(0.26, transferY + 0.2, 0.34, 0x22c55e, 0.55)
     transferPipe.name = 'exhaust'
-    transferPipe.position.set(-0.78, 0.28, 0)
+    transferPipe.position.set(-0.78, (transferY - 0.2) / 2, 0)
     root.add(transferPipe)
-    const transferTop = box(0.44, 0.24, 0.42, 0x16a34a, 0.82)
+    const transferTop = box(0.44, TWO_STROKE.transferPort[1] - TWO_STROKE.transferPort[0], 0.42, 0x16a34a, 0.82)
     transferTop.name = 'exhaust'
-    transferTop.position.set(-0.43, 1.02, 0)
+    transferTop.position.set(-0.43, transferY, 0)
     root.add(transferTop)
-    addAnnotation(annotations, root, 'exhaust', '8. Đường thông các te - cửa quét', 'Dẫn hòa khí từ các te lên cửa quét.', -1.28, 0.62, 0)
-    addAnnotation(annotations, root, 'exhaust', '9. Cửa quét', 'Mở khi pít tông đi xuống để hòa khí từ các te đi vào xi lanh và đẩy khí thải.', -0.86, 1.26, 0)
+    addAnnotation(annotations, root, 'exhaust', '8. Đường thông các te - cửa quét', 'Dẫn hòa khí từ các te lên cửa quét.', -1.28, 0.5, 0)
+    addAnnotation(annotations, root, 'exhaust', '9. Cửa quét', 'Mở sau cửa thải khi pít tông gần ĐCD; hòa khí từ các te vào xi lanh và đẩy khí thải ra.', -0.86, 1.62, 0)
 
     const intakeFlow = createFlowArrow(0.82, 0x0ea5e9)
     intakeFlow.name = 'intake'
     intakeFlow.traverse((part) => {
       if (part.material) part.material.userData.dynamicOpacity = true
     })
-    intakeFlow.position.set(1.2, 0.48, 0.36)
+    intakeFlow.userData.port = 'intake'
+    intakeFlow.position.set(1.2, intakeY, 0.36)
     intakeFlow.rotation.y = Math.PI
     root.add(intakeFlow)
 
@@ -1066,7 +895,8 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     transferFlow.traverse((part) => {
       if (part.material) part.material.userData.dynamicOpacity = true
     })
-    transferFlow.position.set(-0.78, 0.62, 0.38)
+    transferFlow.userData.port = 'transfer'
+    transferFlow.position.set(-0.78, 0.55, 0.38)
     transferFlow.rotation.z = Math.PI / 2
     root.add(transferFlow)
 
@@ -1075,81 +905,133 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     exhaustFlow.traverse((part) => {
       if (part.material) part.material.userData.dynamicOpacity = true
     })
-    exhaustFlow.position.set(1.36, 1.66, 0.36)
+    exhaustFlow.userData.port = 'exhaust'
+    exhaustFlow.position.set(1.36, exhaustY, 0.36)
     root.add(exhaustFlow)
 
     const spark = new THREE.Mesh(new THREE.SphereGeometry(0.16, 24, 24), material(0xfacc15, 0.85))
     spark.name = 'power'
     spark.material.userData.dynamicOpacity = true
-    spark.position.set(0, 2.42, 0)
+    spark.position.set(0, 2.36, 0)
     root.add(spark)
 
     const numberLabels = [
       ['1', 0.38, 3.12, 0.46],
-      ['2', 0.78, 1.72, 0.46],
-      ['3', 2.02, 1.28, 0.46],
-      ['4', 1.86, 0.12, 0.46],
+      ['2', 0.78, 0.15, 0.46, pistonGroup],
+      ['3', 2.06, exhaustY, 0.46],
+      ['4', 2.06, intakeY - 0.08, 0.46],
       ['5', 0.48, 0.55, 0.46],
       ['6', 0.95, -0.66, 0.46],
       ['7', -1.18, -0.74, 0.46],
       ['8', -1.22, 0.08, 0.46],
-      ['9', -0.72, 1.08, 0.46],
-      ['10', -0.92, 1.85, 0.46],
+      ['9', -0.72, transferY, 0.46],
+      ['10', -0.92, 2.05, 0.46],
     ]
-    numberLabels.forEach(([text, x, y, z]) => {
+    numberLabels.forEach(([text, x, y, z, parent = root]) => {
       const labelAnchor = new THREE.Object3D()
       labelAnchor.position.set(x, y, z)
-      root.add(labelAnchor)
+      parent.add(labelAnchor)
       annotations.push({ anchor: labelAnchor, layerId: 'all', label: text, note: '' })
     })
 
     animated.push(
       { mesh: pistonGroup, type: 'twoStrokePiston' },
       { mesh: rod, type: 'twoStrokeRod' },
-      { mesh: crank, type: 'crank' },
-      { mesh: intakeFlow, type: 'flowPulse' },
-      { mesh: transferFlow, type: 'flowPulse' },
-      { mesh: exhaustFlow, type: 'flowPulse' },
-      { mesh: spark, type: 'spark' }
+      { mesh: crank, type: 'twoStrokeCrank' },
+      { mesh: intakeFlow, type: 'portFlow' },
+      { mesh: transferFlow, type: 'portFlow' },
+      { mesh: exhaustFlow, type: 'portFlow' },
+      { mesh: spark, type: 'twoStrokeSpark' }
     )
   }
 
   if (courseId === 5 || courseId === 7) {
-    const body = box(4.8, 0.75, 1.45, 0x2563eb)
-    body.name = 'control'
-    body.position.y = 0.45
-    root.add(body)
-    addAnnotation(annotations, root, courseId === 5 ? 'chassis' : 'control', courseId === 5 ? 'Máy / phương tiện' : 'Thân vỏ ô tô', courseId === 5 ? 'Đối tượng sử dụng nguồn động lực và hệ truyền động' : 'Không gian chở người, hàng hóa và bảo vệ các cụm hệ thống', 0.8, 1.05, 0)
+    // Bài 21 names seven parts of a car; Chương V only needs power source, drive and the machine it moves
+    const isCar = courseId === 7
+    const part = (layerId) => (isCar ? layerId : { powertrain: 'powertrain', transmission: 'transmission' }[layerId] || 'chassis')
+    const add = (mesh, layerId, x, y, z) => {
+      mesh.name = part(layerId)
+      mesh.position.set(x, y, z)
+      root.add(mesh)
+      return mesh
+    }
+    const alongX = (mesh) => {
+      mesh.rotation.z = Math.PI / 2
+      return mesh
+    }
+    const alongZ = (mesh) => {
+      mesh.rotation.x = Math.PI / 2
+      return mesh
+    }
+    const wheelX = [-1.7, 1.7]
+    const wheelZ = [-0.85, 0.85]
 
-    const cabin = box(1.7, 0.8, 1.25, 0x60a5fa, 0.8)
-    cabin.name = 'control'
-    cabin.position.set(0.35, 1.05, 0)
-    root.add(cabin)
-    addAnnotation(annotations, root, 'control', courseId === 5 ? 'Khai thác - bảo dưỡng' : 'Lái - phanh', courseId === 5 ? 'Vận hành, bảo dưỡng, sửa chữa, kiểm định' : 'Điều khiển hướng chuyển động, giảm tốc và dừng xe', 0.35, 1.85, 0)
+    // Khung vỏ: the frame carries every system, the body shell is see-through so the systems inside stay visible
+    ;[-0.55, 0.55].forEach((z) => add(box(4.5, 0.1, 0.1, 0x334155), 'body', 0, 0.2, z))
+    ;[-1.95, 0, 1.95].forEach((x) => add(box(0.1, 0.1, 1.2, 0x334155), 'body', x, 0.2, 0))
+    add(box(4.8, 0.62, 1.45, 0x2563eb, 0.22), 'body', 0, 0.62, 0)
+    add(box(1.8, 0.58, 1.3, 0x60a5fa, 0.2), 'body', 0.35, 1.22, 0)
 
-    const engine = box(0.9, 0.45, 0.9, 0xf97316)
-    engine.name = 'powertrain'
-    engine.position.set(-1.65, 0.85, 0)
-    root.add(engine)
-    addAnnotation(annotations, root, 'powertrain', 'Nguồn động lực', courseId === 5 ? 'Tạo công suất hoặc mô men cho máy/phương tiện' : 'Động cơ hoặc nguồn động lực tạo công suất cho ô tô', -1.65, 1.45, 0)
+    // Động cơ at the front
+    add(box(0.85, 0.5, 0.75, 0xf97316), 'powertrain', -1.65, 0.55, 0)
 
-    const shaft = box(2.8, 0.12, 0.12, 0xfacc15)
-    shaft.name = 'transmission'
-    shaft.position.set(0.2, 0.05, 0)
-    root.add(shaft)
-    addAnnotation(annotations, root, 'transmission', courseId === 5 ? 'Hệ truyền động' : 'Hệ thống truyền lực', courseId === 5 ? 'Truyền và biến đổi công suất đến bộ phận công tác' : 'Truyền mô men từ nguồn động lực đến bánh xe chủ động', 0.2, 0.45, 0)
+    // Hệ thống truyền lực: gearbox, propeller shaft, final drive and the driven rear axle
+    add(box(0.45, 0.34, 0.42, 0xeab308), 'transmission', -0.98, 0.42, 0)
+    add(alongX(cylinder(0.05, 2.25, 0xfacc15)), 'transmission', 0.45, 0.28, 0)
+    add(new THREE.Mesh(new THREE.SphereGeometry(0.2, 24, 24), material(0xeab308)), 'transmission', 1.7, 0.1, 0)
+    add(alongZ(cylinder(0.05, 1.5, 0xfacc15)), 'transmission', 1.7, 0, 0)
 
-    ;[-1.7, 1.7].forEach((x) => {
-      [-0.85, 0.85].forEach((z) => {
-        const wheel = cylinder(0.42, 0.32, 0x111827)
-        wheel.name = 'chassis'
-        wheel.rotation.z = Math.PI / 2
-        wheel.position.set(x, 0, z)
-        root.add(wheel)
+    // Bánh xe - hệ thống treo: the wheel axle runs across the car, so the wheels turn about z
+    wheelX.forEach((x) => {
+      wheelZ.forEach((z) => {
+        const wheel = add(alongZ(cylinder(0.42, 0.3, 0x111827)), 'suspension', x, 0, z)
         animated.push({ mesh: wheel, type: 'wheel' })
+        const hub = add(alongZ(cylinder(0.16, 0.32, 0x94a3b8)), 'suspension', x, 0, z)
+        animated.push({ mesh: hub, type: 'wheel' })
+        add(cylinder(0.07, 0.24, 0x16a34a), 'suspension', x, 0.12 + 0.1, z * 0.7)
       })
     })
-    addAnnotation(annotations, root, 'chassis', courseId === 5 ? 'Bộ phận công tác / bánh xe' : 'Bánh xe - hệ thống treo', courseId === 5 ? 'Nơi nhận công suất để thực hiện chuyển động hoặc công việc' : 'Bánh xe tiếp xúc đường; treo giảm dao động và giữ ổn định', 1.7, 0.75, 0.9)
+
+    if (isCar) {
+      // Hệ thống lái: steering wheel, column and the track rod that turns the front wheels
+      const steeringWheel = new THREE.Mesh(new THREE.TorusGeometry(0.2, 0.035, 12, 40), material(0x7c3aed))
+      steeringWheel.rotation.y = Math.PI / 2
+      steeringWheel.rotation.x = 0.5
+      add(steeringWheel, 'steering', -0.32, 1.12, -0.32)
+      const column = add(cylinder(0.035, 1.25, 0x7c3aed), 'steering', -0.8, 0.62, -0.32)
+      column.rotation.z = 0.95
+      add(alongZ(cylinder(0.04, 1.5, 0x8b5cf6)), 'steering', -1.42, 0.08, 0)
+
+      // Hệ thống phanh: a disc and caliper at every wheel, pedal in the cabin
+      wheelX.forEach((x) => {
+        wheelZ.forEach((z) => {
+          add(alongZ(cylinder(0.27, 0.04, 0xdc2626)), 'brake', x, 0, z * 0.78)
+          add(box(0.12, 0.14, 0.08, 0x991b1b), 'brake', x - 0.22, 0.18, z * 0.78)
+        })
+      })
+      add(box(0.06, 0.22, 0.12, 0xdc2626), 'brake', -0.65, 0.5, 0.25)
+
+      // Hệ thống điện - điện tử: battery, headlights, tail lights and the electronic control unit
+      add(box(0.32, 0.24, 0.3, 0x0f172a), 'electrical', -2.05, 0.5, 0.48)
+      add(box(0.3, 0.08, 0.24, 0x0891b2), 'electrical', -0.3, 0.9, 0.32)
+      ;[-0.48, 0.48].forEach((z) => {
+        add(new THREE.Mesh(new THREE.SphereGeometry(0.1, 16, 16), material(0xfde047)), 'electrical', -2.4, 0.66, z)
+        add(box(0.04, 0.12, 0.2, 0xef4444), 'electrical', 2.41, 0.7, z)
+      })
+
+      addAnnotation(annotations, root, 'powertrain', 'Động cơ', 'Nguồn động lực tạo công suất cho ô tô.', -1.65, 1.0, 0)
+      addAnnotation(annotations, root, 'transmission', 'Hệ thống truyền lực', 'Hộp số, trục các đăng, truyền lực chính - vi sai truyền mô men đến bánh xe chủ động.', 0.45, 0.48, 0)
+      addAnnotation(annotations, root, 'suspension', 'Bánh xe - hệ thống treo', 'Bánh xe tiếp xúc mặt đường; hệ thống treo nối bánh xe với khung, giảm dao động.', 1.7, 0.62, 0.95)
+      addAnnotation(annotations, root, 'steering', 'Hệ thống lái', 'Vô lăng, trục lái, dẫn động lái thay đổi hướng chuyển động của xe.', -0.32, 1.45, -0.32)
+      addAnnotation(annotations, root, 'brake', 'Hệ thống phanh', 'Giảm tốc độ, dừng xe và giữ xe đứng yên.', 1.25, 0.3, -1.0)
+      addAnnotation(annotations, root, 'body', 'Khung vỏ', 'Khung đỡ các hệ thống; vỏ tạo khoang chở người, hàng hóa.', 0.35, 1.68, 0)
+      addAnnotation(annotations, root, 'electrical', 'Hệ thống điện - điện tử', 'Ắc quy, chiếu sáng, tín hiệu và bộ điều khiển điện tử.', -2.3, 0.95, 0.48)
+    } else {
+      addAnnotation(annotations, root, 'chassis', 'Máy / phương tiện', 'Đối tượng sử dụng nguồn động lực và hệ truyền động', 0.8, 1.05, 0)
+      addAnnotation(annotations, root, 'control', 'Khai thác - bảo dưỡng', 'Vận hành, bảo dưỡng, sửa chữa, kiểm định', 0.35, 1.85, 0)
+      addAnnotation(annotations, root, 'powertrain', 'Nguồn động lực', 'Tạo công suất hoặc mô men cho máy/phương tiện', -1.65, 1.0, 0)
+      addAnnotation(annotations, root, 'transmission', 'Hệ truyền động', 'Truyền và biến đổi công suất đến bộ phận công tác', 0.45, 0.48, 0)
+    }
   }
 
   if (courseId === 8) {
@@ -1167,7 +1049,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     railGround.name = 'input'
     railGround.position.set(0, 0.05, 1.35)
     root.add(railGround)
-    addAnnotation(annotations, root, 'input', 'Nguồn 5V / GND', 'Nguồn thấp áp cấp cho cảm biến, IC logic, vi điều khiển và đầu ra.', -2.65, 0.36, -1.35)
+    addAnnotation(annotations, root, 'input', 'Nguồn 5V / GND', 'Nguồn thấp áp cấp cho cảm biến, IC logic, driver và đầu ra.', -2.65, 0.36, -1.35)
 
     const switchBlock = box(0.72, 0.34, 0.62, 0x38bdf8)
     switchBlock.name = 'input'
@@ -1203,12 +1085,6 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     })
     addAnnotation(annotations, root, 'logic', 'IC cổng logic', 'AND, OR, NOT tạo quyết định đầu ra theo bảng chân lí.', -0.18, 0.9, 0)
 
-    const mcu = box(1.15, 0.26, 1.05, 0x312e81)
-    mcu.name = 'microcontroller'
-    mcu.position.set(1.2, 0.32, 0)
-    root.add(mcu)
-    addAnnotation(annotations, root, 'microcontroller', 'Vi điều khiển', 'Đọc tín hiệu logic, xử lí điều kiện, chống nhiễu và phát lệnh điều khiển.', 1.2, 0.92, 0)
-
     const driver = box(0.86, 0.28, 0.72, 0xf97316)
     driver.name = 'driver'
     driver.position.set(2.38, 0.3, 0)
@@ -1217,7 +1093,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
     transistor.name = 'driver'
     transistor.position.set(2.38, 0.58, -0.48)
     root.add(transistor)
-    addAnnotation(annotations, root, 'driver', 'Transistor / driver', 'Khuếch dòng và bảo vệ khối xử lí khi điều khiển còi, LED hoặc rơle.', 2.38, 0.92, 0)
+    addAnnotation(annotations, root, 'driver', 'Transistor / driver', 'Khuếch dòng từ đầu ra cổng logic để điều khiển còi, LED hoặc rơle.', 2.38, 0.92, 0)
 
     const led = new THREE.Mesh(new THREE.SphereGeometry(0.26, 32, 32), material(0xef4444, 0.88))
     led.name = 'output'
@@ -1234,8 +1110,7 @@ function buildChapterModel(courseId, engineMode = 'twoStroke') {
       ['input', -2.28, -0.55, -1.82, -0.1, 0x0ea5e9],
       ['sensor', -2.22, 0.38, -1.85, 0.12, 0x22c55e],
       ['sensor', -1.04, 0, -0.72, 0, 0x22c55e],
-      ['logic', 0.36, 0, 0.62, 0, 0x8b5cf6],
-      ['microcontroller', 1.78, 0, 1.96, 0, 0x6366f1],
+      ['logic', 0.36, 0, 1.96, 0, 0x8b5cf6],
       ['driver', 2.78, 0, 3.04, -0.32, 0xf97316],
       ['output', 2.78, 0, 3.04, 0.36, 0xfacc15],
     ]
@@ -1289,6 +1164,11 @@ export default function ThreeDSimulation() {
   const [selectedPart, setSelectedPart] = useState(null)
   const [showLabels, setShowLabels] = useState(true)
   const [renderFailed, setRenderFailed] = useState(false)
+  const [vrSupported, setVrSupported] = useState(false)
+  const [inVr, setInVr] = useState(false)
+  const [vrError, setVrError] = useState('')
+  const rendererRef = useRef(null)
+  const vrActions = useRef({ nextLayer: () => {}, togglePlay: () => {} })
   const motion = useRef({ angle: 0, cyclePhase: 0, isPlaying, speed, showLabels })
   const viewControls = useRef({ reset: () => {}, highlight: () => {} })
 
@@ -1301,6 +1181,19 @@ export default function ThreeDSimulation() {
   useEffect(() => {
     selectedLayerRef.current = selectedLayer
   }, [selectedLayer])
+
+  // Bài 18 opens on the four-stroke engine, as the textbook does, and can switch to the two-stroke one
+  useEffect(() => {
+    if (Number(lesson?.grade_level) === 11 && Number(lesson?.source_id || lesson?.id) === 602) setEngineMode('diesel4')
+  }, [lesson])
+
+  useEffect(() => {
+    let active = true
+    isImmersiveVrSupported().then((supported) => active && setVrSupported(supported))
+    return () => {
+      active = false
+    }
+  }, [])
 
   useEffect(() => {
     const fetchLesson = async () => {
@@ -1331,17 +1224,18 @@ export default function ThreeDSimulation() {
   }, [user?.id, lessonId])
 
   const simulationKey = getSimulationKey(lesson)
-  // Bài 17, 18 and 19 all describe the four-stroke engine
-  const isFourStrokeLesson = Number(lesson?.grade_level) === 11 && [601, 602, 603].includes(Number(lesson?.source_id || lesson?.id))
+  // Bài 17 and 19 describe the four-stroke engine; Bài 18 explains both the four-stroke and the two-stroke principle
+  const engineLessonId = Number(lesson?.grade_level) === 11 ? Number(lesson?.source_id || lesson?.id) : 0
+  const isFourStrokeLesson = [601, 602, 603].includes(engineLessonId)
+  const isFourStrokeOnly = [601, 603].includes(engineLessonId)
   const chapterSimulation = lesson?.grade_level === 12
     ? getIndustrial12Simulation(simulationKey)
     : lesson?.grade_level === 11
-      ? simulationKey === 'blastFurnace'
-        ? blastFurnaceSimulation
-        : mechanical11SpecializedSimulations[simulationKey] || knttSimulations[simulationKey] || mechanical11SpecializedSimulations[1]
+      ? mechanical11SpecializedSimulations[simulationKey] || knttSimulations[simulationKey] || mechanical11SpecializedSimulations[1]
       : technology10Simulations[simulationKey] || technology10Simulations[1]
   const simulation = lessonModelSimulation(lesson, chapterSimulation) || chapterSimulation
-  const isFourStrokeMode = simulation.modelId === 6 && (engineMode === 'diesel4' || isFourStrokeLesson)
+  const isFourStrokeMode = simulation.modelId === 6 && (engineMode === 'diesel4' || isFourStrokeOnly)
+  const isTwoStrokeMode = simulation.modelId === 6 && !isFourStrokeMode
   const fourStrokeSimulation = fuel === 'gasoline' ? gasolineFourStrokeSimulation : dieselFourStrokeSimulation
   const displayedSimulation = isFourStrokeMode ? fourStrokeSimulation : simulation
   const simulationExperiment = getSimulationExperimentForLesson(lesson)
@@ -1366,6 +1260,26 @@ export default function ThreeDSimulation() {
     setVisitedLayers((current) => new Set([...current, layerId]))
     const strokeIndex = displayedSimulation.layers.findIndex((layer) => layer.id === layerId)
     if (isFourStrokeMode && strokeIndex >= 0) seekEngine(strokeIndex * 180 + 90)
+    if (isTwoStrokeMode && TWO_STROKE_LAYER_ANGLES[layerId] !== undefined) seekEngine(TWO_STROKE_LAYER_ANGLES[layerId])
+  }
+
+  // Controller buttons in the headset: trigger moves to the next knowledge layer, grip pauses or plays
+  vrActions.current = {
+    nextLayer: () => {
+      const index = layerButtons.findIndex((layer) => layer.id === selectedLayer)
+      selectKnowledgeLayer(layerButtons[(index + 1) % layerButtons.length].id)
+    },
+    togglePlay: togglePlaying,
+  }
+
+  const enterVr = async () => {
+    setVrError('')
+    try {
+      const session = await requestVrSession()
+      await rendererRef.current?.xr.setSession(session)
+    } catch {
+      setVrError('Không mở được chế độ VR. Hãy đeo kính, cho phép trình duyệt dùng thiết bị VR rồi thử lại.')
+    }
   }
 
   const closePartCard = () => {
@@ -1431,6 +1345,9 @@ export default function ThreeDSimulation() {
     }
     setRenderFailed(false)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+    renderer.xr.enabled = true
+    renderer.xr.setReferenceSpaceType('local-floor')
+    rendererRef.current = renderer
     container.appendChild(renderer.domElement)
 
     const labelLayer = document.createElement('div')
@@ -1454,7 +1371,10 @@ export default function ThreeDSimulation() {
     const lessonModel = simulation.lessonModel ? createLessonFlowModel(simulation.lessonModel) : null
     const base = new THREE.GridHelper(lessonModel ? 16 : 8, lessonModel ? 16 : 8, 0xcbd5e1, 0xe2e8f0)
     base.position.y = engine ? -2.52 : lessonModel ? lessonModel.floorY : -0.65
-    scene.add(base)
+    // Everything the student looks at sits in one stage, which VR scales down onto a table in front of them
+    const stage = new THREE.Group()
+    stage.add(base)
+    scene.add(stage)
 
     const { root, animated, annotations, framing: modelFraming } = engine || lessonModel || buildChapterModel(simulation.modelId, engineMode)
     const framing = modelFraming || (simulation.modelId === 8 ? LOGIC_BOARD_FRAMING : null)
@@ -1462,7 +1382,7 @@ export default function ThreeDSimulation() {
       root.scale.setScalar(0.78)
       root.position.set(0, -0.18, 0.12)
     }
-    scene.add(root)
+    stage.add(root)
 
     const controls = new OrbitControls(camera, renderer.domElement)
     controls.enableDamping = true
@@ -1508,6 +1428,7 @@ export default function ThreeDSimulation() {
 
     let fittedDistance = 0
     const resize = () => {
+      if (renderer.xr.isPresenting) return
       const rect = container.getBoundingClientRect()
       const width = Math.max(rect.width, 280)
       const height = Math.max(rect.height, 240)
@@ -1561,7 +1482,56 @@ export default function ThreeDSimulation() {
       highlight: (part) => engine?.highlightPart(part),
     }
 
-    let frame
+    // VR: labels become sprites, made once the size of the model in the headset is known
+    let vrLabels = []
+    const onSessionStart = () => {
+      stage.updateMatrixWorld(true)
+      const bounds = new THREE.Box3().setFromObject(root)
+      const size = bounds.getSize(new THREE.Vector3())
+      const center = bounds.getCenter(new THREE.Vector3())
+      const transform = vrStageTransform(size, center)
+      stage.scale.setScalar(transform.scale)
+      stage.position.copy(transform.position)
+      if (!vrLabels.length) {
+        const unit = Math.max(size.x, size.y, size.z) / 6
+        const anchorScale = new THREE.Vector3()
+        vrLabels = annotationViews
+          .filter((annotation) => annotation.layerId !== 'all' && annotation.label)
+          .map((annotation) => {
+            annotation.anchor.getWorldScale(anchorScale)
+            const sprite = createLabelSprite(annotation.label, annotation.note, unit / (anchorScale.x / transform.scale || 1))
+            annotation.anchor.add(sprite)
+            return { sprite, layerId: annotation.layerId }
+          })
+      }
+      labelLayer.style.display = 'none'
+      setInVr(true)
+    }
+    const onSessionEnd = () => {
+      stage.scale.setScalar(1)
+      stage.position.set(0, 0, 0)
+      vrLabels.forEach(({ sprite }) => {
+        sprite.visible = false
+      })
+      setInVr(false)
+      resize()
+    }
+    renderer.xr.addEventListener('sessionstart', onSessionStart)
+    renderer.xr.addEventListener('sessionend', onSessionEnd)
+    const controllers = [0, 1].map((index) => {
+      const controller = renderer.xr.getController(index)
+      controller.addEventListener('select', () => vrActions.current.nextLayer())
+      controller.addEventListener('squeeze', () => vrActions.current.togglePlay())
+      const ray = new THREE.Line(
+        new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1)]),
+        new THREE.LineBasicMaterial({ color: 0x1e3a8a })
+      )
+      ray.scale.z = 2
+      controller.add(ray)
+      scene.add(controller)
+      return controller
+    })
+
     let lastStep = -1
     let lastFrameAt = performance.now()
     const projected = new THREE.Vector3()
@@ -1575,7 +1545,8 @@ export default function ThreeDSimulation() {
       const stepScale = running.isPlaying ? running.speed * frames : 0
       running.angle += 0.025 * stepScale
       const angle = running.angle
-      controls.update()
+      const presenting = renderer.xr.isPresenting
+      if (!presenting) controls.update()
       if (!framing) root.rotation.y = simulation.modelId === 8 ? 0 : Math.sin(angle * 0.25) * 0.18
 
       const cycleDuration = isFourStrokeMode ? FOUR_STROKE_CYCLE_RADIANS : Math.PI * 2
@@ -1585,13 +1556,16 @@ export default function ThreeDSimulation() {
         running.cyclePhase = normalizeCyclePhase(angle)
         engine.update(running.cyclePhase)
       }
-      const step = Math.floor(cycleProgress * displayedSimulation.layers.length)
+      const ports = isTwoStrokeMode ? portOpenings(angle) : null
+      const step = isTwoStrokeMode
+        ? displayedSimulation.layers.findIndex((layer) => layer.id === twoStrokePhase(angle))
+        : Math.floor(cycleProgress * displayedSimulation.layers.length)
       if (step !== lastStep) {
         lastStep = step
         setActiveStep(step % displayedSimulation.layers.length)
       }
 
-      animated.forEach(({ mesh, type }) => {
+      animated.forEach(({ mesh, type, phase = 0 }) => {
         if (type === 'spin' || type === 'wheel') mesh.rotation.y += 0.05 * stepScale
         if (type === 'spinZ') mesh.rotation.z -= 0.04 * stepScale
         if (type === 'spinX') mesh.rotation.x -= 0.08 * stepScale
@@ -1600,17 +1574,38 @@ export default function ThreeDSimulation() {
           mesh.position.lerpVectors(begin, end, (angle * 0.35 + offset) % 1)
         }
         if (type === 'tool') mesh.position.y = 0.35 + Math.sin(angle * 2) * 0.18
-        if (type === 'belt') mesh.position.x = -2.8 + ((angle * 0.9) % 5.6)
-        if (type === 'robot') mesh.rotation.z = -0.65 + Math.sin(angle * 1.4) * 0.28
+        if (type === 'belt') mesh.position.x = -2.8 + ((angle * 0.9 + (mesh.userData.offset || 0)) % 5.6)
+        if (type === 'robotTurn') mesh.rotation.y = Math.sin(angle * 0.9 + phase) * 0.5
+        if (type === 'robotShoulder') mesh.rotation.x = 0.85 + Math.sin(angle * 1.4 + phase) * 0.15
+        if (type === 'robotElbow') mesh.rotation.x = 0.95 + Math.sin(angle * 1.4 + phase + 0.8) * 0.2
         if (type === 'piston') mesh.position.y = 0.45 + Math.sin(angle * 2) * 0.75
         if (type === 'rod') {
           mesh.position.y = -0.15 + Math.sin(angle * 2) * 0.35
           mesh.rotation.z = Math.sin(angle * 2) * 0.22
         }
-        if (type === 'twoStrokePiston') mesh.position.y = 1.36 + Math.cos(angle) * 0.5
+        if (type === 'twoStrokePiston') mesh.position.y = pistonPinY(angle)
         if (type === 'twoStrokeRod') {
-          mesh.position.y = 0.3 + Math.cos(angle) * 0.28
-          mesh.rotation.z = Math.sin(angle) * 0.26
+          const pose = rodPose(angle)
+          mesh.position.set(pose.center.x, pose.center.y, 0)
+          mesh.rotation.z = pose.rotationZ
+        }
+        if (type === 'twoStrokeCrank') mesh.rotation.z = -angle
+        if (type === 'portFlow') {
+          // An arrow shows gas moving only while the piston keeps that port open
+          const open = ports[mesh.userData.port]
+          const pulse = open ? 0.45 + Math.abs(Math.sin(angle * 2.4)) * 0.55 : 0.06
+          mesh.traverse((part) => {
+            if (part.material) {
+              part.material.opacity = pulse
+              part.material.transparent = true
+            }
+          })
+        }
+        if (type === 'twoStrokeSpark') {
+          const flash = sparkOn(angle) ? 1 : 0.12
+          mesh.scale.setScalar(0.6 + flash * 0.9)
+          mesh.material.opacity = flash
+          mesh.material.transparent = true
         }
         if (type === 'dieselPiston') mesh.position.y = mesh.userData.baseY + Math.cos(angle + mesh.userData.phase) * 0.18
         if (type === 'dieselRod') {
@@ -1634,20 +1629,6 @@ export default function ThreeDSimulation() {
           mesh.material.transparent = true
         }
         if (type === 'transfer') mesh.position.x = -3 + ((angle * 0.7) % 6)
-        if (type === 'chargeBucket') {
-          const t = (Math.sin(angle * 0.85) + 1) / 2
-          mesh.position.x = -2.35 + t * 1.35
-          mesh.position.y = 0.16 + t * 2.12
-        }
-        if (type === 'blastFlame') {
-          mesh.scale.setScalar(0.92 + Math.sin(angle * 4) * 0.08)
-          mesh.material.opacity = 0.48 + Math.abs(Math.sin(angle * 3)) * 0.26
-          mesh.material.transparent = true
-        }
-        if (type === 'moltenPulse') {
-          mesh.position.x = 0.35 + ((angle * 0.65) % 1.8)
-          mesh.scale.setScalar(0.75 + Math.abs(Math.sin(angle * 2.5)) * 0.35)
-        }
       })
 
       const selected = selectedLayerRef.current
@@ -1662,6 +1643,13 @@ export default function ThreeDSimulation() {
 
       renderer.render(scene, camera)
 
+      if (presenting) {
+        vrLabels.forEach(({ sprite, layerId }) => {
+          sprite.visible = running.showLabels
+          sprite.material.opacity = selected !== 'all' && layerId !== selected ? 0.3 : 1
+        })
+        return
+      }
       labelLayer.style.display = running.showLabels ? 'block' : 'none'
       annotationViews.forEach((annotation) => {
         annotation.anchor.getWorldPosition(worldPosition)
@@ -1679,13 +1667,18 @@ export default function ThreeDSimulation() {
         annotation.element.style.opacity = outside ? '0' : shouldDim ? '0.28' : '1'
         annotation.element.style.visibility = outside ? 'hidden' : 'visible'
       })
-
-      frame = requestAnimationFrame(animate)
     }
-    animate()
+    // setAnimationLoop instead of requestAnimationFrame: in a headset frames come from the XR session
+    renderer.setAnimationLoop(animate)
 
     return () => {
-      cancelAnimationFrame(frame)
+      renderer.setAnimationLoop(null)
+      renderer.xr.getSession()?.end().catch(() => {})
+      renderer.xr.removeEventListener('sessionstart', onSessionStart)
+      renderer.xr.removeEventListener('sessionend', onSessionEnd)
+      controllers.forEach((controller) => scene.remove(controller))
+      vrLabels.forEach(({ sprite }) => sprite.material.map?.dispose())
+      rendererRef.current = null
       resizeObserver.disconnect()
       renderer.domElement.removeEventListener('pointerdown', onPointerDown)
       renderer.domElement.removeEventListener('pointerup', onPointerUp)
@@ -1700,7 +1693,7 @@ export default function ThreeDSimulation() {
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
       setSelectedPart(null)
     }
-  }, [simulation.modelId, simulation.lessonModel, displayedSimulation.layers.length, engineMode, fuel, isFourStrokeMode, isLoading])
+  }, [simulation.modelId, simulation.lessonModel, displayedSimulation.layers.length, engineMode, fuel, isFourStrokeMode, isTwoStrokeMode, isLoading])
 
   if (isLoading) {
     return <div className="page-container text-center text-slate-600">Đang tải mô phỏng 3D...</div>
@@ -1738,7 +1731,23 @@ export default function ThreeDSimulation() {
               <button type="button" className="rounded-md border border-slate-300 bg-white/95 px-2.5 py-1.5 text-xs font-semibold text-slate-700 hover:bg-white" onClick={() => viewControls.current.reset()}>
                 Góc nhìn chuẩn
               </button>
+              {vrSupported && !renderFailed && (
+                <button
+                  type="button"
+                  className="rounded-md border border-blue-700 bg-blue-700 px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-blue-800 disabled:opacity-60"
+                  onClick={enterVr}
+                  disabled={inVr}
+                  title="Xem mô hình bằng kính thực tế ảo (WebXR). Trong kính: nút cò chuyển lớp kiến thức, nút bóp tạm dừng hoặc chạy tiếp."
+                >
+                  {inVr ? 'Đang xem bằng VR' : 'Xem bằng VR'}
+                </button>
+              )}
             </div>
+            {vrError && (
+              <p role="alert" className="absolute bottom-12 right-3 z-10 max-w-xs rounded-md border border-red-200 bg-white px-3 py-2 text-xs text-red-700">
+                {vrError}
+              </p>
+            )}
             <p className="pointer-events-none absolute bottom-2 left-3 z-10 hidden rounded bg-white/80 px-2 py-0.5 text-xs text-slate-600 sm:block">
               Kéo để xoay, cuộn hoặc chụm tay để phóng to{isFourStrokeMode ? ', bấm vào chi tiết để xem tên và chức năng' : ''}
             </p>
@@ -1818,11 +1827,11 @@ export default function ThreeDSimulation() {
                       setActiveStep(0)
                     }}
                     className={`rounded-md px-3 py-2 text-sm font-bold transition ${
-                      (isFourStrokeLesson ? mode.id === 'diesel4' : engineMode === mode.id)
+                      (isFourStrokeOnly ? mode.id === 'diesel4' : engineMode === mode.id)
                         ? 'bg-slate-950 text-white'
                         : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                     }`}
-                    disabled={isFourStrokeLesson && mode.id === 'twoStroke'}
+                    disabled={isFourStrokeOnly && mode.id === 'twoStroke'}
                   >
                     {mode.label}
                   </button>

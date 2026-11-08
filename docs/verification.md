@@ -190,7 +190,7 @@ Các ngân hàng câu hỏi, nội dung bài học và dữ liệu bộ Cánh di
 
 Trước đây mô hình gắn theo chương và nhiều chương dùng nhầm mô hình của môn khác: Hệ thống điện quốc gia hiện dây chuyền robot, Mạng điện trong nhà hiện máy tiện, Vi điều khiển hiện ô tô, Vẽ kĩ thuật hiện vật liệu cơ khí, Bài 17 và 19 lớp 11 mở mô hình 2 kì.
 
-Nay mỗi bài của ba cuốn Kết nối tri thức (Thiết kế và công nghệ 10, Công nghệ cơ khí 11, Công nghệ điện - điện tử 12) có mô hình riêng trong `frontend/src/data/knttLessonModels.js`, dựng bằng `frontend/src/simulations/lessonFlowModel.js`. Tám bài giữ mô hình vẽ riêng: lớp 11 Bài 4 (lò cao), Bài 12 (dây chuyền robot), Bài 17-19 (động cơ), Bài 21 (ô tô); lớp 12 Bài 21, 23 (bảng mạch logic). Kiểm thử bảo đảm không bài nào thiếu mô hình.
+Nay mỗi bài của ba cuốn Kết nối tri thức (Thiết kế và công nghệ 10, Công nghệ cơ khí 11, Công nghệ điện - điện tử 12) có mô hình riêng trong `frontend/src/data/knttLessonModels.js`, dựng bằng `frontend/src/simulations/lessonFlowModel.js`. Bảy bài giữ mô hình vẽ riêng: lớp 11 Bài 12 (dây chuyền robot), Bài 17-19 (động cơ), Bài 21 (ô tô); lớp 12 Bài 21, 23 (bảng mạch logic). Kiểm thử bảo đảm không bài nào thiếu mô hình.
 
 Giới hạn:
 
@@ -198,6 +198,21 @@ Giới hạn:
 - Thành phần và thuật ngữ lấy từ trang giải bài và giáo án trên mạng, chưa đối chiếu với sách in. Riêng lớp 12 Bài 13-18, 20, 23, 26 và lớp 11 Bài 10, lớp 10 Bài 1, 4, 22 chưa có trang giải đầy đủ nên dựa trên tên bài, nội dung bài trong app và hiểu biết chung; giáo viên cần soát kĩ các bài này.
 - Một số tên bài trong app khác với trang giải bài (lớp 10 Bài 7, Bài 13; lớp 11 Bài 13, Bài 23; lớp 12 Bài 7) và chưa được sửa.
 
+## Soát mô hình 3D theo SGK và chế độ VR
+
+Các mô hình vẽ riêng được soát lại với nội dung SGK Kết nối tri thức (qua trang giải bài, chưa đối chiếu sách in). Lỗi tìm thấy và cách sửa:
+
+| Bài | Lỗi | Đã sửa |
+|---|---|---|
+| Lớp 11 Bài 4 | Mô hình lò cao sản xuất gang - thép, trong khi bài học phân loại vật liệu kim loại; nội dung bài trong app cũng viết theo lò cao | Thay bằng bốn mẫu: gang (C > 2,14%), thép (C ≤ 2,14%), nhôm và hợp kim nhôm, đồng và hợp kim đồng. Viết lại mục tiêu, ý chính, thẻ thí nghiệm; xóa mã lò cao |
+| Lớp 11 Bài 18, động cơ 2 kì | Pít tông chạy theo hàm cos, trục khuỷu quay độc lập, thanh truyền đổi chiều dài, hành trình khác 2R; pít tông quá ngắn nên không bao giờ che cửa nạp; mũi tên dòng khí nhấp nháy cả khi cửa đóng; không mở được mô hình 2 kì trong Bài 18 | Cơ cấu trục khuỷu - thanh truyền tính đúng (rontend/src/simulations/twoStrokeKinematics.js): S = 2R, thanh truyền giữ chiều dài. Cửa thải, cửa quét do đỉnh pít tông đóng mở, cửa thải mở trước; cửa nạp do váy pít tông mở gần ĐCT. Mũi tên chỉ sáng khi cửa mở; bu gi đánh lửa cuối kì nén; lớp kiến thức hiện theo vị trí thật của pít tông. Bài 18 có thêm nút chuyển sang động cơ 2 kì |
+| Lớp 11 Bài 21, ô tô | Bánh xe dựng sai trục (trục bánh dọc thân xe) và quay quanh trục đứng; gộp lái với phanh; thiếu hệ thống điện - điện tử; gọi "thân vỏ" thay cho "khung vỏ" | Bánh xe quay quanh trục ngang. Bảy lớp theo sách: động cơ, truyền lực (hộp số, trục các đăng, vi sai, bán trục), bánh xe - treo, lái, phanh, khung vỏ, điện - điện tử |
+| Lớp 11 Bài 12, dây chuyền robot | Máy CNC và một tay robot, trong khi bài học nói băng tải và các robot vận chuyển, lắp ráp, hỗ trợ (hàn, phun sơn) | Dựng lại: băng tải chở sản phẩm và ba robot có khớp vai, khuỷu, dụng cụ riêng |
+| Lớp 12 Bài 21, 23, bảng mạch logic | Có khối vi điều khiển, là nội dung Chương IX (Bài 24 trở đi) | Bỏ khối vi điều khiển; cổng logic nối thẳng tới driver |
+
+Kiểm thử mới: 	woStrokeKinematics.test.js (S = 2R; thanh truyền không đổi chiều dài; ở ĐCD cửa thải, cửa quét mở và cửa nạp bị che; gần ĐCT ngược lại; cửa thải mở trước cửa quét; cửa nạp không mở cùng lúc với cửa thải; thứ tự cháy - giãn nở → thải - quét → nén → nạp vào các te; bu gi chỉ đánh lửa cuối kì nén).
+
+**Chế độ VR (WebXR).** Khi trình duyệt báo có kính thực tế ảo (Meta Quest, Pico, hoặc điện thoại có trình xem WebXR), trang mô phỏng hiện nút "Xem bằng VR". Trong kính, mô hình được thu về cao khoảng 1,1 m, đặt trước mặt người xem ở độ cao 1,1 m; nhãn chữ chuyển thành bảng nổi luôn quay về phía người xem; nút cò của tay cầm chuyển lớp kiến thức, nút bóp tạm dừng hoặc chạy tiếp. Máy không có WebXR thì không hiện nút. Kiểm thử rSupport.test.js kiểm tra phát hiện WebXR, vị trí, tỉ lệ mô hình trong kính và cách ngắt dòng nhãn. Trên trình duyệt máy tính đã kiểm tra nút VR hiện ra khi giả lập WebXR và báo lỗi rõ ràng khi không mở được phiên. **Chưa thử trên kính thật.**
 ## Trợ lý AI
 
 Chưa đánh giá Gemini trực tuyến. Kiểm thử chỉ xác nhận lớp tích hợp, xử lý lỗi và nhãn `response_mode`. `data/ai_tutor_eval_set.json` có 13 câu về đúng nội dung, ảo giác, an toàn, riêng tư và sư phạm; chạy bằng `scripts/evaluate_ai_tutor.py` khi có khóa. Kết quả từ khóa chỉ để sàng lọc, giáo viên phải chấm theo rubric.
@@ -236,3 +251,4 @@ Giới hạn: hệ thống chưa kiểm tra thân phận thật (email trường
 - Đánh giá Gemini trực tuyến, kiểm định ngân hàng câu hỏi, thẩm định độc lập.
 - Đánh giá khả dụng và thực nghiệm sư phạm với giáo viên, học sinh.
 - Hiệu năng 3D trên máy học sinh chưa đo.
+- Chế độ VR chưa thử trên kính thật.
