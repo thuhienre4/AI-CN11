@@ -5,9 +5,8 @@ from fastapi import APIRouter, Depends, WebSocket, WebSocketDisconnect
 from fastapi.concurrency import run_in_threadpool
 from sqlalchemy.orm import Session
 
-from auth import ACCOUNT_REJECTED, decode_token, teacher_class_names
+from auth import teacher_class_names, user_for_token
 from database import get_db
-from models import User
 from realtime import learning_connections
 
 
@@ -20,13 +19,8 @@ AUTH_TIMEOUT_SECONDS = 10
 def _identify(db: Session, token: str | None):
     """Return (user id, followed classes), releasing the database connection before the socket is used."""
     try:
-        token_data = decode_token(token or "")
-        user = (
-            db.query(User).filter(User.username == token_data.username, User.is_active.is_(True)).first()
-            if token_data
-            else None
-        )
-        if not user or user.account_status == ACCOUNT_REJECTED:
+        user = user_for_token(db, token)
+        if user is None:
             return None
         if user.role in {"admin", "moderator"}:
             return user.id, None

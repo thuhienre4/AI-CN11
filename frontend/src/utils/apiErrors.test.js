@@ -8,7 +8,7 @@ describe('registration error message', () => {
   })
   it('lists each field once', () => {
     const data = { errors: [{ loc: ['body', 'password'] }, { loc: ['body', 'password'] }, { loc: ['body', 'username'] }] }
-    expect(registrationErrorMessage(data)).toBe('Mật khẩu chưa đạt yêu cầu (ít nhất 8 kí tự). Tên đăng nhập cần từ 3 đến 50 kí tự.')
+    expect(registrationErrorMessage(data)).toBe('Mật khẩu chưa đạt yêu cầu: ít nhất 8 kí tự, có cả chữ và số, không chứa tên đăng nhập. Tên đăng nhập cần từ 3 đến 50 kí tự.')
   })
   it('keeps a plain server message, and has a fallback', () => {
     expect(registrationErrorMessage({ detail: 'Tên đăng nhập đã tồn tại' })).toBe('Tên đăng nhập đã tồn tại')

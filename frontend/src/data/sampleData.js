@@ -15,7 +15,7 @@ export const sampleCourses = [
     description:
       'Tìm hiểu thân máy, nắp máy, cơ cấu trục khuỷu - thanh truyền và cơ cấu phân phối khí.',
     content:
-      'Chủ đề giúp học sinh kết nối cấu tạo cơ khí với chuyển động thực tế: piston chuyển động tịnh tiến, trục khuỷu quay, xupap đóng mở đúng thời điểm.',
+      'Chủ đề giúp học sinh kết nối cấu tạo cơ khí với chuyển động thực tế: pít tông chuyển động tịnh tiến, trục khuỷu quay, xu páp đóng mở đúng thời điểm.',
     thumbnail_url:
       'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80',
   },
@@ -25,7 +25,7 @@ export const sampleCourses = [
     description:
       'Liên kết hệ thống bôi trơn, làm mát, cung cấp nhiên liệu - không khí, đánh lửa, khởi động và xả khí.',
     content:
-      'Học sinh quan sát từng hệ thống để hiểu rằng động cơ không chỉ có piston và trục khuỷu; động cơ hoạt động ổn định nhờ nhiều hệ thống hỗ trợ phối hợp.',
+      'Học sinh quan sát từng hệ thống để hiểu rằng động cơ không chỉ có pít tông và trục khuỷu; động cơ hoạt động ổn định nhờ nhiều hệ thống hỗ trợ phối hợp.',
     thumbnail_url:
       'https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=900&q=80',
   },
@@ -33,30 +33,30 @@ export const sampleCourses = [
 
 export const engineCycleSteps = [
   {
-    name: 'Kỳ nạp',
-    piston: 'Piston đi từ điểm chết trên xuống điểm chết dưới',
-    valve: 'Xupap nạp mở, xupap thải đóng',
+    name: 'Kì nạp',
+    piston: 'Pít tông đi từ điểm chết trên xuống điểm chết dưới',
+    valve: 'Xu páp nạp mở, xu páp thải đóng',
     result: 'Không khí hoặc hòa khí được nạp vào xi lanh.',
     color: 'bg-sky-100 text-sky-800 border-sky-300',
   },
   {
-    name: 'Kỳ nén',
-    piston: 'Piston đi từ điểm chết dưới lên điểm chết trên',
-    valve: 'Hai xupap đều đóng',
+    name: 'Kì nén',
+    piston: 'Pít tông đi từ điểm chết dưới lên điểm chết trên',
+    valve: 'Hai xu páp đều đóng',
     result: 'Môi chất trong xi lanh bị nén, áp suất và nhiệt độ tăng.',
     color: 'bg-amber-100 text-amber-800 border-amber-300',
   },
   {
-    name: 'Kỳ cháy - giãn nở',
-    piston: 'Khí cháy giãn nở đẩy piston đi xuống',
-    valve: 'Hai xupap đều đóng',
-    result: 'Đây là kỳ sinh công, lực khí cháy truyền qua thanh truyền làm quay trục khuỷu.',
+    name: 'Kì cháy - giãn nở',
+    piston: 'Khí cháy giãn nở đẩy pít tông đi xuống',
+    valve: 'Hai xu páp đều đóng',
+    result: 'Đây là kì sinh công, lực khí cháy truyền qua thanh truyền làm quay trục khuỷu.',
     color: 'bg-red-100 text-red-800 border-red-300',
   },
   {
-    name: 'Kỳ thải',
-    piston: 'Piston đi từ điểm chết dưới lên điểm chết trên',
-    valve: 'Xupap thải mở, xupap nạp đóng',
+    name: 'Kì thải',
+    piston: 'Pít tông đi từ điểm chết dưới lên điểm chết trên',
+    valve: 'Xu páp thải mở, xu páp nạp đóng',
     result: 'Khí thải được đẩy ra khỏi xi lanh để chuẩn bị chu trình mới.',
     color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
   },
@@ -68,9 +68,9 @@ export const sampleLessons = [
     course_id: 1,
     title: 'Khái niệm và phân loại động cơ đốt trong',
     description:
-      'Hiểu động cơ đốt trong là gì, vì sao gọi là “đốt trong” và có thể phân loại theo nhiên liệu, số kỳ, cách làm mát.',
+      'Hiểu động cơ đốt trong là gì, vì sao gọi là “đốt trong” và có thể phân loại theo nhiên liệu, số kì, cách làm mát.',
     content:
-      'Động cơ đốt trong là động cơ nhiệt trong đó nhiên liệu được đốt cháy ngay bên trong xi lanh hoặc buồng cháy. Nhiệt lượng sinh ra làm khí cháy giãn nở, tạo áp lực đẩy piston hoặc tác dụng lên cánh tuabin để sinh công. Trong chương trình Công nghệ 11, học sinh thường gặp cách phân loại theo nhiên liệu như động cơ xăng và động cơ điêzen; theo chu trình làm việc như động cơ 2 kỳ và 4 kỳ; theo phương pháp làm mát như làm mát bằng không khí hoặc bằng nước.',
+      'Động cơ đốt trong là động cơ nhiệt trong đó nhiên liệu được đốt cháy ngay bên trong xi lanh hoặc buồng cháy. Nhiệt lượng sinh ra làm khí cháy giãn nở, tạo áp lực đẩy pít tông hoặc tác dụng lên cánh tuabin để sinh công. Trong chương trình Công nghệ 11, học sinh thường gặp cách phân loại theo nhiên liệu như động cơ xăng và động cơ điêzen; theo chu trình làm việc như động cơ 2 kì và 4 kì; theo phương pháp làm mát như làm mát bằng không khí hoặc bằng nước.',
     key_points: [
       'Bản chất của động cơ đốt trong là biến nhiệt năng thành cơ năng.',
       'Động cơ xăng thường cần hệ thống đánh lửa bằng bugi.',
@@ -87,14 +87,14 @@ export const sampleLessons = [
       },
       {
         name: 'Cháy trong xi lanh',
-        piston: 'Khí cháy tác dụng trực tiếp lên piston',
+        piston: 'Khí cháy tác dụng trực tiếp lên pít tông',
         valve: 'Buồng cháy được đóng kín trong giai đoạn sinh công',
         result: 'Nhiệt năng chuyển thành lực đẩy cơ học.',
         color: 'bg-red-100 text-red-800 border-red-300',
       },
       {
         name: 'Sinh công',
-        piston: 'Piston truyền lực qua thanh truyền',
+        piston: 'Pít tông truyền lực qua thanh truyền',
         valve: 'Trục khuỷu nhận lực và quay',
         result: 'Động cơ tạo mô-men quay để kéo máy công tác.',
         color: 'bg-blue-100 text-blue-800 border-blue-300',
@@ -109,7 +109,7 @@ export const sampleLessons = [
     description:
       'Nhận diện các nhóm bộ phận chính: cơ cấu, hệ thống và mối quan hệ giữa chúng.',
     content:
-      'Một động cơ đốt trong kiểu piston thường gồm hai cơ cấu chính và nhiều hệ thống phục vụ. Hai cơ cấu chính là cơ cấu trục khuỷu - thanh truyền và cơ cấu phân phối khí. Các hệ thống phục vụ gồm bôi trơn, làm mát, cung cấp nhiên liệu và không khí, đánh lửa đối với động cơ xăng, khởi động và xả khí. Khi học theo SGK, cần xem cấu tạo chung như một mạng liên kết: cơ cấu chính tạo chuyển động, còn các hệ thống phụ trợ bảo đảm động cơ có nhiên liệu, có không khí, đủ mát, đủ dầu bôi trơn và khởi động được.',
+      'Một động cơ đốt trong kiểu pít tông thường gồm hai cơ cấu chính và nhiều hệ thống phục vụ. Hai cơ cấu chính là cơ cấu trục khuỷu - thanh truyền và cơ cấu phân phối khí. Các hệ thống phục vụ gồm bôi trơn, làm mát, cung cấp nhiên liệu và không khí, đánh lửa đối với động cơ xăng, khởi động và xả khí. Khi học theo SGK, cần xem cấu tạo chung như một mạng liên kết: cơ cấu chính tạo chuyển động, còn các hệ thống phụ trợ bảo đảm động cơ có nhiên liệu, có không khí, đủ mát, đủ dầu bôi trơn và khởi động được.',
     key_points: [
       'Cơ cấu trục khuỷu - thanh truyền tạo và truyền chuyển động chính.',
       'Cơ cấu phân phối khí điều khiển quá trình nạp và thải.',
@@ -119,8 +119,8 @@ export const sampleLessons = [
     visual_steps: [
       {
         name: 'Cơ cấu chính',
-        piston: 'Piston, thanh truyền, trục khuỷu tạo chuyển động',
-        valve: 'Xupap và trục cam điều khiển khí vào - ra',
+        piston: 'Pít tông, thanh truyền, trục khuỷu tạo chuyển động',
+        valve: 'Xu páp và trục cam điều khiển khí vào - ra',
         result: 'Đây là phần trực tiếp tạo chuyển động cơ học.',
         color: 'bg-indigo-100 text-indigo-800 border-indigo-300',
       },
@@ -137,16 +137,16 @@ export const sampleLessons = [
   {
     id: 103,
     course_id: 1,
-    title: 'Nguyên lý làm việc của động cơ 4 kỳ',
+    title: 'Nguyên lý làm việc của động cơ 4 kì',
     description:
-      'Quan sát đủ 4 kỳ nạp, nén, cháy - giãn nở và thải; liên hệ với vị trí piston và trạng thái xupap.',
+      'Quan sát đủ 4 kì nạp, nén, cháy - giãn nở và thải; liên hệ với vị trí pít tông và trạng thái xu páp.',
     content:
-      'Động cơ 4 kỳ hoàn thành một chu trình công tác sau bốn hành trình piston, tương ứng hai vòng quay trục khuỷu. Kỳ nạp đưa môi chất mới vào xi lanh. Kỳ nén làm tăng áp suất và nhiệt độ của môi chất. Kỳ cháy - giãn nở là kỳ sinh công. Kỳ thải đẩy khí cháy ra ngoài. Kiến thức quan trọng không phải chỉ nhớ tên bốn kỳ, mà phải liên hệ được: piston đi đâu, xupap nào mở, quá trình nào xảy ra trong xi lanh và kỳ nào tạo công.',
+      'Động cơ 4 kì hoàn thành một chu trình công tác sau bốn hành trình pít tông, tương ứng hai vòng quay trục khuỷu. Kì nạp đưa môi chất mới vào xi lanh. Kì nén làm tăng áp suất và nhiệt độ của môi chất. Kì cháy - giãn nở là kì sinh công. Kì thải đẩy khí cháy ra ngoài. Kiến thức quan trọng không phải chỉ nhớ tên bốn kì, mà phải liên hệ được: pít tông đi đâu, xu páp nào mở, quá trình nào xảy ra trong xi lanh và kì nào tạo công.',
     key_points: [
-      'Một chu trình 4 kỳ gồm bốn hành trình piston và hai vòng quay trục khuỷu.',
-      'Kỳ cháy - giãn nở là kỳ sinh công.',
-      'Xupap nạp mở chủ yếu ở kỳ nạp, xupap thải mở chủ yếu ở kỳ thải.',
-      'Các kỳ còn lại tiêu thụ năng lượng quán tính để chuẩn bị cho kỳ sinh công tiếp theo.',
+      'Một chu trình 4 kì gồm bốn hành trình pít tông và hai vòng quay trục khuỷu.',
+      'Kì cháy - giãn nở là kì sinh công.',
+      'Xu páp nạp mở chủ yếu ở kì nạp, xu páp thải mở chủ yếu ở kì thải.',
+      'Các kì còn lại tiêu thụ năng lượng quán tính để chuẩn bị cho kì sinh công tiếp theo.',
     ],
     visual_steps: engineCycleSteps,
     order: 3,
@@ -156,26 +156,26 @@ export const sampleLessons = [
     course_id: 2,
     title: 'Cơ cấu trục khuỷu - thanh truyền',
     description:
-      'Kết nối piston, thanh truyền, trục khuỷu và bánh đà trong quá trình biến chuyển động tịnh tiến thành chuyển động quay.',
+      'Kết nối pít tông, thanh truyền, trục khuỷu và bánh đà trong quá trình biến chuyển động tịnh tiến thành chuyển động quay.',
     content:
-      'Cơ cấu trục khuỷu - thanh truyền là cơ cấu quan trọng nhất của động cơ piston. Khi khí cháy giãn nở, piston bị đẩy xuống. Thanh truyền nhận lực từ piston và truyền tới trục khuỷu. Trục khuỷu biến chuyển động tịnh tiến của piston thành chuyển động quay. Bánh đà tích trữ năng lượng, giúp trục khuỷu quay đều hơn, đặc biệt trong các kỳ không sinh công.',
+      'Cơ cấu trục khuỷu - thanh truyền là cơ cấu quan trọng nhất của động cơ pít tông. Khi khí cháy giãn nở, pít tông bị đẩy xuống. Thanh truyền nhận lực từ pít tông và truyền tới trục khuỷu. Trục khuỷu biến chuyển động tịnh tiến của pít tông thành chuyển động quay. Bánh đà tích trữ năng lượng, giúp trục khuỷu quay đều hơn, đặc biệt trong các kì không sinh công.',
     key_points: [
-      'Piston nhận áp lực khí cháy và chuyển động trong xi lanh.',
-      'Thanh truyền là chi tiết trung gian truyền lực từ piston tới trục khuỷu.',
+      'Pít tông nhận áp lực khí cháy và chuyển động trong xi lanh.',
+      'Thanh truyền là chi tiết trung gian truyền lực từ pít tông tới trục khuỷu.',
       'Trục khuỷu biến chuyển động tịnh tiến thành chuyển động quay.',
-      'Bánh đà giúp động cơ quay đều và vượt qua các kỳ không sinh công.',
+      'Bánh đà giúp động cơ quay đều và vượt qua các kì không sinh công.',
     ],
     visual_steps: [
       {
         name: 'Nhận lực',
-        piston: 'Khí cháy đẩy piston đi xuống',
-        valve: 'Buồng cháy kín trong kỳ sinh công',
-        result: 'Lực khí cháy tác dụng lên đỉnh piston.',
+        piston: 'Khí cháy đẩy pít tông đi xuống',
+        valve: 'Buồng cháy kín trong kì sinh công',
+        result: 'Lực khí cháy tác dụng lên đỉnh pít tông.',
         color: 'bg-red-100 text-red-800 border-red-300',
       },
       {
         name: 'Truyền lực',
-        piston: 'Piston đẩy thanh truyền',
+        piston: 'Pít tông đẩy thanh truyền',
         valve: 'Thanh truyền đổi hướng lực theo vị trí trục khuỷu',
         result: 'Lực tịnh tiến được truyền thành mô-men quay.',
         color: 'bg-indigo-100 text-indigo-800 border-indigo-300',
@@ -183,7 +183,7 @@ export const sampleLessons = [
       {
         name: 'Tích năng lượng',
         piston: 'Bánh đà quay nhờ quán tính',
-        valve: 'Trục khuỷu tiếp tục kéo piston qua các kỳ còn lại',
+        valve: 'Trục khuỷu tiếp tục kéo pít tông qua các kì còn lại',
         result: 'Động cơ quay đều hơn giữa các lần sinh công.',
         color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
       },
@@ -195,34 +195,34 @@ export const sampleLessons = [
     course_id: 2,
     title: 'Cơ cấu phân phối khí',
     description:
-      'Hiểu nhiệm vụ của xupap, trục cam và cơ cấu truyền động cam trong việc đóng mở cửa nạp, cửa thải.',
+      'Hiểu nhiệm vụ của xu páp, trục cam và cơ cấu truyền động cam trong việc đóng mở cửa nạp, cửa thải.',
     content:
-      'Cơ cấu phân phối khí có nhiệm vụ đóng mở các cửa nạp và cửa thải đúng thời điểm. Ở động cơ 4 kỳ, trục cam thường quay với tốc độ bằng một nửa tốc độ trục khuỷu. Khi cam tác dụng lên con đội, đũa đẩy, cò mổ hoặc trực tiếp lên xupap, xupap mở; khi cam thôi tác dụng, lò xo kéo xupap đóng lại. Nếu phân phối khí sai thời điểm, động cơ khó nạp đủ không khí, khó thải sạch khí cháy và giảm công suất.',
+      'Cơ cấu phân phối khí có nhiệm vụ đóng mở các cửa nạp và cửa thải đúng thời điểm. Ở động cơ 4 kì, trục cam thường quay với tốc độ bằng một nửa tốc độ trục khuỷu. Khi cam tác dụng lên con đội, đũa đẩy, cò mổ hoặc trực tiếp lên xu páp, xu páp mở; khi cam thôi tác dụng, lò xo kéo xu páp đóng lại. Nếu phân phối khí sai thời điểm, động cơ khó nạp đủ không khí, khó thải sạch khí cháy và giảm công suất.',
     key_points: [
-      'Xupap nạp điều khiển dòng khí hoặc hòa khí đi vào xi lanh.',
-      'Xupap thải điều khiển khí cháy đi ra khỏi xi lanh.',
-      'Trục cam quyết định thời điểm mở và đóng xupap.',
-      'Phân phối khí phải đồng bộ với vị trí piston và trục khuỷu.',
+      'Xu páp nạp điều khiển dòng khí hoặc hòa khí đi vào xi lanh.',
+      'Xu páp thải điều khiển khí cháy đi ra khỏi xi lanh.',
+      'Trục cam quyết định thời điểm mở và đóng xu páp.',
+      'Phân phối khí phải đồng bộ với vị trí pít tông và trục khuỷu.',
     ],
     visual_steps: [
       {
         name: 'Nạp',
-        piston: 'Piston đi xuống tạo độ chân không tương đối',
-        valve: 'Xupap nạp mở',
+        piston: 'Pít tông đi xuống tạo độ chân không tương đối',
+        valve: 'Xu páp nạp mở',
         result: 'Môi chất mới đi vào xi lanh.',
         color: 'bg-sky-100 text-sky-800 border-sky-300',
       },
       {
         name: 'Nén và sinh công',
-        piston: 'Piston đi lên rồi bị đẩy xuống',
-        valve: 'Hai xupap đóng',
+        piston: 'Pít tông đi lên rồi bị đẩy xuống',
+        valve: 'Hai xu páp đóng',
         result: 'Xi lanh kín để nén và sinh công.',
         color: 'bg-red-100 text-red-800 border-red-300',
       },
       {
         name: 'Thải',
-        piston: 'Piston đi lên',
-        valve: 'Xupap thải mở',
+        piston: 'Pít tông đi lên',
+        valve: 'Xu páp thải mở',
         result: 'Khí thải thoát ra ngoài.',
         color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
       },
@@ -236,7 +236,7 @@ export const sampleLessons = [
     description:
       'Hiểu vì sao động cơ cần dầu bôi trơn và hệ thống làm mát để làm việc bền, ổn định.',
     content:
-      'Trong động cơ, nhiều chi tiết chuyển động tương đối với tốc độ cao nên dễ ma sát và mài mòn. Hệ thống bôi trơn đưa dầu tới các bề mặt ma sát để giảm mài mòn, làm kín, làm sạch và góp phần làm mát. Hệ thống làm mát lấy bớt nhiệt từ các chi tiết nóng như xi lanh, nắp máy, piston để giữ nhiệt độ làm việc phù hợp. Nếu thiếu dầu hoặc làm mát kém, động cơ có thể bó kẹt, quá nhiệt hoặc hỏng nhanh.',
+      'Trong động cơ, nhiều chi tiết chuyển động tương đối với tốc độ cao nên dễ ma sát và mài mòn. Hệ thống bôi trơn đưa dầu tới các bề mặt ma sát để giảm mài mòn, làm kín, làm sạch và góp phần làm mát. Hệ thống làm mát lấy bớt nhiệt từ các chi tiết nóng như xi lanh, nắp máy, pít tông để giữ nhiệt độ làm việc phù hợp. Nếu thiếu dầu hoặc làm mát kém, động cơ có thể bó kẹt, quá nhiệt hoặc hỏng nhanh.',
     key_points: [
       'Bôi trơn làm giảm ma sát và mài mòn.',
       'Dầu bôi trơn còn hỗ trợ làm mát và làm sạch chi tiết.',
@@ -268,7 +268,7 @@ export const sampleLessons = [
     description:
       'Kết nối các hệ thống giúp động cơ bắt đầu làm việc, duy trì quá trình cháy và thải khí ra ngoài.',
     content:
-      'Hệ thống đánh lửa dùng trong động cơ xăng để tạo tia lửa điện ở bugi đúng thời điểm, thường gần cuối kỳ nén. Hệ thống khởi động làm quay trục khuỷu ban đầu để động cơ có thể tự duy trì chu trình làm việc. Hệ thống xả dẫn khí thải ra ngoài, giảm tiếng ồn và góp phần xử lý khí độc. Ba hệ thống này không trực tiếp sinh công như kỳ cháy - giãn nở, nhưng nếu thiếu chúng, động cơ khó khởi động, cháy không đúng thời điểm hoặc không thải khí tốt.',
+      'Hệ thống đánh lửa dùng trong động cơ xăng để tạo tia lửa điện ở bugi đúng thời điểm, thường gần cuối kì nén. Hệ thống khởi động làm quay trục khuỷu ban đầu để động cơ có thể tự duy trì chu trình làm việc. Hệ thống xả dẫn khí thải ra ngoài, giảm tiếng ồn và góp phần xử lý khí độc. Ba hệ thống này không trực tiếp sinh công như kì cháy - giãn nở, nhưng nếu thiếu chúng, động cơ khó khởi động, cháy không đúng thời điểm hoặc không thải khí tốt.',
     key_points: [
       'Đánh lửa đúng thời điểm giúp động cơ xăng sinh công hiệu quả.',
       'Khởi động cung cấp chuyển động quay ban đầu cho trục khuỷu.',
@@ -296,7 +296,7 @@ export const sampleQuestions = [
   {
     id: 1002,
     lesson_id: 102,
-    text: 'Nhóm nào là hai cơ cấu chính của động cơ piston?',
+    text: 'Nhóm nào là hai cơ cấu chính của động cơ pít tông?',
     question_type: 'multiple_choice',
     difficulty: 'medium',
     points: 1,
@@ -309,14 +309,14 @@ export const sampleQuestions = [
   {
     id: 1003,
     lesson_id: 103,
-    text: 'Trong chu trình 4 kỳ, kỳ nào là kỳ sinh công?',
+    text: 'Trong chu trình 4 kì, kì nào là kì sinh công?',
     question_type: 'multiple_choice',
     difficulty: 'easy',
     points: 1,
     options: [
-      { id: 7, text: 'Kỳ cháy - giãn nở', is_correct: true },
-      { id: 8, text: 'Kỳ nạp', is_correct: false },
-      { id: 9, text: 'Kỳ thải', is_correct: false },
+      { id: 7, text: 'Kì cháy - giãn nở', is_correct: true },
+      { id: 8, text: 'Kì nạp', is_correct: false },
+      { id: 9, text: 'Kì thải', is_correct: false },
     ],
   },
   {
@@ -327,7 +327,7 @@ export const sampleQuestions = [
     difficulty: 'easy',
     points: 1,
     options: [
-      { id: 10, text: 'Biến chuyển động tịnh tiến của piston thành chuyển động quay', is_correct: true },
+      { id: 10, text: 'Biến chuyển động tịnh tiến của pít tông thành chuyển động quay', is_correct: true },
       { id: 11, text: 'Lọc sạch không khí trước khi vào động cơ', is_correct: false },
       { id: 12, text: 'Làm mát nước trong két', is_correct: false },
     ],
@@ -340,7 +340,7 @@ export const sampleQuestions = [
     difficulty: 'medium',
     points: 1,
     options: [
-      { id: 13, text: 'Vị trí piston và chuyển động trục khuỷu', is_correct: true },
+      { id: 13, text: 'Vị trí pít tông và chuyển động trục khuỷu', is_correct: true },
       { id: 14, text: 'Màu sơn thân xe', is_correct: false },
       { id: 15, text: 'Áp suất lốp xe', is_correct: false },
     ],
@@ -355,7 +355,7 @@ export const sampleQuestions = [
     options: [
       { id: 16, text: 'Ma sát tăng, chi tiết nhanh mòn hoặc bó kẹt', is_correct: true },
       { id: 17, text: 'Động cơ tự tăng công suất mãi mãi', is_correct: false },
-      { id: 18, text: 'Xupap tự đóng mở nhanh hơn', is_correct: false },
+      { id: 18, text: 'Xu páp tự đóng mở nhanh hơn', is_correct: false },
     ],
   },
   {
@@ -368,7 +368,7 @@ export const sampleQuestions = [
     options: [
       { id: 19, text: 'Động cơ xăng thường dùng bugi đánh lửa, động cơ điêzen tự cháy nhờ không khí nén nóng', is_correct: true },
       { id: 20, text: 'Động cơ điêzen không cần không khí', is_correct: false },
-      { id: 21, text: 'Động cơ xăng không có piston', is_correct: false },
+      { id: 21, text: 'Động cơ xăng không có pít tông', is_correct: false },
     ],
   },
   {
@@ -381,7 +381,7 @@ export const sampleQuestions = [
     options: [
       { id: 22, text: 'Làm quay trục khuỷu ban đầu để động cơ bắt đầu làm việc', is_correct: true },
       { id: 23, text: 'Thay thế hoàn toàn hệ thống bôi trơn', is_correct: false },
-      { id: 24, text: 'Làm xupap biến mất', is_correct: false },
+      { id: 24, text: 'Làm xu páp biến mất', is_correct: false },
     ],
   },
 ]
@@ -394,8 +394,8 @@ export const interactiveActivities = {
         back: 'Biến nhiệt năng do nhiên liệu cháy thành cơ năng làm quay trục khuỷu.',
       },
       {
-        front: 'Kỳ nào trong động cơ 4 kỳ là kỳ sinh công?',
-        back: 'Kỳ cháy - giãn nở. Khí cháy đẩy piston đi xuống và truyền lực tới trục khuỷu.',
+        front: 'Kì nào trong động cơ 4 kì là kì sinh công?',
+        back: 'Kì cháy - giãn nở. Khí cháy đẩy pít tông đi xuống và truyền lực tới trục khuỷu.',
       },
       {
         front: 'Vì sao cần bôi trơn?',
@@ -403,10 +403,10 @@ export const interactiveActivities = {
       },
     ],
     matching: [
-      { term: 'Piston', answer: 'Nhận lực khí cháy và chuyển động trong xi lanh' },
-      { term: 'Thanh truyền', answer: 'Truyền lực giữa piston và trục khuỷu' },
+      { term: 'Pít tông', answer: 'Nhận lực khí cháy và chuyển động trong xi lanh' },
+      { term: 'Thanh truyền', answer: 'Truyền lực giữa pít tông và trục khuỷu' },
       { term: 'Trục khuỷu', answer: 'Biến chuyển động tịnh tiến thành chuyển động quay' },
-      { term: 'Xupap', answer: 'Đóng mở cửa nạp và cửa thải đúng thời điểm' },
+      { term: 'Xu páp', answer: 'Đóng mở cửa nạp và cửa thải đúng thời điểm' },
     ],
     scenario: {
       title: 'Tình huống chẩn đoán',
@@ -435,41 +435,41 @@ export const interactiveActivities = {
     },
     explainChecklist: [
       'Nêu được nhiệm vụ của bộ phận hoặc hệ thống.',
-      'Chỉ ra nó hoạt động ở kỳ nào trong chu trình.',
+      'Chỉ ra nó hoạt động ở kì nào trong chu trình.',
       'Giải thích nếu nó hỏng thì động cơ bị ảnh hưởng ra sao.',
     ],
   },
   103: {
     flashcards: [
       {
-        front: 'Thứ tự đúng của chu trình 4 kỳ là gì?',
+        front: 'Thứ tự đúng của chu trình 4 kì là gì?',
         back: 'Nạp → nén → cháy - giãn nở → thải.',
       },
       {
-        front: 'Ở kỳ nén, xupap ở trạng thái nào?',
-        back: 'Cả xupap nạp và xupap thải đều đóng để môi chất bị nén trong xi lanh.',
+        front: 'Ở kì nén, xu páp ở trạng thái nào?',
+        back: 'Cả xu páp nạp và xu páp thải đều đóng để môi chất bị nén trong xi lanh.',
       },
       {
-        front: 'Trục khuỷu quay mấy vòng để hoàn thành một chu trình 4 kỳ?',
+        front: 'Trục khuỷu quay mấy vòng để hoàn thành một chu trình 4 kì?',
         back: 'Hai vòng quay trục khuỷu.',
       },
     ],
     matching: [
-      { term: 'Kỳ nạp', answer: 'Xupap nạp mở, môi chất mới đi vào xi lanh' },
-      { term: 'Kỳ nén', answer: 'Hai xupap đóng, môi chất bị nén lại' },
-      { term: 'Kỳ cháy - giãn nở', answer: 'Khí cháy đẩy piston đi xuống và sinh công' },
-      { term: 'Kỳ thải', answer: 'Xupap thải mở, khí cháy đi ra ngoài' },
+      { term: 'Kì nạp', answer: 'Xu páp nạp mở, môi chất mới đi vào xi lanh' },
+      { term: 'Kì nén', answer: 'Hai xu páp đóng, môi chất bị nén lại' },
+      { term: 'Kì cháy - giãn nở', answer: 'Khí cháy đẩy pít tông đi xuống và sinh công' },
+      { term: 'Kì thải', answer: 'Xu páp thải mở, khí cháy đi ra ngoài' },
     ],
     scenario: {
       title: 'Tình huống phân tích chu trình',
       prompt:
-        'Nếu xupap thải mở sai thời điểm trong kỳ nén, điều gì dễ xảy ra?',
+        'Nếu xu páp thải mở sai thời điểm trong kì nén, điều gì dễ xảy ra?',
       options: [
         {
           text: 'Môi chất bị rò ra ngoài, áp suất nén giảm',
           correct: true,
           feedback:
-            'Đúng. Kỳ nén cần buồng cháy kín; xupap mở sai làm mất áp suất và giảm công suất.',
+            'Đúng. Kì nén cần buồng cháy kín; xu páp mở sai làm mất áp suất và giảm công suất.',
         },
         {
           text: 'Động cơ sinh công mạnh hơn',
@@ -478,18 +478,18 @@ export const interactiveActivities = {
             'Chưa đúng. Mất áp suất nén làm quá trình cháy kém hiệu quả.',
         },
         {
-          text: 'Piston không cần chuyển động nữa',
+          text: 'Pít tông không cần chuyển động nữa',
           correct: false,
           feedback:
-            'Chưa đúng. Piston vẫn chuyển động theo trục khuỷu nhưng chu trình làm việc bị sai.',
+            'Chưa đúng. Pít tông vẫn chuyển động theo trục khuỷu nhưng chu trình làm việc bị sai.',
         },
       ],
     },
     explainChecklist: [
-      'Kể đúng bốn kỳ theo thứ tự.',
-      'Mô tả hướng chuyển động của piston ở từng kỳ.',
-      'Nêu trạng thái xupap nạp và xupap thải ở từng kỳ.',
-      'Chỉ ra kỳ nào là kỳ sinh công.',
+      'Kể đúng bốn kì theo thứ tự.',
+      'Mô tả hướng chuyển động của pít tông ở từng kì.',
+      'Nêu trạng thái xu páp nạp và xu páp thải ở từng kì.',
+      'Chỉ ra kì nào là kì sinh công.',
     ],
   },
 }
@@ -648,7 +648,7 @@ sampleLessons.push(
     key_points: [
       'Phanh, lái và treo là các hệ thống ảnh hưởng trực tiếp đến an toàn chuyển động.',
       'Điện - điện tử giúp ô tô hiện đại điều khiển chính xác và hỗ trợ người lái.',
-      'Bảo dưỡng định kỳ giúp phát hiện sớm hư hỏng và kéo dài tuổi thọ xe.',
+      'Bảo dưỡng định kì giúp phát hiện sớm hư hỏng và kéo dài tuổi thọ xe.',
       'Người sử dụng cần biết kiểm tra những dấu hiệu cơ bản trước khi vận hành.',
     ],
     visual_steps: [
@@ -676,7 +676,7 @@ sampleLessons.push(
       {
         name: 'Bảo dưỡng',
         piston: 'Dầu, nước làm mát, lốp, phanh, ắc quy, lọc gió',
-        valve: 'Kiểm tra và thay thế theo chu kỳ',
+        valve: 'Kiểm tra và thay thế theo chu kì',
         result: 'Giúp xe bền, an toàn và tiết kiệm chi phí sửa chữa.',
         color: 'bg-emerald-100 text-emerald-800 border-emerald-300',
       },
@@ -920,12 +920,12 @@ interactiveActivities[404] = {
       {
         text: 'Chỉ tăng âm lượng loa',
         correct: false,
-        feedback: 'Chưa đúng. Âm lượng loa không thay thế kiểm tra kỹ thuật.',
+        feedback: 'Chưa đúng. Âm lượng loa không thay thế kiểm tra kĩ thuật.',
       },
       {
         text: 'Chỉ lau biển số xe',
         correct: false,
-        feedback: 'Chưa đủ. Cần kiểm tra các hệ thống kỹ thuật quan trọng.',
+        feedback: 'Chưa đủ. Cần kiểm tra các hệ thống kĩ thuật quan trọng.',
       },
     ],
   },
@@ -1509,23 +1509,23 @@ export const getTutorReply = (message, lessonId) => {
   const text = message.toLowerCase()
 
   if (text.includes('sgk') || text.includes('công nghệ 11')) {
-    return 'Có thể học theo mạch: khái niệm và phân loại -> cấu tạo chung -> nguyên lý 4 kỳ -> cơ cấu chính -> các hệ thống phục vụ. Mạch này giúp em không học rời rạc từng bộ phận.'
+    return 'Có thể học theo mạch: khái niệm và phân loại -> cấu tạo chung -> nguyên lý 4 kì -> cơ cấu chính -> các hệ thống phục vụ. Mạch này giúp em không học rời rạc từng bộ phận.'
   }
 
   if (text.includes('quiz') || text.includes('kiểm tra')) {
-    return 'Hãy làm quiz sau mỗi bài. Khi sai, em nên quay lại hỏi: bộ phận đó thuộc cơ cấu chính hay hệ thống phục vụ, và nó tham gia vào kỳ nào của chu trình.'
+    return 'Hãy làm quiz sau mỗi bài. Khi sai, em nên quay lại hỏi: bộ phận đó thuộc cơ cấu chính hay hệ thống phục vụ, và nó tham gia vào kì nào của chu trình.'
   }
 
   if (text.includes('4') || text.includes('bốn') || text.includes('chu trình')) {
-    return 'Chu trình 4 kỳ gồm nạp, nén, cháy - giãn nở và thải. Kỳ cháy - giãn nở là kỳ sinh công; ba kỳ còn lại chuẩn bị hoặc làm sạch xi lanh.'
+    return 'Chu trình 4 kì gồm nạp, nén, cháy - giãn nở và thải. Kì cháy - giãn nở là kì sinh công; ba kì còn lại chuẩn bị hoặc làm sạch xi lanh.'
   }
 
-  if (text.includes('trục khuỷu') || text.includes('thanh truyền') || text.includes('piston')) {
-    return 'Piston nhận lực khí cháy, thanh truyền truyền lực, trục khuỷu biến chuyển động tịnh tiến thành chuyển động quay. Đây là lõi của cơ cấu trục khuỷu - thanh truyền.'
+  if (text.includes('trục khuỷu') || text.includes('thanh truyền') || text.includes('pít tông')) {
+    return 'Pít tông nhận lực khí cháy, thanh truyền truyền lực, trục khuỷu biến chuyển động tịnh tiến thành chuyển động quay. Đây là lõi của cơ cấu trục khuỷu - thanh truyền.'
   }
 
-  if (text.includes('xupap') || text.includes('phân phối khí') || text.includes('van')) {
-    return 'Cơ cấu phân phối khí điều khiển xupap nạp và xupap thải đóng mở đúng thời điểm. Nếu sai thời điểm, động cơ nạp không đủ, thải không sạch và giảm công suất.'
+  if (text.includes('xu páp') || text.includes('phân phối khí') || text.includes('van')) {
+    return 'Cơ cấu phân phối khí điều khiển xu páp nạp và xu páp thải đóng mở đúng thời điểm. Nếu sai thời điểm, động cơ nạp không đủ, thải không sạch và giảm công suất.'
   }
 
   if (text.includes('bôi trơn') || text.includes('làm mát')) {
@@ -1536,5 +1536,5 @@ export const getTutorReply = (message, lessonId) => {
     return `Bài "${lesson.title}" nên học theo 3 câu hỏi: bộ phận/hệ thống này làm nhiệm vụ gì, hoạt động ở thời điểm nào của chu trình, và nếu hỏng thì động cơ bị ảnh hưởng ra sao.`
   }
 
-  return 'Em có thể hỏi về khái niệm, phân loại, chu trình 4 kỳ, cơ cấu trục khuỷu - thanh truyền, phân phối khí, bôi trơn, làm mát, nhiên liệu, đánh lửa hoặc khởi động.'
+  return 'Em có thể hỏi về khái niệm, phân loại, chu trình 4 kì, cơ cấu trục khuỷu - thanh truyền, phân phối khí, bôi trơn, làm mát, nhiên liệu, đánh lửa hoặc khởi động.'
 }

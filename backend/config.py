@@ -84,4 +84,21 @@ class Settings(BaseSettings):
     def uploads_root(self) -> Path:
         return Path(self.upload_dir) if self.upload_dir else PROJECT_ROOT / "backend" / "uploads"
 
+DEFAULT_SECRET_KEY = "your-secret-key-change-in-production"
+MIN_SECRET_LENGTH = 32
+
+
+def secret_key_problem(config: Settings, environ: dict) -> str | None:
+    """Why the signing key may not be used on this host. Anyone who knows the key can mint a token for any account,
+    so a hosted server (production, or anything Railway runs) refuses the shipped default and short keys."""
+    hosted = config.environment.lower() == "production" or bool(environ.get("RAILWAY_ENVIRONMENT"))
+    if not hosted:
+        return None
+    if config.secret_key == DEFAULT_SECRET_KEY:
+        return "ENGINE_LAB_SECRET_KEY must be set before the server runs on a host."
+    if len(config.secret_key) < MIN_SECRET_LENGTH:
+        return f"ENGINE_LAB_SECRET_KEY must have at least {MIN_SECRET_LENGTH} characters."
+    return None
+
+
 settings = Settings()

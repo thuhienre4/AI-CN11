@@ -35,15 +35,34 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -
     return jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
 
 
+def token_for(user: User, expires_delta: Optional[timedelta] = None) -> str:
+    """A token that stops working once the account's token_version moves on."""
+    return create_access_token({"sub": user.username, "ver": user.token_version or 0}, expires_delta)
+
+
 def decode_token(token: str) -> Optional[TokenData]:
     try:
         payload = jwt.decode(token, settings.secret_key, algorithms=[settings.algorithm])
         username: str = payload.get("sub")
         if username is None:
             return None
-        return TokenData(username=username)
+        version = payload.get("ver", 0)
+        return TokenData(username=username, version=version if isinstance(version, int) else -1)
     except JWTError:
         return None
+
+
+def user_for_token(db: Session, token: str | None) -> Optional[User]:
+    """The active, not rejected account a token belongs to, or None. Used by every request and socket."""
+    token_data = decode_token(token or "")
+    if token_data is None:
+        return None
+    user = db.query(User).filter(User.username == token_data.username).first()
+    if not user or not user.is_active or user.account_status == ACCOUNT_REJECTED:
+        return None
+    if token_data.version != (user.token_version or 0):
+        return None
+    return user
 
 
 def get_authenticated_user(
@@ -57,15 +76,14 @@ def get_authenticated_user(
         )
 
     token = authorization.split(" ", 1)[1].strip()
-    token_data = decode_token(token)
-    if token_data is None:
+    if decode_token(token) is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="The login session is invalid or expired.",
         )
 
-    user = db.query(User).filter(User.username == token_data.username).first()
-    if not user or not user.is_active or user.account_status == ACCOUNT_REJECTED:
+    user = user_for_token(db, token)
+    if user is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="No active account was found for this token.",

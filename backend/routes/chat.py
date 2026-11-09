@@ -1,11 +1,10 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, HTTPException, status, WebSocket, WebSocketDisconnect
-from fastapi.concurrency import run_in_threadpool
+from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from auth import ACCOUNT_REJECTED, can_view_student, decode_token, ensure_student_scope, get_authenticated_user
+from auth import ensure_student_scope, get_authenticated_user
 from database import get_db
 from models import ChatHistory, LearningEvent, Lesson, LessonProgress, QuizResult, User
 from schemas import ChatMessageResponse, ChatMessageCreate
@@ -276,44 +275,3 @@ def delete_chat_message(
     ensure_user_scope(db, message.user_id, current_user)
     db.delete(message)
     db.commit()
-
-
-# WebSocket endpoint for real-time chat (will be enhanced later)
-@router.websocket("/ws/chat/{user_id}")
-async def websocket_endpoint(
-    websocket: WebSocket,
-    user_id: int,
-    token: str | None = None,
-    db: Session = Depends(get_db),
-):
-    """Authenticated WebSocket channel reserved for realtime tutor updates."""
-    def authorize():
-        try:
-            token_data = decode_token(token or "")
-            current_user = (
-                db.query(User).filter(User.username == token_data.username, User.is_active.is_(True)).first()
-                if token_data
-                else None
-            )
-            if not current_user or current_user.account_status == ACCOUNT_REJECTED:
-                return 4401
-            target = db.query(User).filter(User.id == user_id).first()
-            return None if target and can_view_student(current_user, target) else 4403
-        finally:
-            db.close()  # the socket can stay open for hours; it must not keep a pooled connection
-
-    refusal = await run_in_threadpool(authorize)
-    if refusal == 4401:
-        await websocket.close(code=4401, reason="Authentication is required.")
-        return
-    if refusal == 4403:
-        await websocket.close(code=4403, reason="You cannot access this chat channel.")
-        return
-
-    await websocket.accept()
-    try:
-        while True:
-            data = await websocket.receive_text()
-            await websocket.send_json({"type": "ack", "message": data})
-    except WebSocketDisconnect:
-        return

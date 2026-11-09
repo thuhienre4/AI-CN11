@@ -7,7 +7,7 @@ from fastapi.concurrency import run_in_threadpool
 from pydantic import BaseModel, Field, field_validator, model_validator
 from sqlalchemy.orm import Session
 
-from auth import ACCOUNT_REJECTED, can_manage_content, decode_token, get_authenticated_user, require_teacher_user
+from auth import can_manage_content, get_authenticated_user, require_teacher_user, user_for_token
 from database import get_db
 from game_rooms import LOBBY, game_rooms
 from models import User
@@ -75,13 +75,8 @@ def room_summary(code: str, user: User = Depends(get_authenticated_user)):
 
 def _identify(db: Session, token: str | None):
     try:
-        token_data = decode_token(token or "")
-        user = (
-            db.query(User).filter(User.username == token_data.username, User.is_active.is_(True)).first()
-            if token_data
-            else None
-        )
-        if not user or user.account_status == ACCOUNT_REJECTED:
+        user = user_for_token(db, token)
+        if user is None:
             return None
         return {"id": user.id, "name": user.full_name or user.username, "staff": can_manage_content(user)}
     finally:

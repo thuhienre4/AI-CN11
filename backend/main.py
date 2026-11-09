@@ -1,4 +1,5 @@
 import logging
+import os
 
 from contextlib import asynccontextmanager
 
@@ -10,7 +11,7 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.exc import SQLAlchemyError
 from starlette import status
 
-from config import settings
+from config import secret_key_problem, settings
 from bootstrap import ensure_bootstrap_admin
 from catalog_seed import seed_catalog_if_empty
 from database import Base, engine
@@ -19,8 +20,9 @@ import models  # noqa: F401
 
 logger = logging.getLogger("enginelab")
 
-if settings.environment.lower() == "production" and settings.secret_key == "your-secret-key-change-in-production":
-    raise RuntimeError("ENGINE_LAB_SECRET_KEY must be changed before production startup.")
+_secret_problem = secret_key_problem(settings, os.environ)
+if _secret_problem:
+    raise RuntimeError(_secret_problem)
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -47,11 +49,34 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
-    allow_origin_regex=r"http://(localhost|127\.0\.0\.1):\d+",
+    # Any local port during development only; a hosted server answers just the listed origins
+    allow_origin_regex=None if settings.environment.lower() == "production" else r"http://(localhost|127\.0\.0\.1):\d+",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+SECURITY_HEADERS = {
+    "X-Content-Type-Options": "nosniff",
+    "X-Frame-Options": "DENY",
+    "Referrer-Policy": "no-referrer",
+    "Permissions-Policy": "camera=(), microphone=(), geolocation=()",
+    "Cross-Origin-Opener-Policy": "same-origin",
+}
+
+
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """The API only returns JSON and files: forbid framing, type sniffing and leaking the URL to other sites."""
+    response = await call_next(request)
+    for name, value in SECURITY_HEADERS.items():
+        response.headers.setdefault(name, value)
+    if request.url.path.startswith("/api/"):
+        # Learning data and tokens must not stay in shared caches or the browser cache
+        response.headers.setdefault("Cache-Control", "no-store")
+    if request.url.scheme == "https" or request.headers.get("x-forwarded-proto") == "https":
+        response.headers.setdefault("Strict-Transport-Security", "max-age=31536000; includeSubDomains")
+    return response
 
 
 @app.exception_handler(RequestValidationError)
@@ -110,7 +135,7 @@ async def root():
 
 
 # ============= Import Routes =============
-from routes import accounts, auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime, ai_workspace, game_rooms
+from routes import accounts, auth, lessons, questions, quiz, chat, progress, materials, classroom, nova3d, realtime, ai_workspace, game_designs, game_rooms
 
 app.include_router(ai_workspace.router)
 
@@ -126,6 +151,7 @@ app.include_router(classroom.router)
 app.include_router(nova3d.router)
 app.include_router(realtime.router)
 app.include_router(game_rooms.router)
+app.include_router(game_designs.router)
 
 
 if __name__ == "__main__":

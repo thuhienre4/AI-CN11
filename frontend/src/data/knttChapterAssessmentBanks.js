@@ -194,10 +194,10 @@ export const grade11AssessmentBank = {
       'Trong động cơ bốn kì, kì nào trực tiếp tạo công cơ học?',
       ['Kì nạp', 'Kì nén', 'Kì cháy - giãn nở', 'Kì thải'],
       2,
-      'Khí cháy giãn nở đẩy piston trong kì cháy - giãn nở, tạo công cho động cơ.'
+      'Khí cháy giãn nở đẩy pít tông trong kì cháy - giãn nở, tạo công cho động cơ.'
     ),
     tf(
-      'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay.',
+      'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của pít tông thành chuyển động quay.',
       true,
       'Đây là nhiệm vụ chính của cơ cấu trục khuỷu - thanh truyền.'
     ),
@@ -210,11 +210,11 @@ export const grade11AssessmentBank = {
     match(
       'Ghép kì làm việc với trạng thái chính của động cơ bốn kì.',
       [
-        { term: 'Nạp', answer: 'Xupap nạp mở, piston đi xuống' },
-        { term: 'Nén', answer: 'Hai xupap đóng, piston đi lên' },
-        { term: 'Thải', answer: 'Xupap thải mở, piston đi lên' },
+        { term: 'Nạp', answer: 'Xu páp nạp mở, pít tông đi xuống' },
+        { term: 'Nén', answer: 'Hai xu páp đóng, pít tông đi lên' },
+        { term: 'Thải', answer: 'Xu páp thải mở, pít tông đi lên' },
       ],
-      'Chuyển động piston và trạng thái xupap xác định nhiệm vụ của từng kì.'
+      'Chuyển động pít tông và trạng thái xu páp xác định nhiệm vụ của từng kì.'
     ),
   ],
   7: [

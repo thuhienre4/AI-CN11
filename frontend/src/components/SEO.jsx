@@ -33,7 +33,15 @@ const privatePageSeo = {
   },
   '/projection-practice': {
     title: 'Luyện tập hình chiếu - EngineLab Công nghệ',
-    description: 'Công cụ luyện tập hình chiếu và đọc bản vẽ kỹ thuật trong môn Công nghệ.',
+    description: 'Công cụ luyện tập hình chiếu và đọc bản vẽ kĩ thuật trong môn Công nghệ.',
+  },
+  '/account': {
+    title: 'Tài khoản và dữ liệu - EngineLab',
+    description: 'Đổi mật khẩu, đăng xuất trên mọi thiết bị, tải hoặc xóa dữ liệu cá nhân.',
+  },
+  '/materials': {
+    title: 'Tài liệu học tập - EngineLab Công nghệ',
+    description: 'Bài giảng và tài liệu PDF Công nghệ 10, 11, 12 xếp theo chương, bài của sách Kết nối tri thức.',
   },
   '/game-rooms': {
     title: 'Phòng quiz trò chơi - EngineLab Công nghệ',

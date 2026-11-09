@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, ValidationInfo, field_validator
 from typing import Any, Dict, Optional, List
 from datetime import datetime
 from enum import Enum
@@ -21,13 +21,32 @@ class UserBase(BaseModel):
 
 
 class UserCreate(UserBase):
-    password: str = Field(..., min_length=8)
+    password: str = Field(..., min_length=8, max_length=128)
     class_code: Optional[str] = Field(default=None, max_length=16)
+
+    @field_validator("password")
+    @classmethod
+    def strong_enough(cls, password: str, info: ValidationInfo) -> str:
+        from auth.passwords import password_problem
+
+        problem = password_problem(password, info.data.get("username", ""))
+        if problem:
+            raise ValueError(problem)
+        return password
 
 
 class UserLogin(BaseModel):
-    username: str
-    password: str
+    username: str = Field(..., max_length=100)
+    password: str = Field(..., max_length=128)
+
+
+class PasswordChange(BaseModel):
+    current_password: str = Field(..., max_length=128)
+    new_password: str = Field(..., min_length=8, max_length=128)
+
+
+class AccountDeletion(BaseModel):
+    password: str = Field(..., max_length=128)
 
 
 class UserResponse(UserBase):
@@ -305,6 +324,7 @@ class LearningDashboardResponse(BaseModel):
     intervention_plan: List[str] = Field(default_factory=list)
     active_lessons: int = 0
     active_lessons_without_quiz: int = 0
+    signals: List[Dict[str, Any]] = Field(default_factory=list)
     score_note: str = ""
 
 
@@ -336,6 +356,8 @@ class Token(BaseModel):
 
 class TokenData(BaseModel):
     username: Optional[str] = None
+    # Bumped on the account when its password changes or it signs out everywhere; older tokens stop working
+    version: int = 0
 
 
 # ============= Classroom Schemas =============

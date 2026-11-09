@@ -153,15 +153,15 @@ export const canhDieuLessons = [
     order: 2,
     key_points: [
       'Động cơ đốt trong biến nhiệt năng của nhiên liệu thành cơ năng ngay trong xi lanh.',
-      'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay.',
+      'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của pít tông thành chuyển động quay.',
       'Chu trình 4 kì gồm nạp, nén, cháy - giãn nở và thải; kì cháy - giãn nở là kì sinh công.',
       'Các hệ thống phụ trợ giúp động cơ nạp đủ, đốt cháy tốt, bôi trơn, làm mát và khởi động ổn định.',
     ],
     visual_steps: [
-      { name: 'Kì nạp', piston: 'Piston đi xuống', valve: 'Xupap nạp mở, xupap thải đóng', result: 'Không khí hoặc hòa khí được nạp vào xi lanh' },
-      { name: 'Kì nén', piston: 'Piston đi lên', valve: 'Hai xupap đều đóng', result: 'Môi chất bị nén, áp suất và nhiệt độ tăng' },
-      { name: 'Kì cháy - giãn nở', piston: 'Piston đi xuống', valve: 'Hai xupap đều đóng', result: 'Khí cháy sinh công làm quay trục khuỷu' },
-      { name: 'Kì thải', piston: 'Piston đi lên', valve: 'Xupap thải mở, xupap nạp đóng', result: 'Khí thải được đẩy ra ngoài' },
+      { name: 'Kì nạp', piston: 'Pít tông đi xuống', valve: 'Xu páp nạp mở, xu páp thải đóng', result: 'Không khí hoặc hòa khí được nạp vào xi lanh' },
+      { name: 'Kì nén', piston: 'Pít tông đi lên', valve: 'Hai xu páp đều đóng', result: 'Môi chất bị nén, áp suất và nhiệt độ tăng' },
+      { name: 'Kì cháy - giãn nở', piston: 'Pít tông đi xuống', valve: 'Hai xu páp đều đóng', result: 'Khí cháy sinh công làm quay trục khuỷu' },
+      { name: 'Kì thải', piston: 'Pít tông đi lên', valve: 'Xu páp thải mở, xu páp nạp đóng', result: 'Khí thải được đẩy ra ngoài' },
     ],
   },
   {
@@ -445,8 +445,8 @@ const lessonDetailSections = {
       items: [
         'Động cơ đốt trong là động cơ nhiệt, nhiên liệu cháy trong xi lanh tạo khí áp suất cao để sinh công.',
         'Thân máy, nắp máy tạo không gian lắp xi lanh, buồng cháy, đường nạp và đường thải.',
-        'Cơ cấu trục khuỷu - thanh truyền gồm piston, thanh truyền, trục khuỷu; nhận lực và biến đổi chuyển động.',
-        'Cơ cấu phân phối khí điều khiển xupap nạp, xupap thải đóng mở đúng thời điểm.',
+        'Cơ cấu trục khuỷu - thanh truyền gồm pít tông, thanh truyền, trục khuỷu; nhận lực và biến đổi chuyển động.',
+        'Cơ cấu phân phối khí điều khiển xu páp nạp, xu páp thải đóng mở đúng thời điểm.',
       ],
     },
     {
@@ -454,7 +454,7 @@ const lessonDetailSections = {
       items: [
         'Trong kì nạp, áp suất trong xi lanh giảm nên không khí hoặc hòa khí được hút vào.',
         'Trong kì nén, môi chất bị nén làm áp suất và nhiệt độ tăng, chuẩn bị cho cháy.',
-        'Trong kì cháy - giãn nở, khí cháy đẩy piston đi xuống; đây là kì sinh công.',
+        'Trong kì cháy - giãn nở, khí cháy đẩy pít tông đi xuống; đây là kì sinh công.',
         'Trong kì thải, khí cháy được đẩy ra ngoài để chuẩn bị chu trình mới.',
         'Bôi trơn kém làm tăng ma sát và mài mòn; làm mát kém làm động cơ quá nhiệt.',
       ],
@@ -463,7 +463,7 @@ const lessonDetailSections = {
       title: 'Vận dụng',
       items: [
         'Mô tả đường truyền lực từ khí cháy đến trục khuỷu.',
-        'So sánh trạng thái xupap ở kì nạp và kì thải.',
+        'So sánh trạng thái xu páp ở kì nạp và kì thải.',
         'Giải thích vì sao động cơ cần hệ thống bôi trơn và làm mát.',
       ],
     },
@@ -713,19 +713,19 @@ export const canhDieuActivities = {
       { front: 'Kì nào sinh công?', back: 'Kì cháy - giãn nở là kì sinh công.' },
     ],
     matching: [
-      { term: 'Piston', answer: 'Chuyển động tịnh tiến trong xi lanh' },
-      { term: 'Thanh truyền', answer: 'Truyền lực giữa piston và trục khuỷu' },
+      { term: 'Pít tông', answer: 'Chuyển động tịnh tiến trong xi lanh' },
+      { term: 'Thanh truyền', answer: 'Truyền lực giữa pít tông và trục khuỷu' },
       { term: 'Trục khuỷu', answer: 'Biến chuyển động tịnh tiến thành chuyển động quay' },
     ],
     scenario: {
       title: 'Phân tích chu trình',
-      prompt: 'Ở kì nén, trạng thái xupap và chuyển động piston như thế nào?',
+      prompt: 'Ở kì nén, trạng thái xu páp và chuyển động pít tông như thế nào?',
       options: [
-        { text: 'Piston đi lên, hai xupap đều đóng', correct: true, feedback: 'Đúng. Môi chất bị nén nên áp suất và nhiệt độ tăng.' },
-        { text: 'Piston đi xuống, xupap thải mở', correct: false, feedback: 'Chưa đúng. Đó không phải trạng thái của kì nén.' },
+        { text: 'Pít tông đi lên, hai xu páp đều đóng', correct: true, feedback: 'Đúng. Môi chất bị nén nên áp suất và nhiệt độ tăng.' },
+        { text: 'Pít tông đi xuống, xu páp thải mở', correct: false, feedback: 'Chưa đúng. Đó không phải trạng thái của kì nén.' },
       ],
     },
-    explainChecklist: ['Kể đúng thứ tự 4 kì.', 'Nêu được kì sinh công.', 'Giải thích vai trò piston, thanh truyền, trục khuỷu.'],
+    explainChecklist: ['Kể đúng thứ tự 4 kì.', 'Nêu được kì sinh công.', 'Giải thích vai trò pít tông, thanh truyền, trục khuỷu.'],
   },
 }
 
@@ -1027,26 +1027,26 @@ Object.assign(canhDieuActivities, {
       },
       {
         front: 'Kì nào sinh công?',
-        back: 'Kì cháy - giãn nở là kì sinh công vì khí cháy đẩy piston đi xuống làm quay trục khuỷu.',
+        back: 'Kì cháy - giãn nở là kì sinh công vì khí cháy đẩy pít tông đi xuống làm quay trục khuỷu.',
       },
     ],
     matching: [
-      { term: 'Piston', answer: 'Chuyển động tịnh tiến trong xi lanh và nhận lực khí cháy' },
-      { term: 'Thanh truyền', answer: 'Truyền lực giữa piston và trục khuỷu' },
+      { term: 'Pít tông', answer: 'Chuyển động tịnh tiến trong xi lanh và nhận lực khí cháy' },
+      { term: 'Thanh truyền', answer: 'Truyền lực giữa pít tông và trục khuỷu' },
       { term: 'Trục khuỷu', answer: 'Biến chuyển động tịnh tiến thành chuyển động quay' },
-      { term: 'Cơ cấu phân phối khí', answer: 'Điều khiển xupap nạp và xupap thải đóng mở đúng thời điểm' },
+      { term: 'Cơ cấu phân phối khí', answer: 'Điều khiển xu páp nạp và xu páp thải đóng mở đúng thời điểm' },
     ],
     scenario: {
       title: 'Phân tích chu trình 4 kì',
-      prompt: 'Ở kì nén, trạng thái xupap và chuyển động piston như thế nào?',
+      prompt: 'Ở kì nén, trạng thái xu páp và chuyển động pít tông như thế nào?',
       options: [
         {
-          text: 'Piston đi lên, hai xupap đều đóng',
+          text: 'Pít tông đi lên, hai xu páp đều đóng',
           correct: true,
           feedback: 'Đúng. Môi chất bị nén nên áp suất và nhiệt độ tăng.',
         },
         {
-          text: 'Piston đi xuống, xupap thải mở',
+          text: 'Pít tông đi xuống, xu páp thải mở',
           correct: false,
           feedback: 'Chưa đúng. Đó không phải trạng thái của kì nén.',
         },
@@ -1054,7 +1054,7 @@ Object.assign(canhDieuActivities, {
     },
     explainChecklist: [
       'Kể đúng thứ tự 4 kì.',
-      'Nêu được nhiệm vụ của piston, thanh truyền, trục khuỷu.',
+      'Nêu được nhiệm vụ của pít tông, thanh truyền, trục khuỷu.',
       'Giải thích được vì sao cần bôi trơn và làm mát.',
     ],
   },

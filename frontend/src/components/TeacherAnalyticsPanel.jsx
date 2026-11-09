@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { learningAPI } from '../services/api'
-
-const SIGNAL_LABELS = { high: 'Cần xem sớm', medium: 'Nên xem', low: 'Chưa có tín hiệu' }
+import SignalList, { SignalBadge } from './SignalList'
 
 export default function TeacherAnalyticsPanel() {
   const [analytics, setAnalytics] = useState(null)
@@ -38,11 +37,12 @@ export default function TeacherAnalyticsPanel() {
         </p>
       ) : (
         <>
-          <dl className="mt-4 grid gap-3 sm:grid-cols-3">
+          <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             {[
-              ['Học sinh trong lớp phụ trách', summary.total_students],
+              ['Học sinh lớp phụ trách', summary.total_students],
               ['Đã có hoạt động', summary.active_students],
               ['Cần xem sớm', summary.high_risk_students],
+              ['Chưa bắt đầu học', summary.not_started_students ?? 0],
             ].map(([label, value]) => (
               <div key={label} className="rounded-lg bg-slate-50 p-3">
                 <dt className="text-sm text-slate-600">{label}</dt>
@@ -50,26 +50,31 @@ export default function TeacherAnalyticsPanel() {
               </div>
             ))}
           </dl>
-          {students.length > 0 && (
+          {students.length > 0 ? (
             <ul className="mt-4 divide-y divide-slate-100">
               {students.map((student) => (
-                <li key={student.student_id} className="flex flex-wrap items-baseline justify-between gap-2 py-2 text-sm">
-                  <span className="font-semibold text-slate-900">
-                    {student.name} · {student.class_name}
-                  </span>
-                  <span className="text-slate-600">
-                    {SIGNAL_LABELS[student.risk_level]}
-                    {student.risk_level !== 'low' && student.recommendations?.[0]?.reason
-                      ? `: ${student.recommendations[0].reason}`
-                      : ''}
-                  </span>
+                <li key={student.student_id} className="py-3">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-semibold text-slate-900">{student.name}</span>
+                    <span className="text-sm text-slate-500">{student.class_name}</span>
+                    <SignalBadge level={student.risk_level} />
+                  </div>
+                  <div className="mt-1.5">
+                    {student.risk_level === 'none'
+                      ? <p className="text-sm text-slate-600">Chưa mở bài học nào trên hệ thống.</p>
+                      : <SignalList signals={student.signals} />}
+                  </div>
                 </li>
               ))}
             </ul>
+          ) : (
+            <p className="mt-4 text-sm text-slate-600">Không học sinh nào có tín hiệu cần xem.</p>
           )}
         </>
       )}
-      <p className="mt-4 text-xs leading-5 text-slate-500">{note}</p>
+      <p className="mt-4 text-xs leading-5 text-slate-500">
+        {note} Mỗi tín hiệu là một sự việc ghi nhận được (điểm kiểm tra, mức hoàn thành, mô phỏng, lần quay lại bài), không phải nhận xét về học sinh.
+      </p>
     </section>
   )
 }

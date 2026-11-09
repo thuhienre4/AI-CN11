@@ -49,6 +49,13 @@ def run_startup_migrations(engine):
             "student_class",
             "student_class VARCHAR(50) DEFAULT ''",
         )
+        _add_column_if_missing(
+            connection,
+            inspector,
+            "users",
+            "token_version",
+            "token_version INTEGER NOT NULL DEFAULT 0",
+        )
         # Accounts that predate verification stay usable.
         _add_column_if_missing(
             connection,

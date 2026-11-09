@@ -207,6 +207,37 @@ const getRiskLevel = (riskScore) => {
   return 'low'
 }
 
+// Same rule as backend/routes/progress.py, for when the app runs without the server
+export const SIGNAL_POINTS = { quiz_below_pass: 45, unfinished: 25, no_simulation: 15, inactive: 15 }
+export const SIGNAL_LABELS = {
+  quiz_below_pass: 'Điểm kiểm tra nhanh dưới mức đạt',
+  unfinished: 'Bài đã bắt đầu nhưng chưa hoàn thành',
+  no_simulation: 'Chưa mở mô phỏng của bài đang học',
+  inactive: 'Bài đang học, chưa quay lại từ 7 ngày',
+}
+
+/** Signals summed over lessons, heaviest first, each with up to three example lessons. */
+export const summariseSignals = (lessonRows) => {
+  const grouped = {}
+  lessonRows.forEach((row) => {
+    const kinds = row.analytics?.signals || []
+    kinds.forEach((kind) => {
+      grouped[kind] = grouped[kind] || { kind, label: SIGNAL_LABELS[kind], points: SIGNAL_POINTS[kind], count: 0, lessons: [] }
+      grouped[kind].count += 1
+      if (grouped[kind].lessons.length < 3) grouped[kind].lessons.push(row.lesson?.title || `Bài ${row.lesson_id}`)
+    })
+  })
+  return Object.values(grouped).sort((a, b) => b.points - a.points || b.count - a.count)
+}
+
+/** The highest lesson score and its level; "none" while no lesson has been started (no evidence, not "fine"). */
+export const studentSignalLevel = (lessonRows) => {
+  const active = lessonRows.filter((row) => row.progress_percent > 0)
+  if (!active.length) return { score: 0, level: 'none' }
+  const score = Math.max(...active.map((row) => row.analytics.risk_score))
+  return { score, level: getRiskLevel(score) }
+}
+
 const getKnowledgeUnit = (lesson) => {
   if (!lesson) return 'Kiến thức Công nghệ'
   if (Number(lesson.grade_level) === 10 || lesson.course_id <= 3 || (lesson.course_id >= 1000 && lesson.course_id < 1100)) return 'Công nghệ 10 - Thiết kế và công nghệ'
@@ -225,25 +256,30 @@ const buildLessonAnalytics = (progress) => {
   const masteryScore = clampScore(progress.progress_percent * 0.45 + quizScore * 0.4 + Math.min(activityScore, 100) * 0.15)
   const engagementScore = clampScore(activityScore + Math.min(progress.time_spent_seconds / 60, 30))
   const daysSinceActivity = getDaysSince(progress.last_accessed_at)
+  const signals = []
   const riskReasons = []
-  let riskScore = 0
+  // A finished lesson is not a reason to look again, however long ago it was finished
+  const inProgress = progress.progress_percent > 0 && progress.progress_percent < 100
 
   if (progress.status === 'needs_review' || (hasQuiz && progress.best_quiz_score < 60)) {
-    riskScore += 45
-    riskReasons.push('Điểm quiz dưới ngưỡng đạt, cần ôn lại ngay.')
+    signals.push('quiz_below_pass')
+    riskReasons.push(hasQuiz
+      ? `Điểm kiểm tra nhanh cao nhất ${Math.round(progress.best_quiz_score)}, dưới mức đạt 60.`
+      : 'Bài được đánh dấu cần ôn lại.')
   }
   if (progress.progress_percent > 0 && progress.progress_percent < 70) {
-    riskScore += 25
-    riskReasons.push('Bài học đã bắt đầu nhưng chưa hoàn thành đủ hoạt động.')
+    signals.push('unfinished')
+    riskReasons.push(`Bài đã bắt đầu, mới hoàn thành ${Math.round(progress.progress_percent)}%.`)
   }
-  if (progress.progress_percent > 0 && progress.simulation_count === 0) {
-    riskScore += 15
-    riskReasons.push('Chưa mở mô phỏng, thiếu quan sát trực quan.')
+  if (inProgress && progress.simulation_count === 0) {
+    signals.push('no_simulation')
+    riskReasons.push('Chưa mở mô phỏng của bài này.')
   }
-  if (progress.progress_percent > 0 && daysSinceActivity >= 7) {
-    riskScore += 15
-    riskReasons.push('Đã lâu chưa quay lại bài học này.')
+  if (inProgress && daysSinceActivity >= 7) {
+    signals.push('inactive')
+    riskReasons.push(`Chưa quay lại bài này từ ${daysSinceActivity} ngày.`)
   }
+  const riskScore = signals.reduce((sum, kind) => sum + SIGNAL_POINTS[kind], 0)
 
   const suggestedAction =
     riskScore >= 70
@@ -258,6 +294,7 @@ const buildLessonAnalytics = (progress) => {
     risk_score: clampScore(riskScore),
     risk_level: getRiskLevel(riskScore),
     risk_reasons: riskReasons,
+    signals,
     knowledge_unit: getKnowledgeUnit(progress.lesson),
     suggested_action: suggestedAction,
     days_since_activity: daysSinceActivity,
@@ -381,9 +418,7 @@ export const buildLocalLearningDashboard = (userId) => {
   const engagementScore = lessonProgress.length
     ? Math.round(lessonProgress.reduce((sum, item) => sum + item.analytics.engagement_score, 0) / lessonProgress.length)
     : 0
-  const riskScore = lessonProgress.length
-    ? Math.round(lessonProgress.reduce((sum, item) => sum + item.analytics.risk_score, 0) / lessonProgress.length)
-    : 0
+  const { score: riskScore, level: riskLevel } = studentSignalLevel(lessonProgress)
   const weakAlerts = lessonProgress
     .filter((item) => item.analytics.risk_level === 'high')
     .sort((a, b) => b.analytics.risk_score - a.analytics.risk_score)
@@ -410,7 +445,8 @@ export const buildLocalLearningDashboard = (userId) => {
     mastery_score: masteryScore,
     engagement_score: engagementScore,
     risk_score: riskScore,
-    risk_level: getRiskLevel(riskScore),
+    risk_level: riskLevel,
+    signals: summariseSignals(lessonProgress),
     analytics_summary: {
       active_lessons: activeProgress.length,
       weak_lessons: weakAlerts.length,

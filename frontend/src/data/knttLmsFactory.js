@@ -40,10 +40,11 @@ const flowPresets = {
     ['Kiểm tra', 'Đo kiểm kích thước, bề mặt, độ chính xác và an toàn', 'So sánh với yêu cầu kĩ thuật', 'Có dữ liệu cải tiến sản phẩm.'],
   ],
   engine: [
-    ['Nạp', 'Môi chất được đưa vào xi lanh hoặc hệ thống', 'Xác định vai trò xupap, piston và đường nạp', 'Chuẩn bị cho quá trình sinh công.'],
-    ['Nén', 'Piston nén môi chất để tăng áp suất và nhiệt độ', 'Liên hệ tỉ số nén và hiệu quả làm việc', 'Tạo điều kiện cho cháy hoặc phun nhiên liệu.'],
-    ['Cháy - giãn nở', 'Nhiên liệu cháy làm khí giãn nở đẩy piston', 'Nhận diện kì sinh công', 'Cơ năng được truyền tới trục khuỷu.'],
-    ['Thải', 'Khí cháy được đẩy ra ngoài', 'Quan sát đường thải và chu trình tiếp theo', 'Động cơ sẵn sàng lặp chu trình.'],
+    // Động cơ bốn kì, SGK Công nghệ 11 Kết nối tri thức, Bài 18: pít tông, trạng thái xu páp, kết quả
+    ['Nạp', 'Đi xuống từ ĐCT đến ĐCD', 'Xu páp nạp mở, xu páp thải đóng', 'Hòa khí (động cơ xăng) hoặc không khí (động cơ Diesel) được hút vào xi lanh.'],
+    ['Nén', 'Đi lên từ ĐCD đến ĐCT', 'Hai xu páp đều đóng', 'Môi chất bị nén, áp suất và nhiệt độ tăng; cuối kì bu gi bật tia lửa điện hoặc vòi phun phun nhiên liệu.'],
+    ['Cháy - giãn nở', 'Bị khí cháy đẩy từ ĐCT xuống ĐCD', 'Hai xu páp đều đóng', 'Khí cháy giãn nở sinh công, làm quay trục khuỷu; đây là kì duy nhất sinh công.'],
+    ['Thải', 'Đi lên từ ĐCD đến ĐCT', 'Xu páp thải mở, xu páp nạp đóng', 'Khí thải được đẩy ra ngoài qua đường thải.'],
   ],
   electrical: [
     ['Nguồn', 'Xác định nguồn điện hoặc tín hiệu vào', 'Kiểm tra điện áp, công suất và điều kiện cấp điện', 'Có đầu vào đúng cho hệ thống.'],

@@ -47,7 +47,7 @@ function ActivityScene({ diagnosis }) {
 function PartGraphic({ id, className = 'h-10 w-10' }) {
   if (id === 'piston') return <svg viewBox="0 0 48 48" className={className}><path d="M13 8h22v23H13z" fill="currentColor" opacity=".2"/><path d="M11 8h26M13 15h22M16 31v9M32 31v9M16 40h16" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg>
   if (id === 'rod') return <svg viewBox="0 0 48 48" className={className}><circle cx="14" cy="35" r="8" fill="none" stroke="currentColor" strokeWidth="4"/><circle cx="34" cy="12" r="5" fill="none" stroke="currentColor" strokeWidth="3"/><path d="m19 29 11-13" stroke="currentColor" strokeWidth="7" strokeLinecap="round"/></svg>
-  return <svg viewBox="0 0 48 48" className={className}><circle cx="24" cy="24" r={id === 'bearing' ? 13 : 7} fill="none" stroke="currentColor" strokeWidth="4"/><path d={id === 'piston-pin' ? 'M8 24h32' : 'M5 30h12l7-12 7 12h12'} fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/></svg>
+  return <svg viewBox="0 0 48 48" className={className}><circle cx="24" cy="24" r={id === 'bearing' ? 13 : 7} fill="none" stroke="currentColor" strokeWidth="4"/><path d={id === 'pít tông-pin' ? 'M8 24h32' : 'M5 30h12l7-12 7 12h12'} fill="none" stroke="currentColor" strokeWidth="5" strokeLinecap="round"/></svg>
 }
 const safetyQuestions = [
   { question: 'Trước khi khoan một chi tiết kim loại, thao tác nào quan trọng nhất?', options: ['Giữ phôi bằng tay', 'Kẹp chặt phôi vào ê-tô', 'Tăng tốc độ máy tối đa'], answer: 1, explanation: 'Phôi phải được kẹp chắc để không xoay hoặc văng khi mũi khoan bắt đầu cắt.' },
@@ -62,9 +62,9 @@ const caliperQuestions = [
 const assemblyParts = [
   { id: 'crankshaft', name: 'Trục khuỷu', symbol: '①', note: 'Chi tiết nền nhận chuyển động quay.' },
   { id: 'bearing', name: 'Bạc đầu to', symbol: '②', note: 'Giảm ma sát giữa thanh truyền và chốt khuỷu.' },
-  { id: 'rod', name: 'Thanh truyền', symbol: '③', note: 'Truyền lực giữa piston và trục khuỷu.' },
-  { id: 'piston-pin', name: 'Chốt piston', symbol: '④', note: 'Tạo khớp quay giữa piston và thanh truyền.' },
-  { id: 'piston', name: 'Piston', symbol: '⑤', note: 'Nhận áp lực khí và chuyển động tịnh tiến.' },
+  { id: 'rod', name: 'Thanh truyền', symbol: '③', note: 'Truyền lực giữa pít tông và trục khuỷu.' },
+  { id: 'pít tông-pin', name: 'Chốt pít tông', symbol: '④', note: 'Tạo khớp quay giữa pít tông và thanh truyền.' },
+  { id: 'piston', name: 'Pít tông', symbol: '⑤', note: 'Nhận áp lực khí và chuyển động tịnh tiến.' },
 ]
 const diagnosisCases = [
   { symptom: 'Bộ truyền đai bị trượt khi tải tăng.', checks: ['Đai quá căng', 'Đai chùng hoặc bề mặt dính dầu', 'Bánh đai có đường kính lớn'], answer: 1, action: 'Kiểm tra độ căng, làm sạch bề mặt và thay đai nếu đã mòn.' },

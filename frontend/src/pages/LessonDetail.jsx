@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { getGrade10SlideMaterialByLesson } from '../data/grade10DriveMaterials'
-import { getGrade12MaterialByLesson } from '../data/grade12DriveMaterials'
+import { materialsForLesson } from '../data/lessonMaterials'
 import toast from 'react-hot-toast'
 import { lessonsAPI } from '../services/api'
 import { useAuthStore } from '../store'
@@ -9,6 +8,7 @@ import { getInteractiveActivity, getSampleLesson } from '../data/courseCatalog'
 import { recordLocalLearningEvent } from '../utils/learningProgress'
 import { useLearningSession } from '../hooks/useLearningSession'
 import { canActAsTeacher } from '../utils/roles'
+import { lessonReading } from '../utils/lessonReading'
 
 function InteractiveLearning({ activity }) {
   const [openCard, setOpenCard] = useState(null)
@@ -198,7 +198,7 @@ const buildGeneratedQuestions = (lesson) => {
       type: 'Tình huống',
       question: 'Nếu một bộ phận trong hệ thống hoạt động sai, em sẽ phân tích theo những bước nào?',
       answer: 'Xác định nhiệm vụ, kiểm tra cấu tạo chính, xem nguyên lí làm việc và đánh giá ảnh hưởng an toàn.',
-      explanation: 'AI sinh tình huống để học sinh vận dụng kiến thức vào chẩn đoán kỹ thuật.',
+      explanation: 'AI sinh tình huống để học sinh vận dụng kiến thức vào chẩn đoán kĩ thuật.',
     },
   ]
 }
@@ -316,12 +316,9 @@ export default function LessonDetail() {
     ? `/game-rooms?grade=${lesson?.grade_level || ''}&lesson=${lessonNumber}`
     : '/game-rooms/join'
   const showCircuitLab = lesson?.grade_level === 12 && Number(lesson?.source_course_id || lesson?.course_id) >= 5
-  const usesEngineLabels =
-    lesson?.flow === 'engine'
-    && (Number(lesson?.source_id) === 602 || /nguyên lí làm việc.*động cơ/i.test(lesson?.title || ''))
-  const lessonDriveMaterial =
-    getGrade10SlideMaterialByLesson(lesson) || getGrade12MaterialByLesson(lesson)
-  const isPdfMaterial = lessonDriveMaterial?.file_type === 'application/pdf'
+  const usesEngineLabels = lesson?.flow === 'engine'
+  const lessonFiles = materialsForLesson(lesson)
+  const reading = lessonReading(lesson)
 
   return (
     <div className="nova-content-page nova-lesson-page page-container">
@@ -345,9 +342,21 @@ export default function LessonDetail() {
                 <h2 className="text-xl font-bold text-slate-950">Nội dung bài học</h2>
               </div>
             </div>
-            <p className="text-base leading-8 text-slate-700">
-              {lesson?.content || 'Nội dung bài học đang được cập nhật.'}
-            </p>
+            {reading.paragraph && <p className="text-base leading-8 text-slate-700">{reading.paragraph}</p>}
+            {reading.points.length > 0 && (
+              <>
+                <h3 className={`${reading.paragraph ? 'mt-5' : ''} text-sm font-bold uppercase tracking-wide text-slate-500`}>Ý chính cần nhớ</h3>
+                <ol className="mt-3 space-y-3">
+                  {reading.points.map((point, index) => (
+                    <li key={point} className="flex gap-3 text-base leading-7 text-slate-800">
+                      <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-blue-50 text-sm font-black text-blue-800">{index + 1}</span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ol>
+              </>
+            )}
+            {!reading.paragraph && !reading.points.length && <p className="text-base leading-8 text-slate-700">Nội dung bài học đang được cập nhật.</p>}
             <div className="mt-6 rounded-lg border border-emerald-200 bg-emerald-50 p-4">
               <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
                 <div>
@@ -366,12 +375,12 @@ export default function LessonDetail() {
                 </button>
               </div>
             </div>
-            {lesson?.content_sections?.length > 0 && (
-              <div className="mt-6 space-y-4">
-                {lesson.content_sections.map((section) => (
+            {reading.sections.length > 0 && (
+              <div className="mt-6 grid gap-4 md:grid-cols-2">
+                {reading.sections.map((section) => (
                   <div key={section.title} className="rounded-lg border border-slate-200 bg-slate-50 p-4">
                     <h3 className="font-bold text-slate-950">{section.title}</h3>
-                    <ul className="mt-3 space-y-2 text-sm leading-6 text-slate-700">
+                    <ul className="mt-3 space-y-2 text-[15px] leading-7 text-slate-700">
                       {section.items.map((item) => (
                         <li key={item} className="flex gap-2">
                           <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600"></span>
@@ -404,8 +413,8 @@ export default function LessonDetail() {
                       <h3 className="font-bold">{step.name}</h3>
                     </div>
                     <div className="space-y-2 text-sm leading-6">
-                      <p><span className="font-semibold">{usesEngineLabels ? 'Piston' : 'Thao tác'}:</span> {step.piston}</p>
-                      <p><span className="font-semibold">{usesEngineLabels ? 'Van' : 'Yêu cầu'}:</span> {step.valve}</p>
+                      <p><span className="font-semibold">{usesEngineLabels ? 'Pít tông' : 'Thao tác'}:</span> {step.piston}</p>
+                      <p><span className="font-semibold">{usesEngineLabels ? 'Xu páp' : 'Yêu cầu'}:</span> {step.valve}</p>
                       <p><span className="font-semibold">Kết quả:</span> {step.result}</p>
                     </div>
                   </div>
@@ -414,19 +423,6 @@ export default function LessonDetail() {
             </section>
           )}
 
-          {lesson?.key_points && (
-            <section className="panel p-6">
-              <p className="muted-label mb-1">Ghi nhớ nhanh</p>
-              <h2 className="mb-4 text-xl font-bold text-slate-950">Điểm cần nhớ</h2>
-              <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                {lesson.key_points.map((point) => (
-                  <div key={point} className="rounded-md border border-slate-200 bg-slate-50 p-4">
-                    <p className="text-sm leading-6 text-slate-700">{point}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
 
           <InteractiveLearning activity={activity} />
           <AIQuestionGenerator lesson={lesson} />
@@ -461,35 +457,28 @@ export default function LessonDetail() {
             </div>
           </section>
 
-          {lessonDriveMaterial && (
-            <section className="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
-              <p className="text-xs font-black uppercase tracking-wide text-emerald-700">
-                Tài liệu riêng của bài {lessonDriveMaterial.lesson_number}
-              </p>
-              <h3 className="mt-2 font-bold text-emerald-950">{lessonDriveMaterial.title}</h3>
-              <p className="mt-2 text-sm leading-6 text-emerald-900">
-                {isPdfMaterial ? 'Tài liệu PDF' : 'Bài giảng PowerPoint'} đã được ghép đúng với nội dung bài học này.
-              </p>
-              <div className="mt-4 grid gap-2">
-                <a
-                  href={lessonDriveMaterial.external_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="primary-button w-full justify-center"
-                >
-                  Xem {isPdfMaterial ? 'PDF' : 'slide'} bài {lessonDriveMaterial.lesson_number} ↗
-                </a>
-                <a
-                  href={lessonDriveMaterial.download_url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="secondary-button w-full justify-center"
-                >
-                  Tải file {isPdfMaterial ? 'PDF' : 'PPTX'}
-                </a>
-              </div>
-            </section>
-          )}
+          <section className="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
+            <h3 className="font-bold text-emerald-950">Tài liệu của bài</h3>
+            {lessonFiles.length ? (
+              <ul className="mt-3 space-y-2">
+                {lessonFiles.map((file) => (
+                  <li key={file.id} className="rounded-md border border-emerald-200 bg-white p-3">
+                    <p className="text-sm font-semibold text-slate-900">
+                      <span className={`mr-1.5 rounded px-1.5 py-0.5 text-[10px] font-black ${file.kind === 'PDF' ? 'bg-rose-100 text-rose-800' : 'bg-amber-100 text-amber-900'}`}>{file.kind}</span>
+                      {file.title}
+                    </p>
+                    <div className="mt-2 flex gap-2">
+                      <a href={file.viewUrl} target="_blank" rel="noreferrer" className="primary-button flex-1 justify-center !py-1.5 text-sm">Xem ↗</a>
+                      <a href={file.downloadUrl} className="secondary-button flex-1 justify-center !py-1.5 text-sm">Tải về</a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-2 text-sm leading-6 text-emerald-900">Bài này chưa có bài giảng riêng.</p>
+            )}
+            <Link to={`/materials?grade=${lesson?.grade_level || 11}`} className="mt-3 inline-block text-sm font-semibold text-emerald-800 hover:underline">Mở thư viện tài liệu →</Link>
+          </section>
 
           <section className="rounded-lg border border-blue-200 bg-blue-50 p-5">
             <h3 className="font-bold text-blue-950">Cách học gợi ý</h3>

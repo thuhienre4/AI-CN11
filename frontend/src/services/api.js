@@ -61,6 +61,10 @@ export const authAPI = {
   register: (data) => api.post('/api/auth/register', data),
   login: (data) => api.post('/api/auth/login', data),
   getMe: () => api.get('/api/auth/me'),
+  changePassword: (data) => api.post('/api/auth/change-password', data),
+  logoutEverywhere: () => api.post('/api/auth/logout-all'),
+  exportMyData: () => api.get('/api/auth/me/data'),
+  deleteMyAccount: (password) => api.delete('/api/auth/me', { data: { password } }),
 }
 
 // Account verification
@@ -106,6 +110,14 @@ export const questionsAPI = {
 }
 
 // Live quiz rooms: a teacher opens one, students join with its code
+// Quiz designs kept with the teacher's account
+export const gameDesignsAPI = {
+  list: () => api.get('/api/game-designs'),
+  create: (data) => api.post('/api/game-designs', data),
+  update: (id, data) => api.put(`/api/game-designs/${id}`, data),
+  remove: (id) => api.delete(`/api/game-designs/${id}`),
+}
+
 export const gameRoomsAPI = {
   create: (data) => api.post('/api/game-rooms', data),
   get: (code) => api.get(`/api/game-rooms/${code}`),

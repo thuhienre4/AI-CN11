@@ -116,6 +116,17 @@ test('a teacher runs a live quiz room and a student plays it on another device',
   await options.nth(0).fill('Kì nạp')
   await options.nth(1).fill('Kì nén')
   await page.getByLabel('Phương án B là đáp án đúng').check()
+
+  // The design is kept with the account: another browser sees it after signing in
+  await page.getByRole('button', { name: 'Lưu thiết kế' }).click()
+  await expect(page.getByText('Đã lưu vào tài khoản')).toBeVisible()
+  const otherDevice = await browser.newContext()
+  const otherPage = await otherDevice.newPage()
+  await login(otherPage, teacherName, 'teacher')
+  await otherPage.goto('/game-rooms')
+  await expect(otherPage.getByText('Thi nhanh Bài 18', { exact: true })).toBeVisible()
+  await otherDevice.close()
+
   await page.getByRole('button', { name: 'Mở phòng trực tuyến' }).click()
   const code = (await page.locator('p.font-mono').innerText()).trim()
   expect(code).toMatch(/^\d{6}$/)

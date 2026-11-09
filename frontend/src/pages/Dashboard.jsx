@@ -47,7 +47,7 @@ export default function Dashboard() {
     <section className="studio-labs"><div className="studio-section-heading"><div><p className="studio-eyebrow">HỌC QUA TRẢI NGHIỆM</p><h2>Thực hành & khám phá</h2></div></div><div className="studio-lab-grid">{[
       ['/mechanical-workshop', Wrench, 'Xưởng cơ khí', 'Khám phá cấu tạo và hoạt động cơ khí.'],
       [circuitLesson ? `/lessons/${circuitLesson.id}/circuit-lab` : '/practice-bank', CircuitBoard, 'Thí nghiệm mạch điện', 'Thực hành kiến thức điện và điện tử.'],
-      ['/projection-practice', Cuboid, 'Hình chiếu kỹ thuật', 'Rèn tư duy không gian và đọc bản vẽ.'],
+      ['/projection-practice', Cuboid, 'Hình chiếu kĩ thuật', 'Rèn tư duy không gian và đọc bản vẽ.'],
       ['/game-demo', BookOpen, 'Ôn tập nhanh', 'Củng cố kiến thức qua câu hỏi tương tác.'],
     ].map(([to, Icon, title, description]) => <Link to={to} className="studio-lab" key={to}><Icon size={23} /><h3>{title}</h3><p>{description}</p><ArrowRight size={16} /></Link>)}</div></section>
     <footer className="studio-footer"><span>EngineLab AI</span><span>Công nghệ THPT · Học tập và giảng dạy</span></footer>

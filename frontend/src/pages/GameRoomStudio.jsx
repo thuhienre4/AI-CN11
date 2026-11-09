@@ -10,17 +10,15 @@ import {
   ROOM_LIMITS,
   bankLessons,
   bankQuestionsFor,
-  deleteDesign,
   designProblems,
   emptyDesign,
   emptyQuestion,
-  loadDesigns,
   playableDesign,
   rankTeams,
-  saveDesign,
   scoreTeams,
   toRoomQuestion,
 } from '../utils/gameRoom'
+import { SOURCE_TEXT, copyOf, fetchDesigns, removeDesign, storeDesign } from '../utils/designStore'
 import { canActAsTeacher } from '../utils/roles'
 
 const LEVEL_NAMES = { B: 'Biết', H: 'Hiểu', V: 'Vận dụng' }
@@ -152,7 +150,7 @@ function QuestionEditor({ question, index, total, onChange, onMove, onRemove }) 
   )
 }
 
-function DesignEditor({ design, onChange, onSave, onPlayLive, onPlayProjector, opening, searchParams }) {
+function DesignEditor({ design, onChange, onSave, onPlayLive, onPlayProjector, opening, saving, searchParams }) {
   const [seconds, setSeconds] = useState(DEFAULT_SECONDS)
   const problems = designProblems(design)
   const setQuestions = (questions) => onChange({ ...design, questions })
@@ -214,7 +212,7 @@ function DesignEditor({ design, onChange, onSave, onPlayLive, onPlayProjector, o
             <button type="button" className="secondary-button" disabled={problems.length > 0} onClick={onPlayProjector}>
               Trình chiếu trên lớp (chia đội)
             </button>
-            <button type="button" className="secondary-button" onClick={onSave}>Lưu thiết kế</button>
+            <button type="button" className="secondary-button" onClick={onSave} disabled={saving}>{saving ? 'Đang lưu…' : 'Lưu thiết kế'}</button>
           </div>
           <p className="mt-3 text-xs leading-5 text-slate-500">
             Phòng trực tuyến: học sinh vào bằng mã phòng trên máy của mình, điểm tính theo đúng và nhanh. Trình chiếu: không cần máy chủ, cả lớp chia đội, giáo viên ghi đáp án của từng đội.
@@ -450,14 +448,35 @@ function ProjectorGame({ design, onClose }) {
 export default function GameRoomStudio() {
   const { user } = useAuthStore()
   const [searchParams] = useSearchParams()
-  const [designs, setDesigns] = useState(() => loadDesigns(user?.id))
+  const [designs, setDesigns] = useState([])
+  const [source, setSource] = useState('device')
+  const [loadingDesigns, setLoadingDesigns] = useState(true)
+  const [saving, setSaving] = useState(false)
   const [design, setDesign] = useState(() => emptyDesign())
   const [mode, setMode] = useState('design')
   const [roomCode, setRoomCode] = useState('')
   const [opening, setOpening] = useState(false)
   const [played, setPlayed] = useState(null)
+  const teacher = canActAsTeacher(user)
 
-  if (!canActAsTeacher(user)) {
+  const reloadDesigns = async () => {
+    try {
+      const loaded = await fetchDesigns(user.id)
+      setDesigns(loaded.designs)
+      setSource(loaded.source)
+    } catch {
+      toast.error('Không tải được các thiết kế đã lưu.')
+    } finally {
+      setLoadingDesigns(false)
+    }
+  }
+
+  useEffect(() => {
+    if (teacher) reloadDesigns()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [teacher, user?.id])
+
+  if (!teacher) {
     return (
       <div className="page-container">
         <section className="panel p-6">
@@ -469,9 +488,40 @@ export default function GameRoomStudio() {
     )
   }
 
-  const save = () => {
-    setDesigns(saveDesign(user.id, design))
-    toast.success('Đã lưu thiết kế trên thiết bị này')
+  // Saves the design where the list came from and keeps the stored copy (a new one gets its server id)
+  const persist = async (current) => {
+    const stored = await storeDesign(user.id, current, source)
+    setDesign((editing) => (editing.id === current.id ? { ...editing, id: stored.id, serverId: stored.serverId } : editing))
+    setDesigns((list) => [stored, ...list.filter((item) => item.id !== current.id && item.id !== stored.id)])
+    return stored
+  }
+
+  const save = async () => {
+    setSaving(true)
+    try {
+      await persist(design)
+      toast.success(source === 'server' ? 'Đã lưu vào tài khoản' : 'Đã lưu trên thiết bị này')
+    } catch (error) {
+      toast.error(typeof error.response?.data?.detail === 'string' ? error.response.data.detail : 'Không lưu được thiết kế')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  const remove = async (item) => {
+    if (!window.confirm(`Xóa trò chơi “${item.title || 'Chưa đặt tên'}”?`)) return
+    try {
+      await removeDesign(user.id, item, source)
+      setDesigns((list) => list.filter((other) => other.id !== item.id))
+      if (design.id === item.id) setDesign(emptyDesign())
+    } catch {
+      toast.error('Không xóa được thiết kế')
+    }
+  }
+
+  const duplicate = (item) => {
+    setDesign(copyOf(item))
+    toast('Đã tạo bản sao; bấm “Lưu thiết kế” để giữ lại.', { icon: '📄' })
   }
 
   const playProjector = () => {
@@ -484,7 +534,7 @@ export default function GameRoomStudio() {
     setOpening(true)
     try {
       const response = await gameRoomsAPI.create(game)
-      setDesigns(saveDesign(user.id, design))
+      await persist(design).catch(() => {})
       setPlayed(game)
       setRoomCode(response.data.code)
       setMode('live')
@@ -520,30 +570,32 @@ export default function GameRoomStudio() {
 
       {mode === 'design' && (
         <>
-          {designs.length > 0 && (
-            <section className="mb-5">
-              <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-slate-500">Trò chơi đã thiết kế</h2>
-              <div className="flex flex-wrap gap-2">
-                {designs.map((item) => (
-                  <div key={item.id} className={`flex items-center rounded-md border ${item.id === design.id ? 'border-blue-500 bg-blue-50' : 'border-slate-200 bg-white'}`}>
-                    <button type="button" className="px-3 py-1.5 text-sm font-semibold text-slate-800" onClick={() => setDesign(item)}>
-                      {item.title || 'Chưa đặt tên'} · {item.questions.length} câu
-                    </button>
-                    <button
-                      type="button"
-                      className="px-2 py-1.5 text-sm text-slate-400 hover:text-rose-700"
-                      aria-label={`Xóa ${item.title}`}
-                      onClick={() => {
-                        if (window.confirm(`Xóa trò chơi “${item.title || 'Chưa đặt tên'}”?`)) setDesigns(deleteDesign(user.id, item.id))
-                      }}
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+          <section className="mb-5 rounded-lg border border-slate-200 bg-white p-4">
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <h2 className="text-sm font-bold uppercase tracking-wide text-slate-500">Trò chơi đã thiết kế ({designs.length})</h2>
+              <p className={`text-xs ${source === 'server' ? 'text-emerald-700' : 'text-amber-700'}`}>{SOURCE_TEXT[source]}</p>
+            </div>
+            {loadingDesigns && <p className="mt-2 text-sm text-slate-500">Đang tải…</p>}
+            {!loadingDesigns && !designs.length && (
+              <p className="mt-2 text-sm text-slate-600">Chưa có trò chơi nào. Đặt tên, thêm câu hỏi bên dưới rồi bấm “Lưu thiết kế”.</p>
+            )}
+            <ul className="mt-2 grid gap-2 sm:grid-cols-2 xl:grid-cols-3">
+              {designs.map((item) => (
+                <li key={item.id} className={`flex items-center gap-1 rounded-md border ${item.id === design.id ? 'border-blue-500 bg-blue-50' : 'border-slate-200 bg-white'}`}>
+                  <button type="button" className="min-w-0 flex-1 px-3 py-2 text-left" onClick={() => setDesign(item)}>
+                    <span className="block truncate text-sm font-semibold text-slate-900">{item.title || 'Chưa đặt tên'}</span>
+                    <span className="text-xs text-slate-500">{item.questions.length} câu</span>
+                  </button>
+                  <button type="button" className="px-2 py-2 text-xs font-semibold text-slate-500 hover:text-blue-800" onClick={() => duplicate(item)} aria-label={`Nhân bản ${item.title}`}>
+                    Nhân bản
+                  </button>
+                  <button type="button" className="px-2 py-2 text-sm text-slate-400 hover:text-rose-700" aria-label={`Xóa ${item.title}`} onClick={() => remove(item)}>
+                    ×
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
           <DesignEditor
             design={design}
             onChange={setDesign}
@@ -551,6 +603,7 @@ export default function GameRoomStudio() {
             onPlayLive={playLive}
             onPlayProjector={playProjector}
             opening={opening}
+            saving={saving}
             searchParams={searchParams}
           />
         </>

@@ -38,6 +38,8 @@ class User(Base):
     student_class = Column(String(50), default="")
     is_active = Column(Boolean, default=True)
     account_status = Column(String(20), default="verified", nullable=False, index=True)  # pending, verified, rejected
+    # Part of every token; raising it signs the account out on every device (password change, "sign out everywhere")
+    token_version = Column(Integer, default=0, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
@@ -404,3 +406,15 @@ class AssignmentSubmission(Base):
         back_populates="assignment_submissions",
         foreign_keys=[student_user_id],
     )
+
+
+class QuizDesign(Base):
+    """A quiz game a teacher designed, kept with the teacher's account so it opens on any device."""
+    __tablename__ = "quiz_designs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    owner_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    title = Column(String(120), nullable=False, default="")
+    questions = Column(Text, nullable=False, default="[]")  # JSON list of {text, options, correct, seconds, explanation}
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow, index=True)

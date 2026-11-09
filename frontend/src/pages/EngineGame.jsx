@@ -145,17 +145,17 @@ const chapterGames = {
     processFeedback:
       'Chu trình đúng: kì nạp -> kì nén -> kì cháy - giãn nở -> kì thải.',
     steps: [
-      { id: 'intake', title: 'Kì nạp', hint: 'Piston đi xuống, xupap nạp mở.' },
-      { id: 'compression', title: 'Kì nén', hint: 'Piston đi lên, hai xupap đóng.' },
-      { id: 'power', title: 'Kì cháy - giãn nở', hint: 'Khí cháy đẩy piston đi xuống, sinh công.' },
-      { id: 'exhaust', title: 'Kì thải', hint: 'Piston đi lên, xupap thải mở.' },
+      { id: 'intake', title: 'Kì nạp', hint: 'Pít tông đi xuống, xu páp nạp mở.' },
+      { id: 'compression', title: 'Kì nén', hint: 'Pít tông đi lên, hai xu páp đóng.' },
+      { id: 'power', title: 'Kì cháy - giãn nở', hint: 'Khí cháy đẩy pít tông đi xuống, sinh công.' },
+      { id: 'exhaust', title: 'Kì thải', hint: 'Pít tông đi lên, xu páp thải mở.' },
     ],
     order: ['intake', 'compression', 'power', 'exhaust'],
     matches: [
-      { id: 'piston', term: 'Piston', answer: 'Chuyển động tịnh tiến trong xi lanh và nhận lực khí cháy' },
-      { id: 'rod', term: 'Thanh truyền', answer: 'Truyền lực giữa piston và trục khuỷu' },
+      { id: 'piston', term: 'Pít tông', answer: 'Chuyển động tịnh tiến trong xi lanh và nhận lực khí cháy' },
+      { id: 'rod', term: 'Thanh truyền', answer: 'Truyền lực giữa pít tông và trục khuỷu' },
       { id: 'crankshaft', term: 'Trục khuỷu', answer: 'Biến chuyển động tịnh tiến thành chuyển động quay' },
-      { id: 'valve', term: 'Xupap', answer: 'Đóng mở cửa nạp và cửa thải đúng thời điểm' },
+      { id: 'valve', term: 'Xu páp', answer: 'Đóng mở cửa nạp và cửa thải đúng thời điểm' },
       { id: 'lubrication', term: 'Bôi trơn', answer: 'Giảm ma sát và mài mòn giữa các bề mặt chuyển động' },
     ],
     scenarios: [

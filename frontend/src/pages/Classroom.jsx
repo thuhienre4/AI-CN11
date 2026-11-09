@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
+import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { sampleCourses, sampleLessons } from '../data/courseCatalog'
 import TeacherAnalyticsPanel from '../components/TeacherAnalyticsPanel'
@@ -627,6 +628,18 @@ export default function Classroom() {
           <p className="mt-1 text-base font-bold">Quản lý nộp bài riêng cho từng lớp.</p>
         </div>
       </section>
+
+      {isTeacher && (
+        <section className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-lg border border-blue-200 bg-blue-50 p-5">
+          <div className="min-w-0 flex-1 basis-72">
+            <h2 className="text-lg font-bold text-slate-950">Phòng quiz trò chơi</h2>
+            <p className="mt-1 text-sm leading-6 text-slate-700">
+              Thiết kế bộ câu hỏi từ ngân hàng theo bài hoặc tự soạn, lưu với tài khoản, rồi mở phòng có mã cho học sinh thi đua trên máy của mình, hoặc trình chiếu chia đội trên lớp.
+            </p>
+          </div>
+          <Link to="/game-rooms" className="primary-button shrink-0">Thiết kế và mở phòng quiz</Link>
+        </section>
+      )}
 
       {isTeacher && !isLocalSession() && <TeacherAnalyticsPanel />}
 

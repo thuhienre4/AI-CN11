@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { learningAPI } from '../services/api'
 import { useAuthStore } from '../store'
 import { buildLocalLearningDashboard } from '../utils/learningProgress'
+import SignalList, { SignalBadge } from '../components/SignalList'
 
 const formatDuration = (seconds = 0) => {
   const minutes = Math.round(seconds / 60)
@@ -24,14 +25,6 @@ const statusClass = {
   in_progress: 'bg-blue-50 text-blue-700',
   completed: 'bg-emerald-50 text-emerald-700',
   needs_review: 'bg-amber-50 text-amber-700',
-}
-
-const getLocalUsers = () => {
-  try {
-    return JSON.parse(localStorage.getItem('local_auth_users') || '[]')
-  } catch {
-    return []
-  }
 }
 
 const calculateGamification = (dashboard) => {
@@ -69,32 +62,6 @@ const calculateGamification = (dashboard) => {
   ]
 
   return { xp, level, nextLevelXp, levelProgress, badges }
-}
-
-const buildClassLeaderboard = (currentUser, dashboard, gamification) => {
-  const localUsers = getLocalUsers()
-  const currentName = currentUser?.full_name || currentUser?.username || 'Học sinh hiện tại'
-  const rows = [
-    {
-      id: currentUser?.id || 'current',
-      name: currentName,
-      className: currentUser?.student_class || '',
-      xp: gamification.xp,
-      isCurrent: true,
-    },
-    ...localUsers
-      .filter((item) => item.username !== currentUser?.username)
-      .slice(0, 4)
-      .map((item, index) => ({
-        id: item.id || item.username,
-        name: item.full_name || item.username,
-        className: item.student_class || '',
-        xp: Math.max(80, (dashboard?.average_progress || 20) * 3 - index * 35),
-        isCurrent: false,
-      })),
-  ]
-
-  return rows.sort((a, b) => b.xp - a.xp).slice(0, 5)
 }
 
 const buildAIInsights = (dashboard) => {
@@ -154,7 +121,7 @@ export default function PersonalProgress() {
 
       if (getActivityScore(localDashboard) > getActivityScore(backendDashboard)) {
         setDashboard(localDashboard)
-        setSource('local')
+        setSource('local-newer')
       } else {
         setDashboard(backendDashboard)
         setSource('backend')
@@ -179,10 +146,6 @@ export default function PersonalProgress() {
   }, [dashboard])
 
   const gamification = useMemo(() => calculateGamification(dashboard), [dashboard])
-  const leaderboard = useMemo(
-    () => buildClassLeaderboard(user, dashboard, gamification),
-    [user, dashboard, gamification]
-  )
   const aiInsights = useMemo(() => buildAIInsights(dashboard), [dashboard])
   const evidenceStats = useMemo(() => {
     const rows = dashboard?.lesson_progress || []
@@ -203,7 +166,8 @@ export default function PersonalProgress() {
       mastery_score: dashboard?.mastery_score ?? localDashboard?.mastery_score ?? 0,
       engagement_score: dashboard?.engagement_score ?? localDashboard?.engagement_score ?? 0,
       risk_score: dashboard?.risk_score ?? localDashboard?.risk_score ?? 0,
-      risk_level: dashboard?.risk_level ?? localDashboard?.risk_level ?? 'low',
+      risk_level: dashboard?.risk_level ?? localDashboard?.risk_level ?? 'none',
+      signals: dashboard?.signals ?? localDashboard?.signals ?? [],
       learning_path: dashboard?.learning_path ?? localDashboard?.learning_path ?? [],
       weak_alerts: (dashboard?.weak_alerts ?? localDashboard?.weak_alerts ?? []).map((item) => ({
         ...item,
@@ -239,7 +203,12 @@ export default function PersonalProgress() {
         </div>
         {source === 'local' && (
           <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-            Backend chưa phản hồi, hệ thống đang hiển thị dữ liệu học tập lưu trên trình duyệt của học sinh.
+            Chưa kết nối được máy chủ, đang hiển thị dữ liệu học tập lưu trên trình duyệt này.
+          </div>
+        )}
+        {source === 'local-newer' && (
+          <div className="mt-4 rounded-lg border border-sky-200 bg-sky-50 px-4 py-3 text-sm text-sky-900">
+            Đang hiển thị dữ liệu trên máy này vì còn hoạt động chưa đồng bộ lên máy chủ; bấm “Cập nhật dữ liệu” sau ít phút.
           </div>
         )}
       </section>
@@ -311,17 +280,7 @@ export default function PersonalProgress() {
             <p className="text-sm font-black uppercase text-sky-700">Hồ sơ học tập</p>
             <h2 className="text-2xl font-bold text-slate-950">Gợi ý ôn tập theo quy tắc</h2>
           </div>
-          <div
-            className={`rounded-lg border px-4 py-3 text-sm font-black ${
-              smartAnalytics.risk_level === 'high'
-                ? 'border-rose-200 bg-rose-50 text-rose-900'
-                : smartAnalytics.risk_level === 'medium'
-                  ? 'border-amber-200 bg-amber-50 text-amber-900'
-                  : 'border-emerald-200 bg-emerald-50 text-emerald-900'
-            }`}
-          >
-            Tín hiệu: {smartAnalytics.risk_level === 'high' ? 'Cần xem sớm' : smartAnalytics.risk_level === 'medium' ? 'Nên xem' : 'Chưa có tín hiệu'}
-          </div>
+          <SignalBadge level={smartAnalytics.risk_level} audience="student" />
         </div>
 
         <div className="grid gap-3 sm:grid-cols-3">
@@ -334,8 +293,12 @@ export default function PersonalProgress() {
             <p className="mt-2 text-3xl font-bold text-emerald-700">{smartAnalytics.engagement_score}%</p>
           </div>
           <div className="rounded-lg bg-white p-4 shadow-sm">
-            <p className="text-sm font-semibold text-slate-500">Điểm tín hiệu (tham khảo)</p>
-            <p className="mt-2 text-3xl font-bold text-rose-700">{smartAnalytics.risk_score}%</p>
+            <p className="text-sm font-semibold text-slate-500">Việc nên làm tiếp</p>
+            <div className="mt-2">
+              {smartAnalytics.signals.length
+                ? <SignalList signals={smartAnalytics.signals.slice(0, 2)} withActions />
+                : <p className="text-sm text-slate-600">{smartAnalytics.risk_level === 'none' ? 'Mở một bài học để bắt đầu.' : 'Không có việc nào cần làm thêm.'}</p>}
+            </div>
           </div>
         </div>
 
@@ -433,24 +396,6 @@ export default function PersonalProgress() {
             ))}
           </div>
 
-          <div className="mt-6 border-t border-slate-200 pt-5">
-            <h3 className="font-bold text-slate-950">Leaderboard lớp</h3>
-            <div className="mt-3 space-y-2">
-              {leaderboard.map((row, index) => (
-                <div
-                  key={row.id}
-                  className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${
-                    row.isCurrent ? 'bg-blue-50 text-blue-950' : 'bg-slate-50 text-slate-700'
-                  }`}
-                >
-                  <span className="font-semibold">
-                    {index + 1}. {row.name}{row.className ? ` - Lớp ${row.className}` : ''}
-                  </span>
-                  <span className="font-bold">{Math.round(row.xp)} XP</span>
-                </div>
-              ))}
-            </div>
-          </div>
         </div>
 
         <div className="panel p-6">

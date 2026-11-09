@@ -46,6 +46,8 @@ const PersonalProgress = lazyPage(() => import('./pages/PersonalProgress'))
 const ChapterTests = lazyPage(() => import('./pages/ChapterTests'))
 const Classroom = lazyPage(() => import('./pages/Classroom'))
 const GameRoomStudio = lazyPage(() => import('./pages/GameRoomStudio'))
+const MaterialsLibrary = lazyPage(() => import('./pages/MaterialsLibrary'))
+const AccountSettings = lazyPage(() => import('./pages/AccountSettings'))
 const GameRoomJoin = lazyPage(() => import('./pages/GameRoomJoin'))
 const PracticeBank = lazyPage(() => import('./pages/PracticeBank'))
 const ProjectionPractice = lazyPage(() => import('./pages/ProjectionPractice'))
@@ -254,11 +256,12 @@ function App() {
             }
           />
           <Route path="/avatar" element={<ProtectedRoute><AvatarStudio /></ProtectedRoute>} />
+          <Route path="/account" element={<ProtectedRoute><AccountSettings /></ProtectedRoute>} />
           <Route
             path="/materials"
             element={
               <ProtectedRoute>
-                <Navigate to="/classroom" replace />
+                <MaterialsLibrary />
               </ProtectedRoute>
             }
           />

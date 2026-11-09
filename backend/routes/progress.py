@@ -56,6 +56,39 @@ def risk_level_for(score: int | float) -> str:
     return "medium" if score >= RISK_LEVEL_THRESHOLDS["medium"] else "low"
 
 
+# What each signal means, told to the teacher and the student without judging the student
+SIGNAL_LABELS = {
+    "quiz_below_pass": "Điểm kiểm tra nhanh dưới mức đạt",
+    "unfinished": "Bài đã bắt đầu nhưng chưa hoàn thành",
+    "no_simulation": "Chưa mở mô phỏng của bài đang học",
+    "inactive": "Bài đang học, chưa quay lại từ 7 ngày",
+}
+SIGNAL_EXAMPLES = 3
+
+
+def student_signals(analytics_rows: list, progress_rows: list) -> list:
+    """Signals of one student summed over lessons: [{kind, label, points, count, lessons}], heaviest first."""
+    grouped = {}
+    for analytics, progress in zip(analytics_rows, progress_rows):
+        title = progress.lesson.title if getattr(progress, "lesson", None) else f"Bài {progress.lesson_id}"
+        for kind in analytics["signals"]:
+            entry = grouped.setdefault(kind, {"kind": kind, "label": SIGNAL_LABELS[kind], "points": RISK_POINTS[kind],
+                                              "count": 0, "lessons": []})
+            entry["count"] += 1
+            if len(entry["lessons"]) < SIGNAL_EXAMPLES:
+                entry["lessons"].append(title)
+    return sorted(grouped.values(), key=lambda item: (-item["points"], -item["count"]))
+
+
+def student_level(analytics_rows: list) -> tuple[int, str]:
+    """The highest lesson score and its level; "none" when the student has not started any lesson yet,
+    which says "no evidence" rather than "no concern"."""
+    if not analytics_rows:
+        return 0, "none"
+    score = max(item["risk_score"] for item in analytics_rows)
+    return score, risk_level_for(score)
+
+
 def get_user_or_404(db: Session, user_id: int) -> User:
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -208,23 +241,28 @@ def lesson_analytics(progress: LessonProgress) -> dict:
         + min(activity_score, 100) * MASTERY_WEIGHTS["activity"]
     )
     engagement_score = clamp_score(activity_score + min(progress.time_spent_seconds / 60, 30))
+    signals = []
     risk_reasons = []
-    risk_score = 0
+    # A finished lesson is not a reason to look again, however long ago it was finished
+    in_progress = 0 < progress.progress_percent < 100
 
     if progress.status == "needs_review" or (has_quiz and progress.best_quiz_score < QUIZ_PASS_SCORE):
-        risk_score += RISK_POINTS["quiz_below_pass"]
-        risk_reasons.append("Điểm quiz dưới ngưỡng đạt, cần ôn lại ngay.")
+        signals.append("quiz_below_pass")
+        risk_reasons.append(
+            f"Điểm kiểm tra nhanh cao nhất {round(progress.best_quiz_score)}, dưới mức đạt {QUIZ_PASS_SCORE}."
+            if has_quiz else "Bài được đánh dấu cần ôn lại."
+        )
     if 0 < progress.progress_percent < UNFINISHED_BELOW_PERCENT:
-        risk_score += RISK_POINTS["unfinished"]
-        risk_reasons.append("Bài học đã bắt đầu nhưng chưa hoàn thành đủ hoạt động.")
-    if progress.progress_percent > 0 and progress.simulation_count == 0:
-        risk_score += RISK_POINTS["no_simulation"]
-        risk_reasons.append("Chưa mở mô phỏng, thiếu quan sát trực quan.")
-    if progress.progress_percent > 0 and days_since(progress.last_accessed_at) >= INACTIVE_AFTER_DAYS:
-        risk_score += RISK_POINTS["inactive"]
-        risk_reasons.append("Đã lâu chưa quay lại bài học này.")
+        signals.append("unfinished")
+        risk_reasons.append(f"Bài đã bắt đầu, mới hoàn thành {round(progress.progress_percent)}%.")
+    if in_progress and progress.simulation_count == 0:
+        signals.append("no_simulation")
+        risk_reasons.append("Chưa mở mô phỏng của bài này.")
+    if in_progress and days_since(progress.last_accessed_at) >= INACTIVE_AFTER_DAYS:
+        signals.append("inactive")
+        risk_reasons.append(f"Chưa quay lại bài này từ {days_since(progress.last_accessed_at)} ngày.")
 
-    risk_score = clamp_score(risk_score)
+    risk_score = clamp_score(sum(RISK_POINTS[kind] for kind in signals))
     risk_level = risk_level_for(risk_score)
     return {
         "has_quiz_evidence": has_quiz,
@@ -233,6 +271,7 @@ def lesson_analytics(progress: LessonProgress) -> dict:
         "risk_score": risk_score,
         "risk_level": risk_level,
         "risk_reasons": risk_reasons,
+        "signals": signals,
         "knowledge_unit": knowledge_unit_for_lesson(progress.lesson),
     }
 
@@ -535,8 +574,7 @@ def get_learning_dashboard(
         if analytics_rows
         else 0
     )
-    risk_score = max((item["risk_score"] for item in analytics_rows), default=0)
-    risk_level = risk_level_for(risk_score)
+    risk_score, risk_level = student_level(analytics_rows)
     recommendations = smart_recommendations(progress_rows)
 
     event_query = db.query(LearningEvent).filter(LearningEvent.user_id == user_id)
@@ -565,6 +603,7 @@ def get_learning_dashboard(
         intervention_plan=intervention_plan(risk_level),
         active_lessons=len(analytics_rows),
         active_lessons_without_quiz=sum(1 for item in analytics_rows if not item["has_quiz_evidence"]),
+        signals=student_signals(analytics_rows, active_progress_rows),
         score_note=SCORE_NOTE,
     )
 
@@ -603,8 +642,7 @@ def get_teacher_learning_analytics(
             if analytics_rows
             else 0
         )
-        risk_score = max((item["risk_score"] for item in analytics_rows), default=0)
-        risk_level = risk_level_for(risk_score)
+        risk_score, risk_level = student_level(analytics_rows)
         active_lessons = len(progress_rows)
         student_row = {
             "student_id": student.id,
@@ -614,6 +652,7 @@ def get_teacher_learning_analytics(
             "risk_score": risk_score,
             "risk_level": risk_level,
             "active_lessons": active_lessons,
+            "signals": student_signals(analytics_rows, progress_rows),
             "recommendations": smart_recommendations(progress_rows)[:3],
         }
         student_rows.append(student_row)
@@ -657,9 +696,14 @@ def get_teacher_learning_analytics(
             "active_students": sum(1 for item in student_rows if item["active_lessons"] > 0),
             "high_risk_students": sum(1 for item in student_rows if item["risk_level"] == "high"),
             "medium_risk_students": sum(1 for item in student_rows if item["risk_level"] == "medium"),
+            "not_started_students": sum(1 for item in student_rows if item["risk_level"] == "none"),
         },
         "classes": list(class_rows.values()),
-        "at_risk_students": sorted(student_rows, key=lambda item: item["risk_score"], reverse=True)[:10],
+        # Students with signals first, then those who have not started; quiet students are left out
+        "at_risk_students": sorted(
+            [item for item in student_rows if item["risk_level"] != "low"],
+            key=lambda item: (item["risk_level"] == "none", -item["risk_score"]),
+        )[:10],
         "weak_units": sorted(weak_units.values(), key=lambda item: item["count"], reverse=True)[:5],
     }
 

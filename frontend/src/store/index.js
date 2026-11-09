@@ -1,22 +1,12 @@
 import { create } from 'zustand'
 import { registrationErrorMessage } from '../utils/apiErrors'
 import { authAPI, coursesAPI, lessonsAPI } from '../services/api'
+import { canHashLocally, checkLocalPassword, findLocalUser, hashPassword, readLocalUsers, writeLocalUsers } from '../utils/localAccounts'
+import { passwordProblem } from '../utils/passwordRules'
 
-const LOCAL_USERS_KEY = 'local_auth_users'
 const LOCAL_CURRENT_USER_KEY = 'local_auth_current_user'
 const LOCAL_PROFILE_META_KEY = 'local_profile_meta'
 
-const getLocalUsers = () => {
-  try {
-    return JSON.parse(localStorage.getItem(LOCAL_USERS_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-
-const saveLocalUsers = (users) => {
-  localStorage.setItem(LOCAL_USERS_KEY, JSON.stringify(users))
-}
 
 const getProfileMeta = () => {
   try {
@@ -49,30 +39,29 @@ const createLocalToken = (username) => `local-token-${username}-${Date.now()}`
 
 const normalizeRole = (role) => role || 'student'
 
-const saveLocalRegistration = ({ username, email, password, full_name, role, student_class }) => {
-  const users = getLocalUsers()
-  const exists = users.some(
-    (user) => user.username === username || user.email === email
-  )
+const NO_SAFE_STORAGE = 'Trình duyệt này không lưu được tài khoản ngoại tuyến an toàn. Hãy kết nối máy chủ để đăng nhập.'
+const WRONG_LOCAL_LOGIN = 'Sai tài khoản/email hoặc mật khẩu.'
 
-  if (exists) {
-    return {
-      success: false,
-      error: 'Username or email already registered',
-    }
+const saveLocalRegistration = async ({ username, email, password, full_name, role, student_class }) => {
+  if (!canHashLocally()) return { success: false, error: NO_SAFE_STORAGE }
+  const problem = passwordProblem(password, username)
+  if (problem) return { success: false, error: problem }
+  const users = readLocalUsers()
+  if (findLocalUser(users, username) || findLocalUser(users, email)) {
+    return { success: false, error: 'Tên đăng nhập hoặc email đã có trên máy này.' }
   }
 
   users.push({
     id: Date.now(),
     username,
     email,
-    password,
+    ...(await hashPassword(password)),
     full_name,
     role: normalizeRole(role),
     student_class: student_class || '',
     is_active: true,
   })
-  saveLocalUsers(users)
+  writeLocalUsers(users)
   saveProfileMeta(username, {
     role: normalizeRole(role),
     student_class: student_class || '',
@@ -82,31 +71,7 @@ const saveLocalRegistration = ({ username, email, password, full_name, role, stu
   return { success: true }
 }
 
-const loginLocalUser = (usernameOrEmail, password, expectedRole = 'student') => {
-  const users = getLocalUsers()
-  const user = users.find(
-    (item) =>
-      (item.username === usernameOrEmail || item.email === usernameOrEmail) &&
-      item.password === password
-  )
-
-  if (!user) {
-    return {
-      success: false,
-      error: 'Invalid username/email or password',
-    }
-  }
-
-  if (expectedRole && normalizeRole(user.role) !== expectedRole) {
-    return {
-      success: false,
-      error:
-        expectedRole === 'teacher'
-          ? 'Tài khoản này không phải tài khoản giáo viên'
-          : 'Tài khoản này không phải tài khoản học sinh',
-    }
-  }
-
+const startLocalSession = (user) => {
   const access_token = createLocalToken(user.username)
   localStorage.setItem('token', access_token)
   const safeUser = {
@@ -119,48 +84,46 @@ const loginLocalUser = (usernameOrEmail, password, expectedRole = 'student') => 
     is_active: true,
   }
   localStorage.setItem(LOCAL_CURRENT_USER_KEY, JSON.stringify(safeUser))
-
-  return {
-    success: true,
-    access_token,
-    user: safeUser,
-  }
+  return { success: true, access_token, user: safeUser }
 }
 
-const loginOfflineDemoUser = (usernameOrEmail, password, role = 'student') => {
-  const users = getLocalUsers()
+const roleMismatch = (expectedRole) => ({
+  success: false,
+  error: expectedRole === 'teacher' ? 'Tài khoản này không phải tài khoản giáo viên' : 'Tài khoản này không phải tài khoản học sinh',
+})
+
+// Returns {success, ...} for a known name, or null when this device has never seen the name
+const loginLocalUser = async (usernameOrEmail, password, expectedRole = 'student') => {
+  const users = readLocalUsers()
+  const record = findLocalUser(users, usernameOrEmail)
+  if (!record) return null
+  if (!canHashLocally()) return { success: false, error: NO_SAFE_STORAGE }
+  const { ok, record: current } = await checkLocalPassword(record, password)
+  if (!ok) return { success: false, error: WRONG_LOCAL_LOGIN }
+  if (current !== record) writeLocalUsers(users.map((user) => (user === record ? current : user)))
+  if (expectedRole && normalizeRole(current.role) !== expectedRole) return roleMismatch(expectedRole)
+  return startLocalSession(current)
+}
+
+// Without a server a new name becomes a demo account on this device. A name that already exists here is
+// never taken over: it needs its own password (handled by loginLocalUser).
+const loginOfflineDemoUser = async (usernameOrEmail, password, role = 'student') => {
+  if (!canHashLocally()) return { success: false, error: NO_SAFE_STORAGE }
   const username = usernameOrEmail.trim()
-  const existingIndex = users.findIndex(
-    (item) => item.username === username || item.email === username
-  )
+  const users = readLocalUsers()
   const user = {
-    id: existingIndex >= 0 ? users[existingIndex].id : Date.now(),
+    id: Date.now(),
     username,
     email: username.includes('@') ? username : `${username}@demo.local`,
-    password,
+    ...(await hashPassword(password)),
     full_name: role === 'teacher' ? 'Giáo viên mẫu' : `Học sinh ${username}`,
     role: normalizeRole(role),
     student_class: role === 'student' ? 'mẫu' : '',
     is_active: true,
   }
-
-  if (existingIndex >= 0) {
-    users[existingIndex] = {
-      ...users[existingIndex],
-      ...user,
-    }
-  } else {
-    users.push(user)
-  }
-
-  saveLocalUsers(users)
-  saveProfileMeta(user.username, {
-    role: user.role,
-    student_class: user.student_class,
-    full_name: user.full_name,
-  })
-
-  return loginLocalUser(username, password, role)
+  writeLocalUsers([...users, user])
+  saveProfileMeta(user.username, { role: user.role, student_class: user.student_class, full_name: user.full_name })
+  return startLocalSession(user)
 }
 // Auth Store
 export const useAuthStore = create((set, get) => ({
@@ -211,21 +174,14 @@ export const useAuthStore = create((set, get) => ({
         error.response.status >= 500
 
       if (backendUnavailable) {
-        const result = loginLocalUser(username, password, role)
-        if (result.success) {
-          set({
-            user: result.user,
-            token: result.access_token,
-            isAuthenticated: true,
-            isLoading: false,
-          })
-          return { success: true }
+        const result = (await loginLocalUser(username, password, role)) ?? (await loginOfflineDemoUser(username, password, role))
+        if (!result.success) {
+          set({ error: result.error, isLoading: false })
+          return result
         }
-
-        const demoResult = loginOfflineDemoUser(username, password, role)
         set({
-          user: demoResult.user,
-          token: demoResult.access_token,
+          user: result.user,
+          token: result.access_token,
           isAuthenticated: true,
           isLoading: false,
         })
@@ -239,7 +195,7 @@ export const useAuthStore = create((set, get) => ({
         return { success: false, error: message }
       }
 
-      const message = error.response?.data?.detail || 'Login failed'
+      const message = typeof error.response?.data?.detail === 'string' ? error.response.data.detail : 'Đăng nhập thất bại'
       set({
         error: message,
         isLoading: false,
@@ -270,7 +226,7 @@ export const useAuthStore = create((set, get) => ({
         error.response.status >= 500
 
       if (backendUnavailable) {
-        const result = saveLocalRegistration({
+        const result = await saveLocalRegistration({
           username,
           email,
           password,

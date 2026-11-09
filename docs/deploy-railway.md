@@ -27,7 +27,7 @@ Vào **Variables** của service `backend`, thêm:
 
 | Biến | Giá trị | Ghi chú |
 |---|---|---|
-| `ENGINE_LAB_ENVIRONMENT` | `production` | Máy chủ từ chối khởi động nếu khóa bí mật còn giá trị mặc định |
+| `ENGINE_LAB_ENVIRONMENT` | `production` | Tắt chế độ cho phép mọi cổng localhost gọi API. Trên Railway, máy chủ luôn từ chối khởi động nếu khóa bí mật còn giá trị mặc định hoặc ngắn hơn 32 kí tự, kể cả khi quên đặt biến này |
 | `ENGINE_LAB_SECRET_KEY` | một chuỗi ngẫu nhiên dài | Tạo bằng lệnh `python -c "import secrets; print(secrets.token_urlsafe(48))"`. Không chia sẻ, không đưa lên GitHub. Đổi khóa này thì mọi người phải đăng nhập lại |
 | `ENGINE_LAB_DATABASE_URL` | `sqlite:////data/enginelab.db` | Bốn dấu `/` là đúng: đường dẫn tuyệt đối `/data/...` |
 | `ENGINE_LAB_UPLOAD_DIR` | `/data/uploads` | Nơi lưu học liệu và bài nộp |
@@ -35,7 +35,7 @@ Vào **Variables** của service `backend`, thêm:
 | `ENGINE_LAB_CORS_ORIGINS` | `["https://ai-cn11-production.up.railway.app","https://thuhienre4.github.io"]` | Các trang giao diện được gọi API. Ghi đúng dạng JSON, có ngoặc vuông và dấu nháy kép |
 | `ENGINE_LAB_BOOTSTRAP_ADMIN_USERNAME` | ví dụ `admin_truong` | Quản trị viên đầu tiên, xem bước 5 |
 | `ENGINE_LAB_BOOTSTRAP_ADMIN_EMAIL` | email của quản trị viên | |
-| `ENGINE_LAB_BOOTSTRAP_ADMIN_PASSWORD` | mật khẩu ít nhất 8 kí tự | **Xóa biến này sau lần khởi động đầu tiên** |
+| `ENGINE_LAB_BOOTSTRAP_ADMIN_PASSWORD` | mật khẩu ít nhất 8 kí tự, có chữ và số | **Xóa biến này sau lần khởi động đầu tiên** |
 | `GEMINI_API_KEY` | khóa Gemini (không bắt buộc) | Không có khóa thì trợ lý AI dùng phản hồi dự phòng |
 
 ## 4. Tạo địa chỉ cho backend

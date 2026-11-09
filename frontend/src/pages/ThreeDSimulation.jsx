@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import DeviceConsole from '../components/DeviceConsole'
 import EngineCycleConsole from '../components/EngineCycleConsole'
 import { lessonsAPI } from '../services/api'
 import { getSampleLesson } from '../data/courseCatalog'
@@ -11,6 +12,8 @@ import { recordLocalLearningEvent } from '../utils/learningProgress'
 import { ENGINE_PARTS, createFourStrokeEngine, engineGeometry, pickEnginePart } from '../simulations/fourStrokeEngineModel'
 import { createLessonFlowModel } from '../simulations/lessonFlowModel'
 import { lessonModelSimulation } from '../data/knttLessonModels'
+import { defaultControls, deviceSimulation, getDeviceModel } from '../simulations/devices'
+import { createDeviceScene } from '../simulations/devices/kit'
 import { createLabelSprite, isImmersiveVrSupported, requestVrSession, vrStageTransform } from '../simulations/vrSupport'
 import { TWO_STROKE, pistonPinY, portOpenings, rodPose, sparkOn, twoStrokePhase } from '../simulations/twoStrokeKinematics'
 import {
@@ -514,7 +517,7 @@ const dieselFourStrokeSimulation = {
     'Cuối kì nén, khi pít tông gần đến ĐCT, động cơ xăng dùng bu gi đánh lửa, còn động cơ Diesel phun nhiên liệu vào xi lanh để hỗn hợp tự cháy.',
     'Vc là thể tích khi pít tông ở ĐCT, Va khi ở ĐCD, Va = Vc + Vs; tỉ số nén ε = Va/Vc.',
     'Trục khuỷu dẫn động trục cam qua bộ truyền xích; trục cam quay 1 vòng khi trục khuỷu quay 2 vòng.',
-    'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay của trục khuỷu; bán kính quay R liên hệ với hành trình piston.',
+    'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của pít tông thành chuyển động quay của trục khuỷu; bán kính quay R liên hệ với hành trình pít tông.',
   ],
   teacherPrompts: [
     'Vì sao chỉ kì nổ sinh công, còn các kì khác pít tông vẫn chuyển động được?',
@@ -1176,9 +1179,10 @@ export default function ThreeDSimulation() {
   const [inVr, setInVr] = useState(false)
   const [vrError, setVrError] = useState('')
   const [exploded, setExploded] = useState(false)
+  const [deviceControls, setDeviceControls] = useState({})
   const rendererRef = useRef(null)
   const vrActions = useRef({ nextLayer: () => {}, togglePlay: () => {} })
-  const motion = useRef({ angle: 0, cyclePhase: 0, isPlaying, speed, showLabels, explode: 0, explodeTarget: 0 })
+  const motion = useRef({ angle: 0, cyclePhase: 0, isPlaying, speed, showLabels, explode: 0, explodeTarget: 0, deviceTime: 0, deviceControls: {}, deviceScene: null })
   const viewControls = useRef({ reset: () => {}, highlight: () => {}, refit: () => {} })
 
   useEffect(() => {
@@ -1190,6 +1194,10 @@ export default function ThreeDSimulation() {
   useEffect(() => {
     selectedLayerRef.current = selectedLayer
   }, [selectedLayer])
+
+  useEffect(() => {
+    motion.current.deviceControls = deviceControls
+  }, [deviceControls])
 
   // Bài 18 opens on the four-stroke engine, as the textbook does, and can switch to the two-stroke one
   useEffect(() => {
@@ -1242,12 +1250,19 @@ export default function ThreeDSimulation() {
     : lesson?.grade_level === 11
       ? mechanical11SpecializedSimulations[simulationKey] || knttSimulations[simulationKey] || mechanical11SpecializedSimulations[1]
       : technology10Simulations[simulationKey] || technology10Simulations[1]
-  const simulation = lessonModelSimulation(lesson, chapterSimulation) || chapterSimulation
+  const deviceModel = getDeviceModel(lesson)
+  const simulation = (deviceModel && deviceSimulation(lesson, chapterSimulation, deviceModel))
+    || lessonModelSimulation(lesson, chapterSimulation)
+    || chapterSimulation
   const isFourStrokeMode = simulation.modelId === 6 && (engineMode === 'diesel4' || isFourStrokeOnly)
   const isTwoStrokeMode = simulation.modelId === 6 && !isFourStrokeMode
   const fourStrokeSimulation = fuel === 'gasoline' ? gasolineFourStrokeSimulation : dieselFourStrokeSimulation
   const displayedSimulation = isFourStrokeMode ? fourStrokeSimulation : simulation
-  const simulationExperiment = getSimulationExperimentForLesson(lesson)
+  // A device model brings its own task; the chapter experiments are shared by every lesson of a chapter
+  const simulationExperiment = simulation.device
+    ? { title: `Thực hành trên mô hình: ${simulation.device.title}`, modelFocus: simulation.device.task, duration: '10–15 phút' }
+    : getSimulationExperimentForLesson(lesson)
+  const partDetails = isFourStrokeMode ? ENGINE_PARTS : simulation.device?.parts
   const activeLayer = selectedLayer === 'all'
     ? { name: 'Tổng quan', note: displayedSimulation.objective }
     : displayedSimulation.layers.find((layer) => layer.id === selectedLayer)
@@ -1256,6 +1271,10 @@ export default function ThreeDSimulation() {
     () => [{ id: 'all', name: 'Tổng quan', note: displayedSimulation.objective }, ...displayedSimulation.layers],
     [displayedSimulation]
   )
+
+  useEffect(() => {
+    setDeviceControls(defaultControls(deviceModel))
+  }, [deviceModel])
 
   const seekEngine = useCallback((degrees) => {
     motion.current.angle = (degrees * Math.PI) / 180
@@ -1386,15 +1405,19 @@ export default function ThreeDSimulation() {
     }
 
     const engine = isFourStrokeMode ? createFourStrokeEngine({ fuel }) : null
-    const lessonModel = simulation.lessonModel ? createLessonFlowModel(simulation.lessonModel) : null
-    const base = new THREE.GridHelper(lessonModel ? 16 : 8, lessonModel ? 16 : 8, 0xcbd5e1, 0xe2e8f0)
-    base.position.y = engine ? -2.52 : lessonModel ? lessonModel.floorY : -0.65
+    const deviceScene = simulation.device ? createDeviceScene(simulation.device) : null
+    const motionState = motion.current
+    motionState.deviceScene = deviceScene
+    motionState.deviceTime = 0
+    const lessonModel = !deviceScene && simulation.lessonModel ? createLessonFlowModel(simulation.lessonModel) : null
+    const base = new THREE.GridHelper(lessonModel || deviceScene ? 16 : 8, lessonModel || deviceScene ? 16 : 8, 0xcbd5e1, 0xe2e8f0)
+    base.position.y = engine ? -2.52 : deviceScene ? deviceScene.floorY : lessonModel ? lessonModel.floorY : -0.65
     // Everything the student looks at sits in one stage, which VR scales down onto a table in front of them
     const stage = new THREE.Group()
     stage.add(base)
     scene.add(stage)
 
-    const { root, animated, annotations, framing: modelFraming } = engine || lessonModel || buildChapterModel(simulation.modelId, engineMode)
+    const { root, animated, annotations, framing: modelFraming } = engine || deviceScene || lessonModel || buildChapterModel(simulation.modelId, engineMode)
     const framing = modelFraming || (simulation.modelId === 8 ? LOGIC_BOARD_FRAMING : null)
     // The taken-apart engine is taller, so the camera frames it differently
     const assembledFraming = engine ? { ...engine.framing } : null
@@ -1483,8 +1506,18 @@ export default function ThreeDSimulation() {
     const onPointerDown = (event) => {
       pressedAt = { x: event.clientX, y: event.clientY }
     }
+    // A part chosen by mouse or by a VR controller: highlighted, described, and for some parts operated
+    let pickedPart = null
+    const pickPart = (intersections) => (engine ? pickEnginePart(intersections) : deviceScene ? deviceScene.pick(intersections) : null)
+    const choosePart = (part) => {
+      pickedPart = part
+      engine?.highlightPart(part)
+      setSelectedPart(part)
+      const interaction = part && simulation.device?.interactions?.[part]
+      if (interaction) setDeviceControls((current) => interaction(current))
+    }
     const onPointerUp = (event) => {
-      if (!engine || !pressedAt) return
+      if (!(engine || deviceScene) || !pressedAt) return
       const moved = Math.hypot(event.clientX - pressedAt.x, event.clientY - pressedAt.y)
       pressedAt = null
       if (moved > 6) return
@@ -1494,16 +1527,17 @@ export default function ThreeDSimulation() {
         -((event.clientY - rect.top) / rect.height) * 2 + 1
       )
       raycaster.setFromCamera(pointer, camera)
-      const part = pickEnginePart(raycaster.intersectObject(root, true))
-      engine.highlightPart(part)
-      setSelectedPart(part)
+      choosePart(pickPart(raycaster.intersectObject(root, true)))
     }
     renderer.domElement.addEventListener('pointerdown', onPointerDown)
     renderer.domElement.addEventListener('pointerup', onPointerUp)
 
     viewControls.current = {
       reset: () => (framing ? fitEngineView() : controls.reset()),
-      highlight: (part) => engine?.highlightPart(part),
+      highlight: (part) => {
+        pickedPart = part
+        engine?.highlightPart(part)
+      },
       refit: () => {
         applyEngineFraming()
         if (framing) fitEngineView()
@@ -1512,6 +1546,8 @@ export default function ThreeDSimulation() {
 
     // VR: labels become sprites, made once the size of the model in the headset is known
     let vrLabels = []
+    let vrUnit = 1
+    let vrPartLabel = null
     const onSessionStart = () => {
       stage.updateMatrixWorld(true)
       const bounds = new THREE.Box3().setFromObject(root)
@@ -1522,9 +1558,11 @@ export default function ThreeDSimulation() {
       stage.position.copy(transform.position)
       if (!vrLabels.length) {
         const unit = Math.max(size.x, size.y, size.z) / 6
+        vrUnit = unit
         const anchorScale = new THREE.Vector3()
+        // Part names of the engine and device models belong to no layer but are what the student looks for
         vrLabels = annotationViews
-          .filter((annotation) => annotation.layerId !== 'all' && annotation.label)
+          .filter((annotation) => annotation.label && (annotation.layerId !== 'all' || engine || deviceScene))
           .map((annotation) => {
             annotation.anchor.getWorldScale(anchorScale)
             const sprite = createLabelSprite(annotation.label, annotation.note, unit / (anchorScale.x / transform.scale || 1))
@@ -1541,14 +1579,45 @@ export default function ThreeDSimulation() {
       vrLabels.forEach(({ sprite }) => {
         sprite.visible = false
       })
+      if (vrPartLabel) vrPartLabel.visible = false
       setInVr(false)
       resize()
     }
     renderer.xr.addEventListener('sessionstart', onSessionStart)
     renderer.xr.addEventListener('sessionend', onSessionEnd)
+    const vrRaycaster = new THREE.Raycaster()
+    const controllerRotation = new THREE.Matrix4()
+    const partInfo = engine ? ENGINE_PARTS : simulation.device?.parts
+    // Trigger on a part: name and role appear beside it, and a switch or a pedal is operated
+    const vrPick = (controller) => {
+      if (!(engine || deviceScene)) return false
+      controllerRotation.identity().extractRotation(controller.matrixWorld)
+      vrRaycaster.ray.origin.setFromMatrixPosition(controller.matrixWorld)
+      vrRaycaster.ray.direction.set(0, 0, -1).applyMatrix4(controllerRotation)
+      const hits = vrRaycaster.intersectObject(root, true)
+      const part = pickPart(hits)
+      if (!part) return false
+      choosePart(part)
+      if (vrPartLabel) {
+        vrPartLabel.parent?.remove(vrPartLabel)
+        vrPartLabel.material.map?.dispose()
+        vrPartLabel = null
+      }
+      const info = partInfo?.[part]
+      const hit = hits.find((item) => item.object.userData.part === part)
+      if (info && hit) {
+        vrPartLabel = createLabelSprite(info.name, info.role, vrUnit)
+        vrPartLabel.position.copy(stage.worldToLocal(hit.point.clone()))
+        vrPartLabel.position.y += vrUnit * 0.6
+        stage.add(vrPartLabel)
+      }
+      return true
+    }
     const controllers = [0, 1].map((index) => {
       const controller = renderer.xr.getController(index)
-      controller.addEventListener('select', () => vrActions.current.nextLayer())
+      controller.addEventListener('select', () => {
+        if (!vrPick(controller)) vrActions.current.nextLayer()
+      })
       controller.addEventListener('squeeze', () => vrActions.current.togglePlay())
       const ray = new THREE.Line(
         new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, 0, -1)]),
@@ -1586,6 +1655,12 @@ export default function ThreeDSimulation() {
         running.explode += (running.explodeTarget - running.explode) * Math.min(1, 0.1 * frames)
         if (Math.abs(running.explodeTarget - running.explode) < 0.001) running.explode = running.explodeTarget
         engine.update(running.cyclePhase, running.explode)
+      }
+      if (deviceScene) {
+        running.deviceTime += (frames / 60) * (running.isPlaying ? running.speed : 0)
+        deviceScene.update(running.deviceTime, running.deviceControls)
+        const layer = simulation.device.layers.find((item) => item.id === selectedLayerRef.current)
+        deviceScene.highlight(pickedPart, layer ? new Set(layer.parts) : null)
       }
       const ports = isTwoStrokeMode ? portOpenings(angle) : null
       const step = isTwoStrokeMode
@@ -1663,7 +1738,7 @@ export default function ThreeDSimulation() {
       })
 
       const selected = selectedLayerRef.current
-      if (!engine) root.traverse((object) => {
+      if (!engine && !deviceScene) root.traverse((object) => {
         if (!object.isMesh) return
         if (object.material.userData.dynamicOpacity) return
         const shouldDim = selected !== 'all' && object.name && object.name !== selected
@@ -1709,6 +1784,8 @@ export default function ThreeDSimulation() {
       renderer.xr.removeEventListener('sessionend', onSessionEnd)
       controllers.forEach((controller) => scene.remove(controller))
       vrLabels.forEach(({ sprite }) => sprite.material.map?.dispose())
+      vrPartLabel?.material.map?.dispose()
+      motionState.deviceScene = null
       rendererRef.current = null
       resizeObserver.disconnect()
       renderer.domElement.removeEventListener('pointerdown', onPointerDown)
@@ -1724,7 +1801,7 @@ export default function ThreeDSimulation() {
       if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement)
       setSelectedPart(null)
     }
-  }, [simulation.modelId, simulation.lessonModel, displayedSimulation.layers.length, engineMode, fuel, isFourStrokeMode, isTwoStrokeMode, isLoading])
+  }, [simulation.modelId, simulation.lessonModel, simulation.device, displayedSimulation.layers.length, engineMode, fuel, isFourStrokeMode, isTwoStrokeMode, isLoading])
 
   if (isLoading) {
     return <div className="page-container text-center text-slate-600">Đang tải mô phỏng 3D...</div>
@@ -1793,15 +1870,15 @@ export default function ThreeDSimulation() {
               </p>
             )}
             <p className="pointer-events-none absolute bottom-2 left-3 z-10 hidden rounded bg-white/80 px-2 py-0.5 text-xs text-slate-600 sm:block">
-              Kéo để xoay, cuộn hoặc chụm tay để phóng to{isFourStrokeMode ? ', bấm vào chi tiết để xem tên và chức năng' : ''}
+              Kéo để xoay, cuộn hoặc chụm tay để phóng to{isFourStrokeMode || simulation.device ? ', bấm vào chi tiết để xem tên và chức năng' : ''}
             </p>
-            {selectedPart && ENGINE_PARTS[selectedPart] && (
+            {selectedPart && partDetails?.[selectedPart] && (
               <div className="absolute left-3 top-3 z-10 max-w-xs rounded-lg border border-blue-200 bg-white p-3 shadow-sm">
                 <div className="flex items-start justify-between gap-3">
-                  <h2 className="font-bold text-slate-950">{ENGINE_PARTS[selectedPart].name}</h2>
+                  <h2 className="font-bold text-slate-950">{partDetails[selectedPart].name}</h2>
                   <button type="button" onClick={closePartCard} aria-label="Đóng" className="text-lg leading-none text-slate-500 hover:text-slate-900">×</button>
                 </div>
-                <p className="mt-1 text-sm leading-5 text-slate-700">{ENGINE_PARTS[selectedPart].role}</p>
+                <p className="mt-1 text-sm leading-5 text-slate-700">{partDetails[selectedPart].role}</p>
               </div>
             )}
           </div>
@@ -1815,6 +1892,17 @@ export default function ThreeDSimulation() {
               onSpeedChange={setSpeed}
               onTogglePlay={togglePlaying}
               onSeek={seekEngine}
+            />
+          ) : simulation.device ? (
+            <DeviceConsole
+              model={simulation.device}
+              controls={deviceControls}
+              onControlsChange={setDeviceControls}
+              motion={motion}
+              isPlaying={isPlaying}
+              onTogglePlay={togglePlaying}
+              speed={speed}
+              onSpeedChange={setSpeed}
             />
           ) : (
             <section className="flex flex-wrap items-center gap-4 border-t border-slate-200 bg-white px-4 py-3">

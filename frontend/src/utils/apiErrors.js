@@ -2,7 +2,7 @@
 const REGISTER_FIELDS = {
   email: 'Email không hợp lệ.',
   username: 'Tên đăng nhập cần từ 3 đến 50 kí tự.',
-  password: 'Mật khẩu chưa đạt yêu cầu (ít nhất 8 kí tự).',
+  password: 'Mật khẩu chưa đạt yêu cầu: ít nhất 8 kí tự, có cả chữ và số, không chứa tên đăng nhập.',
   full_name: 'Họ và tên không hợp lệ.',
   student_class: 'Lớp không hợp lệ.',
   class_code: 'Mã lớp không hợp lệ.',

@@ -257,7 +257,73 @@ Kiểm thử: `backend/tests/test_game_rooms.py` (20 ca: luật tính điểm, t
 
 Khi viết kiểm thử, phát hiện lỗi sẵn có: trình xử lí lỗi 422 trong `backend/main.py` trả 500 khi một bộ kiểm tra dữ liệu báo lỗi bằng thông điệp riêng (đối tượng lỗi trong `ctx` không chuyển được sang JSON). Đã sửa.
 
+Thiết kế quiz được lưu với tài khoản giáo viên (bảng `quiz_designs`, API `/api/game-designs`): mở được ở mọi thiết bị; mỗi giáo viên chỉ xem, sửa, xóa thiết kế của mình (thiết kế của người khác trả 404); học sinh và khách bị từ chối; được lưu bản nháp chưa hoàn chỉnh, còn khi mở phòng thì máy chủ kiểm tra đầy đủ; tối đa 200 thiết kế mỗi giáo viên; thiết kế có trong tệp "Tải dữ liệu của tôi". Khi không có máy chủ, thiết kế lưu trên máy và tự chuyển lên tài khoản ở lần kết nối tiếp theo. Có nút nhân bản thiết kế, và trang Lớp học của giáo viên có lối vào phòng quiz. Kiểm thử: `backend/tests/test_game_designs.py` (6 ca), `frontend/src/utils/designStore.test.js` (4 ca); hành trình đầu - cuối thứ năm kiểm tra thêm: giáo viên lưu thiết kế, đăng nhập ở trình duyệt khác vẫn thấy thiết kế đó.
+
 Giới hạn: phòng lưu trong bộ nhớ của một tiến trình máy chủ, mất khi máy chủ khởi động lại và không dùng được khi chạy nhiều tiến trình; tối đa 60 người chơi mỗi phòng; phòng tự xóa sau 4 giờ.
+
+## Rà soát giao diện, nội dung bài học và tài liệu
+
+Chụp 20 trang chính ở 1440 × 900 và 390 × 844 với tài khoản học sinh và giáo viên trên máy chủ thật, đo độ tràn ngang của từng trang.
+
+| Vấn đề | Sửa |
+|---|---|
+| Trang Lớp học của giáo viên tràn ngang trên điện thoại (614 px trên màn 390 px): ô chọn tự rộng theo phương án dài nhất | Quy tắc chung cho `select`, `input`, `textarea`: không rộng hơn khung chứa. Đo lại 34 lượt trang: không trang nào tràn |
+| Trang bài học lặp một nội dung 3-4 lần: đoạn "Nội dung bài học" ghép từ mô tả và ý chính, "Tóm tắt nội dung SGK" lặp đoạn đó, "Kiến thức trọng tâm" và "Điểm cần nhớ" lặp ý chính; "Hoạt động LMS" giống hệt ở mọi bài | `frontend/src/utils/lessonReading.js` bỏ phần trùng: ý chính thành danh sách đánh số, chỉ giữ mục riêng của bài (mục tiêu, vận dụng). Trang Bài 18 từ 3.463 px còn 2.615 px |
+| Thuật ngữ khác sách: piston, xupap, kỳ, kỹ thuật | Đổi trong nội dung hiển thị thành pít tông, xu páp, kì, kĩ thuật; tên biến và khóa trong mã giữ nguyên. Trợ lý vẫn nhận câu hỏi gõ "piston", "xupap" |
+| Sơ đồ bốn kì ghi nhãn "Van" cho câu không phải trạng thái xu páp, và hiện cả ở các bài ô tô | Viết lại theo Bài 18: hành trình pít tông (ĐCT, ĐCD), trạng thái hai xu páp, kết quả từng kì; chỉ hiện ở Bài 17-20 |
+| Không có trang tài liệu: `/materials` chuyển sang Lớp học; trang bài chỉ có tài liệu lớp 10, 12 | Trang **Tài liệu** (`/materials`, có trên thanh điều hướng): bài giảng, PDF của ba khối theo chương, bài của sách, tìm kiếm, mở thư mục Drive, tài liệu giáo viên chia sẻ. Trang bài học có ô "Tài liệu của bài" cho cả ba khối |
+| Slide lớp 11 đánh số theo bộ sách khác (27 bài so với 25), gắn theo số bài sẽ sai (Bài 5 phi kim loại nhận slide thực hành vật liệu) | `frontend/src/data/lessonMaterials.js` gắn slide lớp 11 với bài Kết nối tri thức theo nội dung; slide ôn tập và nội dung ngoài sách vào mục "Tài liệu bổ sung" |
+
+Kiểm thử: `utils/lessonReading.test.js` (4 ca), `data/lessonMaterials.test.js` (6 ca, gồm: mỗi slide lớp 11 xuất hiện đúng một lần, Bài 5 lớp 11 không nhận slide của sách khác). 186 ca giao diện và 5 hành trình đầu - cuối đạt.
+
+## Bảo mật tài khoản, dữ liệu cá nhân và điểm tín hiệu
+
+| Rủi ro tìm thấy | Sửa |
+|---|---|
+| Không giới hạn số lần đăng nhập sai | Sai 5 lần cho một tài khoản, hoặc 20 lần từ một địa chỉ, trong 15 phút thì trả 429 kèm thời gian chờ; đăng nhập đúng xóa bộ đếm của tài khoản. Bộ đếm nằm trong bộ nhớ một tiến trình |
+| Khóa kí token mặc định chỉ bị chặn khi đặt `ENVIRONMENT=production`; quên biến này trên Railway thì ai cũng tạo được token | Trên Railway hoặc môi trường production, máy chủ không khởi động nếu khóa là mặc định hoặc ngắn hơn 32 kí tự |
+| Không đổi được mật khẩu; token bị lộ còn hiệu lực tới khi hết hạn | Token mang phiên bản của tài khoản. Đổi mật khẩu hoặc "Đăng xuất trên mọi thiết bị khác" tăng phiên bản: mọi token cũ, kể cả của kênh WebSocket, bị từ chối |
+| Mật khẩu chỉ cần 8 kí tự | Cần có chữ và số, không thuộc danh sách mật khẩu phổ biến, không chứa tên đăng nhập; cùng một quy tắc ở máy chủ và biểu mẫu |
+| Chế độ ngoại tuyến lưu mật khẩu dạng chữ thường trong trình duyệt; khi không có máy chủ, gõ tên của người khác là đăng nhập được và ghi đè mật khẩu của họ | Chỉ lưu mã PBKDF2 có muối (150.000 vòng); bản ghi cũ được chuyển sang mã ở lần đăng nhập đúng tiếp theo; tên đã có trên máy cần đúng mật khẩu |
+| Trang Tiến độ hiện tên các tài khoản khác từng dùng máy, với điểm XP tự sinh | Bỏ bảng xếp hạng này |
+| Kênh `/ws/chat/{user_id}` nhận token trên URL, không được dùng | Gỡ bỏ; gỡ bộ định tuyến cũ trong `routes/__init__.py` (nhận token qua tham số URL) |
+| API không gửi các header bảo vệ | `X-Content-Type-Options`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, `Cache-Control: no-store` cho `/api`, HSTS khi chạy HTTPS; production không còn mở CORS cho mọi cổng localhost |
+| Người dùng không xem, tải hay xóa được dữ liệu của mình | Trang **Tài khoản và dữ liệu** (`/account`): nêu dữ liệu hệ thống lưu và ai xem được; tải toàn bộ dữ liệu của tôi (JSON, không có mã mật khẩu); học sinh xóa tài khoản cùng tiến độ, kết quả, câu hỏi trợ lý, bài nộp và tệp nộp; xóa dữ liệu của mình trên máy dùng chung. Tài khoản giáo viên, quản trị viên do quản trị viên đóng vì gắn với dữ liệu lớp |
+
+Điểm tín hiệu giữ nguyên trọng số và ngưỡng (45/25/15/15; 40 và 70) để không đổi phân tích độ nhạy đã báo cáo, nhưng:
+
+- Bài đã hoàn thành không còn bị tính "chưa mở mô phỏng" và "lâu chưa quay lại".
+- Học sinh chưa bắt đầu bài nào có mức riêng **Chưa bắt đầu học**, không còn hiện "Chưa có tín hiệu" như thể ổn.
+- Mỗi tín hiệu là một sự việc kèm số liệu ("Điểm kiểm tra nhanh cao nhất 40, dưới mức đạt 60", "Chưa quay lại bài này từ 9 ngày"), không còn cụm như "cần ôn lại ngay".
+- Giáo viên thấy mọi tín hiệu của từng học sinh, số bài và tên bài liên quan; học sinh không còn thấy "Điểm tín hiệu …%" tô đỏ mà thấy "Việc nên làm tiếp".
+- Bản chạy ngoại tuyến tính như máy chủ (lấy bài cao nhất, trước đây lấy trung bình).
+
+Kiểm thử: `backend/tests/test_account_security.py` (18 ca), `backend/tests/test_signal_rules.py` (6 ca); giao diện: `localAccounts`, `passwordRules`, `deviceData` (11 ca). Một lượt chạy trên máy chủ thật: sau khi đổi mật khẩu qua trang, token cũ bị trả 401; sai 5 lần thì lần đúng tiếp theo bị trả 429; header bảo vệ có mặt.
+
+Giới hạn: bộ đếm đăng nhập sai và phòng chơi chỉ nằm trong một tiến trình; token vẫn lưu trong `localStorage` của trình duyệt (cần chống XSS ở giao diện); chưa có xác thực hai lớp và chưa có cách lấy lại mật khẩu qua email.
+
+## Mô hình 3D tương tác cho các bài về cấu tạo và nguyên lí
+
+Rà soát 73 bài của ba khối: bài nào dạy cấu tạo hoặc nguyên lí làm việc của một thiết bị cụ thể thì có mô hình 3D tương tác; bài về khái niệm, quy trình, nghề nghiệp, vẽ kĩ thuật giữ mô hình khối (vẽ kĩ thuật lớp 10 đã có trang luyện hình chiếu riêng). Trước đây 7 bài có mô hình 3D chi tiết; nay thêm 9 mô hình cho 12 bài, tổng 19 bài.
+
+| Bài | Mô hình | Điều khiển và số liệu |
+|---|---|---|
+| 11 – Bài 8 | Máy tiện: ụ đứng, mâm cặp, phôi, bàn xe dao, dao, ụ động | Tốc độ trục chính, chạy dao; v = πDn/1000 |
+| 11 – Bài 20 | Hệ thống bôi trơn và làm mát: các te, bơm dầu, bầu lọc, đường dầu; áo nước, bơm nước, van hằng nhiệt, két nước, quạt | Nhiệt độ nước (van mở từ 82 °C, mở hết 95 °C, quạt từ 98 °C), tốc độ động cơ |
+| 11 – Bài 22 | Hệ thống truyền lực: li hợp, hộp số 4 số và số lùi, các đăng, truyền lực chính, vi sai, bán trục, bánh xe | Chọn số, đạp li hợp, vào cua; tỉ số truyền, tốc độ hai bánh |
+| 11 – Bài 23 | Bánh xe và hệ thống treo (mô hình một phần tư xe) | Mặt đường, giảm chấn hoạt động/hỏng, tốc độ |
+| 11 – Bài 24 | Hệ thống lái bánh răng – thanh răng | Góc vô lăng; dịch chuyển thanh răng, góc hai bánh (Ackermann), bán kính quay vòng |
+| 11 – Bài 25 | Phanh dầu: bàn đạp, trợ lực, xi lanh chính, đường ống, xi lanh công tác, má phanh, đĩa | Lực đạp; áp suất dầu, lực ép má phanh (định luật Pascal) |
+| 12 – Bài 3 | Máy phát điện ba pha: stato ba cuộn lệch 120°, rôto nam châm, tải ba pha | Tốc độ quay, nối sao/tam giác; điện áp tức thời ba pha, Ud |
+| 12 – Bài 5 | Nhà máy điện: nguồn năng lượng, tua bin, máy phát | Thủy điện, nhiệt điện, điện gió; tần số |
+| 12 – Bài 10 | Mạch đèn cầu thang hai công tắc ba cực | Gạt công tắc ngay trên mô hình; đường dòng điện |
+| 12 – Bài 24, 25, 26 | Bo mạch vi điều khiển, quang trở, LED | Chương trình nháy LED hoặc tự điều chỉnh độ sáng; analogRead, PWM |
+
+Mỗi mô hình: bấm vào chi tiết để xem tên và chức năng; lớp kiến thức tô sáng nhóm chi tiết; một số chi tiết bấm để thao tác (cần số, li hợp, bàn đạp phanh, vô lăng, công tắc, giảm chấn, quang trở, nút Reset); bảng số liệu tính theo nguyên lí; nhiệm vụ thực hành riêng của bài thay thẻ thí nghiệm chung của chương. Trong kính VR: nhãn tên hiện cạnh chi tiết, bấm cò khi chĩa tay cầm vào chi tiết thì hiện tên, chức năng và thực hiện thao tác của chi tiết đó; chĩa ra ngoài thì chuyển lớp kiến thức (áp dụng cả cho mô hình động cơ).
+
+Nguyên lí tính toán nằm riêng trong `frontend/src/simulations/devices/principles.js` với 13 kiểm thử (định luật Pascal, tỉ số truyền và vi sai, Ackermann, giảm chấn, van hằng nhiệt, tốc độ cắt, ba pha có tổng bằng 0 và Ud = √3·Up, bảng trạng thái đèn cầu thang, quang trở – PWM). `devices.test.js` (43 ca) kiểm tra với từng mô hình: mọi chi tiết vẽ ra đều có tên và chức năng, lớp kiến thức và thao tác bấm trỏ tới chi tiết có thật, chạy mọi tổ hợp điều khiển 4 giây không sinh giá trị không hợp lệ, khung hình đầu tiên khi chưa có giá trị điều khiển. Khi chạy thử đã phát hiện và sửa: giá trị điều khiển chưa có ở khung hình đầu làm mô hình phanh biến mất (NaN), vòng xuyến bị xoay nằm ngang ở lốp xe, stato, vỏ tua bin; vị trí lò xo, giảm chấn; khung hình của bốn mô hình.
+
+Giới hạn: số liệu là giá trị dạy học trong khoảng thường gặp, không phải thông số của sản phẩm thật; chuyển động quay được làm chậm để quan sát; chế độ VR chưa thử trên kính thật; mô hình Bài 20 thể hiện hai trong năm hệ thống, ba hệ thống còn lại trình bày ở lớp kiến thức.
 
 ## Chưa thực hiện
 

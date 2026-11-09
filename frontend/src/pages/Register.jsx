@@ -6,6 +6,7 @@ import {
   GraduationCap, LockKeyhole, Mail, School, ShieldCheck, Sparkles, UserRound, UsersRound,
 } from 'lucide-react'
 import { useAuthStore } from '../store'
+import { PASSWORD_HINT, passwordProblem } from '../utils/passwordRules'
 
 const roles = [
   {
@@ -91,6 +92,12 @@ export default function Register() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
+
+    const weakPassword = passwordProblem(formData.password, formData.username)
+    if (weakPassword) {
+      toast.error(weakPassword)
+      return
+    }
 
     if (formData.role === 'student' && !formData.full_name.trim()) {
       toast.error('Học sinh cần nhập đầy đủ họ và tên')
@@ -287,6 +294,7 @@ export default function Register() {
               <div>{[1, 2, 3, 4].map((level) => <i key={level} className={passwordScore >= level ? 'filled' : ''} />)}</div>
               <span>Độ an toàn: <strong>{passwordLabel}</strong></span>
             </div>
+            <p className="register-password-hint">{PASSWORD_HINT}</p>
 
             <button type="submit" disabled={isLoading} className="register-submit">
               <span>{isLoading ? 'Đang tạo tài khoản...' : `Tạo tài khoản ${selectedRole.shortTitle.toLowerCase()}`}</span>

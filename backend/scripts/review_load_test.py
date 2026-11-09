@@ -127,7 +127,7 @@ async def create_people(session, students):
         name = f"load_{role}_{index}"
         async with gate:
             status, user = await recorder.call("POST", "/api/auth/register", json={
-                "username": name, "email": f"{name}@example.com", "password": "load-test-pass",
+                "username": name, "email": f"{name}@example.com", "password": "load-test-pass-1",
                 "full_name": name, "role": role, "student_class": "11A1",
             })
         assert status == 201, status
@@ -335,7 +335,7 @@ async def repetition(index, args):
             def login_job(person):
                 async def job(recorder):
                     status, body = await recorder.call("POST", "/api/auth/login", json={
-                        "username": person["name"], "password": "load-test-pass"})
+                        "username": person["name"], "password": "load-test-pass-1"})
                     if status == 200:
                         person["token"] = body["access_token"]
                 return job

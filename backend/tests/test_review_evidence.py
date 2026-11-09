@@ -184,7 +184,7 @@ def test_login_rejects_wrong_password_and_admin_self_registration(api):
     client, *_ = api
     assert client.post("/api/auth/login", json={"username": "student_test", "password": "wrong"}).status_code == 401
     registration = client.post("/api/auth/register", json={
-        "username": "self_admin", "email": "self.admin@example.com", "password": "admin-pass",
+        "username": "self_admin", "email": "self.admin@example.com", "password": "admin-pass-1",
         "full_name": "Admin", "role": "admin", "student_class": "",
     })
     assert registration.status_code == 403
@@ -415,7 +415,7 @@ def test_risk_boundaries(state, score, level):
 
 def test_inactivity_starts_counting_at_seven_days():
     def risk(days):
-        return lesson_analytics(progress_state(progress_percent=100, simulation_count=1,
+        return lesson_analytics(progress_state(progress_percent=80, simulation_count=1,
                                                last_accessed_at=datetime.utcnow() - timedelta(days=days)))["risk_score"]
     assert (risk(6), risk(7)) == (0, 15)
 

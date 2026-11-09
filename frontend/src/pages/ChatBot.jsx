@@ -144,40 +144,40 @@ const buildTutorReply = (message, lesson) => {
   const materialAndManufacturingReply = buildMaterialAndManufacturingReply(text, lesson)
   if (materialAndManufacturingReply) return materialAndManufacturingReply
 
-  if (hasAnyKeyword(text, ['4 kỳ', 'bốn kỳ', 'chu trình', 'nguyên lý làm việc', 'nạp nén nổ xả'])) {
-    return 'Động cơ 4 kỳ hoàn thành một chu trình sau 4 hành trình piston, tương ứng 2 vòng quay trục khuỷu. Thứ tự đúng là: kỳ nạp, kỳ nén, kỳ cháy - giãn nở, kỳ thải. Kỳ cháy - giãn nở là kỳ sinh công vì khí cháy đẩy piston đi xuống, qua thanh truyền làm quay trục khuỷu.'
+  if (hasAnyKeyword(text, ['4 kì', 'bốn kì', 'chu trình', 'nguyên lý làm việc', 'nạp nén nổ xả'])) {
+    return 'Động cơ 4 kì hoàn thành một chu trình sau 4 hành trình pít tông, tương ứng 2 vòng quay trục khuỷu. Thứ tự đúng là: kì nạp, kì nén, kì cháy - giãn nở, kì thải. Kì cháy - giãn nở là kì sinh công vì khí cháy đẩy pít tông đi xuống, qua thanh truyền làm quay trục khuỷu.'
   }
 
-  if (hasAnyKeyword(text, ['kỳ nạp', 'nạp khí'])) {
-    return 'Ở kỳ nạp, piston đi từ điểm chết trên xuống điểm chết dưới. Xupap nạp mở, xupap thải đóng. Không khí hoặc hòa khí được hút vào xi lanh để chuẩn bị cho kỳ nén.'
+  if (hasAnyKeyword(text, ['kì nạp', 'nạp khí'])) {
+    return 'Ở kì nạp, pít tông đi từ điểm chết trên xuống điểm chết dưới. Xu páp nạp mở, xu páp thải đóng. Không khí hoặc hòa khí được hút vào xi lanh để chuẩn bị cho kì nén.'
   }
 
-  if (hasAnyKeyword(text, ['kỳ nén', 'nén'])) {
-    return 'Ở kỳ nén, piston đi từ điểm chết dưới lên điểm chết trên. Cả hai xupap đều đóng, môi chất trong xi lanh bị nén lại nên áp suất và nhiệt độ tăng.'
+  if (hasAnyKeyword(text, ['kì nén', 'nén'])) {
+    return 'Ở kì nén, pít tông đi từ điểm chết dưới lên điểm chết trên. Cả hai xu páp đều đóng, môi chất trong xi lanh bị nén lại nên áp suất và nhiệt độ tăng.'
   }
 
-  if (hasAnyKeyword(text, ['kỳ cháy', 'giãn nở', 'sinh công', 'kỳ nổ'])) {
-    return 'Kỳ cháy - giãn nở là kỳ sinh công. Nhiên liệu cháy làm khí trong xi lanh giãn nở mạnh, đẩy piston đi xuống. Lực này truyền qua thanh truyền tới trục khuỷu và tạo mô-men quay.'
+  if (hasAnyKeyword(text, ['kì cháy', 'giãn nở', 'sinh công', 'kì nổ'])) {
+    return 'Kì cháy - giãn nở là kì sinh công. Nhiên liệu cháy làm khí trong xi lanh giãn nở mạnh, đẩy pít tông đi xuống. Lực này truyền qua thanh truyền tới trục khuỷu và tạo mô-men quay.'
   }
 
-  if (hasAnyKeyword(text, ['kỳ thải', 'xả khí', 'khí thải'])) {
-    return 'Ở kỳ thải, piston đi từ điểm chết dưới lên điểm chết trên. Xupap thải mở, xupap nạp đóng. Khí đã cháy được đẩy ra ngoài để chuẩn bị cho chu trình mới.'
+  if (hasAnyKeyword(text, ['kì thải', 'xả khí', 'khí thải'])) {
+    return 'Ở kì thải, pít tông đi từ điểm chết dưới lên điểm chết trên. Xu páp thải mở, xu páp nạp đóng. Khí đã cháy được đẩy ra ngoài để chuẩn bị cho chu trình mới.'
   }
 
-  if (hasAnyKeyword(text, ['piston', 'pit tông', 'pit-tông'])) {
-    return 'Piston chuyển động tịnh tiến trong xi lanh và nhận lực trực tiếp từ khí cháy. Sau đó piston truyền lực cho thanh truyền. Có thể nhớ: piston là chi tiết nhận lực sinh công đầu tiên.'
+  if (hasAnyKeyword(text, ['pít tông', 'pit tông', 'pit-tông', 'piston'])) {
+    return 'Pít tông chuyển động tịnh tiến trong xi lanh và nhận lực trực tiếp từ khí cháy. Sau đó pít tông truyền lực cho thanh truyền. Có thể nhớ: pít tông là chi tiết nhận lực sinh công đầu tiên.'
   }
 
   if (hasAnyKeyword(text, ['thanh truyền', 'tay biên'])) {
-    return 'Thanh truyền nối piston với trục khuỷu. Nhiệm vụ của thanh truyền là truyền lực từ piston xuống trục khuỷu và giúp biến chuyển động tịnh tiến thành chuyển động quay.'
+    return 'Thanh truyền nối pít tông với trục khuỷu. Nhiệm vụ của thanh truyền là truyền lực từ pít tông xuống trục khuỷu và giúp biến chuyển động tịnh tiến thành chuyển động quay.'
   }
 
   if (hasAnyKeyword(text, ['trục khuỷu'])) {
     return 'Trục khuỷu nhận lực từ thanh truyền và tạo chuyển động quay. Đây là chi tiết đưa công cơ học của động cơ ra ngoài để truyền tới máy công tác hoặc hệ truyền động.'
   }
 
-  if (hasAnyKeyword(text, ['xupap', 'xu pap', 'van', 'phân phối khí', 'trục cam'])) {
-    return 'Cơ cấu phân phối khí điều khiển xupap nạp và xupap thải đóng mở đúng thời điểm. Xupap nạp mở chủ yếu ở kỳ nạp, xupap thải mở chủ yếu ở kỳ thải. Nếu sai thời điểm, động cơ nạp không đủ, thải không sạch và giảm công suất.'
+  if (hasAnyKeyword(text, ['xu páp', 'xu pap', 'xupap', 'van', 'phân phối khí', 'trục cam'])) {
+    return 'Cơ cấu phân phối khí điều khiển xu páp nạp và xu páp thải đóng mở đúng thời điểm. Xu páp nạp mở chủ yếu ở kì nạp, xu páp thải mở chủ yếu ở kì thải. Nếu sai thời điểm, động cơ nạp không đủ, thải không sạch và giảm công suất.'
   }
 
   if (hasAnyKeyword(text, ['bôi trơn', 'dầu', 'ma sát', 'mài mòn'])) {
@@ -193,7 +193,7 @@ const buildTutorReply = (message, lesson) => {
   }
 
   if (hasAnyKeyword(text, ['bugi', 'đánh lửa', 'tia lửa'])) {
-    return 'Hệ thống đánh lửa dùng trong động cơ xăng. Bugi tạo tia lửa điện gần cuối kỳ nén để đốt cháy hòa khí. Đánh lửa đúng thời điểm giúp động cơ sinh công mạnh và ổn định.'
+    return 'Hệ thống đánh lửa dùng trong động cơ xăng. Bugi tạo tia lửa điện gần cuối kì nén để đốt cháy hòa khí. Đánh lửa đúng thời điểm giúp động cơ sinh công mạnh và ổn định.'
   }
 
   if (hasAnyKeyword(text, ['khởi động', 'máy đề', 'đề máy'])) {
@@ -211,7 +211,7 @@ const buildTutorReply = (message, lesson) => {
   if (lesson?.key_points?.length) {
     return `Với bài "${lesson.title}", em cần bám vào các ý chính sau:\n${lesson.key_points
       .map((point, index) => `${index + 1}. ${point}`)
-      .join('\n')}\n\nEm có thể hỏi cụ thể một bộ phận hoặc một kỳ để trợ lý giải thích ngắn gọn hơn.`
+      .join('\n')}\n\nEm có thể hỏi cụ thể một bộ phận hoặc một kì để trợ lý giải thích ngắn gọn hơn.`
   }
 
   return 'Trợ lý học tập có thể trả lời về: công nghệ và đời sống, hệ thống kĩ thuật, công nghệ mới, đánh giá công nghệ, bản vẽ kĩ thuật, hình chiếu, hình cắt, CAD và quy trình thiết kế kĩ thuật.'
