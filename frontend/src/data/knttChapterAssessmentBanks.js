@@ -33,13 +33,13 @@ export const grade11AssessmentBank = {
     mc(
       'Trình tự nào phản ánh hợp lí nhất quá trình chế tạo một sản phẩm cơ khí?',
       [
-        'Kiểm tra → gia công → thiết kế → chọn vật liệu',
-        'Yêu cầu → thiết kế → chọn vật liệu → gia công → lắp ráp → kiểm tra',
-        'Chọn vật liệu → bán sản phẩm → thiết kế → gia công',
-        'Gia công → xác định yêu cầu → lắp ráp → thiết kế',
+        'Thiết kế → gia công → chọn vật liệu → lắp ráp → kiểm tra',
+        'Chọn vật liệu → thiết kế → gia công → kiểm tra → lắp ráp',
+        'Thiết kế → chọn vật liệu → lắp ráp → gia công → kiểm tra',
+        'Thiết kế → chọn vật liệu → gia công → lắp ráp → kiểm tra',
       ],
-      1,
-      'Chế tạo cơ khí bắt đầu từ yêu cầu, sau đó thiết kế, chọn vật liệu, gia công, lắp ráp và kiểm tra.'
+      3,
+      'Từ yêu cầu, sản phẩm được thiết kế, chọn vật liệu, gia công chi tiết, lắp ráp rồi kiểm tra.'
     ),
     tf(
       'Người làm nghề cơ khí chế tạo chỉ cần vận hành máy, không cần đọc bản vẽ và đo kiểm.',
@@ -47,10 +47,15 @@ export const grade11AssessmentBank = {
       'Đọc bản vẽ, hiểu vật liệu, quy trình, đo kiểm và an toàn đều là năng lực quan trọng.'
     ),
     multi(
-      'Chọn các yêu cầu quan trọng của cơ khí chế tạo.',
-      ['Độ chính xác', 'An toàn', 'Năng suất', 'Bỏ qua khả năng bảo trì'],
-      [0, 1, 2],
-      'Sản xuất cơ khí cần bảo đảm độ chính xác, an toàn, năng suất và khả năng bảo trì.'
+      'Những việc nào thuộc công việc của người làm nghề cơ khí chế tạo?',
+      [
+        'Đọc bản vẽ để gia công chi tiết',
+        'Vận hành và bảo trì máy công cụ',
+        'Lập trình phần mềm kế toán cho doanh nghiệp',
+        'Đo kiểm chi tiết sau gia công',
+      ],
+      [0, 1, 3],
+      'Đọc bản vẽ, vận hành, bảo trì máy và đo kiểm là công việc của nghề cơ khí chế tạo; phần mềm kế toán thuộc ngành khác.'
     ),
     match(
       'Ghép hoạt động với nhiệm vụ phù hợp trong cơ khí chế tạo.',
@@ -66,13 +71,13 @@ export const grade11AssessmentBank = {
     mc(
       'Khi chọn vật liệu làm một chi tiết chịu tải và làm việc ở nhiệt độ cao, cần ưu tiên căn cứ nào?',
       [
-        'Chỉ màu sắc của vật liệu',
-        'Cơ tính, nhiệt độ làm việc, khả năng gia công và chi phí',
-        'Chỉ khối lượng riêng',
-        'Vật liệu nào có sẵn cũng dùng được',
+        'Khối lượng riêng nhỏ để chi tiết nhẹ nhất có thể',
+        'Giá thành thấp nhất trong các vật liệu đang có',
+        'Cơ tính ở nhiệt độ làm việc, tính công nghệ và chi phí',
+        'Khả năng dẫn điện tốt để tản nhiệt nhanh hơn',
       ],
-      1,
-      'Lựa chọn vật liệu phải dựa trên điều kiện làm việc và nhiều nhóm tính chất liên quan.'
+      2,
+      'Vật liệu được chọn theo điều kiện làm việc (tải, nhiệt độ), khả năng gia công và chi phí, không theo một tiêu chí riêng lẻ.'
     ),
     tf(
       'Composite có thể kết hợp ưu điểm của nhiều thành phần để tạo vật liệu nhẹ và bền.',
@@ -80,10 +85,15 @@ export const grade11AssessmentBank = {
       'Composite được tạo từ các thành phần khác nhau nhằm đạt tổ hợp tính chất mong muốn.'
     ),
     multi(
-      'Những yếu tố nào cần xem xét khi sử dụng vật liệu mới?',
-      ['Chi phí', 'Quy trình chế tạo', 'An toàn sử dụng', 'Chỉ mức độ nổi tiếng'],
-      [0, 1, 2],
-      'Vật liệu mới cần được đánh giá về chi phí, khả năng chế tạo, an toàn và hiệu quả.'
+      'Vật liệu nào sau đây thuộc nhóm vật liệu phi kim loại?',
+      [
+        'Cao su',
+        'Gang xám',
+        'Hợp kim nhôm',
+        'Chất dẻo nhiệt',
+      ],
+      [0, 3],
+      'Cao su và chất dẻo là vật liệu phi kim loại; gang xám là kim loại đen, hợp kim nhôm là kim loại màu.'
     ),
     match(
       'Ghép nhóm vật liệu với ứng dụng hoặc đặc điểm phù hợp.',
@@ -99,13 +109,13 @@ export const grade11AssessmentBank = {
     mc(
       'Mục đích chính của gia công cơ khí là gì?',
       [
-        'Chỉ làm thay đổi màu của phôi',
         'Làm thay đổi hình dạng, kích thước, bề mặt hoặc tính chất của phôi',
-        'Chỉ đóng gói sản phẩm',
-        'Chỉ kiểm tra bản vẽ',
+        'Lắp các chi tiết đã gia công thành sản phẩm hoàn chỉnh',
+        'Chọn vật liệu phù hợp với điều kiện làm việc của chi tiết',
+        'Kiểm tra kích thước sản phẩm theo bản vẽ trước khi xuất xưởng',
       ],
-      1,
-      'Gia công biến phôi thành chi tiết có hình dạng, kích thước và chất lượng theo yêu cầu.'
+      0,
+      'Gia công biến phôi thành chi tiết có hình dạng, kích thước và chất lượng theo yêu cầu; lắp ráp, chọn vật liệu, kiểm tra là các công đoạn khác.'
     ),
     tf(
       'Quy trình công nghệ hợp lí giúp giảm sai lỗi, tiết kiệm chi phí và đạt yêu cầu kĩ thuật.',
@@ -113,10 +123,15 @@ export const grade11AssessmentBank = {
       'Trình tự nguyên công, máy, dao, đồ gá và chế độ gia công ảnh hưởng trực tiếp đến kết quả.'
     ),
     multi(
-      'Chọn các căn cứ để lựa chọn phương pháp gia công.',
-      ['Vật liệu', 'Hình dạng và độ chính xác', 'Sản lượng và chi phí', 'Sở thích tùy ý của người vận hành'],
-      [0, 1, 2],
-      'Phương pháp gia công phải phù hợp vật liệu, hình dạng, độ chính xác, sản lượng và chi phí.'
+      'Phương pháp nào sau đây là gia công không phoi?',
+      [
+        'Tiện',
+        'Đúc',
+        'Khoan',
+        'Rèn',
+      ],
+      [1, 3],
+      'Đúc và rèn tạo hình mà không cắt bỏ vật liệu; tiện và khoan cắt bỏ lớp vật liệu thành phoi.'
     ),
     match(
       'Ghép phương pháp gia công với mô tả phù hợp.',
@@ -131,9 +146,14 @@ export const grade11AssessmentBank = {
   4: [
     mc(
       'Thành phần nào giúp dây chuyền tự động nhận biết trạng thái của quá trình?',
-      ['Cảm biến', 'Bao bì sản phẩm', 'Sổ quảng cáo', 'Giá bán'],
-      0,
-      'Cảm biến thu nhận thông tin để bộ điều khiển giám sát và ra lệnh.'
+      [
+        'Băng tải',
+        'Robot công nghiệp',
+        'Xi lanh khí nén',
+        'Cảm biến',
+      ],
+      3,
+      'Cảm biến thu nhận thông tin để bộ điều khiển giám sát và ra lệnh; băng tải, robot, xi lanh là bộ phận thực hiện.'
     ),
     tf(
       'Khóa nguồn trước khi bảo trì là một biện pháp hạn chế nguy cơ máy khởi động ngoài ý muốn.',
@@ -142,9 +162,14 @@ export const grade11AssessmentBank = {
     ),
     multi(
       'Nhà máy thông minh có thể mang lại những lợi ích nào?',
-      ['Giám sát thời gian thực', 'Giảm lỗi', 'Dự báo bảo trì', 'Loại bỏ mọi yêu cầu an toàn'],
-      [0, 1, 2],
-      'Dữ liệu và kết nối hỗ trợ giám sát, tối ưu, giảm lỗi và dự báo bảo trì.'
+      [
+        'Giám sát thiết bị theo thời gian thực',
+        'Dự báo bảo trì từ dữ liệu của máy',
+        'Không còn cần người vận hành và bảo trì',
+        'Bỏ được các quy định an toàn lao động',
+      ],
+      [0, 1],
+      'Dữ liệu và kết nối hỗ trợ giám sát và dự báo bảo trì; con người vẫn vận hành, bảo trì và các quy định an toàn vẫn bắt buộc.'
     ),
     match(
       'Ghép thành phần của dây chuyền tự động với chức năng.',
@@ -160,13 +185,13 @@ export const grade11AssessmentBank = {
     mc(
       'Đối tượng tiêu biểu của lĩnh vực cơ khí động lực là',
       [
-        'động cơ, hệ truyền lực và máy công tác.',
-        'sách, báo và thiết bị văn phòng.',
-        'cây trồng và vật nuôi.',
-        'vật dụng trang trí thủ công.',
+        'máy công cụ như máy tiện, máy phay.',
+        'động cơ, hệ thống truyền lực và máy công tác.',
+        'lưới điện truyền tải và trạm biến áp.',
+        'dây chuyền đóng gói sản phẩm thực phẩm.',
       ],
-      0,
-      'Cơ khí động lực tập trung vào máy tạo, truyền và sử dụng công suất cơ học.'
+      1,
+      'Cơ khí động lực gồm máy tạo, truyền và sử dụng công suất cơ học; máy công cụ thuộc cơ khí chế tạo.'
     ),
     tf(
       'Xu hướng xe điện và chẩn đoán điện tử làm giảm nhu cầu học năng lực số trong nghề cơ khí động lực.',
@@ -174,10 +199,15 @@ export const grade11AssessmentBank = {
       'Công nghệ mới khiến năng lực số và chẩn đoán điện tử ngày càng quan trọng.'
     ),
     multi(
-      'Chọn các yêu cầu quan trọng đối với sản phẩm cơ khí động lực.',
-      ['Hiệu quả', 'An toàn', 'Giảm phát thải', 'Tăng tiêu hao nhiên liệu'],
-      [0, 1, 2],
-      'Hiệu quả, an toàn, tiết kiệm nhiên liệu và giảm phát thải là các yêu cầu cốt lõi.'
+      'Phương tiện, máy nào sau đây thuộc lĩnh vực cơ khí động lực?',
+      [
+        'Ô tô',
+        'Máy tiện',
+        'Tàu thủy',
+        'Máy kéo nông nghiệp',
+      ],
+      [0, 2, 3],
+      'Ô tô, tàu thủy, máy kéo có nguồn động lực, truyền lực và máy công tác; máy tiện là máy công cụ của cơ khí chế tạo.'
     ),
     match(
       'Ghép công việc với năng lực phù hợp.',
@@ -191,10 +221,15 @@ export const grade11AssessmentBank = {
   ],
   6: [
     mc(
-      'Trong động cơ bốn kì, kì nào trực tiếp tạo công cơ học?',
-      ['Kì nạp', 'Kì nén', 'Kì cháy - giãn nở', 'Kì thải'],
+      'Trong động cơ bốn kì, kì nào trực tiếp sinh công?',
+      [
+        'Kì nạp',
+        'Kì nén',
+        'Kì nổ (cháy – giãn nở)',
+        'Kì thải',
+      ],
       2,
-      'Khí cháy giãn nở đẩy pít tông trong kì cháy - giãn nở, tạo công cho động cơ.'
+      'Khí cháy giãn nở đẩy pít tông trong kì nổ; ba kì còn lại tiêu tốn công.'
     ),
     tf(
       'Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của pít tông thành chuyển động quay.',
@@ -202,10 +237,15 @@ export const grade11AssessmentBank = {
       'Đây là nhiệm vụ chính của cơ cấu trục khuỷu - thanh truyền.'
     ),
     multi(
-      'Chọn các hệ thống hỗ trợ động cơ đốt trong làm việc ổn định.',
-      ['Hệ thống nhiên liệu', 'Hệ thống bôi trơn', 'Hệ thống làm mát', 'Hệ thống trang trí thân xe'],
-      [0, 1, 2],
-      'Nhiên liệu, bôi trơn và làm mát trực tiếp bảo đảm điều kiện làm việc của động cơ.'
+      'Ở kì nén của động cơ bốn kì, những nhận định nào đúng?',
+      [
+        'Pít tông đi từ ĐCT xuống ĐCD',
+        'Hai xu páp đều đóng',
+        'Áp suất và nhiệt độ trong xi lanh tăng',
+        'Trục khuỷu quay từ 180° đến 360°',
+      ],
+      [1, 2, 3],
+      'Ở kì nén, pít tông đi từ ĐCD lên ĐCT, hai xu páp đóng nên khí bị nén, áp suất và nhiệt độ tăng; trục khuỷu quay từ 180° đến 360°.'
     ),
     match(
       'Ghép kì làm việc với trạng thái chính của động cơ bốn kì.',
@@ -221,13 +261,13 @@ export const grade11AssessmentBank = {
     mc(
       'Nhiệm vụ chính của hệ thống truyền lực trên ô tô là',
       [
-        'truyền mô men từ động cơ đến bánh xe chủ động.',
-        'làm mát khoang hành khách.',
-        'chiếu sáng đường đi.',
-        'giảm tiếng ồn của còi.',
+        'biến chuyển động tịnh tiến của pít tông thành chuyển động quay.',
+        'thay đổi hướng chuyển động của xe theo vành lái.',
+        'giảm dao động truyền từ mặt đường lên thân xe.',
+        'truyền và biến đổi mô men từ động cơ tới bánh xe chủ động.',
       ],
-      0,
-      'Hệ thống truyền lực truyền và biến đổi mô men để đưa công suất đến bánh xe chủ động.'
+      3,
+      'Hệ thống truyền lực truyền và biến đổi mô men tới bánh xe chủ động; các ý còn lại là nhiệm vụ của cơ cấu trục khuỷu thanh truyền, hệ thống lái và hệ thống treo.'
     ),
     tf(
       'Áp suất lốp và tình trạng giảm xóc không ảnh hưởng đến khả năng bám đường của ô tô.',
@@ -235,10 +275,15 @@ export const grade11AssessmentBank = {
       'Lốp và giảm xóc ảnh hưởng trực tiếp đến tiếp xúc bánh xe với mặt đường và độ an toàn.'
     ),
     multi(
-      'Chọn các hệ thống trực tiếp góp phần điều khiển và bảo đảm an toàn chuyển động.',
-      ['Hệ thống lái', 'Hệ thống phanh', 'Hệ thống treo', 'Hệ thống giải trí'],
-      [0, 1, 2],
-      'Lái, phanh và treo có vai trò trực tiếp đối với hướng chuyển động, dừng xe và độ bám đường.'
+      'Bộ phận nào thuộc hệ thống truyền lực của ô tô?',
+      [
+        'Giảm chấn',
+        'Li hợp',
+        'Cơ cấu lái',
+        'Bộ vi sai',
+      ],
+      [1, 3],
+      'Li hợp, hộp số, truyền lực các đăng, truyền lực chính và bộ vi sai thuộc hệ thống truyền lực; giảm chấn thuộc hệ thống treo, cơ cấu lái thuộc hệ thống lái.'
     ),
     match(
       'Ghép hệ thống ô tô với nhiệm vụ.',
@@ -257,13 +302,13 @@ export const grade12AssessmentBank = {
     mc(
       'Kĩ thuật điện bao gồm nhóm hoạt động nào?',
       [
-        'Thiết kế, sản xuất, truyền tải, phân phối và sử dụng điện năng',
-        'Chỉ sửa chữa đồ dùng điện gia đình',
-        'Chỉ sản xuất pin',
-        'Chỉ ghi số điện tiêu thụ',
+        'Sản xuất điện năng ở nhà máy và bán điện cho khách hàng',
+        'Sản xuất, truyền tải, phân phối và sử dụng điện năng',
+        'Thiết kế, chế tạo các linh kiện bán dẫn và vi mạch',
+        'Lắp đặt hệ thống cấp thoát nước cho tòa nhà',
       ],
-      0,
-      'Kĩ thuật điện bao quát toàn bộ chuỗi tạo ra, truyền tải, phân phối và sử dụng điện năng.'
+      1,
+      'Kĩ thuật điện bao quát cả chuỗi sản xuất, truyền tải, phân phối và sử dụng điện năng; linh kiện bán dẫn thuộc kĩ thuật điện tử.'
     ),
     tf(
       'Người làm nghề điện cần đọc sơ đồ, đo kiểm và tuân thủ quy trình an toàn.',
@@ -271,10 +316,15 @@ export const grade12AssessmentBank = {
       'Đây là những năng lực nền tảng trong thiết kế, lắp đặt, vận hành và bảo trì điện.'
     ),
     multi(
-      'Chọn các xu hướng phát triển của kĩ thuật điện.',
-      ['Năng lượng tái tạo', 'Lưới điện thông minh', 'Tự động hóa', 'Loại bỏ thiết bị bảo vệ'],
-      [0, 1, 2],
-      'Kĩ thuật điện phát triển theo hướng xanh, thông minh, tự động và số hóa.'
+      'Chọn các xu hướng phát triển của kĩ thuật điện hiện nay.',
+      [
+        'Tăng tỉ trọng nhiệt điện than trong tổng nguồn điện',
+        'Phát triển lưới điện thông minh',
+        'Tăng tỉ lệ năng lượng tái tạo',
+        'Giảm tự động hóa trong vận hành hệ thống điện',
+      ],
+      [1, 2],
+      'Kĩ thuật điện phát triển theo hướng nguồn sạch, lưới thông minh và tự động hóa.'
     ),
     match(
       'Ghép vị trí nghề điện với nhiệm vụ phù hợp.',
@@ -289,9 +339,14 @@ export const grade12AssessmentBank = {
   2: [
     mc(
       'Vì sao truyền tải điện năng đi xa thường sử dụng điện áp cao?',
-      ['Để tăng tổn thất', 'Để giảm tổn thất công suất trên đường dây', 'Để bỏ thiết bị bảo vệ', 'Để mọi tải dùng trực tiếp'],
-      1,
-      'Nâng điện áp giúp giảm dòng điện với cùng công suất, từ đó giảm tổn thất trên đường dây.'
+      [
+        'Để tăng tần số dòng điện cho phù hợp với tải',
+        'Để dòng điện trên đường dây lớn hơn',
+        'Để giảm tổn thất công suất trên đường dây',
+        'Để đổi dòng điện xoay chiều thành một chiều',
+      ],
+      2,
+      'Cùng công suất, điện áp cao thì dòng điện nhỏ, tổn thất I²R trên đường dây giảm.'
     ),
     tf(
       'Mạch điện ba pha được dùng phổ biến trong sản xuất và truyền tải điện năng.',
@@ -299,10 +354,15 @@ export const grade12AssessmentBank = {
       'Hệ ba pha có nhiều ưu điểm về truyền tải công suất và vận hành động cơ.'
     ),
     multi(
-      'Chọn các bộ phận của hệ thống điện quốc gia.',
-      ['Nguồn điện', 'Lưới truyền tải và phân phối', 'Phụ tải', 'Bộ phận trang trí'],
-      [0, 1, 2],
-      'Nguồn, lưới điện, phụ tải cùng hệ thống điều khiển - bảo vệ tạo thành hệ thống điện quốc gia.'
+      'Nguồn năng lượng nào sau đây là nguồn tái tạo dùng trong nhà máy điện?',
+      [
+        'Năng lượng gió',
+        'Than đá',
+        'Khí thiên nhiên',
+        'Năng lượng mặt trời',
+      ],
+      [0, 3],
+      'Gió và mặt trời là nguồn tái tạo; than đá và khí thiên nhiên là nhiên liệu hóa thạch.'
     ),
     match(
       'Ghép loại công trình điện với chức năng.',
@@ -317,9 +377,14 @@ export const grade12AssessmentBank = {
   3: [
     mc(
       'Thiết bị nào có nhiệm vụ tự động ngắt mạch khi quá tải hoặc ngắn mạch?',
-      ['Aptomat', 'Ổ cắm', 'Bóng đèn', 'Công tơ'],
+      [
+        'Aptomat',
+        'Cầu dao',
+        'Công tơ điện',
+        'Ổ cắm điện',
+      ],
       0,
-      'Aptomat là thiết bị đóng cắt và bảo vệ mạch điện khi xuất hiện sự cố.'
+      'Aptomat vừa đóng cắt vừa tự ngắt khi quá tải, ngắn mạch; cầu dao chỉ đóng cắt bằng tay.'
     ),
     tf(
       'Sơ đồ nguyên lí thể hiện quan hệ điện giữa các phần tử, còn sơ đồ lắp đặt thể hiện vị trí và cách đi dây.',
@@ -328,9 +393,14 @@ export const grade12AssessmentBank = {
     ),
     multi(
       'Khi lựa chọn thiết bị điện gia đình cần căn cứ vào những yếu tố nào?',
-      ['Điện áp và dòng điện định mức', 'Công suất tải', 'Môi trường sử dụng', 'Chỉ màu vỏ thiết bị'],
-      [0, 1, 2],
-      'Thiết bị phải phù hợp thông số điện, tải và điều kiện môi trường.'
+      [
+        'Thương hiệu được quảng cáo nhiều nhất',
+        'Điện áp và dòng điện định mức',
+        'Công suất của tải',
+        'Môi trường lắp đặt (ẩm ướt, ngoài trời)',
+      ],
+      [1, 2, 3],
+      'Thiết bị phải phù hợp thông số điện, công suất tải và điều kiện môi trường; quảng cáo không phải căn cứ kĩ thuật.'
     ),
     match(
       'Ghép thiết bị với chức năng trong mạng điện gia đình.',
@@ -346,13 +416,13 @@ export const grade12AssessmentBank = {
     mc(
       'Việc đầu tiên cần làm khi phát hiện người bị điện giật là',
       [
-        'chạm trực tiếp để kéo nạn nhân ra.',
-        'nhanh chóng tách nguồn điện bằng biện pháp an toàn.',
-        'dội nước vào khu vực xảy ra sự cố.',
-        'để nạn nhân tự thoát khỏi nguồn điện.',
+        'dùng tay kéo ngay nạn nhân ra khỏi chỗ bị giật.',
+        'gọi cấp cứu rồi chờ nhân viên y tế tới xử lí.',
+        'dội nước để làm mát người nạn nhân.',
+        'ngắt nguồn điện hoặc dùng vật cách điện tách nạn nhân ra.',
       ],
-      1,
-      'Phải tách nguồn an toàn trước khi tiếp cận để tránh người cứu tiếp tục bị điện giật.'
+      3,
+      'Phải tách nạn nhân khỏi nguồn điện an toàn trước để người cứu không bị điện giật, sau đó mới sơ cứu và gọi cấp cứu.'
     ),
     tf(
       'Tắt thiết bị khi không sử dụng vừa giảm chi phí vừa góp phần giảm tải cho hệ thống điện.',
@@ -361,9 +431,14 @@ export const grade12AssessmentBank = {
     ),
     multi(
       'Chọn các biện pháp phòng tránh tai nạn điện.',
-      ['Nối đất bảo vệ', 'Dùng thiết bị chống rò', 'Ngắt nguồn trước khi sửa chữa', 'Thay cầu chì bằng dây đồng tùy ý'],
-      [0, 1, 2],
-      'Nối đất, chống rò và cô lập nguồn đều giảm nguy cơ; thay sai thiết bị bảo vệ rất nguy hiểm.'
+      [
+        'Thay cầu chì bằng dây đồng to hơn để khỏi bị đứt',
+        'Nối đất bảo vệ cho vỏ thiết bị kim loại',
+        'Dùng thiết bị chống dòng điện rò',
+        'Đi dép nhựa nên có thể sửa điện khi chưa ngắt nguồn',
+      ],
+      [1, 2],
+      'Nối đất và chống rò giảm nguy cơ điện giật; thay sai thiết bị bảo vệ hoặc sửa điện khi chưa ngắt nguồn rất nguy hiểm.'
     ),
     match(
       'Ghép nguy cơ điện với biện pháp phù hợp.',
@@ -377,10 +452,15 @@ export const grade12AssessmentBank = {
   ],
   5: [
     mc(
-      'Hệ thống điện tử thường xử lí đại lượng nào là chủ yếu?',
-      ['Tín hiệu điện', 'Nhiên liệu lỏng', 'Phôi kim loại', 'Đất trồng'],
-      0,
-      'Kĩ thuật điện tử thu nhận, xử lí và tạo ra các tín hiệu phục vụ điều khiển, truyền thông và hiển thị.'
+      'Thiết bị nào sau đây là sản phẩm của kĩ thuật điện tử?',
+      [
+        'Máy biến áp lực của trạm 110 kV',
+        'Điện thoại thông minh',
+        'Đường dây truyền tải 500 kV',
+        'Động cơ điện ba pha của máy bơm',
+      ],
+      1,
+      'Điện thoại xử lí tín hiệu bằng mạch điện tử; ba thiết bị còn lại thuộc kĩ thuật điện.'
     ),
     tf(
       'Dịch vụ điện tử hiện đại có liên quan đến IoT, thiết bị thông minh và bảo mật dữ liệu.',
@@ -389,9 +469,14 @@ export const grade12AssessmentBank = {
     ),
     multi(
       'Chọn các năng lực cần thiết trong nghề điện tử.',
-      ['Đọc sơ đồ', 'Nhận biết linh kiện', 'Đo và phân tích tín hiệu', 'Bỏ qua quy trình tìm lỗi'],
-      [0, 1, 2],
-      'Người làm nghề điện tử cần đọc mạch, hiểu linh kiện, đo kiểm và xử lí lỗi có hệ thống.'
+      [
+        'Đọc sơ đồ mạch điện tử',
+        'Vận hành máy tiện, máy phay',
+        'Dùng đồng hồ vạn năng, máy hiện sóng để đo kiểm',
+        'Thi công kết cấu bê tông cốt thép',
+      ],
+      [0, 2],
+      'Người làm nghề điện tử cần đọc mạch và đo kiểm tín hiệu; vận hành máy công cụ và thi công kết cấu thuộc ngành khác.'
     ),
     match(
       'Ghép khối của hệ thống điện tử với nhiệm vụ.',
@@ -406,9 +491,14 @@ export const grade12AssessmentBank = {
   6: [
     mc(
       'Linh kiện nào thường được dùng để chỉnh lưu dòng điện?',
-      ['Diode', 'Điện trở', 'Cuộn cảm', 'Công tắc cơ khí'],
-      0,
-      'Diode dẫn điện chủ yếu theo một chiều nên được dùng trong mạch chỉnh lưu.'
+      [
+        'Điện trở',
+        'Tụ điện',
+        'Cuộn cảm',
+        'Diode',
+      ],
+      3,
+      'Diode dẫn điện chủ yếu theo một chiều nên được dùng trong mạch chỉnh lưu; tụ điện dùng để lọc sau chỉnh lưu.'
     ),
     tf(
       'Transistor có thể làm việc như phần tử khuếch đại hoặc công tắc điện tử.',
@@ -416,10 +506,15 @@ export const grade12AssessmentBank = {
       'Hai ứng dụng cơ bản của transistor là khuếch đại và đóng cắt.'
     ),
     multi(
-      'Chọn các chức năng đúng của linh kiện thụ động.',
-      ['Điện trở hạn chế dòng điện', 'Tụ điện tích và phóng điện', 'Cuộn cảm liên quan đến từ trường', 'Điện trở tự lập trình thuật toán'],
-      [0, 1, 2],
-      'Điện trở, tụ điện và cuộn cảm có các đặc tính thụ động riêng; chúng không tự thực hiện chương trình.'
+      'Linh kiện nào sau đây là linh kiện thụ động?',
+      [
+        'Transistor',
+        'Điện trở',
+        'Tụ điện',
+        'IC vi điều khiển',
+      ],
+      [1, 2],
+      'Điện trở, tụ điện, cuộn cảm là linh kiện thụ động; transistor và IC là linh kiện tích cực.'
     ),
     match(
       'Ghép linh kiện với ứng dụng phù hợp.',
@@ -434,9 +529,14 @@ export const grade12AssessmentBank = {
   7: [
     mc(
       'Đặc điểm của tín hiệu tương tự là',
-      ['chỉ có hai mức 0 và 1.', 'biến thiên liên tục theo thời gian.', 'không mang thông tin.', 'luôn có biên độ bằng không.'],
-      1,
-      'Tín hiệu tương tự có thể nhận các giá trị liên tục trong một khoảng.'
+      [
+        'nhận một trong hai mức logic 0 và 1.',
+        'thay đổi theo từng bước rời rạc đã được mã hóa.',
+        'biến thiên liên tục theo thời gian.',
+        'luôn có biên độ không đổi theo thời gian.',
+      ],
+      2,
+      'Tín hiệu tương tự nhận các giá trị liên tục; hai ý đầu mô tả tín hiệu số.'
     ),
     tf(
       'Trong mạch khuếch đại đảo, tín hiệu ra ngược pha với tín hiệu vào.',
@@ -444,10 +544,15 @@ export const grade12AssessmentBank = {
       'Đảo pha là đặc điểm quan trọng của cấu hình khuếch đại đảo dùng op-amp.'
     ),
     multi(
-      'Mạch điện tử tương tự có thể thực hiện những chức năng nào?',
-      ['Khuếch đại', 'Lọc', 'So sánh', 'Chỉ lưu văn bản'],
-      [0, 1, 2],
-      'Mạch tương tự thường khuếch đại, lọc, so sánh, chỉnh lưu hoặc ổn áp.'
+      'Với mạch khuếch đại đảo dùng op-amp, những nhận định nào đúng?',
+      [
+        'Hệ số khuếch đại có độ lớn bằng R2/R1',
+        'Tín hiệu vào được đưa tới đầu không đảo',
+        'Điện áp ra không vượt quá điện áp nguồn cấp',
+        'Tăng R1 thì hệ số khuếch đại tăng',
+      ],
+      [0, 2],
+      'Ura = −(R2/R1)·Uvào, tín hiệu vào qua R1 tới đầu đảo; điện áp ra bị giới hạn bởi nguồn; tăng R1 làm hệ số khuếch đại giảm.'
     ),
     match(
       'Ghép đại lượng hoặc bộ phận với vai trò trong mạch op-amp.',
@@ -461,10 +566,15 @@ export const grade12AssessmentBank = {
   ],
   8: [
     mc(
-      'Cổng AND cho đầu ra bằng 1 khi nào?',
-      ['Ít nhất một đầu vào bằng 1', 'Tất cả đầu vào bằng 1', 'Tất cả đầu vào bằng 0', 'Các đầu vào khác nhau'],
-      1,
-      'Theo bảng chân lí, cổng AND chỉ cho mức 1 khi mọi đầu vào đều ở mức 1.'
+      'Cổng OR hai đầu vào cho đầu ra bằng 0 khi nào?',
+      [
+        'A = 1, B = 0',
+        'A = 0, B = 1',
+        'A = 1, B = 1',
+        'A = 0, B = 0',
+      ],
+      3,
+      'Cổng OR cho 1 khi có ít nhất một đầu vào bằng 1, nên chỉ cho 0 khi cả hai đầu vào bằng 0.'
     ),
     tf(
       'Đầu ra của mạch tuần tự có thể phụ thuộc cả đầu vào hiện tại và trạng thái trước đó.',
@@ -472,10 +582,15 @@ export const grade12AssessmentBank = {
       'Mạch tuần tự có phần tử nhớ nên trạng thái trước ảnh hưởng đến đầu ra.'
     ),
     multi(
-      'Chọn các phần tử hoặc mạch thuộc điện tử số.',
-      ['Cổng logic', 'Flip-flop', 'Bộ đếm', 'Van nước cơ khí'],
-      [0, 1, 2],
-      'Cổng logic, flip-flop và bộ đếm là các thành phần tiêu biểu của mạch số.'
+      'Mạch nào sau đây là mạch tuần tự (có phần tử nhớ)?',
+      [
+        'Bộ đếm',
+        'Cổng AND',
+        'Flip-flop',
+        'Mạch chỉ gồm cổng OR và NOT',
+      ],
+      [0, 2],
+      'Bộ đếm và flip-flop có phần tử nhớ nên là mạch tuần tự; mạch chỉ gồm cổng logic là mạch tổ hợp.'
     ),
     match(
       'Ghép cổng logic với quy tắc đầu ra.',
@@ -491,13 +606,13 @@ export const grade12AssessmentBank = {
     mc(
       'Vai trò chính của vi điều khiển trong một hệ thống tự động là',
       [
-        'đọc tín hiệu, xử lí chương trình và điều khiển đầu ra.',
-        'chỉ cung cấp điện cho tải công suất lớn.',
-        'thay thế hoàn toàn cảm biến.',
-        'chỉ làm giá đỡ linh kiện.',
+        'đọc tín hiệu vào, thực hiện chương trình và điều khiển đầu ra.',
+        'cấp nguồn trực tiếp cho các tải công suất lớn.',
+        'đo trực tiếp các đại lượng vật lí thay cho cảm biến.',
+        'khuếch đại công suất tín hiệu âm thanh ra loa.',
       ],
       0,
-      'Vi điều khiển thực hiện chương trình để xử lí đầu vào và tạo tín hiệu điều khiển.'
+      'Vi điều khiển xử lí tín hiệu từ cảm biến theo chương trình rồi tạo tín hiệu điều khiển; tải lớn cần mạch công suất riêng.'
     ),
     tf(
       'Có thể nối trực tiếp mọi tải công suất lớn vào chân vi điều khiển mà không cần driver.',
@@ -505,10 +620,15 @@ export const grade12AssessmentBank = {
       'Chân vi điều khiển chỉ chịu dòng giới hạn; tải lớn cần driver, transistor hoặc rơle.'
     ),
     multi(
-      'Một hệ thống vi điều khiển thường có những thành phần nào?',
-      ['Bộ xử lí và bộ nhớ', 'Chân vào/ra', 'Cảm biến và cơ cấu chấp hành', 'Chỉ một bóng đèn không có mạch điều khiển'],
-      [0, 1, 2],
-      'Hệ thống cần bộ xử lí, bộ nhớ, giao tiếp vào/ra và các phần tử kết nối với môi trường.'
+      'Trên bo mạch Arduino Uno, những nhận định nào đúng?',
+      [
+        'Có thể nối trực tiếp động cơ công suất lớn vào chân số',
+        'Các chân A0–A5 đọc được tín hiệu tương tự',
+        'Chân số có thể đặt làm đầu vào hoặc đầu ra',
+        'Chương trình được nạp từ máy tính qua cổng USB',
+      ],
+      [1, 2, 3],
+      'Chân của vi điều khiển chỉ chịu dòng nhỏ nên tải lớn cần mạch công suất; ba ý còn lại đúng.'
     ),
     match(
       'Ghép thành phần với nhiệm vụ trong mạch điều chỉnh độ sáng LED.',

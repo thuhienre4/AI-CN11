@@ -25,7 +25,7 @@ export default {
     tool: { name: 'Dao tiện', role: 'Cắt bỏ một lớp vật liệu (phoi) khỏi phôi.' },
     carriage: { name: 'Bàn xe dao', role: 'Mang dao chuyển động tịnh tiến dọc phôi (chuyển động tiến dao).' },
     tailstock: { name: 'Ụ động (ụ sau)', role: 'Đỡ đầu kia của phôi dài bằng mũi tâm.' },
-    leadscrew: { name: 'Trục vít me, trục trơn', role: 'Truyền chuyển động từ hộp tốc độ tới bàn xe dao.' },
+    leadscrew: { name: 'Trục vít me, trục trơn', role: 'Truyền chuyển động từ hộp bước tiến (hộp chạy dao) tới bàn xe dao: trục vít me khi tiện ren, trục trơn khi tiện trơn.' },
   },
   layers: [
     { id: 'structure', name: 'Cấu tạo máy tiện', note: 'Thân máy, ụ đứng, mâm cặp, bàn xe dao, ụ động, trục vít me.', parts: ['bed', 'headstock', 'chuck', 'carriage', 'tailstock', 'leadscrew'] },

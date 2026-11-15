@@ -58,6 +58,7 @@ const GameDemo = lazyPage(() => import('./pages/GameDemo'))
 const ThreeDSimulation = lazyPage(() => import('./pages/ThreeDSimulation'))
 const ThptExam = lazyPage(() => import('./pages/ThptExam'))
 const ChapterExam = lazyPage(() => import('./pages/ChapterExam'))
+const UserGuide = lazyPage(() => import('./pages/UserGuide'))
 const NotFound = lazyPage(() => import('./pages/NotFound'))
 
 // Components
@@ -229,6 +230,7 @@ function App() {
             {/* Public Routes */}
             <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
             <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
+            <Route path="/guide" element={<UserGuide />} />
 
           {/* Protected Routes */}
           <Route

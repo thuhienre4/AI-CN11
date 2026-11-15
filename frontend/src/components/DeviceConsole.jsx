@@ -86,9 +86,9 @@ export default function DeviceConsole({ model, controls, onControlsChange, motio
       {readouts.length > 0 && (
         <dl className="grid grid-cols-2 gap-x-4 gap-y-1 sm:grid-cols-3 lg:grid-cols-5">
           {readouts.map((item) => (
-            <div key={item.label} className="min-w-0">
+            <div key={item.label} className={item.wide ? 'col-span-full min-w-0' : 'min-w-0'}>
               <dt className="truncate text-[10px] font-semibold uppercase tracking-wide text-slate-500">{item.label}</dt>
-              <dd className="truncate text-sm font-bold tabular-nums text-slate-950">{item.value}</dd>
+              <dd className={`text-sm font-bold tabular-nums text-slate-950 ${item.wide ? '' : 'truncate'}`}>{item.value}</dd>
             </div>
           ))}
         </dl>

@@ -9,7 +9,7 @@ const PHASE_VOLTS = 220
 const SLOW = 0.02 // the rotor is drawn far slower than its real 3000 rpm
 
 const SOURCES = {
-  hydro: { name: 'Thủy điện', chain: 'Thế năng của nước → động năng tua bin → điện năng', fluid: 0x38bdf8 },
+  hydro: { name: 'Thủy điện', chain: 'Thế năng của nước → động năng của dòng nước → cơ năng tua bin → điện năng', fluid: 0x38bdf8 },
   thermal: { name: 'Nhiệt điện', chain: 'Hóa năng nhiên liệu → nhiệt năng của hơi nước → cơ năng tua bin → điện năng', fluid: 0xe5e7eb },
   wind: { name: 'Điện gió', chain: 'Động năng của gió → cơ năng cánh quạt → điện năng', fluid: 0xbae6fd },
 }
@@ -79,7 +79,7 @@ const makeGenerator = ({ withPlant }) => ({
     ]
     if (withPlant) {
       const source = SOURCES[controls.source]
-      return [{ label: 'Biến đổi năng lượng', value: source.chain }, ...rows.slice(0, 2)]
+      return [{ label: 'Biến đổi năng lượng', value: source.chain, wide: true }, ...rows.slice(0, 2)]
     }
     return [
       ...rows,
@@ -136,7 +136,8 @@ const makeGenerator = ({ withPlant }) => ({
     }
 
     const annotations = [
-      label(root, 'Stato', -1.45, 1.25, 0),
+      // in the plant view the upper left of the ring is behind the turbine
+      withPlant ? label(root, 'Stato', 1.1, -1.25, 0.2) : label(root, 'Stato', -1.45, 1.25, 0),
       label(coils[0].winding.parent, 'Cuộn dây pha A', 0, 1.35, 0),
       label(coils[1].winding.parent, 'Pha B', 0, 1.35, 0, true),
       label(coils[2].winding.parent, 'Pha C', 0, 1.35, 0, true),
@@ -153,7 +154,7 @@ const makeGenerator = ({ withPlant }) => ({
       annotations,
       floorY: -1.8,
       framing: withPlant
-        ? { center: new THREE.Vector3(0.3, 0, -1.6), width: 7, height: 4.2, direction: new THREE.Vector3(0.9, 0.35, 0.75).normalize() }
+        ? { center: new THREE.Vector3(0, -0.1, -1.2), width: 7.6, height: 4.4, direction: new THREE.Vector3(-0.55, 0.35, 0.75).normalize() }
         : { center: new THREE.Vector3(0.6, 0, 0), width: 5.6, height: 3.8, direction: new THREE.Vector3(0.15, 0.15, 1).normalize() },
       update(time, controls) {
         const dt = Math.min(0.1, Math.max(0, time - lastTime))

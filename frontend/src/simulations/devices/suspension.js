@@ -11,6 +11,8 @@ const ROADS = {
 }
 const ROAD_LENGTH = 8 // metres before the road pattern repeats
 const cm = (metres) => `${(metres * 100).toFixed(1).replace('.', ',')} cm`
+// wheel above its rest place relative to the body: the spring is shorter
+const springState = (metres) => (Math.abs(metres) < 0.0005 ? 'không đổi' : `${metres > 0 ? 'nén thêm' : 'dãn ra'} ${cm(Math.abs(metres))}`)
 
 export default {
   keys: ['11-23'],
@@ -50,7 +52,7 @@ export default {
       { label: 'Mặt đường dưới bánh', value: cm(state.road || 0) },
       { label: 'Bánh xe dịch chuyển', value: cm(state.wheel || 0) },
       { label: 'Thân xe dịch chuyển', value: cm(state.body || 0) },
-      { label: 'Lò xo bị nén thêm', value: cm((state.wheel || 0) - (state.body || 0)) },
+      { label: 'Lò xo so với lúc đứng yên', value: springState((state.wheel || 0) - (state.body || 0)) },
     ]
   },
   build() {
@@ -101,7 +103,7 @@ export default {
       root,
       annotations,
       floorY: -1.1,
-      framing: { center: new THREE.Vector3(-0.4, 0.9, 0), width: 5.8, height: 4.8, direction: new THREE.Vector3(0.25, 0.2, 1).normalize() },
+      framing: { center: new THREE.Vector3(-0.4, 1.15, 0), width: 5.8, height: 5.5, direction: new THREE.Vector3(0.25, 0.2, 1).normalize() },
       update(time, controls) {
         const dt = Math.min(0.05, Math.max(0, time - lastTime))
         lastTime = time

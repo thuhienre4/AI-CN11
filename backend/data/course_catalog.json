@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-07T18:27:28.784Z",
+  "generated_at": "2026-11-15T05:49:37.421Z",
   "courses": [
     {
       "id": 1001,
@@ -365,8 +365,8 @@
       "id": 110202,
       "course_id": 1102,
       "title": "Bài 4. Vật liệu kim loại và hợp kim",
-      "description": "Nhận biết kim loại, hợp kim, gang, thép và liên hệ quy trình sản xuất gang - thép trong lò cao.",
-      "content": "Bài học giới thiệu kim loại và hợp kim dùng trong cơ khí, trong đó gang và thép là hai vật liệu quan trọng. Mô hình lò cao giúp quan sát quặng sắt, than cốc và đá vôi được nạp từ đỉnh lò; gió nóng thổi vào đáy lò tạo nhiệt và khí khử; gang lỏng, xỉ và khí thải được tách ra ở các cửa khác nhau. Từ đó học sinh hiểu vật liệu kim loại không chỉ được lựa chọn theo tính chất mà còn gắn với quy trình luyện kim và yêu cầu bảo vệ môi trường.",
+      "description": "Phân loại vật liệu kim loại thành sắt và hợp kim của sắt (gang, thép), kim loại màu (nhôm, đồng); nêu tính chất và ứng dụng.",
+      "content": "Bài học phân loại vật liệu kim loại dùng trong cơ khí thành hai nhóm: sắt và hợp kim của sắt (gang, thép) và kim loại màu (nhôm, đồng và hợp kim của chúng). Mô hình 3D đặt bốn mẫu vật liệu cạnh nhau để học sinh so sánh thành phần, tính chất và ứng dụng của từng loại.",
       "model_3d_url": null,
       "order": 2
     },
@@ -492,7 +492,7 @@
       "course_id": 1106,
       "title": "Bài 18. Nguyên lí làm việc của động cơ đốt trong",
       "description": "Mô tả chu trình làm việc của động cơ bốn kì và hai kì.",
-      "content": "Mô tả chu trình làm việc của động cơ bốn kì và hai kì. Động cơ bốn kì gồm nạp, nén, cháy - giãn nở và thải. Mỗi kì có chuyển động piston, trạng thái xupap và nhiệm vụ riêng. Hiểu nguyên lí giúp giải thích công suất, tiêu hao nhiên liệu và hiện tượng hư hỏng.",
+      "content": "Mô tả chu trình làm việc của động cơ bốn kì và hai kì. Động cơ bốn kì gồm nạp, nén, cháy - giãn nở và thải. Mỗi kì có chuyển động pít tông, trạng thái xu páp và nhiệm vụ riêng. Hiểu nguyên lí giúp giải thích công suất, tiêu hao nhiên liệu và hiện tượng hư hỏng.",
       "model_3d_url": null,
       "order": 2
     },
@@ -501,7 +501,7 @@
       "course_id": 1106,
       "title": "Bài 19. Các cơ cấu trong động cơ đốt trong",
       "description": "Nhận biết cơ cấu trục khuỷu - thanh truyền và cơ cấu phối khí.",
-      "content": "Nhận biết cơ cấu trục khuỷu - thanh truyền và cơ cấu phối khí. Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của piston thành chuyển động quay. Cơ cấu phối khí điều khiển thời điểm nạp và thải môi chất. Các cơ cấu cần bôi trơn, làm mát và lắp ghép chính xác để làm việc bền.",
+      "content": "Nhận biết cơ cấu trục khuỷu - thanh truyền và cơ cấu phối khí. Cơ cấu trục khuỷu - thanh truyền biến chuyển động tịnh tiến của pít tông thành chuyển động quay. Cơ cấu phối khí điều khiển thời điểm nạp và thải môi chất. Các cơ cấu cần bôi trơn, làm mát và lắp ghép chính xác để làm việc bền.",
       "model_3d_url": null,
       "order": 3
     },
@@ -2409,7 +2409,7 @@
         },
         {
           "id": 34404089,
-          "text": "Vẽ tranh phong cảnh và trang trí sản phẩm",
+          "text": "Thiết kế giao diện cho phần mềm quản lí kho",
           "is_correct": false,
           "order": 2
         },
@@ -3049,7 +3049,7 @@
       "options": [
         {
           "id": 34416084,
-          "text": "kho vật tư",
+          "text": "bộ điều khiển PLC",
           "is_correct": false,
           "order": 1
         },
@@ -3061,13 +3061,13 @@
         },
         {
           "id": 34416086,
-          "text": "bản vẽ",
+          "text": "robot công nghiệp",
           "is_correct": false,
           "order": 3
         },
         {
           "id": 34416087,
-          "text": "phôi đúc",
+          "text": "cảm biến quang",
           "is_correct": false,
           "order": 4
         }
@@ -3361,7 +3361,7 @@
         },
         {
           "id": 34420089,
-          "text": "Ô tô dần được thay bằng xe ngựa kéo",
+          "text": "Xe mới quay lại dùng bộ chế hòa khí thay cho phun xăng điện tử",
           "is_correct": false,
           "order": 2
         },
@@ -4205,7 +4205,7 @@
       "options": [
         {
           "id": 34808084,
-          "text": "chỉ bằng đúng 220 V",
+          "text": "chỉ ở cấp 0,4 kV",
           "is_correct": false,
           "order": 1
         },
@@ -4223,7 +4223,7 @@
         },
         {
           "id": 34808087,
-          "text": "chỉ bằng đúng 500 kV",
+          "text": "từ 220 kV đến 500 kV",
           "is_correct": false,
           "order": 4
         }
@@ -4693,7 +4693,7 @@
         },
         {
           "id": 34816046,
-          "text": "nhanh chóng tách nạn nhân khỏi nguồn điện an toàn",
+          "text": "ngắt nguồn điện hoặc dùng vật cách điện tách nạn nhân ra",
           "is_correct": true,
           "order": 3
         },
@@ -5407,7 +5407,7 @@
         },
         {
           "id": 34832050,
-          "text": "Y = 2",
+          "text": "Y bằng A + B, tức bằng 1",
           "is_correct": false,
           "order": 3
         },
@@ -5509,7 +5509,7 @@
         },
         {
           "id": 34832126,
-          "text": "Không cần cổng",
+          "text": "Cổng NAND",
           "is_correct": false,
           "order": 3
         },
@@ -5728,33 +5728,33 @@
     {
       "id": 1209032,
       "lesson_id": 120903,
-      "text": "Yêu cầu: trời càng tối đèn càng sáng. Thuật toán đúng là",
+      "text": "Yêu cầu: trời càng tối đèn càng sáng. Biết giá trị đọc từ cảm biến tăng khi môi trường sáng hơn. Thuật toán đúng là",
       "question_type": "multiple_choice",
       "difficulty": "hard",
       "points": 1,
       "options": [
         {
           "id": 34836128,
-          "text": "giá trị cảm biến càng nhỏ, mức xuất ra LED càng lớn",
-          "is_correct": true,
+          "text": "giá trị cảm biến càng nhỏ, mức xuất ra LED càng nhỏ",
+          "is_correct": false,
           "order": 1
         },
         {
           "id": 34836129,
-          "text": "giá trị cảm biến càng nhỏ, mức xuất ra LED càng nhỏ",
+          "text": "mức xuất ra LED luôn giữ nguyên ở giá trị lớn nhất",
           "is_correct": false,
           "order": 2
         },
         {
           "id": 34836130,
-          "text": "mức xuất ra LED luôn giữ nguyên ở giá trị lớn nhất",
+          "text": "tắt LED mỗi khi giá trị cảm biến giảm xuống",
           "is_correct": false,
           "order": 3
         },
         {
           "id": 34836131,
-          "text": "tắt LED mỗi khi giá trị cảm biến giảm xuống",
-          "is_correct": false,
+          "text": "giá trị cảm biến càng nhỏ, mức xuất ra LED càng lớn",
+          "is_correct": true,
           "order": 4
         }
       ]

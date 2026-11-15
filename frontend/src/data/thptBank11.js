@@ -6,7 +6,7 @@ export const grade11Questions = {
   ],
   2: [
     ['B', 'NT', 'Người vận hành máy tiện, máy phay thuộc nhóm nghề nào?', 'Vận hành máy công cụ', ['Thiết kế cơ khí', 'Quản lí dự án', 'Kinh doanh thiết bị'], 'Đây là nhóm nghề trực tiếp gia công chi tiết.'],
-    ['V', 'DG', 'Yêu cầu nào quan trọng nhất với người làm nghề lắp ráp cơ khí chính xác?', 'Đọc được bản vẽ và thao tác an toàn', ['Viết được chương trình máy tính phức tạp', 'Có kinh nghiệm bán hàng và chăm sóc khách hàng', 'Vẽ tranh phong cảnh và trang trí sản phẩm'], 'Nghề lắp ráp dựa trên bản vẽ, quy trình và an toàn.'],
+    ['V', 'DG', 'Yêu cầu nào quan trọng nhất với người làm nghề lắp ráp cơ khí chính xác?', 'Đọc được bản vẽ và thao tác an toàn', ['Viết được chương trình máy tính phức tạp', 'Có kinh nghiệm bán hàng và chăm sóc khách hàng', 'Thiết kế giao diện cho phần mềm quản lí kho'], 'Nghề lắp ráp dựa trên bản vẽ, quy trình và an toàn.'],
   ],
   3: [
     ['B', 'NT', 'Vật liệu cơ khí được phân thành các nhóm lớn nào?', 'Kim loại và hợp kim, phi kim loại, vật liệu mới', ['Vật liệu rắn, vật liệu lỏng, vật liệu khí', 'Vật liệu đắt tiền, vật liệu rẻ, vật liệu thải', 'Vật liệu dẫn nhiệt, cách nhiệt, chịu nhiệt'], 'Theo sơ đồ phân loại trong bài.'],
@@ -45,7 +45,7 @@ export const grade11Questions = {
     ['H', 'NT', 'Vì sao cần kiểm tra chất lượng trước khi đóng gói?', 'Để phát hiện sản phẩm không đạt yêu cầu', ['Để tăng khối lượng của mỗi sản phẩm trước khi xuất xưởng', 'Để thay thế công đoạn lắp ráp của quy trình', 'Để giảm kích thước của sản phẩm đã gia công'], 'Kiểm tra bảo đảm chất lượng đầu ra.'],
   ],
   12: [
-    ['B', 'NT', 'Trong dây chuyền sản xuất tự động, bộ phận vận chuyển sản phẩm giữa các trạm thường là', 'băng tải', ['bản vẽ', 'phôi đúc', 'kho vật tư'], 'Băng tải liên kết các trạm.'],
+    ['B', 'NT', 'Trong dây chuyền sản xuất tự động, bộ phận vận chuyển sản phẩm giữa các trạm thường là', 'băng tải', ['robot công nghiệp', 'cảm biến quang', 'bộ điều khiển PLC'], 'Băng tải liên kết các trạm.'],
     ['H', 'DG', 'Robot hàn được dùng thay người trong dây chuyền ô tô chủ yếu vì', 'lặp lại chính xác trong môi trường nguy hiểm', ['không cần bảo dưỡng trong suốt vòng đời của nó', 'có thể tự thiết kế mẫu xe mới cho nhà máy', 'hoạt động được mà không cần nguồn năng lượng'], 'Robot lặp lại chính xác, giảm nguy hiểm cho người lao động.'],
   ],
   13: [
@@ -62,7 +62,7 @@ export const grade11Questions = {
   ],
   16: [
     ['B', 'NT', 'Công việc nào thuộc ngành nghề bảo dưỡng trong cơ khí động lực?', 'Kiểm tra, sửa chữa động cơ', ['Thiết kế tòa nhà cao tầng', 'Lập trình trang web bán hàng', 'Vận hành trạm biến áp 110 kV của khu công nghiệp'], 'Bảo dưỡng, sửa chữa là nghề tiêu biểu của lĩnh vực.'],
-    ['H', 'DG', 'Xu hướng nào tạo yêu cầu mới cho thợ sửa chữa ô tô hiện nay?', 'Xe điện và chẩn đoán điện tử ngày càng phổ biến', ['Xe ngày càng ít linh kiện điện tử hơn so với các đời xe trước', 'Xe không còn cần đến bảo dưỡng định kì', 'Ô tô dần được thay bằng xe ngựa kéo'], 'Xu hướng nghề gắn với điện hóa và điện tử.'],
+    ['H', 'DG', 'Xu hướng nào tạo yêu cầu mới cho thợ sửa chữa ô tô hiện nay?', 'Xe điện và chẩn đoán điện tử ngày càng phổ biến', ['Xe ngày càng ít linh kiện điện tử hơn so với các đời xe trước', 'Xe không còn cần đến bảo dưỡng định kì', 'Xe mới quay lại dùng bộ chế hòa khí thay cho phun xăng điện tử'], 'Xu hướng nghề gắn với điện hóa và điện tử.'],
   ],
   17: [
     ['B', 'NT', 'Động cơ đốt trong gồm những gì?', 'Hai cơ cấu và các hệ thống chính', ['Một cơ cấu và một máy phát điện', 'Ba xi lanh và một bánh đà', 'Hai trục khuỷu và một bu gi'], 'Cơ cấu trục khuỷu thanh truyền, cơ cấu phối khí và các hệ thống.'],

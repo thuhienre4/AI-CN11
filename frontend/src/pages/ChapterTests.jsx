@@ -148,7 +148,8 @@ function QuestionInput({ question, answer, setAnswer, submitted }) {
 
   if (type === 'matching') {
     const current = answer || {}
-    const answerOptions = question.pairs.map((pair) => pair.answer)
+    // alphabetical, so the list never gives away which answer belongs to which row
+    const answerOptions = question.pairs.map((pair) => pair.answer).sort((a, b) => a.localeCompare(b, 'vi'))
     return (
       <div className="mt-3 space-y-2">
         {question.pairs.map((pair) => {

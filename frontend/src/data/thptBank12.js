@@ -13,7 +13,7 @@ export const grade12Questions = {
     ['V', 'SD', 'Tải ba pha đối xứng nối hình sao, điện áp pha 220 V, mỗi pha R = 50 Ω. Dòng điện dây bằng', '4,4 A', ['7,6 A', '2,5 A', '13,2 A'], 'Ip = Up/R = 4,4 A; nối sao nên Id = Ip.'],
   ],
   4: [
-    ['B', 'NT', 'Lưới điện phân phối có cấp điện áp', 'từ 110 kV trở xuống', ['từ 220 kV trở lên', 'chỉ bằng đúng 500 kV', 'chỉ bằng đúng 220 V'], 'Lưới phân phối đưa điện tới nơi tiêu thụ.'],
+    ['B', 'NT', 'Lưới điện phân phối có cấp điện áp', 'từ 110 kV trở xuống', ['từ 220 kV trở lên', 'từ 220 kV đến 500 kV', 'chỉ ở cấp 0,4 kV'], 'Lưới phân phối đưa điện tới nơi tiêu thụ.'],
     ['H', 'NT', 'Vì sao phải nâng điện áp lên cao khi truyền tải điện đi xa?', 'Để giảm dòng điện và tổn thất trên đường dây', ['Để tăng tần số của dòng điện trên đường dây', 'Để giảm số nhà máy cần phát điện trong hệ thống', 'Để biến dòng điện xoay chiều thành một chiều'], 'Cùng công suất, điện áp cao thì dòng nhỏ, tổn hao I²R giảm.'],
   ],
   5: [
@@ -41,7 +41,7 @@ export const grade12Questions = {
     ['H', 'SD', 'Trong mạch hai công tắc ba cực, đèn sáng khi nào?', 'Khi hai công tắc cùng nối vào một dây liên lạc', ['Khi chỉ một công tắc được cấp nguồn', 'Khi hai công tắc nối vào hai dây liên lạc khác nhau', 'Khi tháo bỏ dây trung tính của đèn'], 'Hai công tắc phải tạo thành mạch kín.'],
   ],
   11: [
-    ['B', 'SD', 'Khi thấy người bị điện giật, việc đầu tiên cần làm là', 'nhanh chóng tách nạn nhân khỏi nguồn điện an toàn', ['dùng tay không kéo ngay nạn nhân ra khỏi nơi đó', 'đổ nước lên người nạn nhân để làm mát cơ thể', 'gọi người tới rồi chờ đợi không làm gì thêm'], 'Phải cắt nguồn hoặc dùng vật cách điện.'],
+    ['B', 'SD', 'Khi thấy người bị điện giật, việc đầu tiên cần làm là', 'ngắt nguồn điện hoặc dùng vật cách điện tách nạn nhân ra', ['dùng tay không kéo ngay nạn nhân ra khỏi nơi đó', 'đổ nước lên người nạn nhân để làm mát cơ thể', 'gọi người tới rồi chờ đợi không làm gì thêm'], 'Phải cắt nguồn hoặc dùng vật cách điện.'],
     ['V', 'DG', 'Vỏ máy giặt bị rò điện khi chạm vào. Biện pháp phù hợp nhất là', 'ngắt điện, kiểm tra sửa chữa và nối đất vỏ máy', ['tiếp tục dùng nhưng đi dép nhựa khi chạm vào', 'dán băng dính lên vỏ máy ở vị trí bị rò điện', 'thay bằng ổ cắm khác rồi tiếp tục sử dụng'], 'Phải xử lí nguyên nhân rò điện và bảo vệ nối đất.'],
   ],
   12: [
@@ -82,14 +82,14 @@ export const grade12Questions = {
   ],
   21: [
     ['B', 'NT', 'Cổng AND có đầu ra bằng 1 khi', 'tất cả các đầu vào đều bằng 1', ['một đầu vào bất kì bằng 1', 'tất cả các đầu vào đều bằng 0', 'hai đầu vào khác giá trị nhau'], 'Theo bảng chân lí của cổng AND.'],
-    ['V', 'SD', 'Hàm Y = (A + B)·C với A = 1, B = 0, C = 0 cho kết quả', 'Y = 0', ['Y = 1', 'Y = 2', 'Không xác định'], 'A + B = 1, nhân với C = 0 cho 0.'],
+    ['V', 'SD', 'Hàm Y = (A + B)·C với A = 1, B = 0, C = 0 cho kết quả', 'Y = 0', ['Y = 1', 'Y bằng A + B, tức bằng 1', 'Không xác định'], 'A + B = 1, nhân với C = 0 cho 0.'],
   ],
   22: [
     ['B', 'NT', 'Flip-flop D dùng để', 'lưu trữ một bit dữ liệu', ['khuếch đại tín hiệu tương tự', 'biến xoay chiều thành một chiều', 'đo điện năng tiêu thụ của mạch'], 'Flip-flop là phần tử nhớ.'],
     ['V', 'SD', 'Mạch đếm dùng 3 flip-flop D nối tầng có thể đếm được tối đa bao nhiêu trạng thái?', '8', ['3', '6', '16'], '2³ = 8 trạng thái.'],
   ],
   23: [
-    ['H', 'SD', 'Mạch báo cháy dùng cổng logic cần báo khi có khói hoặc nhiệt độ cao. Nên dùng cổng nào cho hai tín hiệu đó?', 'Cổng OR', ['Cổng AND', 'Cổng NOT', 'Không cần cổng'], 'Chỉ cần một trong hai điều kiện đúng.'],
+    ['H', 'SD', 'Mạch báo cháy dùng cổng logic cần báo khi có khói hoặc nhiệt độ cao. Nên dùng cổng nào cho hai tín hiệu đó?', 'Cổng OR', ['Cổng AND', 'Cổng NOT', 'Cổng NAND'], 'Chỉ cần một trong hai điều kiện đúng.'],
     ['V', 'SD', 'Mạch báo cháy lắp xong, còi kêu liên tục dù không có khói. Nguyên nhân hợp lí là', 'đầu vào cổng logic bị treo ở mức 1 do nối sai', ['nguồn điện của mạch đã bị ngắt hoàn toàn', 'còi báo không được nối với mạch', 'cảm biến đã được tháo ra khỏi mạch và đầu vào ở mức 0'], 'Đầu ra phản ánh mức logic ở đầu vào.'],
   ],
   24: [
@@ -102,7 +102,7 @@ export const grade12Questions = {
   ],
   26: [
     ['H', 'SD', 'Trong mạch tự động điều chỉnh độ sáng LED, cảm biến ánh sáng đóng vai trò nào?', 'Cung cấp tín hiệu đầu vào cho vi điều khiển', ['Lưu trữ chương trình điều khiển của mạch', 'Cấp nguồn 5 V cho toàn bộ bo mạch', 'Trực tiếp thay đổi điện áp nguồn của LED'], 'Vi điều khiển đọc cảm biến rồi điều khiển LED.'],
-    ['V', 'TK', 'Yêu cầu: trời càng tối đèn càng sáng. Thuật toán đúng là', 'giá trị cảm biến càng nhỏ, mức xuất ra LED càng lớn', ['giá trị cảm biến càng nhỏ, mức xuất ra LED càng nhỏ', 'mức xuất ra LED luôn giữ nguyên ở giá trị lớn nhất', 'tắt LED mỗi khi giá trị cảm biến giảm xuống'], 'Độ sáng LED tỉ lệ nghịch với độ sáng môi trường (giả sử giá trị đọc tăng theo độ sáng).'],
+    ['V', 'TK', 'Yêu cầu: trời càng tối đèn càng sáng. Biết giá trị đọc từ cảm biến tăng khi môi trường sáng hơn. Thuật toán đúng là', 'giá trị cảm biến càng nhỏ, mức xuất ra LED càng lớn', ['giá trị cảm biến càng nhỏ, mức xuất ra LED càng nhỏ', 'mức xuất ra LED luôn giữ nguyên ở giá trị lớn nhất', 'tắt LED mỗi khi giá trị cảm biến giảm xuống'], 'Môi trường tối thì giá trị đọc nhỏ, cần xuất mức điều khiển LED lớn: hai đại lượng biến đổi ngược chiều.'],
   ],
 }
 
