@@ -60,6 +60,7 @@ const ThptExam = lazyPage(() => import('./pages/ThptExam'))
 const ChapterExam = lazyPage(() => import('./pages/ChapterExam'))
 const UserGuide = lazyPage(() => import('./pages/UserGuide'))
 const DailyChallenge = lazyPage(() => import('./pages/DailyChallenge'))
+const CareerExperience = lazyPage(() => import('./pages/CareerExperience'))
 const NotFound = lazyPage(() => import('./pages/NotFound'))
 
 // Components
@@ -236,6 +237,8 @@ function App() {
             <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
             <Route path="/guide" element={<UserGuide />} />
             <Route path="/challenge" element={<ProtectedRoute><DailyChallenge /></ProtectedRoute>} />
+            <Route path="/career" element={<ProtectedRoute><CareerExperience /></ProtectedRoute>} />
+            <Route path="/lessons/:lessonId/career" element={<ProtectedRoute><CareerExperience /></ProtectedRoute>} />
 
           {/* Protected Routes */}
           <Route

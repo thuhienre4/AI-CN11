@@ -352,6 +352,12 @@ Thử thách kiến thức: 5 câu mỗi ngày do máy chủ chọn và chấm, 
 
 Kiểm thử: 10 ca máy chủ mới (chọn câu, ẩn đáp án, chấm một lần, từ chối sự kiện giả, quy tắc hoàn thành), 4 ca giao diện mới, hành trình đầu – cuối có làm và nộp thử thách. Tổng: 328 ca máy chủ, 276 ca giao diện, 6 hành trình đầu – cuối.
 
+## Trò chơi trải nghiệm hướng nghiệp "Một ngày làm nghề" (16/11/2026)
+
+Gắn vào 5 bài về ngành nghề (lớp 10 Bài 7; lớp 11 Bài 2, 16; lớp 12 Bài 2, 14), mỗi bài 3 nghề theo nhóm nghề của bài, mỗi nghề 3 tình huống ở nơi làm việc. Mỗi tình huống có đúng một lựa chọn tốt nhất, một chưa trọn vẹn, một chưa đúng, đều có giải thích, ưu tiên an toàn lao động, quy trình và đạo đức nghề. Cuối mỗi nghề có ngành học, trình độ đào tạo (không nêu tên trường, mức lương) và câu hỏi tự đánh giá mức yêu thích; hồ sơ nghề gợi ý theo hai trục làm tốt và yêu thích, chỉ lưu trên máy học sinh, ghi rõ không phải trắc nghiệm hướng nghiệp chuẩn hóa. Nội dung tình huống do nhóm soạn, cần giáo viên bộ môn rà soát.
+
+Kiểm thử: 4 ca giao diện (gắn đúng bài, cấu trúc lựa chọn, vị trí đáp án, quy tắc gợi ý), 1 hành trình đầu – cuối chơi trọn một nghề. Tổng: 328 ca máy chủ, 280 ca giao diện, 7 hành trình đầu – cuối.
+
 ## Chưa thực hiện
 
 - Đo tải và kiểm thử đồng thời trên PostgreSQL, nhiều tiến trình, mạng thực.

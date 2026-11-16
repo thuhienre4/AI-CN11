@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { CAREER_LESSONS } from '../data/careerGames'
 import { Link, useParams } from 'react-router-dom'
 import { materialsForLesson } from '../data/lessonMaterials'
 import toast from 'react-hot-toast'
@@ -448,6 +449,12 @@ export default function LessonDetail() {
                 <Link to={`/lessons/${lessonId}/circuit-lab`} className="secondary-button w-full">
                   <span className="mr-2 rounded bg-slate-100 px-1.5 py-0.5 text-xs">E</span>
                   Thiết kế thí nghiệm mạch
+                </Link>
+              )}
+              {CAREER_LESSONS[Number(lessonId)] && (
+                <Link to={`/lessons/${lessonId}/career`} className="primary-button w-full">
+                  <span className="mr-2 rounded bg-white/20 px-1.5 py-0.5 text-xs">N</span>
+                  Trải nghiệm nghề
                 </Link>
               )}
               <Link to={`/lessons/${lessonId}/quiz`} className="secondary-button w-full">

@@ -246,3 +246,31 @@ test('a student earns points by finishing a quick test, and the teacher sees and
   expect((await request.get(`${API}/api/learning/users/1/journey`, { headers: { Authorization: `Bearer ${token}` } })).status()).toBe(403)
   await teacherContext.close()
 })
+
+test('a student tries a job from a careers lesson and it lands in the career profile', async ({ page }) => {
+  const username = `hsn${run}`
+  await register(page, { role: 'student', username, fullName: 'Lê Thu Trang', studentClass: '11A3' })
+  await login(page, username)
+
+  await page.goto('/lessons/110102')
+  await page.getByRole('link', { name: /Trải nghiệm nghề/ }).click()
+  await expect(page.getByRole('heading', { name: 'Một ngày làm nghề' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Thợ vận hành máy CNC' })).toBeVisible()
+
+  await page.getByRole('article').filter({ hasText: 'Thợ vận hành máy CNC' }).getByRole('button', { name: 'Vào ca làm việc' }).click()
+  for (let index = 0; index < 3; index += 1) {
+    await page.getByRole('radiogroup').getByRole('radio').first().click()
+    // every choice is explained, and the best one is shown
+    await expect(page.getByText('Lựa chọn tốt nhất')).toBeVisible()
+    await page.getByRole('button', { name: /Tình huống tiếp theo|Kết thúc ca làm việc/ }).click()
+  }
+  await expect(page.getByText(/\d\/6 điểm xử lí tình huống/)).toBeVisible()
+  await expect(page.getByText('Trung cấp, cao đẳng: Cắt gọt kim loại, Công nghệ kĩ thuật cơ khí')).toBeVisible()
+  await page.getByText('Em rất muốn thử nghề này').click()
+  await page.getByRole('button', { name: 'Lưu vào hồ sơ nghề' }).click()
+
+  const profile = page.getByRole('region', { name: 'Hồ sơ nghề của em' })
+  await expect(profile.getByText('Thợ vận hành máy CNC')).toBeVisible()
+  await expect(profile.getByText(/Xử lí tình huống \d\/6 · Em rất muốn thử nghề này/)).toBeVisible()
+  await expect(page.getByText(/Đã thử · \d\/6 điểm/)).toBeVisible()
+})

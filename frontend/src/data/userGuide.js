@@ -89,6 +89,17 @@ export const GUIDE_TASKS = {
       ],
     },
     {
+      id: 'career',
+      title: 'Trải nghiệm nghề',
+      to: '/career',
+      linkLabel: 'Mở Một ngày làm nghề',
+      steps: [
+        'Ở các bài về ngành nghề (lớp 10 Bài 7, lớp 11 Bài 2 và 16, lớp 12 Bài 2 và 14), bấm “Trải nghiệm nghề”.',
+        'Chọn một nghề, xử lí ba tình huống ở nơi làm việc; mỗi lựa chọn đều có giải thích.',
+        'Cuối ca, tự đánh giá em có thích nghề đó không; “Hồ sơ nghề” gợi ý ngành học phù hợp.',
+      ],
+    },
+    {
       id: 'tutor',
       title: 'Hỏi trợ lí học tập',
       to: '/ai-workspace',
