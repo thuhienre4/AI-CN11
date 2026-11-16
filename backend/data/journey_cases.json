@@ -1,0 +1,1232 @@
+[
+ {
+  "name": "nothing done",
+  "lessons": [],
+  "events": [],
+  "today": "2026-11-16",
+  "expected": {
+   "xp": 0,
+   "level": 1,
+   "level_floor": 0,
+   "next_level_xp": 100,
+   "breakdown": {
+    "lessons": 0,
+    "quizzes": 0,
+    "models": 0,
+    "active_days": 0,
+    "daily_tasks": 0
+   },
+   "streak": {
+    "current": 0,
+    "best": 0
+   },
+   "active_days": 0,
+   "daily_tasks": [
+    {
+     "id": "study",
+     "title": "Học một bài",
+     "done": false
+    },
+    {
+     "id": "quiz",
+     "title": "Làm một bài kiểm tra nhanh",
+     "done": false
+    },
+    {
+     "id": "model",
+     "title": "Mở một mô hình 3D",
+     "done": false
+    }
+   ],
+   "badges": [
+    {
+     "id": "first_lesson",
+     "title": "Bước đầu tiên",
+     "description": "Hoàn thành bài học đầu tiên",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "five_lessons",
+     "title": "Chăm chỉ",
+     "description": "Hoàn thành 5 bài học",
+     "earned": false,
+     "current": 0,
+     "target": 5
+    },
+    {
+     "id": "twenty_lessons",
+     "title": "Bền bỉ",
+     "description": "Hoàn thành 20 bài học",
+     "earned": false,
+     "current": 0,
+     "target": 20
+    },
+    {
+     "id": "solid_three",
+     "title": "Nắm chắc",
+     "description": "Đạt từ 80 điểm kiểm tra nhanh ở 3 bài",
+     "earned": false,
+     "current": 0,
+     "target": 3
+    },
+    {
+     "id": "perfect",
+     "title": "Chính xác",
+     "description": "Đạt 100 điểm kiểm tra nhanh ở một bài",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "retry",
+     "title": "Kiên trì",
+     "description": "Làm lại bài kiểm tra và đạt từ 80 điểm",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "explorer",
+     "title": "Khám phá",
+     "description": "Mở mô hình 3D ở 5 bài",
+     "earned": false,
+     "current": 0,
+     "target": 5
+    },
+    {
+     "id": "streak_three",
+     "title": "Đều đặn",
+     "description": "Học 3 ngày liên tiếp",
+     "earned": false,
+     "current": 0,
+     "target": 3
+    },
+    {
+     "id": "streak_seven",
+     "title": "Thói quen tốt",
+     "description": "Học 7 ngày liên tiếp",
+     "earned": false,
+     "current": 0,
+     "target": 7
+    }
+   ]
+  }
+ },
+ {
+  "name": "one lesson completed with a model and a quiz of 85",
+  "lessons": [
+   {
+    "status": "completed",
+    "best_quiz_score": 85,
+    "quiz_attempt_count": 1,
+    "simulation_count": 2
+   }
+  ],
+  "events": [
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "lesson_completed",
+    "2026-11-16"
+   ]
+  ],
+  "today": "2026-11-16",
+  "expected": {
+   "xp": 104,
+   "level": 2,
+   "level_floor": 100,
+   "next_level_xp": 300,
+   "breakdown": {
+    "lessons": 40,
+    "quizzes": 34,
+    "models": 10,
+    "active_days": 5,
+    "daily_tasks": 15
+   },
+   "streak": {
+    "current": 1,
+    "best": 1
+   },
+   "active_days": 1,
+   "daily_tasks": [
+    {
+     "id": "study",
+     "title": "Học một bài",
+     "done": true
+    },
+    {
+     "id": "quiz",
+     "title": "Làm một bài kiểm tra nhanh",
+     "done": true
+    },
+    {
+     "id": "model",
+     "title": "Mở một mô hình 3D",
+     "done": true
+    }
+   ],
+   "badges": [
+    {
+     "id": "first_lesson",
+     "title": "Bước đầu tiên",
+     "description": "Hoàn thành bài học đầu tiên",
+     "earned": true,
+     "current": 1,
+     "target": 1
+    },
+    {
+     "id": "five_lessons",
+     "title": "Chăm chỉ",
+     "description": "Hoàn thành 5 bài học",
+     "earned": false,
+     "current": 1,
+     "target": 5
+    },
+    {
+     "id": "twenty_lessons",
+     "title": "Bền bỉ",
+     "description": "Hoàn thành 20 bài học",
+     "earned": false,
+     "current": 1,
+     "target": 20
+    },
+    {
+     "id": "solid_three",
+     "title": "Nắm chắc",
+     "description": "Đạt từ 80 điểm kiểm tra nhanh ở 3 bài",
+     "earned": false,
+     "current": 1,
+     "target": 3
+    },
+    {
+     "id": "perfect",
+     "title": "Chính xác",
+     "description": "Đạt 100 điểm kiểm tra nhanh ở một bài",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "retry",
+     "title": "Kiên trì",
+     "description": "Làm lại bài kiểm tra và đạt từ 80 điểm",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "explorer",
+     "title": "Khám phá",
+     "description": "Mở mô hình 3D ở 5 bài",
+     "earned": false,
+     "current": 1,
+     "target": 5
+    },
+    {
+     "id": "streak_three",
+     "title": "Đều đặn",
+     "description": "Học 3 ngày liên tiếp",
+     "earned": false,
+     "current": 1,
+     "target": 3
+    },
+    {
+     "id": "streak_seven",
+     "title": "Thói quen tốt",
+     "description": "Học 7 ngày liên tiếp",
+     "earned": false,
+     "current": 1,
+     "target": 7
+    }
+   ]
+  }
+ },
+ {
+  "name": "repeating the same actions earns nothing more",
+  "lessons": [
+   {
+    "status": "completed",
+    "best_quiz_score": 85,
+    "quiz_attempt_count": 9,
+    "simulation_count": 40
+   }
+  ],
+  "events": [
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-16"
+   ]
+  ],
+  "today": "2026-11-16",
+  "expected": {
+   "xp": 104,
+   "level": 2,
+   "level_floor": 100,
+   "next_level_xp": 300,
+   "breakdown": {
+    "lessons": 40,
+    "quizzes": 34,
+    "models": 10,
+    "active_days": 5,
+    "daily_tasks": 15
+   },
+   "streak": {
+    "current": 1,
+    "best": 1
+   },
+   "active_days": 1,
+   "daily_tasks": [
+    {
+     "id": "study",
+     "title": "Học một bài",
+     "done": true
+    },
+    {
+     "id": "quiz",
+     "title": "Làm một bài kiểm tra nhanh",
+     "done": true
+    },
+    {
+     "id": "model",
+     "title": "Mở một mô hình 3D",
+     "done": true
+    }
+   ],
+   "badges": [
+    {
+     "id": "first_lesson",
+     "title": "Bước đầu tiên",
+     "description": "Hoàn thành bài học đầu tiên",
+     "earned": true,
+     "current": 1,
+     "target": 1
+    },
+    {
+     "id": "five_lessons",
+     "title": "Chăm chỉ",
+     "description": "Hoàn thành 5 bài học",
+     "earned": false,
+     "current": 1,
+     "target": 5
+    },
+    {
+     "id": "twenty_lessons",
+     "title": "Bền bỉ",
+     "description": "Hoàn thành 20 bài học",
+     "earned": false,
+     "current": 1,
+     "target": 20
+    },
+    {
+     "id": "solid_three",
+     "title": "Nắm chắc",
+     "description": "Đạt từ 80 điểm kiểm tra nhanh ở 3 bài",
+     "earned": false,
+     "current": 1,
+     "target": 3
+    },
+    {
+     "id": "perfect",
+     "title": "Chính xác",
+     "description": "Đạt 100 điểm kiểm tra nhanh ở một bài",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "retry",
+     "title": "Kiên trì",
+     "description": "Làm lại bài kiểm tra và đạt từ 80 điểm",
+     "earned": true,
+     "current": 1,
+     "target": 1
+    },
+    {
+     "id": "explorer",
+     "title": "Khám phá",
+     "description": "Mở mô hình 3D ở 5 bài",
+     "earned": false,
+     "current": 1,
+     "target": 5
+    },
+    {
+     "id": "streak_three",
+     "title": "Đều đặn",
+     "description": "Học 3 ngày liên tiếp",
+     "earned": false,
+     "current": 1,
+     "target": 3
+    },
+    {
+     "id": "streak_seven",
+     "title": "Thói quen tốt",
+     "description": "Học 7 ngày liên tiếp",
+     "earned": false,
+     "current": 1,
+     "target": 7
+    }
+   ]
+  }
+ },
+ {
+  "name": "streak of three days ending yesterday, then a gap before",
+  "lessons": [
+   {
+    "status": "in_progress",
+    "best_quiz_score": 0,
+    "quiz_attempt_count": 0,
+    "simulation_count": 1
+   },
+   {
+    "status": "needs_review",
+    "best_quiz_score": 45,
+    "quiz_attempt_count": 1,
+    "simulation_count": 0
+   }
+  ],
+  "events": [
+   [
+    "lesson_viewed",
+    "2026-11-10"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-13"
+   ],
+   [
+    "quiz_submitted",
+    "2026-11-14"
+   ],
+   [
+    "simulation_opened",
+    "2026-11-15"
+   ]
+  ],
+  "today": "2026-11-16",
+  "expected": {
+   "xp": 48,
+   "level": 1,
+   "level_floor": 0,
+   "next_level_xp": 100,
+   "breakdown": {
+    "lessons": 0,
+    "quizzes": 18,
+    "models": 10,
+    "active_days": 20,
+    "daily_tasks": 0
+   },
+   "streak": {
+    "current": 3,
+    "best": 3
+   },
+   "active_days": 4,
+   "daily_tasks": [
+    {
+     "id": "study",
+     "title": "Học một bài",
+     "done": false
+    },
+    {
+     "id": "quiz",
+     "title": "Làm một bài kiểm tra nhanh",
+     "done": false
+    },
+    {
+     "id": "model",
+     "title": "Mở một mô hình 3D",
+     "done": false
+    }
+   ],
+   "badges": [
+    {
+     "id": "first_lesson",
+     "title": "Bước đầu tiên",
+     "description": "Hoàn thành bài học đầu tiên",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "five_lessons",
+     "title": "Chăm chỉ",
+     "description": "Hoàn thành 5 bài học",
+     "earned": false,
+     "current": 0,
+     "target": 5
+    },
+    {
+     "id": "twenty_lessons",
+     "title": "Bền bỉ",
+     "description": "Hoàn thành 20 bài học",
+     "earned": false,
+     "current": 0,
+     "target": 20
+    },
+    {
+     "id": "solid_three",
+     "title": "Nắm chắc",
+     "description": "Đạt từ 80 điểm kiểm tra nhanh ở 3 bài",
+     "earned": false,
+     "current": 0,
+     "target": 3
+    },
+    {
+     "id": "perfect",
+     "title": "Chính xác",
+     "description": "Đạt 100 điểm kiểm tra nhanh ở một bài",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "retry",
+     "title": "Kiên trì",
+     "description": "Làm lại bài kiểm tra và đạt từ 80 điểm",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "explorer",
+     "title": "Khám phá",
+     "description": "Mở mô hình 3D ở 5 bài",
+     "earned": false,
+     "current": 1,
+     "target": 5
+    },
+    {
+     "id": "streak_three",
+     "title": "Đều đặn",
+     "description": "Học 3 ngày liên tiếp",
+     "earned": true,
+     "current": 3,
+     "target": 3
+    },
+    {
+     "id": "streak_seven",
+     "title": "Thói quen tốt",
+     "description": "Học 7 ngày liên tiếp",
+     "earned": false,
+     "current": 3,
+     "target": 7
+    }
+   ]
+  }
+ },
+ {
+  "name": "streak broken two days ago",
+  "lessons": [],
+  "events": [
+   [
+    "lesson_viewed",
+    "2026-11-12"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-13"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-14"
+   ]
+  ],
+  "today": "2026-11-16",
+  "expected": {
+   "xp": 15,
+   "level": 1,
+   "level_floor": 0,
+   "next_level_xp": 100,
+   "breakdown": {
+    "lessons": 0,
+    "quizzes": 0,
+    "models": 0,
+    "active_days": 15,
+    "daily_tasks": 0
+   },
+   "streak": {
+    "current": 0,
+    "best": 3
+   },
+   "active_days": 3,
+   "daily_tasks": [
+    {
+     "id": "study",
+     "title": "Học một bài",
+     "done": false
+    },
+    {
+     "id": "quiz",
+     "title": "Làm một bài kiểm tra nhanh",
+     "done": false
+    },
+    {
+     "id": "model",
+     "title": "Mở một mô hình 3D",
+     "done": false
+    }
+   ],
+   "badges": [
+    {
+     "id": "first_lesson",
+     "title": "Bước đầu tiên",
+     "description": "Hoàn thành bài học đầu tiên",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "five_lessons",
+     "title": "Chăm chỉ",
+     "description": "Hoàn thành 5 bài học",
+     "earned": false,
+     "current": 0,
+     "target": 5
+    },
+    {
+     "id": "twenty_lessons",
+     "title": "Bền bỉ",
+     "description": "Hoàn thành 20 bài học",
+     "earned": false,
+     "current": 0,
+     "target": 20
+    },
+    {
+     "id": "solid_three",
+     "title": "Nắm chắc",
+     "description": "Đạt từ 80 điểm kiểm tra nhanh ở 3 bài",
+     "earned": false,
+     "current": 0,
+     "target": 3
+    },
+    {
+     "id": "perfect",
+     "title": "Chính xác",
+     "description": "Đạt 100 điểm kiểm tra nhanh ở một bài",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "retry",
+     "title": "Kiên trì",
+     "description": "Làm lại bài kiểm tra và đạt từ 80 điểm",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "explorer",
+     "title": "Khám phá",
+     "description": "Mở mô hình 3D ở 5 bài",
+     "earned": false,
+     "current": 0,
+     "target": 5
+    },
+    {
+     "id": "streak_three",
+     "title": "Đều đặn",
+     "description": "Học 3 ngày liên tiếp",
+     "earned": true,
+     "current": 3,
+     "target": 3
+    },
+    {
+     "id": "streak_seven",
+     "title": "Thói quen tốt",
+     "description": "Học 7 ngày liên tiếp",
+     "earned": false,
+     "current": 3,
+     "target": 7
+    }
+   ]
+  }
+ },
+ {
+  "name": "many lessons: badges and levels",
+  "lessons": [
+   {
+    "status": "completed",
+    "best_quiz_score": 100,
+    "quiz_attempt_count": 2,
+    "simulation_count": 1
+   },
+   {
+    "status": "completed",
+    "best_quiz_score": 100,
+    "quiz_attempt_count": 2,
+    "simulation_count": 1
+   },
+   {
+    "status": "completed",
+    "best_quiz_score": 100,
+    "quiz_attempt_count": 2,
+    "simulation_count": 1
+   },
+   {
+    "status": "completed",
+    "best_quiz_score": 100,
+    "quiz_attempt_count": 2,
+    "simulation_count": 1
+   },
+   {
+    "status": "completed",
+    "best_quiz_score": 100,
+    "quiz_attempt_count": 2,
+    "simulation_count": 1
+   },
+   {
+    "status": "completed",
+    "best_quiz_score": 70,
+    "quiz_attempt_count": 1,
+    "simulation_count": 0
+   },
+   {
+    "status": "completed",
+    "best_quiz_score": 70,
+    "quiz_attempt_count": 1,
+    "simulation_count": 0
+   },
+   {
+    "status": "completed",
+    "best_quiz_score": 70,
+    "quiz_attempt_count": 1,
+    "simulation_count": 0
+   },
+   {
+    "status": "in_progress",
+    "best_quiz_score": 12.5,
+    "quiz_attempt_count": 1,
+    "simulation_count": 0
+   }
+  ],
+  "events": [
+   [
+    "lesson_completed",
+    "2026-11-01"
+   ],
+   [
+    "lesson_completed",
+    "2026-11-02"
+   ],
+   [
+    "lesson_completed",
+    "2026-11-03"
+   ],
+   [
+    "lesson_completed",
+    "2026-11-04"
+   ],
+   [
+    "lesson_completed",
+    "2026-11-05"
+   ],
+   [
+    "lesson_completed",
+    "2026-11-06"
+   ],
+   [
+    "lesson_completed",
+    "2026-11-07"
+   ],
+   [
+    "lesson_completed",
+    "2026-11-08"
+   ]
+  ],
+  "today": "2026-11-08",
+  "expected": {
+   "xp": 699,
+   "level": 4,
+   "level_floor": 600,
+   "next_level_xp": 1000,
+   "breakdown": {
+    "lessons": 320,
+    "quizzes": 289,
+    "models": 50,
+    "active_days": 40,
+    "daily_tasks": 0
+   },
+   "streak": {
+    "current": 8,
+    "best": 8
+   },
+   "active_days": 8,
+   "daily_tasks": [
+    {
+     "id": "study",
+     "title": "Học một bài",
+     "done": true
+    },
+    {
+     "id": "quiz",
+     "title": "Làm một bài kiểm tra nhanh",
+     "done": false
+    },
+    {
+     "id": "model",
+     "title": "Mở một mô hình 3D",
+     "done": false
+    }
+   ],
+   "badges": [
+    {
+     "id": "first_lesson",
+     "title": "Bước đầu tiên",
+     "description": "Hoàn thành bài học đầu tiên",
+     "earned": true,
+     "current": 1,
+     "target": 1
+    },
+    {
+     "id": "five_lessons",
+     "title": "Chăm chỉ",
+     "description": "Hoàn thành 5 bài học",
+     "earned": true,
+     "current": 5,
+     "target": 5
+    },
+    {
+     "id": "twenty_lessons",
+     "title": "Bền bỉ",
+     "description": "Hoàn thành 20 bài học",
+     "earned": false,
+     "current": 8,
+     "target": 20
+    },
+    {
+     "id": "solid_three",
+     "title": "Nắm chắc",
+     "description": "Đạt từ 80 điểm kiểm tra nhanh ở 3 bài",
+     "earned": true,
+     "current": 3,
+     "target": 3
+    },
+    {
+     "id": "perfect",
+     "title": "Chính xác",
+     "description": "Đạt 100 điểm kiểm tra nhanh ở một bài",
+     "earned": true,
+     "current": 1,
+     "target": 1
+    },
+    {
+     "id": "retry",
+     "title": "Kiên trì",
+     "description": "Làm lại bài kiểm tra và đạt từ 80 điểm",
+     "earned": true,
+     "current": 1,
+     "target": 1
+    },
+    {
+     "id": "explorer",
+     "title": "Khám phá",
+     "description": "Mở mô hình 3D ở 5 bài",
+     "earned": true,
+     "current": 5,
+     "target": 5
+    },
+    {
+     "id": "streak_three",
+     "title": "Đều đặn",
+     "description": "Học 3 ngày liên tiếp",
+     "earned": true,
+     "current": 3,
+     "target": 3
+    },
+    {
+     "id": "streak_seven",
+     "title": "Thói quen tốt",
+     "description": "Học 7 ngày liên tiếp",
+     "earned": true,
+     "current": 7,
+     "target": 7
+    }
+   ]
+  }
+ },
+ {
+  "name": "score outside 0-100 is clamped; month boundary in a streak",
+  "lessons": [
+   {
+    "status": "completed",
+    "best_quiz_score": 140,
+    "quiz_attempt_count": 1,
+    "simulation_count": 0
+   },
+   {
+    "status": "completed",
+    "best_quiz_score": -5,
+    "quiz_attempt_count": 1,
+    "simulation_count": 0
+   }
+  ],
+  "events": [
+   [
+    "lesson_viewed",
+    "2026-10-30"
+   ],
+   [
+    "lesson_viewed",
+    "2026-10-31"
+   ],
+   [
+    "lesson_viewed",
+    "2026-11-01"
+   ]
+  ],
+  "today": "2026-11-01",
+  "expected": {
+   "xp": 135,
+   "level": 2,
+   "level_floor": 100,
+   "next_level_xp": 300,
+   "breakdown": {
+    "lessons": 80,
+    "quizzes": 40,
+    "models": 0,
+    "active_days": 15,
+    "daily_tasks": 0
+   },
+   "streak": {
+    "current": 3,
+    "best": 3
+   },
+   "active_days": 3,
+   "daily_tasks": [
+    {
+     "id": "study",
+     "title": "Học một bài",
+     "done": true
+    },
+    {
+     "id": "quiz",
+     "title": "Làm một bài kiểm tra nhanh",
+     "done": false
+    },
+    {
+     "id": "model",
+     "title": "Mở một mô hình 3D",
+     "done": false
+    }
+   ],
+   "badges": [
+    {
+     "id": "first_lesson",
+     "title": "Bước đầu tiên",
+     "description": "Hoàn thành bài học đầu tiên",
+     "earned": true,
+     "current": 1,
+     "target": 1
+    },
+    {
+     "id": "five_lessons",
+     "title": "Chăm chỉ",
+     "description": "Hoàn thành 5 bài học",
+     "earned": false,
+     "current": 2,
+     "target": 5
+    },
+    {
+     "id": "twenty_lessons",
+     "title": "Bền bỉ",
+     "description": "Hoàn thành 20 bài học",
+     "earned": false,
+     "current": 2,
+     "target": 20
+    },
+    {
+     "id": "solid_three",
+     "title": "Nắm chắc",
+     "description": "Đạt từ 80 điểm kiểm tra nhanh ở 3 bài",
+     "earned": false,
+     "current": 1,
+     "target": 3
+    },
+    {
+     "id": "perfect",
+     "title": "Chính xác",
+     "description": "Đạt 100 điểm kiểm tra nhanh ở một bài",
+     "earned": true,
+     "current": 1,
+     "target": 1
+    },
+    {
+     "id": "retry",
+     "title": "Kiên trì",
+     "description": "Làm lại bài kiểm tra và đạt từ 80 điểm",
+     "earned": false,
+     "current": 0,
+     "target": 1
+    },
+    {
+     "id": "explorer",
+     "title": "Khám phá",
+     "description": "Mở mô hình 3D ở 5 bài",
+     "earned": false,
+     "current": 0,
+     "target": 5
+    },
+    {
+     "id": "streak_three",
+     "title": "Đều đặn",
+     "description": "Học 3 ngày liên tiếp",
+     "earned": true,
+     "current": 3,
+     "target": 3
+    },
+    {
+     "id": "streak_seven",
+     "title": "Thói quen tốt",
+     "description": "Học 7 ngày liên tiếp",
+     "earned": false,
+     "current": 3,
+     "target": 7
+    }
+   ]
+  }
+ }
+]

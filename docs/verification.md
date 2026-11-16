@@ -336,6 +336,16 @@ Mô hình 3D. Chụp 19 bài có mô hình 3D bằng Chrome, đối chiếu tên
 
 Hướng dẫn sử dụng. Trang `/guide` (xem được khi chưa đăng nhập) theo vai trò học sinh, giáo viên: bắt đầu trong 3 bước, các việc thường làm với đúng tên nút và liên kết tới trang, VR, ngoại tuyến, tài khoản và dữ liệu, câu hỏi thường gặp, ô tìm kiếm. Mở từ biểu tượng dấu hỏi trên thanh điều hướng, menu điện thoại và trang đăng nhập. `userGuide.test.js` kiểm tra mọi liên kết trỏ tới trang có thật. Không trang nào tràn ngang ở 1440 và 390 điểm ảnh.
 
+## Hành trình học tập, báo cáo lớp và nén tệp (16/11/2026)
+
+Hành trình học tập. Điểm kinh nghiệm, cấp độ, 9 huy hiệu, 3 nhiệm vụ hằng ngày và chuỗi ngày học được tính từ tiến độ và sự kiện học tập đã ghi, không lưu riêng nên không thể cộng tay. Điểm đến từ việc hoàn thành bài (40), điểm kiểm tra nhanh cao nhất của bài (tới 40), mở mô hình 3D (10, mỗi bài một lần), ngày có học (5) và ngày làm đủ ba nhiệm vụ (15); bấm lặp lại không được thêm điểm. Ngày tính theo giờ Việt Nam. Quy tắc nằm ở `backend/journey.py`; bản ngoại tuyến `frontend/src/utils/journey.js` được kiểm tra với cùng 7 ca mẫu trong `backend/data/journey_cases.json`. Bảng xếp hạng chỉ gồm học sinh cùng lớp đã được giáo viên xác nhận; học sinh không chọn được lớp khác.
+
+Báo cáo lớp cho giáo viên. Kết quả từng học sinh, tỉ lệ hoàn thành theo bài, và 10 câu bị trả lời sai nhiều nhất (tính lần trả lời đầu của mỗi học sinh, từ 3 học sinh trở lên, kèm phương án hay chọn nhầm). Giáo viên chỉ xem được lớp được phân công. Tải về dạng CSV mở được bằng Excel; ô bắt đầu bằng = + - @ được thêm dấu nháy để không thành công thức.
+
+Nén tệp. Máy chủ giao diện gửi tệp văn bản nén brotli hoặc gzip theo trình duyệt; tệp JavaScript chính giảm từ 449 KB xuống 128 KB.
+
+Kiểm thử: 14 ca máy chủ mới (quy tắc, phân quyền, xếp hạng, báo cáo, CSV), 9 ca giao diện mới, 1 hành trình đầu – cuối mới (học sinh làm bài, điểm và nhiệm vụ cập nhật, giáo viên xem và tải báo cáo). Tổng: 318 ca máy chủ, 272 ca giao diện, 6 hành trình đầu – cuối.
+
 ## Chưa thực hiện
 
 - Đo tải và kiểm thử đồng thời trên PostgreSQL, nhiều tiến trình, mạng thực.

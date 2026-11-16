@@ -151,3 +151,81 @@ test('a teacher runs a live quiz room and a student plays it on another device',
   await expect(page.getByText('Kết quả chung cuộc')).toBeVisible()
   await studentContext.close()
 })
+
+test('a student earns points by finishing a quick test, and the teacher sees and exports the class report', async ({ page, browser, request }) => {
+  const admin = await (await request.post(`${API}/api/auth/login`, { data: E2E_ADMIN })).json()
+  const adminHeaders = { Authorization: `Bearer ${admin.access_token}` }
+  const approve = async (username, data) => {
+    const pending = await (await request.get(`${API}/api/accounts/pending`, { headers: adminHeaders })).json()
+    const account = pending.find((item) => item.username === username)
+    expect(account, `${username} is waiting for review`).toBeTruthy()
+    expect((await request.post(`${API}/api/accounts/${account.id}/review`, { headers: adminHeaders, data })).ok()).toBe(true)
+  }
+
+  // A class of its own, so accounts of the other journeys do not appear in it
+  const className = `12T${run.slice(-3)}`.toUpperCase()
+  const studentName = `hsj${run}`
+  await register(page, { role: 'student', username: studentName, fullName: 'Trần Minh Khôi', studentClass: className })
+  await approve(studentName, { decision: 'approve' })
+  const token = await login(page, studentName)
+
+  // Before any work: level 1, nothing done today
+  await page.goto('/progress')
+  await expect(page.getByRole('heading', { name: 'Cấp độ, nhiệm vụ và huy hiệu' })).toBeVisible()
+  await expect(page.getByText(/Cấp 1 · 0 điểm kinh nghiệm/)).toBeVisible()
+
+  // Study: open the model, take the quick test
+  await page.goto('/lessons/110602/3d')
+  await expect(page.locator('canvas').first()).toBeVisible()
+  await page.goto('/lessons/110602/quiz')
+  const options = page.locator('main button, .nova-quiz-card button').filter({ hasText: /^[A-D]/ })
+  for (let question = 0; question < 10; question += 1) {
+    if (await page.getByText('Hoàn thành kiểm tra nhanh').isVisible()) break
+    await options.first().click()
+    await page.waitForTimeout(300)
+  }
+  await expect(page.getByText('Hoàn thành kiểm tra nhanh')).toBeVisible()
+
+  // The server computed the journey from that work
+  const me = await (await request.get(`${API}/api/auth/me`, { headers: { Authorization: `Bearer ${token}` } })).json()
+  await expect.poll(async () => {
+    const journey = await (await request.get(`${API}/api/learning/users/${me.id}/journey`, { headers: { Authorization: `Bearer ${token}` } })).json()
+    return journey.daily_tasks.filter((task) => task.done).map((task) => task.id).sort().join(',')
+  }, { timeout: 15_000 }).toContain('quiz')
+  const journey = await (await request.get(`${API}/api/learning/users/${me.id}/journey`, { headers: { Authorization: `Bearer ${token}` } })).json()
+  expect(journey.xp).toBeGreaterThan(0)
+  expect(journey.breakdown.active_days).toBe(5)
+
+  await page.goto('/progress')
+  await expect(page.getByText(new RegExp(`Cấp ${journey.level} · ${journey.xp} điểm kinh nghiệm`))).toBeVisible()
+  await expect(page.getByText('Trần Minh Khôi (em)')).toBeVisible()
+  await expect(page.getByText(new RegExp(`Lớp ${className} · 1 học sinh`))).toBeVisible()
+  await page.goto('/')
+  await expect(page.getByText(/Nhiệm vụ hôm nay · [1-3]\/3/)).toBeVisible()
+
+  // The teacher of that class reads the report and downloads it
+  const teacherContext = await browser.newContext()
+  const teacherPage = await teacherContext.newPage()
+  const teacherName = `gvj${run}`
+  await register(teacherPage, { role: 'teacher', username: teacherName, fullName: 'Thầy Bảo' })
+  await approve(teacherName, { decision: 'approve', classes: className })
+  const teacherToken = await login(teacherPage, teacherName, 'teacher')
+  await teacherPage.goto('/classroom')
+  const report = teacherPage.locator('section', { has: teacherPage.getByRole('heading', { name: 'Báo cáo kết quả của lớp' }) })
+  await expect(report.getByRole('cell', { name: 'Trần Minh Khôi' })).toBeVisible()
+  await expect(report.getByText(/Bài 18/).first()).toBeVisible()
+  await expect(report.getByText('Chưa đủ dữ liệu: cần ít nhất 3 học sinh trả lời cùng một câu.')).toBeVisible()
+  const [download] = await Promise.all([
+    teacherPage.waitForEvent('download'),
+    report.getByRole('button', { name: 'Tải báo cáo (CSV)' }).click(),
+  ])
+  expect(download.suggestedFilename()).toMatch(/^bao-cao-lop.*\.csv$/)
+  const csv = await (await request.get(`${API}/api/learning/teacher/report.csv`, { headers: { Authorization: `Bearer ${teacherToken}` } })).text()
+  expect(csv).toContain('Trần Minh Khôi')
+  expect(csv).toContain(className)
+
+  // A student cannot read the report or another student's journey
+  expect((await request.get(`${API}/api/learning/teacher/report`, { headers: { Authorization: `Bearer ${token}` } })).status()).toBe(403)
+  expect((await request.get(`${API}/api/learning/users/1/journey`, { headers: { Authorization: `Bearer ${token}` } })).status()).toBe(403)
+  await teacherContext.close()
+})

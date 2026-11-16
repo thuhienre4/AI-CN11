@@ -160,6 +160,11 @@ export const learningAPI = {
       params: { course_id: courseId },
     }),
   getTeacherAnalytics: () => api.get('/api/learning/teacher/analytics'),
+  getJourney: (userId) => api.get(`/api/learning/users/${userId}/journey`),
+  getLeaderboard: (className = null) => api.get('/api/learning/leaderboard', { params: { class_name: className || undefined } }),
+  getClassReport: (className = null) => api.get('/api/learning/teacher/report', { params: { class_name: className || undefined } }),
+  downloadClassReport: (className = null) =>
+    api.get('/api/learning/teacher/report.csv', { params: { class_name: className || undefined }, responseType: 'blob' }),
   getLessonProgress: (userId, lessonId) =>
     api.get(`/api/learning/users/${userId}/lessons/${lessonId}/progress`),
   updateLessonProgress: (userId, lessonId, data) =>

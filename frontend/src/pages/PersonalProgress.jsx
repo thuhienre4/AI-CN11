@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { learningAPI } from '../services/api'
 import { useAuthStore } from '../store'
+import JourneyPanel from '../components/JourneyPanel'
 import { buildLocalLearningDashboard } from '../utils/learningProgress'
 import SignalList, { SignalBadge } from '../components/SignalList'
 
@@ -25,43 +26,6 @@ const statusClass = {
   in_progress: 'bg-blue-50 text-blue-700',
   completed: 'bg-emerald-50 text-emerald-700',
   needs_review: 'bg-amber-50 text-amber-700',
-}
-
-const calculateGamification = (dashboard) => {
-  const completed = dashboard?.completed_lessons || 0
-  const inProgress = dashboard?.in_progress_lessons || 0
-  const averageQuiz = dashboard?.average_quiz_score || 0
-  const assistantQuestions = dashboard?.assistant_questions || 0
-  const activeLessons = dashboard?.lesson_progress?.filter((item) => item.progress_percent > 0).length || 0
-  const xp = completed * 160 + inProgress * 60 + Math.round(averageQuiz * 2) + assistantQuestions * 10
-  const level = Math.max(1, Math.floor(xp / 350) + 1)
-  const nextLevelXp = level * 350
-  const levelProgress = Math.min(100, Math.round((xp / nextLevelXp) * 100))
-
-  const badges = [
-    {
-      name: 'Người khởi động',
-      unlocked: activeLessons > 0,
-      description: 'Bắt đầu học ít nhất một bài.',
-    },
-    {
-      name: 'Thợ máy chăm chỉ',
-      unlocked: completed >= 2,
-      description: 'Hoàn thành từ 2 bài học trở lên.',
-    },
-    {
-      name: 'Tay đua quiz',
-      unlocked: averageQuiz >= 80,
-      description: 'Điểm kiểm tra trung bình đạt từ 80%.',
-    },
-    {
-      name: 'Kĩ sư hỏi sâu',
-      unlocked: assistantQuestions >= 3,
-      description: 'Đặt từ 3 câu hỏi cho AI gia sư.',
-    },
-  ]
-
-  return { xp, level, nextLevelXp, levelProgress, badges }
 }
 
 const buildAIInsights = (dashboard) => {
@@ -145,7 +109,6 @@ export default function PersonalProgress() {
       })
   }, [dashboard])
 
-  const gamification = useMemo(() => calculateGamification(dashboard), [dashboard])
   const aiInsights = useMemo(() => buildAIInsights(dashboard), [dashboard])
   const evidenceStats = useMemo(() => {
     const rows = dashboard?.lesson_progress || []
@@ -355,48 +318,7 @@ export default function PersonalProgress() {
       </section>
 
       <section className="mb-6 grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-        <div className="panel p-6">
-          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
-            <div>
-              <p className="muted-label mb-1">Thành tích học tập</p>
-              <h2 className="text-2xl font-bold text-slate-950">XP, cấp độ và huy hiệu</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Học sinh tích lũy XP khi hoàn thành bài, làm quiz, chơi game và hỏi AI gia sư.
-              </p>
-            </div>
-            <div className="rounded-lg bg-blue-50 px-5 py-4 text-center">
-              <p className="text-xs font-semibold uppercase text-blue-700">Level</p>
-              <p className="text-4xl font-bold text-blue-700">{gamification.level}</p>
-            </div>
-          </div>
-
-          <div className="mt-5">
-            <div className="flex items-center justify-between text-sm">
-              <span className="font-semibold text-slate-800">{gamification.xp} XP</span>
-              <span className="text-slate-500">Mốc tiếp theo: {gamification.nextLevelXp} XP</span>
-            </div>
-            <div className="mt-2 h-3 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full bg-blue-600" style={{ width: `${gamification.levelProgress}%` }}></div>
-            </div>
-          </div>
-
-          <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            {gamification.badges.map((badge) => (
-              <div
-                key={badge.name}
-                className={`rounded-lg border p-4 ${
-                  badge.unlocked
-                    ? 'border-emerald-200 bg-emerald-50 text-emerald-950'
-                    : 'border-slate-200 bg-slate-50 text-slate-500'
-                }`}
-              >
-                <p className="font-bold">{badge.unlocked ? 'Đã mở khóa' : 'Chưa mở'} · {badge.name}</p>
-                <p className="mt-2 text-sm leading-6">{badge.description}</p>
-              </div>
-            ))}
-          </div>
-
-        </div>
+        <JourneyPanel userId={user?.id} showLeaderboard={user?.role === 'student'} />
 
         <div className="panel p-6">
           <p className="muted-label mb-1">Gợi ý từ AI</p>

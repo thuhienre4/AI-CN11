@@ -1,4 +1,5 @@
 import { sampleLessons } from '../data/courseCatalog'
+import { buildJourney, localDay } from './journey'
 import { learningAPI } from '../services/api'
 
 const STORAGE_KEY = 'engine_lab_learning_events'
@@ -530,4 +531,12 @@ export const buildTeacherLearningAnalytics = () => {
         : 0,
     },
   }
+}
+
+/** XP, level, badges and today's tasks from what is stored on this device, by the server's rules. */
+export const buildLocalJourney = (userId) => {
+  const events = readEvents()
+    .filter((event) => String(event.user_id) === String(userId))
+    .map((event) => [event.event_type, localDay(event.created_at)])
+  return buildJourney(buildLocalLearningDashboard(userId).lesson_progress, events, localDay(Date.now()))
 }

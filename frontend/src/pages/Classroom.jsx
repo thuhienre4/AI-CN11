@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { sampleCourses, sampleLessons } from '../data/courseCatalog'
+import ClassReportPanel from '../components/ClassReportPanel'
 import TeacherAnalyticsPanel from '../components/TeacherAnalyticsPanel'
 import { classroomAPI, isBackendUnavailable } from '../services/api'
 import { useAuthStore } from '../store'
@@ -642,6 +643,7 @@ export default function Classroom() {
       )}
 
       {isTeacher && !isLocalSession() && <TeacherAnalyticsPanel />}
+      {isTeacher && !isLocalSession() && <ClassReportPanel />}
 
       <div className="grid gap-6 xl:grid-cols-[420px_1fr]">
         <aside className="min-w-0 space-y-6">
