@@ -306,6 +306,9 @@ export const CAREER_LESSONS = {
   },
 }
 
+// Jobs that also have a 3D workplace procedure (simulations/careers), one per lesson
+export const JOBS_WITH_3D = ['maintenance-tech', 'cnc-operator', 'auto-technician', 'electrician', 'assembly-tech']
+
 export const careerLessonIds = Object.keys(CAREER_LESSONS).map(Number)
 
 export const allCareerJobs = () =>

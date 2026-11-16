@@ -61,6 +61,7 @@ const ChapterExam = lazyPage(() => import('./pages/ChapterExam'))
 const UserGuide = lazyPage(() => import('./pages/UserGuide'))
 const DailyChallenge = lazyPage(() => import('./pages/DailyChallenge'))
 const CareerExperience = lazyPage(() => import('./pages/CareerExperience'))
+const CareerSimulation = lazyPage(() => import('./pages/CareerSimulation'))
 const NotFound = lazyPage(() => import('./pages/NotFound'))
 
 // Components
@@ -238,6 +239,7 @@ function App() {
             <Route path="/guide" element={<UserGuide />} />
             <Route path="/challenge" element={<ProtectedRoute><DailyChallenge /></ProtectedRoute>} />
             <Route path="/career" element={<ProtectedRoute><CareerExperience /></ProtectedRoute>} />
+            <Route path="/career/:jobId/3d" element={<ProtectedRoute><CareerSimulation /></ProtectedRoute>} />
             <Route path="/lessons/:lessonId/career" element={<ProtectedRoute><CareerExperience /></ProtectedRoute>} />
 
           {/* Protected Routes */}

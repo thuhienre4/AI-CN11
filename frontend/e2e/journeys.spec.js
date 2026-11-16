@@ -274,3 +274,32 @@ test('a student tries a job from a careers lesson and it lands in the career pro
   await expect(profile.getByText(/Xử lí tình huống \d\/6 · Em rất muốn thử nghề này/)).toBeVisible()
   await expect(page.getByText(/Đã thử · \d\/6 điểm/)).toBeVisible()
 })
+
+test('a student does a 3D workplace procedure: a skipped safety step is caught, the right order finishes', async ({ page }) => {
+  const username = `hsx${run}`
+  await register(page, { role: 'student', username, fullName: 'Phạm Gia Huy', studentClass: '10A2' })
+  await login(page, username)
+
+  await page.goto('/lessons/100107/career')
+  await page.getByRole('article').filter({ hasText: 'Kĩ thuật viên bảo trì thiết bị' }).getByRole('link', { name: /Thực hành trong xưởng 3D/ }).click()
+  await expect(page.getByRole('heading', { name: 'Thay ổ bi băng tải' })).toBeVisible()
+  await expect(page.getByText('Bước 1/8')).toBeVisible()
+
+  await page.getByText('Khó bấm trong cảnh 3D?').click()
+  const objects = page.getByRole('group', { name: 'Đồ vật trong cảnh' })
+  const use = (name) => objects.getByRole('button', { name, exact: true }).click()
+
+  // Going for the bearing before the power is locked out is caught and explained
+  await use('Gối đỡ ổ bi')
+  await expect(page.getByRole('alert')).toContainText('Chưa đúng trình tự')
+  await expect(page.getByText('Lỗi: 1')).toBeVisible()
+  await use('Hộp mỡ bôi trơn')
+  await expect(page.getByRole('alert')).toContainText('Nguy hiểm!')
+
+  for (const name of ['Nút dừng', 'Aptomat cấp điện cho băng tải', 'Bộ khóa an toàn và thẻ', 'Nút chạy', 'Gối đỡ ổ bi', 'Sổ bảo trì', 'Bộ khóa an toàn và thẻ', 'Nút chạy']) {
+    await use(name)
+  }
+  await expect(page.getByText('Hoàn thành ca làm việc')).toBeVisible()
+  await expect(page.getByLabel('2 trên 3 sao')).toBeVisible()
+  await expect(page.getByText('2 lần thao tác sai hoặc nguy hiểm.', { exact: false })).toBeVisible()
+})

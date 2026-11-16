@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 
-import { CAREER_LESSONS, INTEREST_OPTIONS, QUALITY_POINTS, allCareerJobs, maxJobPoints } from '../data/careerGames'
+import { CAREER_LESSONS, INTEREST_OPTIONS, JOBS_WITH_3D, QUALITY_POINTS, allCareerJobs, maxJobPoints } from '../data/careerGames'
 import { useAuthStore } from '../store'
 import { careerAdvice, careerSummary, readCareerProfile, saveCareerResult } from '../utils/careerProfile'
 import { recordLocalLearningEvent } from '../utils/learningProgress'
@@ -35,6 +35,12 @@ function JobCard({ entry, result, onPlay }) {
           {result ? 'Làm lại' : 'Vào ca làm việc'}
         </button>
       </div>
+      {JOBS_WITH_3D.includes(entry.id) && (
+        <Link to={`/career/${entry.id}/3d`} className="mt-2 flex items-center justify-between rounded-md border border-blue-700 px-3 py-1.5 text-sm font-semibold text-blue-800 hover:bg-blue-50">
+          <span><span className="mr-1.5 rounded bg-blue-700 px-1.5 py-0.5 text-[10px] font-black text-white">3D</span>Thực hành trong xưởng 3D</span>
+          <span aria-hidden="true">→</span>
+        </Link>
+      )}
     </article>
   )
 }

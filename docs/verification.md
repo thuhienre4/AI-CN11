@@ -358,6 +358,12 @@ Gắn vào 5 bài về ngành nghề (lớp 10 Bài 7; lớp 11 Bài 2, 16; lớ
 
 Kiểm thử: 4 ca giao diện (gắn đúng bài, cấu trúc lựa chọn, vị trí đáp án, quy tắc gợi ý), 1 hành trình đầu – cuối chơi trọn một nghề. Tổng: 328 ca máy chủ, 280 ca giao diện, 7 hành trình đầu – cuối.
 
+## Mô phỏng 3D trải nghiệm nghề (16/11/2026)
+
+Năm quy trình làm việc trong xưởng 3D, mỗi bài hướng nghiệp một nghề: thay ổ bi băng tải có khóa nguồn (bảo trì), tiện trục theo bản vẽ (máy tiện, dùng lại mô hình Bài 8), thay dầu động cơ (ô tô), lắp ổ cắm trên mạch đang có điện (lắp đặt điện), lắp tụ hóa đúng cực (lắp ráp bo mạch). Học sinh bấm vào đồ vật theo đúng trình tự; bấm sớm bước sau hoặc làm điều nguy hiểm bị tính lỗi kèm lí do; xếp 1–3 sao theo số lỗi. Quy tắc nằm ở `simulations/careers/procedure.js`, kiểm thử riêng; mọi bước, mối nguy và đồ vật đều được kiểm tra là có thật trong cảnh, đi đúng thứ tự thì không lỗi. Có danh sách đồ vật thay cho bấm trong cảnh 3D. Đã chụp và chỉnh từng cảnh để nhãn không chồng nhau.
+
+Kiểm thử: 14 ca giao diện, 1 hành trình đầu – cuối làm trọn một quy trình có bước sai. Tổng: 328 ca máy chủ, 294 ca giao diện, 8 hành trình đầu – cuối.
+
 ## Chưa thực hiện
 
 - Đo tải và kiểm thử đồng thời trên PostgreSQL, nhiều tiến trình, mạng thực.
