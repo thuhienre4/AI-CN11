@@ -77,7 +77,7 @@ def test_a_student_reads_their_own_journey_but_not_a_classmates(api):
     own = client.get(f"/api/learning/users/{identities['student']}/journey", headers=headers["student"])
     assert own.status_code == 200
     body = own.json()
-    assert body["breakdown"] == {"lessons": 40, "quizzes": 40, "models": 10, "active_days": 5, "daily_tasks": 0}
+    assert body["breakdown"] == {"lessons": 40, "quizzes": 40, "models": 10, "active_days": 5, "daily_tasks": 0, "challenges": 0}
     assert body["xp"] == 95 and body["level"] == 1 and body["next_level_xp"] == 100
     assert {badge["id"] for badge in body["badges"] if badge["earned"]} == {"first_lesson", "perfect"}
     assert client.get(f"/api/learning/users/{mate_id}/journey", headers=headers["student"]).status_code == 403

@@ -1,7 +1,8 @@
 // Learning journey for the offline mode: the same rules as backend/journey.py, which is the reference.
 // Both are checked against backend/data/journey_cases.json, so a change on one side fails the other's test.
 
-export const XP = { lessonCompleted: 40, quizMax: 40, modelOpened: 10, activeDay: 5, dailyTasks: 15 }
+export const XP = { lessonCompleted: 40, quizMax: 40, modelOpened: 10, activeDay: 5, dailyTasks: 15, challengeMax: 20 }
+export const CHALLENGE_EVENT = 'challenge_completed'
 
 const DAILY_TASKS = [
   ['study', 'Học một bài', ['lesson_viewed', 'lesson_completed']],
@@ -19,7 +20,13 @@ const BADGES = [
   ['explorer', 'Khám phá', 'Mở mô hình 3D ở 5 bài', 'models', 5],
   ['streak_three', 'Đều đặn', 'Học 3 ngày liên tiếp', 'best_streak', 3],
   ['streak_seven', 'Thói quen tốt', 'Học 7 ngày liên tiếp', 'best_streak', 7],
+  ['challenge_seven', 'Bền chí', 'Làm thử thách hằng ngày trong 7 ngày', 'challenges', 7],
+  ['challenge_perfect', 'Tinh thông', 'Trả lời đúng cả 5 câu thử thách', 'challenge_perfect', 1],
 ]
+
+// What each level is called; past the list the last title stays
+const LEVEL_TITLES = ['Người mới bắt đầu', 'Học viên', 'Thợ phụ', 'Thợ lành nghề', 'Kĩ thuật viên', 'Kĩ thuật viên bậc cao', 'Kĩ sư', 'Kĩ sư chính', 'Chuyên gia công nghệ']
+export const levelTitle = (level) => LEVEL_TITLES[Math.min(LEVEL_TITLES.length, Math.max(1, level)) - 1]
 
 const DAY_MS = 24 * 60 * 60 * 1000
 
@@ -52,10 +59,15 @@ const streaks = (days, today) => {
   return [current, best]
 }
 
-/** lessons: rows with status, best_quiz_score, quiz_attempt_count, simulation_count. events: [type, local day]. */
+const clampScore = (score) => Math.min(100, Math.max(0, score || 0))
+
+/** lessons: rows with status, best_quiz_score, quiz_attempt_count, simulation_count.
+ * events: [type, local day] or [type, local day, score]. A lesson counts as finished once its quick test was taken. */
 export const buildJourney = (lessons, events, today) => {
-  const completed = lessons.filter((item) => item.status === 'completed').length
   const tested = lessons.filter((item) => (item.quiz_attempt_count || 0) > 0)
+  const completed = tested.filter((item) => item.status === 'completed').length
+  const challenges = events.filter(([type]) => type === CHALLENGE_EVENT).map(([, , score]) => clampScore(score))
+  const todayChallenge = events.find(([type, day]) => type === CHALLENGE_EVENT && day === today)
   const quizXp = tested.reduce(
     (sum, item) => sum + Math.floor((Math.min(100, Math.max(0, item.best_quiz_score || 0)) * XP.quizMax) / 100 + 0.5),
     0
@@ -77,6 +89,7 @@ export const buildJourney = (lessons, events, today) => {
     models: models * XP.modelOpened,
     active_days: typesByDay.size * XP.activeDay,
     daily_tasks: fullDays * XP.dailyTasks,
+    challenges: challenges.reduce((sum, score) => sum + Math.floor((score * XP.challengeMax) / 100 + 0.5), 0),
   }
   const xp = Object.values(breakdown).reduce((sum, value) => sum + value, 0)
   const level = levelFor(xp)
@@ -87,6 +100,8 @@ export const buildJourney = (lessons, events, today) => {
     retry: tested.filter((item) => (item.quiz_attempt_count || 0) >= 2 && (item.best_quiz_score || 0) >= 80).length,
     models,
     best_streak: best,
+    challenges: challenges.length,
+    challenge_perfect: challenges.filter((score) => score >= 100).length,
   }
   const todayTypes = typesByDay.get(today) || new Set()
   return {
@@ -97,6 +112,7 @@ export const buildJourney = (lessons, events, today) => {
     breakdown,
     streak: { current, best },
     active_days: typesByDay.size,
+    challenge_today: todayChallenge ? clampScore(todayChallenge[2]) : null,
     daily_tasks: DAILY_TASKS.map(([id, title, wanted]) => ({ id, title, done: done(todayTypes, wanted) })),
     badges: BADGES.map(([id, title, description, counter, target]) => ({
       id,

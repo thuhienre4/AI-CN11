@@ -346,6 +346,12 @@ Nén tệp. Máy chủ giao diện gửi tệp văn bản nén brotli hoặc gzi
 
 Kiểm thử: 14 ca máy chủ mới (quy tắc, phân quyền, xếp hạng, báo cáo, CSV), 9 ca giao diện mới, 1 hành trình đầu – cuối mới (học sinh làm bài, điểm và nhiệm vụ cập nhật, giáo viên xem và tải báo cáo). Tổng: 318 ca máy chủ, 272 ca giao diện, 6 hành trình đầu – cuối.
 
+## Thử thách hằng ngày, danh hiệu, bản đồ chương (16/11/2026)
+
+Thử thách kiến thức: 5 câu mỗi ngày do máy chủ chọn và chấm, ưu tiên câu học sinh từng sai rồi đến bài yếu, bài đang học, bài cùng khối; mỗi câu ghi lí do được chọn. Một lần mỗi ngày (khóa duy nhất theo người dùng và ngày), tới 20 điểm kinh nghiệm. Kết quả là sự kiện `challenge_completed` chỉ máy chủ được ghi: điểm cuối nhận sự kiện từ trình duyệt từ chối loại này, gói ngoại tuyến bỏ qua nó. Bài hoàn thành chỉ được tính điểm khi đã có bài kiểm tra nhanh do máy chủ chấm, vì tự đánh dấu hoàn thành không đủ làm căn cứ cho bảng xếp hạng. Thêm 9 danh hiệu theo cấp, 2 huy hiệu, thông báo khi được điểm, lên cấp, đạt huy hiệu, và bản đồ chương theo mức nắm vững từng bài.
+
+Kiểm thử: 10 ca máy chủ mới (chọn câu, ẩn đáp án, chấm một lần, từ chối sự kiện giả, quy tắc hoàn thành), 4 ca giao diện mới, hành trình đầu – cuối có làm và nộp thử thách. Tổng: 328 ca máy chủ, 276 ca giao diện, 6 hành trình đầu – cuối.
+
 ## Chưa thực hiện
 
 - Đo tải và kiểm thử đồng thời trên PostgreSQL, nhiều tiến trình, mạng thực.

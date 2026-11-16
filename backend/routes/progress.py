@@ -383,6 +383,10 @@ def intervention_plan(risk_level: str) -> List[str]:
     ]
 
 
+# Events only the server records, from answers it graded itself; a browser may not report them
+SERVER_ONLY_EVENTS = {"challenge_completed"}
+
+
 def persist_learning_event(db: Session, user_id: int, event_data: LearningEventCreate) -> LearningEvent:
     def stored_event():
         return (
@@ -433,6 +437,8 @@ def track_learning_event(
 ):
     """Record one learning activity and update the student's lesson progress."""
     ensure_learning_data_access(db, user_id, current_user)
+    if event_data.event_type in SERVER_ONLY_EVENTS:
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="This event is recorded by the server only.")
     student = get_user_or_404(db, user_id)
     student_class = confirmed_class(student)
 
@@ -465,7 +471,8 @@ def track_learning_events_batch(
             detail="A batch can contain at most 100 learning events.",
         )
 
-    rows = [persist_learning_event(db, user_id, event_data) for event_data in events]
+    # Server-only events in an offline queue are dropped rather than failing the whole batch
+    rows = [persist_learning_event(db, user_id, event_data) for event_data in events if event_data.event_type not in SERVER_ONLY_EVENTS]
     db.commit()
     for row in rows:
         db.refresh(row)

@@ -58,10 +58,14 @@ export const recordLocalLearningEvent = (userId, event) => {
     payload: event.payload || null,
     created_at: new Date(now).toISOString(),
     synced_at: null,
+    ...(event.local_only ? { local_only: true } : {}),
+    ...(event.client_event_id ? { client_event_id: event.client_event_id } : {}),
   }
   events.push(storedEvent)
   writeEvents(events.slice(-500))
-  if (event.auto_sync !== false) void syncPendingLearningEvents(userId)
+  const announce = () => globalThis.window?.dispatchEvent(new CustomEvent('enginelab:progress-recorded', { detail: { user_id: userId } }))
+  if (event.auto_sync !== false) void syncPendingLearningEvents(userId).finally(announce)
+  else announce()
   return storedEvent
 }
 
@@ -80,8 +84,9 @@ export const syncPendingLearningEvents = async (userId) => {
     })
     if (assignedIds) writeEvents(events)
 
+    // A challenge scored on this device stays here: the server records only results it graded itself
     const pending = events.filter(
-      (event) => String(event.user_id) === String(userId) && !event.synced_at,
+      (event) => String(event.user_id) === String(userId) && !event.synced_at && !event.local_only,
     )
     let synced = 0
 
@@ -537,6 +542,6 @@ export const buildTeacherLearningAnalytics = () => {
 export const buildLocalJourney = (userId) => {
   const events = readEvents()
     .filter((event) => String(event.user_id) === String(userId))
-    .map((event) => [event.event_type, localDay(event.created_at)])
+    .map((event) => [event.event_type, localDay(event.created_at), event.score])
   return buildJourney(buildLocalLearningDashboard(userId).lesson_progress, events, localDay(Date.now()))
 }

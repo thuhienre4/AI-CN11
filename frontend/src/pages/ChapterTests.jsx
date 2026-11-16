@@ -299,10 +299,10 @@ export default function ChapterTests() {
 
       <section className="mb-6 rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
         <p className="muted-label mb-2">Ôn nhanh cuối chương</p>
-        <h1 className="text-3xl font-bold tracking-tight text-slate-950">Mini test theo nội dung slide</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-950">Test</h1>
         <p className="mt-3 max-w-3xl leading-7 text-slate-600">
           {course.title}. Câu hỏi bao quát kiến thức trọng tâm của từng bài trong chương; học sinh làm trực
-          tiếp và xem giải thích theo nội dung slide ngay sau khi nộp.
+          tiếp và xem giải thích ngay sau khi nộp.
         </p>
       </section>
 

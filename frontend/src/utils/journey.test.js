@@ -1,6 +1,6 @@
 import fs from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { buildJourney, levelFor, localDay } from './journey'
+import { buildJourney, levelFor, levelTitle, localDay } from './journey'
 
 const cases = JSON.parse(fs.readFileSync(new URL('../../../backend/data/journey_cases.json', import.meta.url), 'utf8'))
 
@@ -18,5 +18,9 @@ describe('learning journey (offline rules)', () => {
     const lessons = [{ status: 'in_progress', best_quiz_score: 0, quiz_attempt_count: 0, simulation_count: 0 }]
     const events = Array.from({ length: 40 }, () => ['assistant_question', '2026-11-16'])
     expect(buildJourney(lessons, events, '2026-11-16').xp).toBe(5)
+  })
+
+  it('names each level, keeping the last title past the list', () => {
+    expect([1, 2, 5, 9, 15].map(levelTitle)).toEqual(['Người mới bắt đầu', 'Học viên', 'Kĩ thuật viên', 'Chuyên gia công nghệ', 'Chuyên gia công nghệ'])
   })
 })

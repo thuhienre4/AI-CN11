@@ -161,6 +161,8 @@ export const learningAPI = {
     }),
   getTeacherAnalytics: () => api.get('/api/learning/teacher/analytics'),
   getJourney: (userId) => api.get(`/api/learning/users/${userId}/journey`),
+  getChallenge: () => api.get('/api/learning/challenge/today'),
+  submitChallenge: (answers) => api.post('/api/learning/challenge/today', { answers }),
   getLeaderboard: (className = null) => api.get('/api/learning/leaderboard', { params: { class_name: className || undefined } }),
   getClassReport: (className = null) => api.get('/api/learning/teacher/report', { params: { class_name: className || undefined } }),
   downloadClassReport: (className = null) =>

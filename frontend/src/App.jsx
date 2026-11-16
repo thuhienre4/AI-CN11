@@ -59,10 +59,12 @@ const ThreeDSimulation = lazyPage(() => import('./pages/ThreeDSimulation'))
 const ThptExam = lazyPage(() => import('./pages/ThptExam'))
 const ChapterExam = lazyPage(() => import('./pages/ChapterExam'))
 const UserGuide = lazyPage(() => import('./pages/UserGuide'))
+const DailyChallenge = lazyPage(() => import('./pages/DailyChallenge'))
 const NotFound = lazyPage(() => import('./pages/NotFound'))
 
 // Components
 import AccountStatusNotice from './components/AccountStatusNotice'
+import { JourneyRewards } from './components/JourneyPanel'
 import Navigation from './components/Navigation'
 import SEO from './components/SEO'
 import { Skeleton } from './components/ui'
@@ -144,6 +146,7 @@ class AppErrorBoundary extends Component {
 
 function App() {
   const userId = useAuthStore((state) => state.user?.id)
+  const isStudent = useAuthStore((state) => state.user?.role === 'student')
 
   useEffect(() => {
     if (!userId) return undefined
@@ -222,6 +225,7 @@ function App() {
       />
       <div className="min-h-screen bg-transparent">
         <Navigation />
+        {userId && isStudent && <JourneyRewards userId={userId} />}
         <AccountStatusNotice />
         <AppErrorBoundary>
           <Suspense fallback={<PageFallback />}>
@@ -231,6 +235,7 @@ function App() {
             <Route path="/login" element={<PublicOnlyRoute><Login /></PublicOnlyRoute>} />
             <Route path="/register" element={<PublicOnlyRoute><Register /></PublicOnlyRoute>} />
             <Route path="/guide" element={<UserGuide />} />
+            <Route path="/challenge" element={<ProtectedRoute><DailyChallenge /></ProtectedRoute>} />
 
           {/* Protected Routes */}
           <Route

@@ -203,6 +203,23 @@ test('a student earns points by finishing a quick test, and the teacher sees and
   await page.goto('/')
   await expect(page.getByText(/Nhiệm vụ hôm nay · [1-3]\/3/)).toBeVisible()
 
+  // The daily challenge: five questions, graded by the server, once a day
+  await page.goto('/challenge')
+  await expect(page.getByRole('heading', { name: 'Thử thách hôm nay' })).toBeVisible()
+  const groups = page.getByRole('radiogroup')
+  await expect(groups).toHaveCount(5)
+  for (let index = 0; index < 5; index += 1) await groups.nth(index).getByRole('radio').first().click()
+  await page.getByRole('button', { name: 'Nộp bài' }).click()
+  await expect(page.getByText(/Đúng [0-5]\/5 câu · \+\d+ điểm kinh nghiệm/)).toBeVisible()
+  await expect(page.getByText('Đáp án đúng').first()).toBeVisible()
+  const afterChallenge = await (await request.get(`${API}/api/learning/users/${me.id}/journey`, { headers: { Authorization: `Bearer ${token}` } })).json()
+  expect(afterChallenge.challenge_today).not.toBeNull()
+  const again = await request.post(`${API}/api/learning/challenge/today`, { headers: { Authorization: `Bearer ${token}` }, data: { answers: {} } })
+  expect(again.status()).toBe(409)
+  await page.goto('/progress')
+  await expect(page.getByRole('heading', { name: 'Em đã đi được bao xa' })).toBeVisible()
+  await expect(page.getByText(/Thử thách hôm nay: đúng \d+%/)).toBeVisible()
+
   // The teacher of that class reads the report and downloads it
   const teacherContext = await browser.newContext()
   const teacherPage = await teacherContext.newPage()

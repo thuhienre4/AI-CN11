@@ -48,12 +48,13 @@ def _journeys(db: Session, user_ids: list[int]) -> dict[int, dict]:
         progress_by_user[row.user_id].append(row)
     events_by_user: dict[int, list] = {user_id: [] for user_id in user_ids}
     event_rows = (
-        db.query(LearningEvent.user_id, LearningEvent.event_type, LearningEvent.occurred_at, LearningEvent.created_at)
+        db.query(LearningEvent.user_id, LearningEvent.event_type, LearningEvent.occurred_at, LearningEvent.created_at,
+                 LearningEvent.score)
         .filter(LearningEvent.user_id.in_(user_ids))
         .all()
     )
-    for user_id, event_type, occurred_at, created_at in event_rows:
-        events_by_user[user_id].append((event_type, local_day(occurred_at or created_at)))
+    for user_id, event_type, occurred_at, created_at, score in event_rows:
+        events_by_user[user_id].append((event_type, local_day(occurred_at or created_at), score))
     today = local_day(datetime.utcnow())
     return {
         user_id: build_journey(_lesson_rows(progress_by_user[user_id]), events_by_user[user_id], today)

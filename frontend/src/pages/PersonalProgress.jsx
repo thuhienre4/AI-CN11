@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { learningAPI } from '../services/api'
 import { useAuthStore } from '../store'
+import ChapterMap from '../components/ChapterMap'
 import JourneyPanel from '../components/JourneyPanel'
 import { buildLocalLearningDashboard } from '../utils/learningProgress'
 import SignalList, { SignalBadge } from '../components/SignalList'
@@ -378,6 +379,8 @@ export default function PersonalProgress() {
           </div>
         </div>
       </section>
+
+      <div className="mb-6"><ChapterMap lessonProgress={dashboard?.lesson_progress || []} defaultGrade={Number((user?.student_class || '').match(/^\s*(10|11|12)/)?.[1] || 11)} /></div>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_360px]">
         <section className="panel p-6">

@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
+import toast from 'react-hot-toast'
 
 import { learningAPI } from '../services/api'
+import { levelTitle } from '../utils/journey'
 import { buildLocalJourney } from '../utils/learningProgress'
 
 /** The student's journey from the server; from this device when the server cannot be reached or is behind. */
@@ -22,10 +24,12 @@ export function useJourney(userId) {
       }
     }
     load()
-    window.addEventListener('enginelab:learning-update', load)
+    // From the server's live channel, and from this device after an activity is recorded
+    const events = ['enginelab:learning-update', 'enginelab:progress-recorded']
+    events.forEach((name) => window.addEventListener(name, load))
     return () => {
       active = false
-      window.removeEventListener('enginelab:learning-update', load)
+      events.forEach((name) => window.removeEventListener(name, load))
     }
   }, [userId])
   return state
@@ -38,7 +42,7 @@ function LevelBar({ journey }) {
   return (
     <div>
       <div className="flex items-baseline justify-between gap-3 text-sm">
-        <span className="font-bold text-slate-900">Cấp {journey.level} · {journey.xp} điểm kinh nghiệm</span>
+        <span className="font-bold text-slate-900">Cấp {journey.level} · {journey.xp} điểm kinh nghiệm <span className="font-semibold text-blue-800">· {levelTitle(journey.level)}</span></span>
         <span className="text-slate-500">còn {journey.next_level_xp - journey.xp} điểm tới cấp {journey.level + 1}</span>
       </div>
       <div
@@ -52,6 +56,19 @@ function LevelBar({ journey }) {
         <div className="h-full rounded-full bg-blue-700 transition-[width] duration-500" style={{ width: `${levelPercent(journey)}%` }} />
       </div>
     </div>
+  )
+}
+
+function ChallengeLink({ journey }) {
+  const score = journey.challenge_today
+  return (
+    <Link
+      to="/challenge"
+      className={`mt-3 flex items-center justify-between gap-3 rounded-md border px-3 py-2 text-sm font-semibold ${score === null ? 'border-blue-700 bg-blue-700 text-white hover:bg-blue-800' : 'border-emerald-300 bg-emerald-50 text-emerald-950 hover:bg-emerald-100'}`}
+    >
+      <span>{score === null ? 'Thử thách hôm nay: 5 câu chọn riêng cho em' : `Thử thách hôm nay: đúng ${Math.round(score)}%`}</span>
+      <span aria-hidden="true">{score === null ? 'Làm ngay →' : 'Xem lại →'}</span>
+    </Link>
   )
 }
 
@@ -84,6 +101,7 @@ export function JourneyToday({ userId }) {
       <LevelBar journey={journey} />
       <p className="mb-2 mt-4 text-xs font-bold uppercase tracking-wide text-slate-500">Nhiệm vụ hôm nay · {done}/{journey.daily_tasks.length}</p>
       <DailyTasks tasks={journey.daily_tasks} />
+      <ChallengeLink journey={journey} />
       {journey.streak.current > 1 && <p className="mt-3 text-sm text-slate-600">Đã học {journey.streak.current} ngày liên tiếp.</p>}
     </div>
   )
@@ -136,6 +154,7 @@ const BREAKDOWN = [
   ['models', 'Mở mô hình 3D'],
   ['active_days', 'Ngày có học'],
   ['daily_tasks', 'Đủ nhiệm vụ trong ngày'],
+  ['challenges', 'Thử thách hằng ngày'],
 ]
 
 /** Full panel for the progress page. */
@@ -149,7 +168,7 @@ export default function JourneyPanel({ userId, showLeaderboard = true }) {
       <p className="muted-label mb-1">Hành trình học tập</p>
       <h2 className="text-2xl font-bold text-slate-950">Cấp độ, nhiệm vụ và huy hiệu</h2>
       <p className="mt-2 text-sm leading-6 text-slate-600">
-        Điểm đến từ việc học xong và hiểu bài: mỗi bài chỉ tính một lần, làm lại bài kiểm tra để nâng điểm thì được thêm, bấm lặp lại thì không.
+        Điểm đến từ việc học xong và hiểu bài: mỗi bài chỉ tính một lần và được tính là hoàn thành khi đã làm kiểm tra nhanh; làm lại bài kiểm tra để nâng điểm thì được thêm, bấm lặp lại thì không.
       </p>
       {source === 'device' && (
         <p className="mt-3 rounded-md bg-amber-50 px-3 py-2 text-sm text-amber-900">Đang tính từ dữ liệu trên máy này; sẽ khớp với máy chủ sau khi đồng bộ.</p>
@@ -167,6 +186,7 @@ export default function JourneyPanel({ userId, showLeaderboard = true }) {
         <section aria-labelledby="journey-today">
           <h3 id="journey-today" className="mb-2 text-sm font-bold uppercase tracking-wide text-slate-500">Nhiệm vụ hôm nay</h3>
           <DailyTasks tasks={journey.daily_tasks} />
+          <ChallengeLink journey={journey} />
           <p className="mt-3 text-sm text-slate-600">
             {journey.streak.current > 0 ? `Chuỗi hiện tại: ${journey.streak.current} ngày` : 'Chưa có chuỗi ngày học'}
             {journey.streak.best > 0 ? ` · dài nhất: ${journey.streak.best} ngày` : ''}
@@ -197,4 +217,32 @@ export default function JourneyPanel({ userId, showLeaderboard = true }) {
       </section>
     </div>
   )
+}
+
+/** Announces points, a new level and new badges as they are earned; mounted once for a signed-in student. */
+export function JourneyRewards({ userId }) {
+  const { journey } = useJourney(userId)
+  const seen = useRef(null)
+  useEffect(() => {
+    if (!journey) return
+    const earned = new Set(journey.badges.filter((badge) => badge.earned).map((badge) => badge.id))
+    const before = seen.current
+    // The first value only sets the baseline; afterwards only rises past the best seen are announced, so a
+    // switch between the device's count and the server's never shows as a reward
+    if (!before) {
+      seen.current = { xp: journey.xp, level: journey.level, badges: earned }
+      return
+    }
+    if (journey.xp > before.xp) toast.success(`+${journey.xp - before.xp} điểm kinh nghiệm`, { id: 'journey-xp' })
+    if (journey.level > before.level) toast.success(`Lên cấp ${journey.level}: ${levelTitle(journey.level)}`, { id: 'journey-level', duration: 5000 })
+    journey.badges
+      .filter((badge) => badge.earned && !before.badges.has(badge.id))
+      .forEach((badge) => toast.success(`Huy hiệu mới: ${badge.title}`, { id: `journey-badge-${badge.id}`, duration: 5000 }))
+    seen.current = {
+      xp: Math.max(before.xp, journey.xp),
+      level: Math.max(before.level, journey.level),
+      badges: new Set([...before.badges, ...earned]),
+    }
+  }, [journey])
+  return null
 }
